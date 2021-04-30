@@ -1,0 +1,76 @@
+<ips:template parameters="$question, $forum" />
+{{$iposted = $forum->contentPostedIn( null, array( $question->tid ) );}}
+{{if !$question->mapped('moved_to')}}
+	<li class="ipsDataItem cForumQuestion {{if $question->unread()}}ipsDataItem_unread{{endif}} {{if $question->hidden()}}ipsModerated{{endif}}">
+		<div class='ipsDataItem_icon'>
+			{{if $question->topic_answered_pid}}
+				<span title='{lang="answered"}' class='cBestAnswerIndicator' data-ipsTooltip>
+					<i class='fa fa-check'></i>
+				</span>
+			{{else}}
+				<span title='{lang="awaiting_answer"}' class='cBestAnswerIndicator cBestAnswerIndicator_off' data-ipsTooltip>
+					<i class='fa fa-question'></i>
+				</span>
+			{{endif}}
+		</div>
+		<div class='ipsDataItem_main'>
+			<h4 class='ipsDataItem_title ipsType_break ipsContained_container'>
+				<span class='ipsType_break ipsContained'>
+					{{if $question->locked()}}
+						<i class='fa fa-lock' data-ipsTooltip title='{lang="topic_locked"}'></i>
+					{{endif}}
+					{{if $question->unread()}}
+						<a href='{$question->url( 'getNewComment' )}' title='{lang="first_unread_post"}' data-ipsTooltip>
+							<span class='ipsItemStatus'><i class="fa {{if \in_array( $question->tid, $iposted )}}fa-star{{else}}fa-circle{{endif}}"></i></span>
+						</a>
+					{{else}}
+						{{if \in_array( $question->tid, $iposted )}}
+							<span class='ipsItemStatus ipsItemStatus_read ipsItemStatus_posted'><i class="fa fa-star"></i></span>
+						{{endif}}
+					{{endif}}
+					{{if $question->mapped('pinned') || $question->mapped('featured') || $question->hidden() === -1 || $question->hidden() === 1}}
+					<span>
+						{{if $question->hidden() === -1}}
+							<span class="ipsBadge ipsBadge_icon ipsBadge_small ipsBadge_warning" data-ipsTooltip title='{$question->hiddenBlurb()}'><i class='fa fa-eye-slash'></i></span>
+						{{elseif $question->hidden() === 1}}
+							<span class="ipsBadge ipsBadge_icon ipsBadge_small ipsBadge_warning" data-ipsTooltip title='{lang="pending_approval"}'><i class='fa fa-warning'></i></span>
+						{{endif}}
+						{{if $question->mapped('pinned')}}
+							<span class="ipsBadge ipsBadge_icon ipsBadge_small ipsBadge_positive" data-ipsTooltip title='{lang="pinned"}'><i class='fa fa-thumb-tack'></i></span>
+						{{endif}}
+						{{if $question->mapped('featured')}}
+							<span class="ipsBadge ipsBadge_icon ipsBadge_small ipsBadge_positive" data-ipsTooltip title='{lang="featured"}'><i class='fa fa-star'></i></span>
+						{{endif}}
+					</span>
+					{{endif}}
+					{{if $question->prefix()}}
+						{template="prefix" group="global" app="core" params="$question->prefix( TRUE ), $question->prefix()"}
+					{{endif}}
+					<a href='{$question->url()}'>
+						{{if $question->mapped('title')}}{$question->mapped('title')}{{else}}<em class="ipsType_light">{lang="content_deleted"}</em>{{endif}}
+					</a>
+				</span>
+			</h4>
+			<div class='ipsDataItem_meta'>
+				<p class='ipsType_reset ipsType_normal ipsType_light'>
+					{lang="ask_byline" htmlsprintf="$question->author()->link(), \IPS\DateTime::ts( $question->start_date )->html()"}
+				</p>
+			</div>
+			{{if \count( $question->tags() )}}
+				<p>{template="tags" group="global" app="core" params="$question->tags()"}</p>
+			{{endif}}
+		</div>
+		<div class='ipsDataItem_generic ipsDataItem_size2 ipsType_center cForumQuestion_stat'>
+			<span>{{if $question->question_rating}}{$question->question_rating}{{else}}0{{endif}}</span>
+			<span class='ipsType_light'>{lang="votes_no_number" pluralize="$question->question_rating"}</span>
+		</div>
+		<div class='ipsDataItem_generic ipsDataItem_size2 ipsType_center cForumQuestion_stat'>
+			{{foreach $question->stats(FALSE) AS $k => $v}}
+				{{if $k == 'forums_comments' OR $k == 'answers_no_number'}}
+					<span>{number="$v"}</span>
+					<span class='ipsType_light'>{lang="answers_no_number" pluralize="$v"}</span>
+				{{endif}}
+			{{endforeach}}
+		</div>
+	</li>
+{{endif}}

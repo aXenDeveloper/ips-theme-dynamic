@@ -1,0 +1,10 @@
+<ips:template parameters="$member, $count" />
+{{if $member->canAccessModule( \IPS\Application\Module::get( 'core', 'messaging', 'front' ) ) AND $member->group['g_max_messages'] > 0}}
+	<div class='ipsGrid_span6 ipsResponsive_hidePhone'>
+		<div class='ipsPos_right ipsType_right' data-role="quotaTooltip" data-ipsTooltip data-ipsTooltip-label="{lang="messenger_quota" sprintf="$member->group['g_max_messages']" pluralize="$count"}">
+			{{$percent = floor( 100 / $member->group['g_max_messages'] * $count );}}
+			<span class="ipsAttachment_progress"><span data-role='quotaWidth' style='width: {expression="$percent > 100 ? 100 : $percent"}%'></span></span><br>
+			<span class='ipsType_light ipsResponsive_hidePhone'>{lang="messenger_quota_short" sprintf="$percent"}</span>
+		</div>
+	</div>
+{{endif}}

@@ -1,0 +1,216 @@
+<ips:template parameters="$item, $comment, $editorName, $app, $type, $class=''" />
+{{$idField = $comment::$databaseColumnId;}}
+<div id='comment-{$comment->$idField}_wrap' data-controller='core.front.core.comment' data-commentApp='{$app}' data-commentType='{$type}' data-commentID="{$comment->$idField}" data-quoteData='{expression="json_encode( array('userid' => $comment->author()->member_id, 'username' => $comment->author()->name, 'timestamp' => $comment->mapped('date'), 'contentapp' => $comment::$application, 'contenttype' => $type, 'contentid' => $item->tid, 'contentclass' => $class, 'contentcommentid' => $comment->$idField) )"}' class='ipsComment_content ipsType_medium'>
+
+	<div class='ipsComment_meta ipsType_light ipsFlex ipsFlex-ai:center ipsFlex-jc:between ipsFlex-fd:row-reverse'>
+		<div class='ipsType_light ipsType_reset ipsType_blendLinks ipsComment_toolWrap'>
+			<div class='ipsResponsive_hidePhone ipsComment_badges'>
+				<ul class='ipsList_reset ipsFlex ipsFlex-jc:end ipsFlex-fw:wrap ipsGap:2 ipsGap_row:1'>
+					{{if ! $comment->isFirst() and $comment->author()->member_id AND $comment->author()->member_id == $item->author()->member_id}}
+						<li><strong class="ipsBadge ipsBadge_large ipsComment_authorBadge">{lang="author"}</strong></li>
+					{{endif}}
+					{{if $comment->author()->hasHighlightedReplies()}}
+						<li><strong class='ipsBadge ipsBadge_large ipsBadge_highlightedGroup'>{expression="\IPS\Member\Group::load( $comment->author()->member_group_id )->name" raw="true"}</strong></li>
+					{{endif}}
+					{{if ( $comment->item()->isSolved() and $comment->item()->mapped('solved_comment_id') == $comment->pid )}}
+						<li><strong class='ipsBadge ipsBadge_large ipsBadge_positive ipsBadge_reverse'><i class='fa fa-check'></i> {lang="this_is_a_solved_post"}</strong></li>
+					{{endif}}
+					{{if $comment->isFeatured()}}
+						<li><strong class='ipsBadge ipsBadge_large ipsBadge_popular'>{lang="this_is_a_featured_post"}</strong></li>
+					{{endif}}
+					{{if ( settings.reputation_enabled and settings.reputation_highlight and $comment->reactionCount() >= settings.reputation_highlight ) }}
+						<li><strong class='ipsBadge ipsBadge_large ipsBadge_popular'>{lang="this_is_a_popular_post"}</strong></li>
+					{{endif}}
+				</ul>
+			</div>
+			<ul class='ipsList_reset ipsComment_tools'>
+				<li>
+					<a href='#elControls_{$comment->$idField}_menu' class='ipsComment_ellipsis' id='elControls_{$comment->$idField}' title='{lang="more_options"}' data-ipsMenu data-ipsMenu-appendTo='#comment-{$comment->$idField}_wrap'><i class='fa fa-ellipsis-h'></i></a>
+					<ul id='elControls_{$comment->$idField}_menu' class='ipsMenu ipsMenu_narrow ipsHide'>
+						{{if $comment->canReportOrRevoke() === TRUE}}
+							<li class='ipsMenu_item'><a href='{$comment->url('report')}' data-ipsDialog data-ipsDialog-remoteSubmit data-ipsDialog-size='medium' data-ipsDialog-flashMessage='{lang="report_submit_success"}' data-ipsDialog-title="{lang="report_post"}" data-action='reportComment' title='{lang="report_content"}'>{lang="report"}</a></li>
+						{{endif}}
+						{{if $comment->mapped('first') }}
+							<li class='ipsMenu_item'><a href='{$comment->item()->url()}' title='{lang="share_this_post"}' data-ipsDialog data-ipsDialog-size='narrow' data-ipsDialog-content='#elSharePost_{$comment->$idField}_menu' data-ipsDialog-title="{lang="share_this_post"}" d='elSharePost_{$comment->$idField}' data-role='shareComment'>{lang="share"}</a></li>
+						{{else}}
+							<li class='ipsMenu_item'><a href='{$comment->item()->url()->setQueryString( array( 'do' => 'findComment', 'comment' => $comment->$idField ) )}' title='{lang="share_this_post"}' data-ipsDialog data-ipsDialog-size='narrow' data-ipsDialog-content='#elSharePost_{$comment->$idField}_menu' data-ipsDialog-title="{lang="share_this_post"}" id='elSharePost_{$comment->$idField}' data-role='shareComment'>{lang="share"}</a></li>
+						{{endif}}
+						{{if $comment->canEdit() || ( !$comment->mapped('first') and ( $comment->canPromoteToSocialMedia() || $comment->item()->canSolve() || $comment->canDelete() || $comment->canHide() || $comment->canUnhide() || $comment->canSplit() || $item->canFeatureComment() || $item->canUnfeatureComment() || ( $comment->hidden() == -2 AND \IPS\Member::loggedIn()->modPermission('can_manage_deleted_content') ) ) )}}
+							<li class='ipsMenu_sep'><hr></li>
+						{{endif}}
+						{{if $comment->canEdit()}}
+							{{if $comment->mapped('first') and $comment->item()->canEdit()}}
+								<li class='ipsMenu_item'><a href='{$comment->item()->url()->setQueryString( 'do', 'edit' )}'>{lang="edit"}</a></li>
+							{{else}}
+								<li class='ipsMenu_item'><a href='{$comment->url('edit')}' data-action='editComment'>{lang="edit"}</a></li>
+							{{endif}}
+						{{endif}}
+						{{if $comment->hidden() == -2 AND \IPS\Member::loggedIn()->modPermission('can_manage_deleted_content')}}
+							<li class='ipsMenu_item'><a href='{$comment->url('restore')->csrf()}' data-confirm data-confirmSubMessage='{lang="restore_as_visible_desc"}'>{lang="restore_as_visible"}</a></li>
+							<li class='ipsMenu_item'><a href='{$comment->url('restore')->csrf()->setQueryString( 'restoreAsHidden', 1 )}' data-confirm data-confirmSubMessage='{lang="restore_as_hidden_desc"}'>{lang="restore_as_hidden"}</a></li>
+							<li class='ipsMenu_item'><a href='{$comment->url('delete')->csrf()->setQueryString( 'immediately', 1 )}' data-confirm data-confirmSubMessage='{lang="delete_immediately_desc"}'>{lang="delete_immediately"}</a></li>
+						{{else}}
+							{{if $comment instanceof \IPS\Content\Hideable}}
+								{{if !$comment->hidden() and $comment->canHide()}}
+									<li class='ipsMenu_item'><a href='{$comment->url('hide')->csrf()}' data-ipsDialog data-ipsDialog-title="{lang="hide"}">{lang="hide"}</a></li>
+								{{elseif $comment->hidden() and $comment->canUnhide()}}
+									<li class='ipsMenu_item'><a href='{$comment->url('unhide')->csrf()}'>{lang="unhide"}</a></li>
+								{{endif}}
+							{{endif}}
+							{{if $comment->canSplit()}}
+								<li class='ipsMenu_item'><a href='{$comment->url('split')}' data-action='splitComment' data-ipsDialog data-ipsDialog-title="{lang="split_to_new" sprintf="\IPS\Member::loggedIn()->language()->addToStack( $item::$title )"}">{lang="split"}</a></li>
+							{{endif}}
+							{{if $comment->canDelete()}}
+								<li class='ipsMenu_item'><a href='{$comment->url('delete')->csrf()->setPage('page',\IPS\Request::i()->page)}' data-action='deleteComment' data-updateOnDelete="#commentCount">{lang="delete"}</a></li>
+							{{endif}}
+							{{if $comment->isFeatured() AND $item->canUnfeatureComment()}}
+								<li class='ipsMenu_item'><a href='{$comment->url('unfeature')->csrf()->setPage('page',\IPS\Request::i()->page)}' data-action="unrecommendComment">{lang="unrecommend_content"}</a></li>
+							{{endif}}
+							{{if !$comment->isFeatured() AND $item->canFeatureComment()}}
+								<li class='ipsMenu_item'><a href='{$comment->url('feature')->csrf()->setPage('page',\IPS\Request::i()->page)}' data-ipsDialog data-ipsDialog-title='{lang="recommend_post"}' data-ipsDialog-remoteSubmit data-ipsDialog-size='medium' data-action="recommendComment">{lang="recommend_content"}</a></li>
+							{{endif}}
+							{{if ( ! $comment->mapped('first') and $comment->canPromoteToSocialMedia() )}}
+								<li class='ipsMenu_item'>{template="promoteLink" app="core" group="global" params="$comment"}</li>
+							{{endif}}
+						{{endif}}
+					</ul>
+				</li>
+				{{if \count( $item->commentMultimodActions() ) and !$comment->mapped('first')}}
+				<li><span class='ipsCustomInput'>
+					<input type="checkbox" name="multimod[{$comment->$idField}]" value="1" data-role="moderation" data-actions="{{if $comment->canSplit()}}split merge{{endif}} {{if $comment->hidden() === -1 AND $comment->canUnhide()}}unhide{{elseif $comment->hidden() === 1 AND $comment->canUnhide()}}approve{{elseif $comment->canHide()}}hide{{endif}} {{if $comment->canDelete()}}delete{{endif}}" data-state='{{if $comment->tableStates()}}{$comment->tableStates()}{{endif}}'>
+					<span></span>
+				</span></li>
+				{{endif}}
+			</ul>
+		</div>
+
+		<div class='ipsType_reset ipsResponsive_hidePhone'>
+			<a href='{$comment->item()->url()->setQueryString( array( 'do' => 'findComment', 'comment' => $comment->$idField ) )}' class='ipsType_blendLinks'>{$comment->dateLine()|raw}</a> 
+			{{if $comment->ip_address and \IPS\Member::loggedIn()->modPermission('can_use_ip_tools') and \IPS\Member::loggedIn()->canAccessModule( \IPS\Application\Module::get( 'core', 'modcp' ) )}}
+				&middot; <a class='ipsType_blendLinks ipsType_light ipsType_noUnderline ipsType_noBreak' href="{url="app=core&module=modcp&controller=modcp&tab=ip_tools&ip=$comment->ip_address" seoTemplate="modcp_ip_tools"}" data-ipsMenu data-ipsMenu-menuID='{$comment->$idField}_ip_menu'>{lang="ip_short"} <i class='fa fa-angle-down'></i></a>
+			{{endif}}
+			<span class='ipsResponsive_hidePhone'>
+				{{if $comment->editLine()}}
+					({lang="edited_lc"})
+				{{endif}}
+				{{if $comment->hidden() AND $comment->hidden() != -2}}
+					&middot; {$comment->hiddenBlurb()}
+				{{elseif $comment->hidden() == -2}}
+					&middot; {$comment->deletedBlurb()}
+				{{endif}}
+			</span>
+		</div>
+	</div>
+
+	{{if member.modPermission('mod_see_warn') and $comment->warning}}
+		{template="commentWarned" group="global" app="core" params="$comment"}
+	{{endif}}
+
+
+	<div class='cPost_contentWrap'>
+		{{if $comment->hidden() !== 0}}
+			<div class='ipsResponsive_showPhone ipsResponsive_block ipsSpacer_bottom'>
+				{{if $comment->hidden() AND $comment->hidden() != -2}}
+					{$comment->hiddenBlurb()}
+				{{elseif $comment->hidden() == -2}}
+					{$comment->deletedBlurb()}
+				{{endif}}
+			</div>
+		{{endif}}
+		<div data-role='commentContent' class='ipsType_normal ipsType_richText ipsPadding_bottom ipsContained' data-controller='core.front.core.lightboxedImages'>
+			{$comment->content()|raw}
+
+			{{if $comment->editLine()}}
+				{$comment->editLine()|raw}
+			{{endif}}
+		</div>
+
+		{{if ( \IPS\IPS::classUsesTrait( $comment, 'IPS\Content\Reactable' ) and settings.reputation_enabled and $comment->hasReactionBar() ) || ( $comment->hidden() === 1 && ( $comment->canUnhide() || $comment->canDelete() ) ) || ( $comment->hidden() === 0 and $item->canComment() and $editorName ) || $comment->item()->canSolve() }}
+			<div class='ipsItemControls'>
+				{{if !( $comment->hidden() === 1 && ( $comment->canUnhide() || $comment->canDelete() ) )}}
+					{{if \IPS\IPS::classUsesTrait( $comment, 'IPS\Content\Reactable' ) and settings.reputation_enabled}}
+						{template="reputation" group="global" app="core" params="$comment"}
+					{{endif}}
+				{{endif}}
+				<ul class='ipsComment_controls ipsClearfix ipsItemControls_left' data-role="commentControls">
+					{{if $comment->hidden() === 1 && ( $comment->canUnhide() || $comment->canDelete() )}}
+						{{if $comment->canUnhide()}}
+							<li><a href='{$comment->url('unhide')->csrf()}' class='ipsButton ipsButton_verySmall ipsButton_positive' data-action='approveComment'><i class='fa fa-check'></i> {lang="approve"}</a></li>
+						{{endif}}
+						{{if $comment->canDelete()}}
+							<li><a href='{$comment->url('delete')->csrf()->setPage('page',\IPS\Request::i()->page)}' data-action='deleteComment' data-updateOnDelete="#commentCount" class='ipsButton ipsButton_verySmall ipsButton_negative'><i class='fa fa-times'></i> {lang="delete"}</a></li>
+						{{endif}}
+						{{if $comment->canEdit() || $comment->canSplit() || $comment->canHide()}}
+							<li>
+								<a href='#elControls_{$comment->$idField}_moderator_menu' id='elControls_{$comment->$idField}_moderator' data-ipsMenu data-ipsMenu-appendTo='#comment-{$comment->$idField}_wrap'>{lang="moderator_tools"} &nbsp;<i class='fa fa-caret-down'></i></a>
+								<ul id='elControls_{$comment->$idField}_moderator_menu' class='ipsMenu ipsMenu_narrow ipsHide'>
+									{{if $comment->canEdit()}}
+										{{if $comment->mapped('first') and $comment->item()->canEdit()}}
+											<li class='ipsMenu_item'><a href='{$comment->item()->url()->setQueryString( 'do', 'edit' )}'>{lang="edit"}</a></li>
+										{{else}}
+											<li class='ipsMenu_item'><a href='{$comment->url('edit')}' data-action='editComment'>{lang="edit"}</a></li>
+										{{endif}}
+									{{endif}}
+									{{if $comment->canSplit()}}
+										<li class='ipsMenu_item'><a href='{$comment->url('split')}' data-action='splitComment' data-ipsDialog data-ipsDialog-title="{lang="split_to_new" sprintf="\IPS\Member::loggedIn()->language()->addToStack( $item::$title )"}">{lang="split"}</a></li>
+									{{endif}}
+									{{if $comment instanceof \IPS\Content\Hideable and $comment->canHide()}}
+										<li class='ipsMenu_item'><a href='{$comment->url('hide')->csrf()}' data-ipsDialog data-ipsDialog-title="{lang="hide"}">{lang="hide"}</a></li>
+									{{endif}}
+								</ul>
+							</li>
+						{{endif}}
+					{{else}}
+						{{if $comment->hidden() === 0 and $item->canComment() and $editorName}}
+							<li data-ipsQuote-editor='{$editorName}' data-ipsQuote-target='#comment-{$comment->$idField}' class='ipsJS_show'>
+								<button class='ipsButton ipsButton_light ipsButton_verySmall ipsButton_narrow cMultiQuote ipsHide' data-action='multiQuoteComment' data-ipsTooltip data-ipsQuote-multiQuote data-mqId='mq{$comment->$idField}' title='{lang="multiquote"}'><i class='fa fa-plus'></i></button>
+							</li>
+							<li data-ipsQuote-editor='{$editorName}' data-ipsQuote-target='#comment-{$comment->$idField}' class='ipsJS_show'>
+								<a href='#' data-action='quoteComment' data-ipsQuote-singleQuote>{lang="quote"}</a>
+							</li>
+						{{endif}}
+						{{if ( $comment->item()->isSolved() and $comment->item()->mapped('solved_comment_id') == $comment->pid ) AND $comment->item()->canSolve()}}
+							<li><a href='{$item->url()->csrf()->setQueryString( array( 'do' => 'unsolve', 'answer' => $comment->pid ) )}' data-action="unsolveComment">{lang="unsolve_content"}</a></li>
+						{{endif}}
+						{{if $comment->item()->canSolve() AND ! $comment->item()->isSolved()}}
+							<li><a href='{$item->url()->csrf()->setQueryString( array( 'do' => 'solve', 'answer' => $comment->pid ) )}' data-action="solveComment">{lang="solve_content"}</a></li>
+						{{endif}}
+					{{endif}}
+					<li class='ipsHide' data-role='commentLoading'>
+						<span class='ipsLoading ipsLoading_tiny ipsLoading_noAnim'></span>
+					</li>
+				</ul>
+			</div>
+		{{endif}}
+
+		{{if trim( $comment->author()->signature )}}
+			{template="signature" group="global" app="core" params="$comment->author()"}
+		{{endif}}
+	</div>
+
+	{{if $comment->ip_address and \IPS\Member::loggedIn()->modPermission('can_use_ip_tools') and \IPS\Member::loggedIn()->canAccessModule( \IPS\Application\Module::get( 'core', 'modcp' ) )}}
+		<div class='ipsHide ipsPadding ipsMenu ipsMenu_veryWide' id='{$comment->$idField}_ip_menu'>
+			<h5 class='ipsType_normal ipsType_reset'>{lang="ip_address"}</h5>
+			<input type='text' autofocus class='ipsField_fullWidth ipsMargin_vertical:half' value='{$comment->ip_address}'>
+			<a href='{url="app=core&module=modcp&controller=modcp&tab=ip_tools&ip=$comment->ip_address" seoTemplate="modcp_ip_tools"}' class='ipsButton ipsButton_light ipsButton_small ipsButton_fullWidth'>{lang="more_about_ip_address"} <i class='fa fa-angle-right'></i></a>
+		</div>
+	{{endif}}
+
+	<div class='ipsPadding ipsHide cPostShareMenu' id='elSharePost_{$comment->$idField}_menu'>
+		<h5 class='ipsType_normal ipsType_reset'>{lang="link_to_post"}</h5>
+		{{if $comment->mapped('first') }}
+			{{$url = $comment->item()->url();}}
+		{{else}}
+			{{$url = $comment->item()->url()->setQueryString( array( 'do' => 'findComment', 'comment' => $comment->$idField ) );}}
+		{{endif}}
+		{{if \IPS\Settings::i()->ref_on}}
+			{{$url = $url->setQueryString( array( '_rid' => \IPS\Member::loggedIn()->member_id  ) );}}
+		{{endif}}
+		<input type='text' value='{$url}' class='ipsField_fullWidth'>
+
+		{{if !$comment->item()->container()->disable_sharelinks and \count( $comment->sharelinks() )}}
+			<h5 class='ipsType_normal ipsType_reset ipsSpacer_top'>{lang="share_externally"}</h5>
+			{template="sharelinks" group="global" app="core" params="$comment"}
+		{{endif}}
+	</div>
+</div>

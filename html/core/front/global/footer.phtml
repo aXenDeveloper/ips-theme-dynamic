@@ -1,0 +1,51 @@
+<ips:template parameters="" />
+{{if \IPS\Settings::i()->site_social_profiles AND $links = json_decode( \IPS\Settings::i()->site_social_profiles, TRUE ) AND \count( $links )}}
+<ul id='elFooterSocialLinks' class='ipsList_inline ipsType_center ipsSpacer_top'>
+	{template="siteSocialProfiles" if="theme.social_links == 'footer'" app="core" group="global" location="front"}
+</ul>
+{{endif}}
+{{if ( \IPS\Settings::i()->site_online || \IPS\Member::loggedIn()->group['g_access_offline'] ) and ( \IPS\Dispatcher::i()->application instanceof \IPS\Application AND \IPS\Dispatcher::i()->application->canAccess() )}}
+<ul class='ipsList_inline ipsType_center ipsSpacer_top' id="elFooterLinks">
+	{{$languages = \IPS\Lang::getEnabledLanguages();}}
+	{{if \count( $languages ) > 1}}
+		<li>
+			<a href='#elNavLang_menu' id='elNavLang' data-ipsMenu data-ipsMenu-above>{lang='language'} <i class='fa fa-caret-down'></i></a>
+			<ul id='elNavLang_menu' class='ipsMenu ipsMenu_selectable ipsHide'>
+			{{foreach $languages as $id => $lang }}
+				<li class='ipsMenu_item{{if \IPS\Member::loggedIn()->language()->id == $id || ( $lang->default && \IPS\Member::loggedIn()->language === 0 )}} ipsMenu_itemChecked{{endif}}'>
+					<form action="{url="app=core&module=system&controller=language" noprotocol="true" csrf="true" seoTemplate="language"}" method="post">
+					<input type="hidden" name="ref" value="{expression="base64_encode( (string) request.url() )"}">
+					<button type='submit' name='id' value='{$id}' class='ipsButton ipsButton_link ipsButton_link_secondary'>{{if $lang->get__icon()}}<i class='{$lang->get__icon()}'></i> {{endif}}{$lang->title} {{if $lang->default}}{lang="default"}{{endif}}</button>
+					</form>
+				</li>
+			{{endforeach}}
+			</ul>
+		</li>
+	{{endif}}
+	{{$themes = \IPS\Theme::getThemesWithAccessPermission();}}
+	{{if \count( $themes ) > 1 }}
+		<li>
+			<a href='#elNavTheme_menu' id='elNavTheme' data-ipsMenu data-ipsMenu-above>{lang='skin'} <i class='fa fa-caret-down'></i></a>
+			<ul id='elNavTheme_menu' class='ipsMenu ipsMenu_selectable ipsHide'>
+			{{foreach $themes as $id => $set }}
+				<li class='ipsMenu_item{{if \IPS\Theme::i()->id == $id}} ipsMenu_itemChecked{{endif}}'>
+					<form action="{url="app=core&module=system&controller=theme" noprotocol="true" csrf="true" seoTemplate="theme"}" method="post">
+					<input type="hidden" name="ref" value="{expression="base64_encode( (string) request.url() )"}">
+					<button type='submit' name='id' value='{$id}' class='ipsButton ipsButton_link ipsButton_link_secondary'>{lang="$set->_title"} {{if $set->is_default}}{lang="default"}{{endif}}</button>
+					</form>
+				</li>
+			{{endforeach}}
+			</ul>
+		</li>
+	{{endif}}
+	{{if \IPS\Settings::i()->privacy_type != "none"}}
+		<li><a href='{{if \IPS\Settings::i()->privacy_type == "internal"}}{url="app=core&module=system&controller=privacy" seoTemplate="privacy"}{{else}}{setting="privacy_link"}{{endif}}'>{lang="privacy"}</a></li>
+	{{endif}}
+	{{if \IPS\Member::loggedIn()->canUseContactUs() and !( \IPS\Dispatcher::i()->application->directory == 'core' and \IPS\Dispatcher::i()->module and \IPS\Dispatcher::i()->module->key == 'contact' )}}
+		<li><a rel="nofollow" href='{url="app=core&module=contact&controller=contact" seoTemplate="contact"}' {{if \IPS\Settings::i()->contact_type != 'contact_redirect' }}data-ipsdialog data-ipsDialog-remoteSubmit data-ipsDialog-flashMessage='{lang="contact_sent_blurb"}' data-ipsdialog-title="{lang="contact"}"{{endif}}>{lang='contact'}</a></li>
+	{{endif}}
+</ul>	
+{{if \IPS\Dispatcher::i()->application instanceof \IPS\Application AND \IPS\Dispatcher::i()->application->canManageWidgets()}}
+	<button type='button' id='elWidgetControls' data-action='openSidebar' data-ipsTooltip title='{lang="manage_blocks"}' class='ipsButton ipsButton_primary ipsButton_narrow'><i class='fa fa-chevron-right'></i></button>
+{{endif}}
+{{endif}}

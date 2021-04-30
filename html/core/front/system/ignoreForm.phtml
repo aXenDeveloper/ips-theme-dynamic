@@ -1,0 +1,45 @@
+<ips:template parameters="$id, $action, $elements, $hiddenValues, $actionButtons, $uploadField, $class='', $attributes=array(), $sidebar" />
+<form accept-charset='utf-8' id="elIgnoreForm" class="ipsForm {$class}" action="{$action}" method="post" {{if $uploadField}}enctype="multipart/form-data"{{endif}} {{foreach $attributes as $k => $v}}{$k}="{$v}"{{endforeach}} data-ipsForm>
+	<input type="hidden" name="{$id}_submitted" value="1">
+	{{foreach $hiddenValues as $k => $v}}
+		<input type="hidden" name="{$k}" value="{$v}">
+	{{endforeach}}
+	<ul class="ipsForm ipsForm_vertical">
+		{{foreach $elements as $collection}}
+			{{foreach $collection as $input}}
+				{{if !( $input instanceof \IPS\Helpers\Form\Checkbox )}}
+					<li class='ipsFieldRow ipsFieldRow_noLabel ipsFieldRow_fullWidth'>
+						<div class='ipsFieldRow_content'>
+							{$input->html()|raw}
+							{{if $input->error}}
+								<br>
+								<span class="ipsType_warning">{lang="$input->error"}</span>
+							{{endif}}
+						</div>
+					</li>
+				{{endif}}
+			{{endforeach}}
+			<li class='ipsFieldRow ipsFieldRow_fullWidth' id='elIgnoreTypes'>
+				<strong class='ipsFieldRow_title'>{lang="ignored_users_ignore"}</strong>
+				<ul class='ipsFieldRow_content ipsList_reset'>
+					{{foreach $collection as $input}}
+						{{if $input instanceof \IPS\Helpers\Form\Checkbox}}
+							<li class='ipsFieldRow_inlineCheckbox'>
+								{$input->html()|raw}
+								<label for='check_{$input->htmlId}'>{lang="$input->name"}</label>
+							</li>
+						{{endif}}
+					{{endforeach}}
+				</ul>
+			</li>
+		{{endforeach}}
+		<li class='ipsFieldRow' id='elIgnoreSubmitRow'>
+			<div class='ipsFieldRow_content'>
+				{{foreach $actionButtons as $button}}
+					{$button|raw}
+				{{endforeach}}
+			</div>
+		</li>
+	</ul>
+	<div id='elIgnoreLoading'></div>
+</form>

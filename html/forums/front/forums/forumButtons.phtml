@@ -1,0 +1,13 @@
+<ips:template parameters="$forum" />
+{{if $forum->can('add')}}
+	<li class='ipsToolList_primaryAction'>
+		{{if $forum->forums_bitoptions['bw_enable_answers']}}
+			<a class="ipsButton ipsButton_medium ipsButton_important ipsButton_fullWidth" href="{$forum->url()->setQueryString( 'do', 'add' )}" title='{lang="ask_a_question_desc"}'>{lang="ask_a_question"}</a>
+		{{else}}
+			<a class="ipsButton ipsButton_medium ipsButton_important ipsButton_fullWidth" href="{$forum->url()->setQueryString( 'do', 'add' )}" title='{lang="start_new_topic_desc"}'>{lang="start_new_topic"}</a>
+		{{endif}}
+	</li>
+{{endif}}
+{{if $forum->sub_can_post}}
+{template="viewChangeList" group="global" app="forums" params="$forum"}
+{{endif}}

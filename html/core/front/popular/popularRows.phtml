@@ -1,0 +1,54 @@
+<ips:template parameters="$table, $headers, $rows" />
+{{if empty( $rows )}}
+	<li class='ipsAreaBackground_light ipsPad_double ipsType_light ipsType_center'>
+		{lang="no_results"}
+	</li>
+{{else}}
+	{{$currentDate = null;}}
+	{{$rowCounts = array();}}
+	{{foreach $rows as $r}}
+		{{$nextDate = md5( $r['leader_date']->dayAndMonth() . $r['leader_date']->format('Y') );}}
+		
+		{{if $currentDate !== $nextDate}}
+			<li class='cPastLeaders_row'>
+				<h2 class='cPastLeaders_title ipsType_withHr ipsType_sectionHead'>
+					<a href="{url="app=core&module=discover&controller=popular&tab=leaderboard&custom_date_start={$r['leader_date']->getTimeStamp()}&custom_date_end={$r['leader_date']->getTimeStamp()}" seoTemplate="leaderboard_leaderboard"}">{$r['leader_date']->dayAndMonth()} {$r['leader_date']->format('Y')}</a>
+				</h2>
+				<div class='cPastLeaders_grid ipsFlex ipsFlex-fw:wrap ipsGap'>
+		{{endif}}
+			{{if ! $r['leader_member_id']->member_id or ! $r['leader_rep_total']}}
+					<div class='ipsFlex-flex:11'>
+						<div class='cPastLeaders_cell cPastLeaders_cellEmpty'></div>
+					</div>
+			{{else}}
+					<div class='ipsFlex-flex:11'>
+						<div class='cPastLeaders_cell' data-position='{lang="leader_position_{$r['leader_position']}_short"}'>
+							<span class="ipsLeaderboard_trophy ipsLeaderboard_trophy_{$r['leader_position']}" data-ipsTooltip title="{lang="leader_position_{$r['leader_position']}"}">
+								<i class="fa fa-trophy"></i>
+							</span>
+							<div class='ipsPhotoPanel ipsPhotoPanel_mini'>
+								{template="userPhoto" group="global" app="core" params="$r['leader_member_id'], 'mini'"}
+								<div>
+									<p class='ipsType_reset cPastLeaders_user ipsType_blendLinks ipsTruncate ipsTruncate_line ipsType_bold ipsType_large'>{$r['leader_member_id']->link()|raw}</p>
+									<p class='ipsType_reset cPastLeaders_rep'>
+										{{if \IPS\Content\Reaction::isLikeMode()}}
+											{lang="received_x_likes" pluralize="$r['leader_rep_total']"}
+										{{else}}
+											{lang="received_x_points" pluralize="$r['leader_rep_total']"}
+										{{endif}}
+									</p>
+								</div>								
+							</div>
+						</div>
+					</div>
+		{{endif}}
+		{{if !isset( $rowCounts[ $nextDate ] )}}
+			{{$rowCounts[ $nextDate ] = 1;}}
+		{{else}}
+			{{$rowCounts[ $nextDate ]++;}}
+		{{endif}}
+		{{$currentDate = $nextDate;}}
+	{{endforeach}}
+				</div>
+			</li>
+{{endif}}

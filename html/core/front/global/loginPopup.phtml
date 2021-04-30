@@ -1,0 +1,42 @@
+<ips:template parameters="$login" />
+<div id='elUserSignIn_menu' class='ipsMenu ipsMenu_auto ipsHide'>
+	<form accept-charset='utf-8' method='post' action='{$login->url}' data-controller="core.global.core.login">
+		<input type="hidden" name="csrfKey" value="{expression="\IPS\Session::i()->csrfKey"}">
+		<input type="hidden" name="ref" value="{expression="base64_encode( \IPS\Request::i()->url() )"}">
+		<div data-role="loginForm">
+			{{$usernamePasswordMethods = $login->usernamePasswordMethods();}}
+			{{$buttonMethods = $login->buttonMethods();}}
+			{{if $usernamePasswordMethods and $buttonMethods}}
+				<div class='ipsColumns ipsColumns_noSpacing'>
+					<div class='ipsColumn ipsColumn_wide' id='elUserSignIn_internal'>
+						{template="loginPopupForm" app="core" group="global" params="$login"}
+					</div>
+					<div class='ipsColumn ipsColumn_wide'>
+						<div class='ipsPadding' id='elUserSignIn_external'>
+							<div class='ipsAreaBackground_light ipsPadding:half'>
+								{{if \count( $buttonMethods ) > 1}}
+									<p class='ipsType_reset ipsType_small ipsType_center'><strong>{lang="sign_in_with_these"}</strong></p>
+								{{endif}}
+								{{foreach $buttonMethods as $method}}
+									<div class='ipsType_center ipsMargin_top:half'>
+										{$method->button()|raw}
+									</div>
+								{{endforeach}}
+							</div>
+						</div>
+					</div>
+				</div>
+			{{elseif $usernamePasswordMethods}}
+				{template="loginPopupForm" app="core" group="global" params="$login"}
+			{{elseif $buttonMethods}}
+				<div class="cLogin_popupSingle">
+					{{foreach $buttonMethods as $method}}
+						<div class='ipsPadding:half ipsType_center'>
+							{$method->button()|raw}
+						</div>
+					{{endforeach}}
+				</div>
+			{{endif}}
+		</div>
+	</form>
+</div>

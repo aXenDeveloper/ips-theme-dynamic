@@ -1,0 +1,13 @@
+<ips:template parameters="$ref" />
+<h3 class='ipsType_reset ipsWidget_title'>
+	{lang="block_newsletter_title"}
+</h3>
+<div class='ipsWidget_inner ipsPad'>
+	<span class="ipsType ipsType_veryLarge ipsPos_right ipsPad"><i class="fa fa-envelope"></i></span>
+	{template="richText" group="global" app="core" location="global" params="\IPS\Member::loggedIn()->language()->addToStack('block_newsletter_signup'), array('ipsType_reset','ipsType_medium')"}
+	{{if \IPS\Member::loggedIn()->member_id}}
+		<a class="ipsButton ipsButton_small ipsButton_light ipsButton_fullWidth" href="{url="app=core&module=system&controller=settings&do=newsletterSubscribe&ref={$ref}" seoTemplate="settings" csrf="true" ref="$ref"}">{lang="block_newsletter_signup_button"}</a>
+	{{else}}
+		<a class="ipsButton ipsButton_small ipsButton_light ipsButton_fullWidth" href='{url="app=core&module=system&controller=register&newsletter=1" seoTemplate="register"}' {{if \IPS\Login::registrationType() == 'normal'}}data-ipsDialog data-ipsDialog-size='narrow' data-ipsDialog-title='{lang="sign_up"}'{{endif}}>{lang="block_newsletter_signup_button"}</a>
+	{{endif}}
+</div>

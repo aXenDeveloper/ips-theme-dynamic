@@ -1,0 +1,41 @@
+<ips:template parameters=" " />
+<ul id='elMobileNav' class='ipsResponsive_hideDesktop' data-controller='core.front.core.mobileNav'>
+	{{if \count( \IPS\Output::i()->breadcrumb )}}
+		{{if \count( \IPS\Output::i()->breadcrumb ) == 1}}
+			<li id='elMobileBreadcrumb'>
+				<a href='{setting="base_url"}'>
+					<span>{lang="home"}</span>
+				</a>
+			</li>
+		{{else}}
+			{{$i = 0;}}
+			{{foreach \IPS\Output::i()->breadcrumb as $k => $b}}
+				{{if $i + 2 == \count( \IPS\Output::i()->breadcrumb )}}
+					<li id='elMobileBreadcrumb'>
+						<a href='{$b[0]}'>
+							<span>{$b[1]}</span>
+						</a>
+					</li>
+				{{endif}}
+				{{$i++;}}
+			{{endforeach}}
+		{{endif}}
+	{{endif}}
+	
+	{{$defaultStream = \IPS\core\Stream::defaultStream();}}
+	<li {{if !\IPS\Member::loggedIn()->canAccessModule( \IPS\Application\Module::get( 'core', 'discover' ) ) }}class='ipsHide'{{endif}}>
+		<a data-action="defaultStream" href='{{if $defaultStream}}{$defaultStream->url()}{{else}}{url="app=core&module=discover&controller=streams" seoTemplate="discover_all"}{{endif}}'><i class="fa fa-newspaper-o" aria-hidden="true"></i></a>
+	</li>
+
+	{{if !\IPS\Member::loggedIn()->restrict_post and \count( \IPS\Member::loggedIn()->createMenu() )}}
+	<li data-ipsDrawer data-ipsDrawer-drawerElem='#elMobileCreateMenuDrawer'>
+		<a href='#'><i class='fa fa-plus'></i></a>
+	</li>
+	{{endif}}
+
+	{{if \IPS\Member::loggedIn()->canAccessModule( \IPS\Application\Module::get( 'core', 'search' ) )}}
+		<li class='ipsJS_show'>
+			<a href='{url="app=core&module=search&controller=search" seoTemplate="search"}'><i class='fa fa-search'></i></a>
+		</li>
+	{{endif}}
+</ul>

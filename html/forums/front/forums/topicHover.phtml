@@ -1,0 +1,49 @@
+<ips:template parameters="$topic, $overviews" />
+
+<div class='cTopicHovercard' data-controller='forums.front.forum.hovercard' data-topicID='{$topic->tid}'>
+	{{if \count( $overviews ) > 1}}
+		<div class="ipsTabs ipsTabs_small ipsTabs_container ipsClearfix" id="elTopic_{$topic->tid}" data-ipsTabBar data-ipsTabBar-contentarea="#elTopic_{$topic->tid}_content">
+			<a href="#elTopic_{$topic->tid}" data-action="expandTabs"><i class="fa fa-caret-down"></i></a>
+			<ul role="tablist">
+				{{foreach $overviews as $tabID => $tabData}}
+					<li>
+						<a href="#ipsTabs_elTopic_{$topic->tid}_elTopic_{$topic->tid}_{$tabID}_panel" id="elTopic_{$topic->tid}_{$tabID}" class="ipsTabs_item ipsType_center" role="tab" aria-selected="{{if $tabID == 'firstPost'}}true{{else}}false{{endif}}">{lang="$tabData[0]"}</a>
+					</li>
+				{{endforeach}}
+			</ul>
+		</div>
+		<div id='elTopic_{$topic->tid}_content' class='ipsTabs_panels ipsTabs_contained cTopicHovercard_container ipsScrollbar'>
+	{{else}}
+		<div class='ipsPad cTopicHovercard_container ipsScrollbar'>
+	{{endif}}
+
+		{{foreach $overviews as $tabID => $tabData}}
+			{{if \count( $overviews ) > 1}}
+				<div id='ipsTabs_elTopic_{$topic->tid}_elTopic_{$topic->tid}_{$tabID}_panel' class='ipsTabs_panel'>
+			{{endif}}
+				<div class='ipsPhotoPanel ipsPhotoPanel_tiny ipsClearfix'>
+					{template="userPhoto" group="global" app="core" params="$tabData[1]->author(), 'tiny'"}
+					<div class='ipsType_small'>
+						<strong>{$tabData[1]->author()->name}</strong>
+						<p class='ipsType_reset ipsType_light ipsType_blendLinks'>
+							{datetime="$tabData[1]->mapped('date')"}
+							{{if $tabData[1]->item()->unread() }}
+								&middot; <a href='{$tabData[1]->item()->url('markRead')->csrf()}' title='{lang="mark_topic_read"}' data-action='markTopicRead'><i class='fa fa-check'></i> {lang="mark_topic_read"}</a>
+							{{endif}}
+							{{if $tabData[1]->canReportOrRevoke() === TRUE}}
+								&middot; <a href='{$tabData[1]->url('report')}' data-ipsDialog data-ipsDialog-remoteSubmit data-ipsDialog-size='medium' data-ipsDialog-flashMessage='{lang="report_submit_success"}' data-ipsDialog-title="{lang="report_post"}" data-action='reportComment' title='{lang="report_post"}'><span class='ipsResponsive_showPhone ipsResponsive_inline'><i class='fa fa-flag'></i></span><span class='ipsResponsive_hidePhone ipsResponsive_inline'>{lang="report_post"}</span></a>
+							{{endif}}
+						</p>
+					</div>
+				</div>
+				<hr class='ipsHr'>
+
+				<div class='ipsType_richText ipsType_small' data-controller='core.front.core.lightboxedImages'>
+					{$tabData[1]->content()|raw}
+				</div>
+			{{if \count( $overviews ) > 1}}
+				</div>
+			{{endif}}
+		{{endforeach}}
+	</div>
+</div>

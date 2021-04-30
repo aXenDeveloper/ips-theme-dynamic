@@ -1,0 +1,22 @@
+<ips:template parameters="$statuses, $orientation='vertical'" />
+<h3 class='ipsType_reset ipsWidget_title'>{lang="block_recentStatusUpdates"}</h3>
+<div class='ipsWidget_inner cStatusUpdateWidget' data-controller="core.front.core.statusFeedWidget">
+	{{if \IPS\core\Statuses\Status::canCreateFromCreateMenu()}}
+		<div class="ipsAreaBackground ipsPad_half" data-role='statusFormArea'>
+			<div class='ipsComposeArea_editor' data-role='statusDummy'>
+				<div class='ipsComposeArea_dummy ipsType_light' tabindex='-1'>
+					{lang="status_content"}
+				</div>
+			</div>
+			<div data-role='statusEditor' class='ipsHide'></div>
+		</div>
+	{{endif}}
+	<ul class='ipsDataList' data-role="statusFeed">
+		{{foreach $statuses as $status}}
+			{template="recentStatusUpdatesStatus" app="core" group="widgets" params="$status"}
+		{{endforeach}}
+	</ul>
+	{{if \count( $statuses ) == 0}}
+		<div class='ipsType_center ipsType_light ipsPad_half' data-role="statusFeedEmpty">{lang="no_recent_statuses"}</div>
+	{{endif}}
+</div>

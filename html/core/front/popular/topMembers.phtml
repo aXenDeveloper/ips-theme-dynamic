@@ -1,0 +1,21 @@
+<ips:template parameters="$url, $filters, $activeFilter, $output" />
+<div data-baseurl='{$url}' data-resort='topMembers' data-tableID='topMembers' data-controller='core.global.core.table'>
+	<div class="ipsPad_half ipsClearfix ipsClear">
+		<ul class="ipsButtonRow ipsPos_right ipsClearfix">
+			<li>
+				<a href="#elFilterByMenu_menu" id="elFilterByMenu" data-role='tableFilterMenu' data-ipsMenu data-ipsMenu-activeClass="ipsButtonRow_active" data-ipsMenu-selectable="radio"><span data-role="extraHtml">{$filters[ $activeFilter ]}</span> <i class="fa fa-caret-down"></i></a>
+				<ul class='ipsMenu ipsMenu_auto ipsMenu_withStem ipsMenu_selectable ipsHide' data-role="tableFilterMenu" id='elFilterByMenu_menu'>
+					{{foreach $filters as $k => $v}}
+						<li data-action="tableFilter" data-ipsMenuValue='{expression="str_replace( array( 'IPS\\', '\\' ), array( '', '_' ), $k )"}' class='ipsMenu_item {{if $k === $activeFilter}}ipsMenu_itemChecked{{endif}}'>
+							<a href='{$url->setQueryString( array( 'filter' => str_replace( array( 'IPS\\', '\\' ), array( '', '_' ), $k ) ) )}'>{$v}</a>
+						</li>
+					{{endforeach}}
+				</ul>
+			</li>
+		</ul>
+	</div>
+	<section data-role="tableRows">
+		{$output|raw}
+	</section>
+	<div class="ipsHide" data-role="tablePagination"></div>
+</div>

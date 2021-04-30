@@ -1,0 +1,8 @@
+<ips:template parameters="$app, $area, $id, $count" />
+{{if member.member_id}}
+	{{if member.following( $app, $area, $id )}}
+		<a href="{url="app=core&module=system&controller=notifications&do=follow&follow_app={$app}&follow_area={$area}&follow_id={$id}&from_search=1"}" title="{lang="following_this_member"}" class="ipsButton ipsButton_small ipsButton_positive ipsButton_fullWidth" data-role="followButton" data-ipsHover data-ipsHover-cache='false' data-ipsHover-onClick>{lang="following_member"} <i class='fa fa-caret-down'></i></a>
+	{{else}}	
+		<a href="{url="app=core&module=system&controller=notifications&do=follow&follow_app={$app}&follow_area={$area}&follow_id={$id}&from_search=1"}" title="{lang="follow_this_member"}" class="ipsButton ipsButton_small ipsButton_primary ipsButton_fullWidth" data-role="followButton" data-ipsHover data-ipsHover-cache='false' data-ipsHover-onClick>{lang="follow_member"}</a>
+	{{endif}}
+{{endif}}

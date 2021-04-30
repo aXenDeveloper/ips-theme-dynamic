@@ -1,0 +1,57 @@
+<ips:template parameters="$name, $value, $multiple, $url, $title, $roots, $zeroVal, $noJs, $permCheck, $subnodes, $togglePerm=NULL, $toggleIds=array(), $disabledCallback=NULL, $zeroValTogglesOn=array(), $zeroValTogglesOff=array(), $autoPopulate=FALSE, $children=NULL, $nodeClass=NULL, $where=NULL, $disabledArray=array(), $noParentNodesTitle=NULL, $noParentNodes=array(), $clubs=FALSE, $togglePermPBR=TRUE, $toggleIdsOff=array(), $loadMoreLink=FALSE" />
+<div class='ipsSelectTree ipsJS_show' data-name='{$name}' data-ipsSelectTree data-ipsSelectTree-url="{$url}" {{if $multiple}}data-ipsSelectTree-multiple{{endif}} data-ipsSelectTree-selected='{$value|raw}'>
+	<input type="hidden" name="{$name}" value="" data-role="nodeValue">
+	<div class='ipsSelectTree_value ipsSelectTree_placeholder'></div>
+	<span class='ipsSelectTree_expand'><i class='fa fa-chevron-down'></i></span>
+	<div class='ipsSelectTree_nodes ipsHide'>
+		<div data-role='nodeList' class='ipsScrollbar'>
+			{{if $clubs}}
+				<div class='ipsTabs ipsTabs_small ipsTabs_stretch ipsClearfix ipsJS_show' id='tabs_nodeSelect_{$name}' data-ipsTabBar data-ipsTabBar-contentArea='#ipsTabs_content_nodeSelect_{$name}'>
+					<a href='#tabs_nodeSelect_{$name}' data-action='expandTabs'><i class='fa fa-caret-down'></i></a>
+					<ul role='tablist'>
+						<li>
+							<a href='#ipsTabs_tabs_nodeSelect_{$name}_nodeSelect_{$name}_tab_global_panel' id='nodeSelect_{$name}_tab_global' class="ipsTabs_item" role="tab">
+								{lang="club_node_selector_global"}
+							</a>
+						</li>
+						<li>
+							<a href='#ipsTabs_tabs_nodeSelect_{$name}_nodeSelect_{$name}_tab_clubs_panel' id='nodeSelect_{$name}_tab_clubs' class="ipsTabs_item" role="tab">
+								{lang="club_node_selector_clubs"}
+							</a>
+						</li>
+					</ul>
+				</div>
+				<div id='ipsTabs_content_nodeSelect_{$name}' class='ipsTabs_panels'>
+					<div id='ipsTabs_tabs_nodeSelect_{$name}_nodeSelect_{$name}_tab_global_panel' class="ipsTabs_panel" aria-labelledby="nodeSelect_{$name}_tab_global" aria-hidden="false" data-role="globalNodeList">
+						{template="nodeCascade" app="core" group="forms" location="global" params="$roots, FALSE, $permCheck, $subnodes, $togglePerm, $toggleIds, $disabledCallback, $autoPopulate, $children, $nodeClass, $where, $disabledArray, $noParentNodesTitle, $noParentNodes, FALSE, $togglePermPBR, $toggleIdsOff"}
+					</div>
+					<div id='ipsTabs_tabs_nodeSelect_{$name}_nodeSelect_{$name}_tab_clubs_panel' class="ipsTabs_panel" aria-labelledby="nodeSelect_{$name}_tab_clubs" aria-hidden="false" data-role="clubNodeList">
+						{template="nodeCascade" app="core" group="forms" location="global" params="$roots, FALSE, $permCheck, $subnodes, $togglePerm, $toggleIds, $disabledCallback, $autoPopulate, $children, $nodeClass, $where, $disabledArray, $noParentNodesTitle, $noParentNodes, TRUE, $togglePermPBR, $toggleIdsOff"}
+					</div>
+				</div>		
+			{{else}}
+				{template="nodeCascade" app="core" group="forms" location="global" params="$roots, FALSE, $permCheck, $subnodes, $togglePerm, $toggleIds, $disabledCallback, $autoPopulate, $children, $nodeClass, $where, $disabledArray, $noParentNodesTitle, $noParentNodes, NULL, $togglePermPBR, $toggleIdsOff"}
+			{{endif}}
+		</div>
+		{{if $loadMoreLink}}
+			<div class='ipsSelectTree_loadMore' data-action='nodeLoadMore' data-offset='{$loadMoreLink}'>
+				<a class='ipsButton ipsButton_light ipsButton_fullWidth'><span class='ipsLoading ipsLoading_tiny ipsHide'>&nbsp;</span>&nbsp;&nbsp;{lang="node_load_more"}</a>
+			</div>
+		{{endif}}
+	</div>
+</div>
+{{if $zeroVal !== NULL}}
+	&nbsp;{lang="or"}&nbsp;
+	<span class='ipsCustomInput'>
+		<input type="checkbox" name="{$name}-zeroVal" id="{$name}-zeroVal" data-role="zeroVal" {{if $value === 0}}checked{{endif}} {{if !empty($zeroValTogglesOn) OR !empty($zeroValTogglesOff)}}data-control="toggle"{{endif}} {{if !empty($zeroValTogglesOn)}} data-togglesOn="{expression="implode( ',', $zeroValTogglesOn )"}" aria-controls="{expression="implode( ',', $zeroValTogglesOn )"}"{{endif}} {{if !empty($zeroValTogglesOff)}} data-togglesOff="{expression="implode( ',', $zeroValTogglesOff )"}" aria-controls="{expression="implode( ',', $zeroValTogglesOff )"}"{{endif}} > 
+		<span></span>
+	</span>
+	<label for="{$name}-zeroVal" class='ipsField_unlimited'>{lang="$zeroVal"}</label>
+{{endif}}
+<noscript>
+	{{if $noJs}}
+		{$noJs|raw}
+	{{else}}
+		<a href="{$url->setQueryString( '_noJs', '1' )}">{lang="click_here_to_refresh"}</a>
+	{{endif}}
+</noscript>

@@ -1,0 +1,19 @@
+/* BOTH */
+@media screen and (max-width: 979px) {
+	.ipsLightbox {
+		bottom: 0px;
+		right: 0px;
+		top: 0px;
+		left: 0px;
+	}
+
+	.ipsLightbox_imagePanel
+	{
+		margin-left: 10px;
+		margin-right: 10px;
+	}
+
+	.ipsLightbox_next, .ipsLightbox_prev {
+		opacity: 0.4;
+	}
+}

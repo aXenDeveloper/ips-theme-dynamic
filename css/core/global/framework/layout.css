@@ -1,0 +1,441 @@
+#ipsLayout_body {
+	margin: 0 auto;
+}
+
+#ipsLayout_header {
+	position: relative;
+}
+
+#ipsLayout_contentArea {
+	display: table;
+	width: 100%;
+}
+
+#ipsLayout_mainArea, #ipsLayout_sidebar {
+	display: table-cell;
+	height: 100%;
+	vertical-align: top;
+	box-sizing: border-box;
+}
+
+	#ipsLayout_mainArea:only-of-type {
+		display: block;
+	}
+
+#ipsLayout_mainArea {
+	width: 100%;
+	min-height: 350px;
+	padding: 0px;
+}
+
+	.ipsLayout_minimal #ipsLayout_mainArea {
+		padding-top: 15px;
+		padding-bottom: 15px;
+	}
+
+#ipsLayout_sidebar {
+	min-width: 340px;
+	max-width: 340px;
+	padding-bottom: 15px;
+	overflow: hidden;
+	border-radius: 0;
+}
+
+	html[dir="ltr"] #ipsLayout_sidebar.ipsLayout_sidebarleft,
+	html[dir="rtl"] #ipsLayout_sidebar.ipsLayout_sidebarright {
+		padding-right: 20px;
+	}
+	html[dir="ltr"] #ipsLayout_sidebar.ipsLayout_sidebarright,
+	html[dir="rtl"] #ipsLayout_sidebar.ipsLayout_sidebarleft {
+		padding-left: 20px;
+	}
+	
+	body:not( .cWidgetsManaging ) #ipsLayout_sidebar.ipsLayout_sidebarUnused,
+	body.ipsLayout_sidebarUnused:not( .cWidgetsManaging ) #ipsLayout_sidebar {
+		min-width: 1px;
+		width: 0;
+		padding: 0 !important;
+	}
+
+	#ipsLayout_contentWrapper #ipsLayout_sidebar:first-child {
+		padding: 15px 15px 15px 15px;
+	}
+
+@media (max-width: 979px){
+	#ipsLayout_sidebar > .cWidgetContainer > .ipsList_reset{
+		display: flex;
+		flex-wrap: wrap;
+		margin: 0 0 -15px -15px;
+	}
+
+		#ipsLayout_sidebar .ipsWidget_vertical{
+			flex: 1 1 250px;
+			margin: 0 0 20px 15px;
+			max-width: calc(100% - 15px);
+		}
+}
+
+#elContextualTools {
+	padding: 0px 15px 0px 15px;
+	margin: 0px -15px 0px -15px;
+	transition: box-shadow 0.3s linear;
+}
+
+	#elContextualTools.ipsSticky {
+		margin-top: 0;
+		padding: 15px;
+	}
+
+#ipsLayout_footer {
+	margin: 20px 0;
+}
+
+	#ipsLayout_footer p {
+		margin: 0;
+	}
+
+		#ipsLayout_footer a, #ipsLayout_footer p {
+			font-size: {fontsize="medium"};
+			text-decoration: none;
+			color: rgb( var(--theme-footer_text) );
+		}
+
+		#ipsLayout_footer #elCopyright {
+			opacity: 0.6;
+			font-size: {fontsize="x_small"};
+			margin-top: 5px;
+			text-align: center; 
+		}
+		#elCopyright_userLine {
+			display: block;
+		}
+
+.ipsLayout_container {
+	{{if theme.enable_fluid_width}}
+		{{if theme.fluid_width_size}}
+			max-width: {theme="fluid_width_size"}%;
+		{{else}}
+			max-width: 100%;
+		{{endif}}
+	{{else}}
+		max-width: var(--container--width);
+	{{endif}}
+	padding: 0 15px;
+	margin: 0 auto;
+	position: relative;
+}
+
+/* SIMPLIFIED WRAPPER */
+.ipsLayout_minimal #ipsLayout_header #elUserNav,
+.ipsLayout_minimal #elSearch,
+.ipsLayout_minimal #elMobileNav,
+.ipsLayout_minimal .ipsBreadcrumb {
+	display: none !important;
+}
+
+.ipsLayout_minimal .ipsLayout_container {
+	max-width: var(--minimal_container--width);
+}
+
+/* SPACER STYLES */
+/* ipsSpacer classes are deprecated - use ipsMargin classes below in future work */
+.ipsApp .ipsSpacer_top, .ipsApp .ipsSpacer_both { margin-top: var(--sp-5); }
+	.ipsApp .ipsSpacer_top.ipsSpacer_double, .ipsApp .ipsSpacer_both.ipsSpacer_double { margin-top: var(--sp-8); }
+	.ipsApp .ipsSpacer_top.ipsSpacer_half, .ipsApp .ipsSpacer_both.ipsSpacer_half { margin-top: var(--sp-3); }
+
+.ipsApp .ipsSpacer_bottom, .ipsApp .ipsSpacer_both { margin-bottom: var(--sp-5); }
+	.ipsApp .ipsSpacer_bottom.ipsSpacer_double, .ipsApp .ipsSpacer_both.ipsSpacer_double { margin-bottom: var(--sp-8);	}
+	.ipsApp .ipsSpacer_bottom.ipsSpacer_half, .ipsApp .ipsSpacer_both.ipsSpacer_half { margin-bottom: var(--sp-3); }
+
+/* Generate normal/double/half margin for each side */
+/* !important is used on these styles since they are constants and should never be overridden with specificity */
+{{$marginSizes = array('\:none' => '0', '' => 'var(--sp-5)', '\:half' => 'var(--sp-3)', '\:double' => 'var(--sp-8)' );}}
+{{$breakpoints = array('' => '', '979px' => 'md\:', '767px' => 'sm\:' );}}
+
+{{foreach $breakpoints as $mq => $prefix}}
+{{if !empty($mq)}}
+@media (max-width: {$mq}) {
+{{endif}}
+{{foreach $marginSizes as $modifier => $size}}
+	.{$prefix}ipsMargin{$modifier} { margin: {$size} !important; }
+	.{$prefix}ipsMargin_vertical{$modifier}, .{$prefix}ipsMargin_top{$modifier} { margin-top: {$size} !important; }
+	.{$prefix}ipsMargin_vertical{$modifier}, .{$prefix}ipsMargin_bottom{$modifier} { margin-bottom: {$size} !important; }
+	.{$prefix}ipsMargin_horizontal{$modifier}, html[dir="ltr"] .{$prefix}ipsMargin_left{$modifier}, html[dir="rtl"] .{$prefix}ipsMargin_right{$modifier} { margin-left: {$size} !important; }
+	.{$prefix}ipsMargin_horizontal{$modifier}, html[dir="ltr"] .{$prefix}ipsMargin_right{$modifier}, html[dir="rtl"] .{$prefix}ipsMargin_left{$modifier} { margin-right: {$size} !important; }
+{{endforeach}}
+{{if !empty($mq)}}
+}
+{{endif}}
+{{endforeach}}
+
+/* Fixed column sizing */
+.ipsColumns {
+	width: 100%;
+	display: table;
+	table-layout: fixed;
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+
+	.ipsColumns.ipsColumns_horizontalSpacing, 
+	.ipsColumns.ipsColumns_verticalSpacing,
+	.ipsColumns.ipsColumns_bothSpacing,
+	.ipsColumns.ipsColumns_noSpacing {
+		border-collapse: separate;
+	}
+
+	.ipsColumns.ipsColumns_horizontalSpacing {
+		border-spacing: var(--sp-5) 0;
+	}
+
+		.ipsColumns.ipsColumns_horizontalSpacing.ipsColumns_halfSpacing {
+			border-spacing: var(--sp-3) 0;
+		}
+
+	.ipsColumns.ipsColumns_verticalSpacing {
+		border-spacing: 0 var(--sp-5);
+	}
+
+		.ipsColumns.ipsColumns_verticalSpacing.ipsColumns_halfSpacing {
+			border-spacing: 0 var(--sp-3);
+		}
+
+	.ipsColumns.ipsColumns_bothSpacing {
+		border-spacing: var(--sp-5);
+	}	
+
+		.ipsColumns.ipsColumns_bothSpacing.ipsColumns_halfSpacing {
+			border-spacing: var(--sp-3);
+		}	
+
+html[dir="ltr"] .ipsColumns > .ipsColumn:first-child:not( .ipsPad ),
+html[dir="ltr"] .ipsColumns.ipsColumns_noSpacing > .ipsColumn:not( .ipsPad ) {
+	padding-left: 0;
+}
+
+html[dir="ltr"] .ipsColumns > .ipsColumn:last-child:not( .ipsPad ),
+html[dir="ltr"] .ipsColumns.ipsColumns_noSpacing > .ipsColumn:not( .ipsPad ) {
+	padding-right: 0;
+}
+
+html[dir="rtl"] .ipsColumns > .ipsColumn:first-child:not( .ipsPad ),
+html[dir="rtl"] .ipsColumns.ipsColumns_noSpacing > .ipsColumn:not( .ipsPad ) {
+	padding-right: 0;
+}
+
+html[dir="rtl"] .ipsColumns > .ipsColumn:last-child:not( .ipsPad ),
+html[dir="rtl"] .ipsColumns.ipsColumns_noSpacing > .ipsColumn:not( .ipsPad ) {
+	padding-left: 0;
+}
+
+.ipsColumn {
+	display: table-cell;
+	position: relative;
+	vertical-align: top;
+	padding: 0 var(--sp-3);
+}
+
+.ipsColumn_veryNarrow {
+	width: 50px;
+}
+
+.ipsColumn_narrow {
+	width: 120px;
+}
+
+.ipsColumn_medium {
+	width: 200px;
+}
+
+.ipsColumn_wide {
+	width: 280px;
+}
+
+.ipsColumn_veryWide {
+	width: 360px;
+}
+
+.ipsColumn_fluid {
+	width: 100%;
+}
+
+	.ipsCoverPhoto .ipsColumns,
+	.ipsCoverPhoto .ipsColumn_fluid {
+		width: auto;
+	}
+
+/*.ipsColumn_filterBar {
+	position: absolute;
+	left: 0;
+	width: 350px;
+	height: 100%;
+	z-index: 5000;
+}*/
+
+.ipsFilter_layout {
+	position: absolute !important;
+	max-width: 100%;
+}
+
+/* The following grid styles renamed from Bootstrap */
+/**
+ * Bootstrap v2.2.2
+ *
+ * Copyright 2012 Twitter, Inc
+ * Licensed under the Apache License v2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Designed and built with all the love in the world @twitter by @mdo and @fat.
+ */
+ul.ipsGrid, ol.ipsGrid {
+	padding: 0;
+	margin: 0;
+}
+
+.ipsGrid:before,
+.ipsGrid:after {
+	display: table;
+	content: "";
+	line-height: 0;
+}
+
+.ipsGrid:after {
+	clear: both;
+}
+
+.ipsGrid > [class*="ipsGrid_span"] {
+	display: block;
+	width: 100%;
+	min-height: 30px;
+	box-sizing: border-box;
+}
+html[dir="ltr"] .ipsGrid > [class*="ipsGrid_span"] {
+	float: left;
+	margin-left: 2.127659574468085%;
+}
+html[dir="rtl"] .ipsGrid > [class*="ipsGrid_span"] {
+	float: right;
+	margin-right: 2.127659574468085%;
+}
+
+html[dir="ltr"] .ipsGrid > [class*="ipsGrid_span"]:first-child {
+	margin-left: 0;
+}
+html[dir="rtl"] .ipsGrid > [class*="ipsGrid_span"]:first-child {
+	margin-right: 0;
+}
+
+html[dir="ltr"] .ipsGrid .controls-row [class*="ipsGrid_span"] + [class*="ipsGrid_span"] {
+	margin-left: 2.127659574468085%;
+}
+html[dir="rtl"] .ipsGrid .controls-row [class*="ipsGrid_span"] + [class*="ipsGrid_span"] {
+	margin-right: 2.127659574468085%;
+}
+
+.ipsApp .ipsGrid > .ipsGrid_span12 { width: 100%; }
+.ipsApp .ipsGrid > .ipsGrid_span11 { width: 91.48936170212765%; }
+.ipsApp .ipsGrid > .ipsGrid_span10 { width: 82.97872340425532%; }
+.ipsApp .ipsGrid > .ipsGrid_span9 { width: 74.46808510638297%; }
+.ipsApp .ipsGrid > .ipsGrid_span8 { width: 65.95744680851064%; }
+.ipsApp .ipsGrid > .ipsGrid_span7 { width: 57.44680851063829%; }
+.ipsApp .ipsGrid > .ipsGrid_span6 { width: 48.93617021276595%; }
+.ipsApp .ipsGrid > .ipsGrid_span5 { width: 40.42553191489362%; }
+.ipsApp .ipsGrid > .ipsGrid_span4 { width: 31.914893617021278%; }
+.ipsApp .ipsGrid > .ipsGrid_span3 { width: 23.404255319148934%; }
+.ipsApp .ipsGrid > .ipsGrid_span2 { width: 14.893617021276595%; }
+.ipsApp .ipsGrid > .ipsGrid_span1 { width: 6.382978723404255%; }
+
+/* End Bootstrap */
+
+/* Additional styles that save us from having to open a new 'row' (only for spans that 12 is divisible by)
+   Instead, we can just build a long list of items with grid classes, and the margin will work properly */
+
+ol.ipsGrid > li, ul.ipsGrid > li {
+	margin-bottom: 15px;
+}
+
+html[dir="ltr"] .ipsGrid_span12:nth-child( 1n ),
+html[dir="ltr"] .ipsGrid_span12 + [class*="ipsGrid_span"],
+html[dir="ltr"] .ipsGrid_span6:nth-child( odd ), 
+html[dir="ltr"] .ipsGrid_span4:nth-child( 3n+1 ),
+html[dir="ltr"] .ipsGrid_span3:nth-child( 4n+1 ),
+html[dir="ltr"] .ipsGrid_span2:nth-child( 6n+1 ),
+html[dir="ltr"] .ipsGrid_span1:nth-child( 12n+1 ) {
+	margin-left: 0;
+}
+html[dir="rtl"] .ipsGrid_span12:nth-child( 1n ),
+html[dir="rtl"] .ipsGrid_span12 + [class*="ipsGrid_span"],
+html[dir="rtl"] .ipsGrid_span6:nth-child( odd ), 
+html[dir="rtl"] .ipsGrid_span4:nth-child( 3n+1 ),
+html[dir="rtl"] .ipsGrid_span3:nth-child( 4n+1 ),
+html[dir="rtl"] .ipsGrid_span2:nth-child( 6n+1 ),
+html[dir="rtl"] .ipsGrid_span1:nth-child( 12n+1 ) {
+	margin-right: 0;
+}
+
+/* Patchwork styles */
+.ipsPatchwork > li {
+	margin-bottom: 0 !important;
+}
+
+.ipsJS_has [data-ipsPatchwork] [data-role="patchworkItem"] {
+	opacity: 0.01;
+}
+
+.ipsGrid > li [data-role="patchworkItem"] + [data-role="patchworkItem"] {
+	margin-top: 15px;
+}
+
+/* Item control styles */
+.ipsItemControls {
+	display: flex;
+	align-items: center;
+	justify-content: flex-end;
+	flex-wrap: wrap;
+	padding: var(--sp-2) var(--sp-5);
+	border-top: 1px solid rgba( var(--theme-text_color), 0.1 );
+	color: rgb( var(--theme-text_light) );
+	width: 100%;
+	min-height: calc( 42px + ( var(--sp-2) * 2 ) );
+}
+
+	.cPost .ipsItemControls{
+		padding-left: 0;
+		padding-right: 0;
+	}
+
+	.ipsItemControls_left {
+		order: 1;
+		flex-grow: 1;
+	}
+	.ipsItemControls_right {
+		order: 2;
+		flex-grow: 1;
+	}
+
+	.ipsItemControls a{
+		color: inherit;
+	}
+
+	.ipsItemControls .fa-ellipsis-h {
+		font-size: {fontsize="x_large"};
+	}
+
+		.ipsItemControls .ipsButton .fa-ellipsis-h {
+			position: relative;
+			top: 3px;
+		}
+		
+		html[dir="ltr"] .ipsItemControls .ipsButton .fa-ellipsis-h {
+			margin-right: 4px;
+		}
+		html[dir="rtl"] .ipsItemControls .ipsButton .fa-ellipsis-h {
+			margin-left: 4px;
+		}
+
+@media (max-width: 767px){
+	/* This prevents the reactions from creating a horizontal scrollbar on mobiles */
+	.ipsItemControls_right{
+		padding: 0 5px;
+	}
+}

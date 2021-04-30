@@ -1,0 +1,85 @@
+<ips:template parameters="" />
+{{if theme.responsive}}
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+{{endif}}
+{{if !isset( \IPS\Output::i()->metaTags['og:image'] )}}
+	{{$shareLogos = \IPS\Settings::i()->icons_sharer_logo ? json_decode( \IPS\Settings::i()->icons_sharer_logo, true ) : array();}}
+	{{foreach $shareLogos as $logo}}
+		<meta property="og:image" content="{file="$logo" extension="core_Icons" scheme="full"}">
+	{{endforeach}}
+{{endif}}
+{{if !isset( \IPS\Output::i()->metaTags['og:image'] ) and !\count( $shareLogos ) }}
+	<meta name="twitter:card" content="summary" />
+{{else}}
+	<meta name="twitter:card" content="summary_large_image" />
+{{endif}}
+{{if \IPS\Settings::i()->site_twitter_id}}
+	{{if mb_substr( \IPS\Settings::i()->site_twitter_id, 0, 1 ) === '@'}}
+		<meta name="twitter:site" content="{setting="site_twitter_id"}" />
+	{{else}}
+		<meta name="twitter:site" content="@{setting="site_twitter_id"}" />
+	{{endif}}
+{{endif}}
+{{foreach \IPS\Output::i()->metaTags as $name => $content}}
+	{{if $name == 'canonical'}}
+		<link rel="canonical" href="{$content}">
+	{{else}}
+		{{if $name != 'title'}}
+			{{if \is_array( $content ) }}
+				{{foreach $content as $_value }}
+					<meta {{if mb_substr( $name, 0, 3 ) === 'og:' or mb_substr( $name, 0, 3 ) === 'fb:'}}property{{else}}name{{endif}}="{$name}" content="{$_value}">
+				{{endforeach}}
+			{{else}}
+				<meta {{if mb_substr( $name, 0, 3 ) === 'og:' or mb_substr( $name, 0, 3 ) === 'fb:'}}property{{else}}name{{endif}}="{$name}" content="{$content}">
+			{{endif}}
+		{{endif}}
+	{{endif}}
+{{endforeach}}
+{{foreach \IPS\Output::i()->linkTags as $type => $value}}
+	{{if \is_array( $value )}}
+		<link {{foreach $value as $k => $v}}{$k}="{expression="$v"}" {{endforeach}}/>
+	{{elseif $type != 'canonical' OR !isset( \IPS\Output::i()->metaTags['canonical'] )}}
+		<link rel="{$type}" href="{expression="$value"}" />
+	{{endif}}
+{{endforeach}}
+{{foreach \IPS\Output::i()->rssFeeds as $title => $url}}<link rel="alternate" type="application/rss+xml" title="{lang="$title"}" href="{$url}" />{{endforeach}}
+{{if \IPS\Output::i()->base}}
+	<base target="{expression="\IPS\Output::i()->base"}">
+{{endif}}
+{{$manifest = json_decode( \IPS\Settings::i()->manifest_details, TRUE );}}
+<link rel="manifest" href="{url="app=core&module=system&controller=metatags&do=manifest" seoTemplate="manifest"}">
+<meta name="msapplication-config" content="{url="app=core&module=system&controller=metatags&do=iebrowserconfig" seoTemplate="iebrowserconfig"}">
+<meta name="msapplication-starturl" content="{{if isset( $manifest['start_url'] )}}{$manifest['start_url']}{{else}}/{{endif}}">
+<meta name="application-name" content="{{if isset( $manifest['name'] )}}{$manifest['name']}{{else}}{setting="board_name"}{{endif}}">
+{{if \IPS\Settings::i()->mobile_app_id and \IPS\Settings::i()->mobile_app_prompt}}
+	<meta name="apple-itunes-app" content="app-id={expression="\IPS\Settings::i()->mobile_app_itunes_id ?: \IPS\APP_MULTICOMMUNITY_ITUNES_ID"}{{if \IPS\Settings::i()->itunes_affiliate_string}}, affiliate-data={setting="itunes_affiliate_string"}{{endif}}, app-argument={expression="\IPS\Request::i()->url()"}">
+{{endif}}
+<meta name="apple-mobile-web-app-title" content="{{if isset( $manifest['name'] )}}{$manifest['name']}{{else}}{setting="board_name"}{{endif}}">
+{{if isset( $manifest['theme_color'] )}}
+	<meta name="theme-color" content="{$manifest['theme_color']}">
+{{else}}
+	<meta name="theme-color" content="{theme="header"}">
+{{endif}}
+{{if isset( $manifest['background_color'] )}}
+	<meta name="msapplication-TileColor" content="{$manifest['background_color']}">
+{{endif}}
+{{if \IPS\Settings::i()->icons_mask_icon AND \IPS\Settings::i()->icons_mask_color}}
+	<link rel="mask-icon" href="{file="\IPS\Settings::i()->icons_mask_icon" extension="core_Icons"}" color="{setting="icons_mask_color"}">
+{{endif}}
+
+{{$homeScreen = json_decode( \IPS\Settings::i()->icons_homescreen, TRUE ) ?? array();}}
+{{foreach $homeScreen as $name => $image}}
+	{{if $name != 'original'}}
+		{{if mb_strpos( $name, 'apple-touch-icon' ) !== FALSE}}
+			{{if $name === 'apple-touch-icon-57x57'}}
+				<link rel="apple-touch-icon" href="{file="$image['url']" extension="core_Icons"}">
+			{{else}}
+				<link rel="apple-touch-icon" sizes="{$image['width']}x{$image['height']}" href="{file="$image['url']" extension="core_Icons"}">
+			{{endif}}
+		{{elseif mb_strpos( $name, 'msapplication' ) !== FALSE}}
+			<meta name="{$name}" content="{file="$image['url']" extension="core_Icons"}"/>
+		{{else}}
+			<link rel="icon" sizes="{$image['width']}x{$image['height']}" href="{file="$image['url']" extension="core_Icons"}">
+		{{endif}}
+	{{endif}}
+{{endforeach}}

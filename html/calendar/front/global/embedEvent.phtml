@@ -1,0 +1,104 @@
+<ips:template parameters="$item, $url, $image=NULL" />
+
+<div data-embedInfo-maxSize='{{if settings.max_internalembed_width}}{setting="max_internalembed_width"}{{else}}100%{{endif}}' class='ipsRichEmbed'>
+	{template="embedHeader" group="embed" app="core" params="$item, $item->mapped('title'), $item->mapped('date'), $url"}
+
+	{{if $item->map( 500, 100 )}}
+		<div class='ipsRichEmbed_masthead ipsType_center'>
+			<a href='{$url}' title='{$item->mapped('title')}'>
+				{$item->map( 500, 100 )|raw}
+			</a>
+		</div>
+	{{elseif $item->coverPhoto() && $item->coverPhoto()->file}}
+		{{$photo = $item->coverPhoto()->file;}}
+		<div class='ipsRichEmbed_masthead ipsRichEmbed_mastheadBg ipsType_center'>
+			<a href='{$url}' title='{$item->mapped('title')}' style='background-image: url( "{expression="str_replace( array( '(', ')' ), array( '\(', '\)' ), $photo->url )"}") '>
+				<img src='{$photo->url}' alt='{$item->mapped('title')}' class='ipsHide'>
+			</a>
+		</div>
+	{{endif}}
+	<div class='ipsPadding ipsClearfix'>
+		<div class='ipsPhotoPanel ipsPhotoPanel_medium'>
+			<span class='cCalendarEmbed_calendar ipsPos_left ipsType_blendLinks'>
+				<a href='{$url}'>
+					{{$nextOccurrence = $item->nextOccurrence( \IPS\calendar\Date::getDate(), 'startDate' ) ?: $item->lastOccurrence( 'startDate' );}}
+					<time datetime='{$nextOccurrence->mysqlDatetime()}' class='ipsCalendarDate'>
+						<span class='ipsCalendarDate_month'>{$nextOccurrence->monthNameShort}</span>
+						<span class='ipsCalendarDate_date'>{$nextOccurrence->mday}</span>
+					</time>
+				</a>
+			</span>
+			<div>
+				<div class='ipsType_reset ipsType_medium'>
+					{{if $item->_end_date}}
+						<dl class='cCalendarEmbed_dates ipsSpacer_top ipsSpacer_half'>
+							<dt class='ipsType_light'>{lang="from"}</dt>
+							<dd>
+								<time datetime='{expression="$item->_start_date->format( 'Y-m-d' )"}'>
+									{$item->_start_date->dayName} {$item->_start_date->mday} {$item->_start_date->monthName} {$item->_start_date->year}{{if !$item->all_day}}, {$item->_start_date->localeTime( FALSE )}{{endif}}
+								</time>
+							</dd>
+							<dt class='ipsType_light'>{lang="until"}</dt>
+							<dd>
+								<time datetime='{expression="$item->_end_date->format( 'Y-m-d' )"}'>
+									{{$sameDay = !( ($item->_start_date->mday != $item->_end_date->mday) or ($item->_start_date->mon != $item->_end_date->mon) or ($item->_start_date->year != $item->_end_date->year) );}}
+									{{if !$sameDay}}{$item->_end_date->dayName} {$item->_end_date->mday} {$item->_end_date->monthName} {$item->_end_date->year}{{endif}}{{if !$item->all_day}}{{if !$sameDay}}, {{endif}}{$item->_end_date->localeTime( FALSE )}{{endif}}
+								</time>
+							</dd>
+						</dl>
+					{{else}}
+						<p class='ipsSpacer_top ipsSpacer_half'>
+							<time datetime='{expression="$item->_start_date->format( 'Y-m-d' )"}'>
+								{$item->_start_date->dayName} {$item->_start_date->mday} {$item->_start_date->monthName} {$item->_start_date->year}{{if !$item->all_day}}, {$item->_start_date->localeTime( FALSE )}{{endif}}
+							</time>
+						</p>
+					{{endif}}
+				</div>
+				{{if $desc = $item->truncated(TRUE)}}
+					<div class='ipsType_richText ipsType_medium ipsSpacer_top ipsSpacer_half' data-truncate='1'>
+						{$desc|raw}
+					</div>
+				{{endif}}
+			</div>
+
+			{{if $item->rsvp}}
+				{{$attendees = $item->attendees();}}
+				<hr class='ipsHr'>
+				<ul class='ipsList_inline ipsSpacer_bottom ipsSpacer_half ipsType_normal'>
+					{{if isset( $attendees[1][ \IPS\Member::loggedIn()->member_id ] )}}
+						<li class='ipsType_success'>
+							<i class='fa fa-check-circle'></i>
+							{lang="you_are_going"}
+						</li>
+					{{elseif isset( $attendees[0][ \IPS\Member::loggedIn()->member_id ] )}}
+						<li class='ipsType_negative'>
+							<i class='fa fa-times-circle'></i>
+							{lang="you_arent_going"}
+						</li>
+					{{elseif $item->can('rsvp') && !( $item->rsvp_limit > 0 AND \count($attendees[1]) >= $item->rsvp_limit )}}
+						<li>
+							<ul class='ipsList_inline ipsList_noSpacing'>
+								<li>
+									<a href='{$item->url('rsvp')->setQueryString( 'action', 'yes' )->csrf()}' class='ipsButton ipsButton_important ipsButton_fullWidth ipsButton_verySmall'>{lang="rsvp_attend_event"}</a>
+								</li>
+								{{if $item->rsvp_limit == -1}}
+									<li>
+										<a href='{$item->url('rsvp')->setQueryString( 'action', 'maybe' )->csrf()}' class='ipsButton ipsButton_link ipsButton_verySmall'>{lang="rsvp_maybe_event"}</a>
+									</li>
+								{{endif}}
+								<li>
+									<a href='{$item->url('rsvp')->setQueryString( 'action', 'no' )->csrf()}' class='ipsButton ipsButton_link ipsButton_verySmall'>{lang="rsvp_notgoing_event"}</a>
+								</li>
+							</ul>
+						</li>
+					{{endif}}
+
+					<li class='{{if !\count($attendees[1])}}ipsType_light{{endif}}'>
+						<i class='fa fa-user'></i> {lang="x_users_going" pluralize="\count($attendees[1])"}
+					</li>
+				</ul>
+			{{endif}}
+		</div>
+		{template="embedItemStats" group="embed" app="core" params="$item"}
+	</div>
+</div>

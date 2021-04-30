@@ -1,0 +1,109 @@
+<ips:template parameters="$tab, $output, $canChangeEmail, $canChangePassword, $canChangeUsername, $canChangeSignature, $loginMethods,  $canConfigureMfa=FALSE, $showApps=FALSE" />
+{template="pageHeader" group="global" app="core" params="\IPS\Member::loggedIn()->language()->addToStack('settings'), \IPS\Member::loggedIn()->language()->addToStack('settings_blurb')"}
+<div id='elSettingsTabs' data-ipsTabBar data-ipsTabBar-contentArea='#elProfileTabContent' data-ipsTabBar-itemSelector='[data-ipsSideMenu] .ipsSideMenu_item' data-ipsTabBar-activeClass='ipsSideMenu_itemActive'>
+	<div class='ipsColumns ipsColumns_collapsePhone'>
+		<div class='ipsColumn ipsColumn_wide'>
+			<div class='ipsBox ipsPadding sm:ipsPadding:half ipsResponsive_pull sm:ipsMargin_bottom'>
+				<div class='ipsSideMenu' data-ipsSideMenu>
+					<h3 class="ipsSideMenu_mainTitle ipsAreaBackground_light ipsType_medium">
+						<a href="#modcp_menu" class="ipsPad_double" data-action="openSideMenu">
+							<i class="fa fa-bars"></i> &nbsp;{lang="settings_area"}&nbsp;<i class="fa fa-caret-down"></i>
+						</a>
+					</h3>
+					<ul class="ipsSideMenu_list">
+						<li>
+							<a href='{url="app=core&module=system&controller=settings" seoTemplate="settings"}' id='setting_overview' class='ipsType_normal ipsSideMenu_item {{if $tab === 'overview'}}ipsSideMenu_itemActive{{endif}}' title="{lang="overview"}" role="tab" aria-selected="{{if $tab === 'overview'}}true{{else}}false{{endif}}">
+								<i class='fa fa-tachometer'></i> {lang="overview"}
+							</a>
+						</li>
+						{{if $canChangeEmail}}
+							<li>
+								<a href='{url="app=core&module=system&controller=settings&area=email" seoTemplate="settings_email"}' id='setting_email' class='ipsType_normal ipsSideMenu_item {{if $tab === 'email'}}ipsSideMenu_itemActive{{endif}}' title="{lang="email_address"}" role="tab" aria-selected="{{if $tab === 'email'}}true{{else}}false{{endif}}">
+									<i class='fa fa-envelope-o'></i> {lang="email_address"}
+								</a>
+							</li>
+						{{endif}}
+						{{if $canChangePassword}}
+							<li>
+								<a href='{url="app=core&module=system&controller=settings&area=password" seoTemplate="settings_password"}' id='setting_password' class='ipsType_normal ipsSideMenu_item {{if $tab === 'password'}}ipsSideMenu_itemActive{{endif}}' title="{lang="password"}" role="tab" aria-selected="{{if $tab === 'password'}}true{{else}}false{{endif}}">
+									<i class='fa fa-key'></i> {lang="password"}
+								</a>
+							</li>
+						{{endif}}
+						{{if $canConfigureMfa}}
+							<li>
+								<a href='{url="app=core&module=system&controller=settings&area=mfa" seoTemplate="settings_mfa"}' id='setting_mfa' class='ipsType_normal ipsSideMenu_item {{if $tab === 'mfa'}}ipsSideMenu_itemActive{{endif}}' title="{lang="ucp_mfa"}" role="tab" aria-selected="{{if $tab === 'mfa'}}true{{else}}false{{endif}}">
+									<i class='fa fa-lock'></i> {lang="ucp_mfa"}
+								</a>
+							</li>
+						{{endif}}
+						{{if settings.device_management}}
+							<li>
+								<a href='{url="app=core&module=system&controller=settings&area=devices" seoTemplate="settings_devices"}' id='setting_devices' class='ipsType_normal ipsSideMenu_item {{if $tab === 'devices'}}ipsSideMenu_itemActive{{endif}}' title="{lang="ucp_devices"}" role="tab" aria-selected="{{if $tab === 'devices'}}true{{else}}false{{endif}}">
+									<i class='fa fa-laptop'></i> {lang="ucp_devices"}
+								</a>
+							</li>
+						{{endif}}
+						{{if $canChangeUsername}}
+							<li>
+								<a href='{url="app=core&module=system&controller=settings&area=username" seoTemplate="settings_username"}' id='setting_username' class='ipsType_normal ipsSideMenu_item {{if $tab === 'username'}}ipsSideMenu_itemActive{{endif}}' title="{lang="username"}" role="tab" aria-selected="{{if $tab === 'username'}}true{{else}}false{{endif}}">
+									<i class='fa fa-user'></i> {lang="username"}
+								</a>
+							</li>
+						{{endif}}
+						<li>
+							<a href='{url="app=core&module=system&controller=settings&area=links" seoTemplate="settings_links"}' id='setting_links' class='ipsType_normal ipsSideMenu_item {{if $tab === 'links'}}ipsSideMenu_itemActive{{endif}}' title="{lang="profile_settings_cvb"}" role="tab" aria-selected="{{if $tab === 'links'}}true{{else}}false{{endif}}">
+							<i class='fa fa-link'></i> {lang="profile_settings_cvb"}
+							</a>
+						</li>
+						{{if $canChangeSignature}}
+							<li>
+								<a href='{url="app=core&module=system&controller=settings&area=signature" seoTemplate="settings_signature"}' id='setting_signature' class='ipsType_normal ipsSideMenu_item {{if $tab === 'signature'}}ipsSideMenu_itemActive{{endif}}' title="{lang="signature"}" role="tab" aria-selected="{{if $tab === 'signature'}}true{{else}}false{{endif}}">
+									<i class='fa fa-pencil'></i> {lang="signature"}
+								</a>
+							</li>
+						{{endif}}
+						{{if \IPS\Settings::i()->ref_on}}
+							<li>
+								<a href='{url="app=core&module=system&controller=settings&area=referrals" seoTemplate="settings_referrals"}' id='setting_referrals' class='ipsType_normal ipsSideMenu_item {{if $tab === 'referrals'}}ipsSideMenu_itemActive{{endif}}' title="{lang="referrals"}" role="tab" aria-selected="{{if $tab === 'referrals'}}true{{else}}false{{endif}}">
+								<i class='fa fa-users'></i> {lang="referrals"}
+								</a>
+							</li>
+						{{endif}}
+						{{foreach $loginMethods as $method}}
+							{{if $method->showInUcp( \IPS\Member::loggedIn() )}}
+								<li>
+									<a href='{url="app=core&module=system&controller=settings&area=login&service={$method->id}" seoTemplate="settings_login"}' id='setting_login_{$method->id}' class='ipsType_normal ipsSideMenu_item {{if $tab === "login_{$method->id}"}}ipsSideMenu_itemActive{{endif}}' title="{$method->_title}" role="tab" aria-selected="{{if $tab === "login_{$method->id}"}}true{{else}}false{{endif}}">
+										{{$icon = $method->logoForUcp();}}
+										{{if \is_string( $icon )}}
+											<i class='fa fa-{$icon}'></i>
+										{{else}}
+											<div class="cLoginServiceIcon">
+												{{if $icon}}<img src="{$icon}">{{endif}}
+											</div>
+										{{endif}}
+										{lang="$method->_title"}
+									</a>
+								</li>
+							{{endif}}
+						{{endforeach}}
+						{{if $showApps}}
+							<li>
+								<a href='{url="app=core&module=system&controller=settings&area=apps" seoTemplate="settings_apps"}' id='setting_apps' class='ipsType_normal ipsSideMenu_item {{if $tab === "apps"}}ipsSideMenu_itemActive{{endif}}' title="{lang="oauth_apps"}" role="tab" aria-selected="{{if $tab === "apps"}}true{{else}}false{{endif}}">
+									<i class='fa fa-cubes'></i> {lang="oauth_apps"}
+								</a>
+							</li>
+						{{endif}}
+					</ul>
+				</div>
+			</div>
+		</div>
+		<div class='ipsColumn ipsColumn_fluid'>
+			<section id='elProfileTabContent' class='ipsBox ipsResponsive_pull'>
+				<div id="ipsTabs_elSettingsTabs_setting_{$tab}_panel" class="ipsTabs_panel" aria-labelledby="setting_overview" aria-hidden="false">
+					{$output|raw}
+				</div>
+			</section>
+		</div>
+	</div>
+</div>

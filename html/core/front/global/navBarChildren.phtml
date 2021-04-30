@@ -1,0 +1,36 @@
+<ips:template parameters="$items, $preview=FALSE" />
+{{foreach $items as $item}}
+	{{if $preview or $item->canView()}}
+		{{if $children = $item->children()}}
+			{{$id = md5( mt_rand() );}}
+			<li id='elNavigation_{$id}' class='ipsMenu_item ipsMenu_subItems'>
+				<a href='{$item->link()}'>
+					{$item->title()}
+				</a>
+				<ul id='elNavigation_{$id}_menu' class='ipsMenu ipsMenu_auto ipsHide'>
+					{template="navBarChildren" app="core" group="global" params="$children, $preview"}
+				</ul>
+			</li>
+		{{elseif $item instanceof \IPS\core\extensions\core\FrontNavigation\MenuHeader}}
+			<li class='ipsMenu_title'>
+				{$item->title()}
+			</li>
+		{{elseif $item instanceof \IPS\core\extensions\core\FrontNavigation\MenuSeparator}}
+			<li class='ipsMenu_sep'>
+				<hr>
+			</li>
+		{{elseif $item instanceof \IPS\core\extensions\core\FrontNavigation\MenuButton}}
+			<li class='ipsPad_half'>
+				<a href='{$item->link()}' class='ipsButton ipsButton_primary ipsButton_verySmall ipsButton_fullWidth'>
+					{$item->title()}
+				</a>
+			</li>
+		{{else}}
+			<li class='ipsMenu_item' {$item->attributes()|raw}>
+				<a href='{$item->link()}' {{if method_exists( $item, 'target' ) AND $item->target()}}target='{$item->target()}'{{if $item->target() == '_blank'}} rel="noopener"{{endif}}{{endif}}>
+					{$item->title()}
+				</a>
+			</li>
+		{{endif}}
+	{{endif}}
+{{endforeach}}

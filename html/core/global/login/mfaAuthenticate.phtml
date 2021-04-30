@@ -1,0 +1,14 @@
+<ips:template parameters="$screen, $url" />
+<div id='elTwoFactorAuthentication' class='ipsModal' data-controller='core.global.core.2fa'>
+	<div>
+		<h1 class='ipsType_center ipsType_pageTitle ipsSpacer_top'>{lang="mfa_popup_title"}</h1>
+		<form action="{$url}" method="post" accept-charset='utf-8' data-ipsForm class="ipsForm ipsForm_fullWidth">
+			<input type="hidden" name="mfa_auth" value="1">
+			<input type="hidden" name="csrfKey" value="{expression="\IPS\Session::i()->csrfKey"}">
+			{$screen|raw}
+			<div class="ipsAreaBackground ipsType_center ipsPad cOtherMethod">
+				<a href='{$url->setQueryString( array( '_mfa' => 'alt', '_mfaMethod' => '' ) )}' class='ipsButton ipsButton_link ipsButton_medium ipsButton_fullWidth'>{lang="mfa_try_another_method"} <i class='fa fa-angle-right'></i></a>
+			</div>
+		</form>
+	</div>
+</div>

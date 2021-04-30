@@ -1,0 +1,9 @@
+<ips:template parameters="$name, $value, $error=''" />
+
+<select name="bday[month]">
+	<option value='0' {{if $value['month'] == 0 }}selected{{endif}}></option>
+	{{foreach range( 1, 12 ) as $month}}
+		<option value='{$month}' {{if $value['month'] == $month }}selected{{endif}}>{expression="\IPS\DateTime::create()->setDate( 2000, $month, 15 )->strFormat('%B')"}</option>
+	{{endforeach}}
+</select>
+

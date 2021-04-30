@@ -1,0 +1,84 @@
+<ips:template parameters="$table, $popularQuestions, $newQuestions, $featuredTopic, $forum" />
+
+{{if $popularQuestions && $newQuestions}}
+	<div class='ipsBox ipsSpacer_bottom ipsSpacer_double'>
+		<h2 class='ipsType_sectionTitle ipsType_reset ipsHide'>{lang="explore_questions_title"}</h2>
+		<div class="ipsTabs ipsClearfix" id="elQuestionsTabs" data-ipsTabBar data-ipsTabBar-contentarea="#elQuestionsTabsContent">
+			<a href="#elQuestionsTabs" data-action="expandTabs"><i class="fa fa-caret-down"></i></a>
+			<ul role="tablist" class="ipsList_reset">
+				<li>
+					<a href="#elPopularQuestions" role="tab" id="elPopularQuestions" class="ipsTabs_item {{if \count( $popularQuestions ) || !\count( $popularQuestions ) && !\count( $newQuestions )}}ipsTabs_activeItem{{endif}}" role="tab" aria-selected="{{if \count( $popularQuestions ) || !\count( $popularQuestions ) && !\count( $newQuestions )}}true{{else}}false{{endif}}">
+						{lang="popular_questions_title"}
+					</a>
+				</li>				
+				<li>
+					<a href="#elNewQuestions" id="elNewQuestions" role="tab" class="ipsTabs_item {{if !\count( $popularQuestions ) && \count( $newQuestions )}}ipsTabs_activeItem{{endif}}" role="tab" aria-selected="{{if !\count( $popularQuestions ) && \count( $newQuestions )}}true{{else}}false{{endif}}">
+						{{if \IPS\Settings::i()->forums_new_questions}}{lang="new_questions_title_no_answer"}{{else}}{lang="new_questions_title_no_best"}{{endif}}
+					</a>
+				</li>
+			</ul>
+		</div>
+		<section id='elQuestionsTabsContent'>
+			<div id="ipsTabs_elQuestionsTabs_elPopularQuestions_panel" class="ipsTabs_panel" aria-labelledby="elPopularQuestions">
+				{{if \count( $popularQuestions )}}
+					<ol class='ipsDataList ipsDataList_zebra ipsClear cForumTopicTable cForumQuestions cTopicList' id='elTable_popularQuestions' data-role="tableRows">
+						{{foreach $popularQuestions as $question}}
+							{template="popularQuestionRow" params="$question, $forum" group="forums"}
+						{{endforeach}}
+					</ol>
+				{{else}}
+					<div class='ipsType_center ipsType_light ipsPad'>
+						<p class='ipsType_reset ipsType_large'>{lang="no_popular_questions"}</p>
+					</div>
+				{{endif}}
+			</div>
+			<div id="ipsTabs_elQuestionsTabs_elNewQuestions_panel" class="ipsTabs_panel" aria-labelledby="elNewQuestions">
+				{{if \count( $newQuestions )}}
+					<ol class='ipsDataList ipsDataList_zebra ipsClear cForumTopicTable cForumQuestions cTopicList' id='elTable_newQuestions' data-role="tableRows">
+						{{foreach $newQuestions as $question}}
+							{template="popularQuestionRow" params="$question, $forum" group="forums"}
+						{{endforeach}}
+					</ol>
+				{{else}}
+					<div class='ipsType_center ipsType_light ipsPad'>
+						<p class='ipsType_reset ipsType_large'>{lang="no_new_questions"}</p>
+					</div>
+				{{endif}}
+			</div>
+		</section>
+	</div>
+{{else}}
+	{{if $popularQuestions}}
+		<section class='ipsBox ipsSpacer_bottom ipsSpacer_double'>
+			<h2 class='ipsType_sectionTitle ipsType_reset'>{lang="popular_questions_title"}</h2>
+			{{if \count( $popularQuestions )}}
+				<ol class='ipsDataList ipsDataList_readStatus ipsClear cForumTopicTable' id='elTable_' data-role="tableRows">
+					{{foreach $popularQuestions as $question}}
+						{template="popularQuestionRow" params="$question, $forum" group="forums"}
+					{{endforeach}}
+				</ol>
+			{{else}}
+				<div class='ipsType_center ipsType_light ipsPad'>
+					<p class='ipsType_reset ipsType_large'>{lang="no_popular_questions"}</p>
+				</div>
+			{{endif}}
+		</section>
+	{{endif}}
+	{{if $newQuestions}}
+		<section class='ipsBox ipsSpacer_bottom ipsSpacer_double'>
+			<h2 class='ipsType_sectionTitle ipsType_reset'>{{if \IPS\Settings::i()->forums_new_questions}}{lang="new_questions_title_no_answer"}{{else}}{lang="new_questions_title_no_best"}{{endif}}</h2>
+			{{if \count( $newQuestions )}}
+			<ol class='ipsDataList ipsDataList_readStatus ipsClear cForumTopicTable' id='elTable_' data-role="tableRows">
+				{{foreach $newQuestions as $question}}
+					{template="popularQuestionRow" params="$question, $forum" group="forums"}
+				{{endforeach}}
+			</ol>
+			{{else}}
+			<div class='ipsType_center ipsType_light ipsPad'>
+				<p class='ipsType_reset ipsType_large'>{lang="no_new_questions"}</p>
+			</div>
+			{{endif}}
+		</section>
+	{{endif}}
+{{endif}}
+{$table|raw}

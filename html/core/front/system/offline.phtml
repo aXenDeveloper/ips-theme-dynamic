@@ -1,0 +1,17 @@
+<ips:template parameters="$message" />
+<div id='ipsLayout_mainArea'>
+	<div class='ipsBox_alt'>
+		<br>
+		<h1 class='ipsType_pageTitle'>{lang='offline_unavailable' sprintf='\IPS\Settings::i()->board_name'}</h1>
+		<br>
+		<div class='ipsRichText ipsType_normal'>
+			{$message|raw}
+		</div>
+		<br>
+		{{if member.member_id}}
+			<a href='{url="app=core&module=system&controller=login&do=logout" seoTemplate="logout" csrf="1"}' class='ipsButton ipsButton_medium ipsButton_primary'>{lang='sign_out'}</a>
+		{{else}}
+			<a href='{url="app=core&module=system&controller=login" seoTemplate="login"}' class='ipsButton ipsButton_medium ipsButton_primary'>{lang='login'}</a>
+		{{endif}}
+	</div>
+</div>

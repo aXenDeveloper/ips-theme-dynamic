@@ -1,0 +1,13 @@
+<ips:template parameters="$table, $headers, $rows" />
+{{foreach $rows as $row}}
+	<li class='ipsGrid_span6 ipsPhotoPanel ipsPhotoPanel_mini ipsClearfix'>
+		{template="userPhoto" app="core" group="global" params="\IPS\Member::load( $row['member_id'] ), 'mini'"}
+		<div>
+			<h3 class='ipsType_normal ipsType_reset ipsTruncate ipsTruncate_line'>{member="name" id="$row['member_id']"}</h3>
+			<span class='ipsType_light'>
+				{{if $row['bday_year']}}
+				{lang="member_age" pluralize="\IPS\Member::load( $row['member_id'] )->age( \IPS\calendar\Date::getDate( \IPS\Request::i()->y ?: NULL, \IPS\Request::i()->m ?: NULL, \IPS\Request::i()->d ?: NULL ) )"}{{endif}}
+			</span>
+		</div>
+	</li>
+{{endforeach}}

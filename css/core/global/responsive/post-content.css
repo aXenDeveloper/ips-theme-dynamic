@@ -1,0 +1,48 @@
+/* PHONES */
+@media screen and (max-width: 767px) {
+	iframe[data-embedContent] {
+		max-width: 500px;
+		min-height: 165px;
+	}
+
+	html[dir] .ipsEmbedded_withImage .ipsEmbedded_image {
+		display: none;
+	}
+
+	.ipsEmbedded_image, .ipsEmbedded_image a {
+		width: auto;
+	}
+
+	html[dir="ltr"] .ipsEmbedded_withImage .ipsEmbedded_headerArea, 
+	html[dir="ltr"] .ipsEmbedded_withImage .ipsEmbedded_content {
+		padding-left: 7px;
+	}
+	html[dir="rtl"] .ipsEmbedded_withImage .ipsEmbedded_headerArea, 
+	html[dir="rtl"] .ipsEmbedded_withImage .ipsEmbedded_content {
+		padding-right: 7px;
+	}
+
+	/* ======================================================== */
+	/* IMAGES */
+	/* ======================================================== */
+	html[dir="ltr"] .ipsAttachLink_image.ipsAttachLink_right,
+	html[dir="ltr"] .ipsAttachLink.ipsAttachLink_right,
+	html[dir="rtl"] .ipsAttachLink_image.ipsAttachLink_left,
+	html[dir="rtl"] .ipsAttachLink.ipsAttachLink_left {
+		margin-left: 15px;
+	}
+	html[dir="ltr"] .ipsAttachLink_image.ipsAttachLink_left,
+	html[dir="ltr"] .ipsAttachLink.ipsAttachLink_left,
+	html[dir="rtl"] .ipsAttachLink_image.ipsAttachLink_right,
+	html[dir="rtl"] .ipsAttachLink.ipsAttachLink_right {
+		margin-right: 15px;
+	}
+}
+
+
+/* BOTH */
+@media screen and (max-width: 979px) {
+	.cke_wysiwyg_div {
+		font-size: 16px;
+	}
+}

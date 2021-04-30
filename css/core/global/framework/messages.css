@@ -1,0 +1,134 @@
+/* Messages: to give the user information, warnings etc. */
+/* ======================================================== */
+/* BASE */
+.ipsMessage,
+.ipsAnnouncement {
+	border-radius: var(--radius-1);
+	position: relative;
+	margin-bottom: var(--sp-3);
+	color: #fff;
+	border: 1px solid rgba(0,0,0,0.1);
+	box-shadow: inset rgba(255,255,255,0.1) 0px 1px 0px;
+}
+html[dir="ltr"] .ipsMessage {
+	padding: var(--sp-4) var(--sp-4) var(--sp-4) var(--sp-9);
+}
+html[dir="rtl"] .ipsMessage {
+	padding: var(--sp-4) var(--sp-9) var(--sp-4) var(--sp-4);
+}
+
+	.ipsMessage:before {
+		font-family: 'FontAwesome';
+		position: absolute;
+		top: var(--sp-4);
+		font-size: 20px;
+		line-height: 1;
+	}
+	html[dir="ltr"] .ipsMessage:before {
+		left: var(--sp-4);
+	}
+	html[dir="rtl"] .ipsMessage:before {
+		right: var(--sp-4);
+	}
+
+	.ipsMessage:not(.cAnnouncementPageTop):not(.cAnnouncementSidebar):not(.cAnnouncementContentTop) a:not(.ipsUserPhoto):not(.ipsButton) {
+		border-bottom: 1px solid {hextorgb="#fff" opacity="0.6"};
+	}
+
+		.ipsMessage a:not(.ipsUserPhoto):not(.ipsButton){
+			color: inherit;
+		}
+
+	.ipsMessage_title {
+		margin: 0;
+		padding: 0;
+		font-size: {fontsize="base"};
+		line-height: 1;
+		margin-bottom: var(--sp-1);
+	}
+	
+	.ipsMessage a.ipsButton {
+		margin-top: -5px;
+	}
+
+html[dir] .ipsMessage .ipsButton_link {
+	border-color: currentColor;
+	color: #fff;
+	opacity: 0.7;
+}
+	
+/* Styles a code displayed in some messages */
+.ipsMessage_code {
+	padding: 7px;
+	display: inline-block;
+	background: rgba(0,0,0,0.2);
+	border-radius: 3px;
+	margin-top: -7px;
+	color: rgba(255,255,255,0.8);
+}
+html[dir="rtl"] .ipsMessage_code {
+	float: left;
+	margin-right: -7px;
+}
+html[dir="rtl"] .ipsMessage_code {
+	float: left;
+	margin-left: -7px;
+}
+
+/* ======================================================== */
+/* ERROR */
+.ipsMessage_error {
+	background: var(--negative-dark);
+}
+
+	.ipsMessage_error:before {
+		content: '\f06a';
+	}
+
+/* ======================================================== */
+/* SUCCESS */
+.ipsMessage_success {
+	background: var(--positive-dark);
+}
+
+	.ipsMessage_success:before {
+		content: '\f00c';
+	}
+
+/* ======================================================== */
+/* WARNING */
+.ipsMessage_warning {
+	background: var(--intermediate-dark);
+}
+
+	.ipsMessage_warning:before {
+		content: '\f071';
+	}
+	
+	.ipsMessage a.ipsMessage_close {
+		border-bottom: none;
+	}
+
+/* ======================================================== */
+/* INFO */
+.ipsMessage_info, .ipsMessage_information {
+	background: var(--informational-dark);
+}
+
+	.ipsMessage_info:before, .ipsMessage_information:before {
+		content: '\f05a';
+	}
+
+/* ======================================================== */
+/* OTHER */
+.ipsMessage_general {
+	background: var(--general-dark);
+}
+
+	.ipsMessage_general:before {
+		content: '\f05a';
+	}
+
+.ipsMessage_none {
+	background: rgb( var(--theme-area_background_dark) );
+}

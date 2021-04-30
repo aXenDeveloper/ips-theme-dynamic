@@ -1,0 +1,61 @@
+<ips:template parameters="$table, $headers, $rows" />
+{{foreach $rows as $row}}
+	{{$contentItemClass = $row::$contentItemClass;}}
+	<li class="ipsDataItem {{if $contentItemClass::containerUnread( $row )}}ipsDataItem_unread{{endif}} {{if method_exists( $row, 'tableClass' ) && $row->tableClass()}}ipsDataItem_{$row->tableClass()}{{endif}}" data-controller='core.front.system.manageFollowed' data-followID='{$row->_followData['follow_area']}-{$row->_followData['follow_rel_id']}'>
+		<div class='ipsDataItem_main'>
+			<h4 class='ipsType_sectionHead'>
+				{{if $row->_locked}}
+					<i class="fa fa-lock"></i>
+				{{endif}}
+				
+				<a href='{$row->url()}'>
+					{$row->_title}
+				</a>
+			</h4>
+			<div class='ipsDataItem_meta ipsType_light' data-ipsTruncate data-ipsTruncate-size='2 lines' data-ipsTruncate-type='remove'>
+				{$row->_description}
+			</div>
+			<ul class='ipsList_inline ipsType_light'>
+				{{if $row->_items}}
+					<li>{lang="node_content_items" pluralize="$row->_items"}</li>
+				{{endif}}
+				{{if $row->_comments}}
+					<li>{lang="node_content_comments" pluralize="$row->_comments"}</li>
+				{{endif}}
+				{{if $row->_reviews}}
+					<li>{lang="node_content_reviews" pluralize="$row->_reviews"}</li>
+				{{endif}}
+			</ul>
+		</div>
+		
+		<div class='ipsDataItem_generic ipsDataItem_size1 ipsType_center ipsType_large'>
+			<span class='ipsBadge ipsBadge_icon ipsBadge_new {{if !$row->_followData['follow_is_anon']}}ipsHide{{endif}}' data-role='followAnonymous' data-ipsTooltip title='{lang="follow_is_anon"}'><i class='fa fa-eye-slash'></i></span>
+		</div>
+
+		<div class='ipsDataItem_generic ipsDataItem_size6'>
+			<ul class='ipsList_reset'>
+				<li title='{lang="follow_when"}' data-role='followDate'><i class='fa fa-clock-o'></i> {datetime="$row->_followData['follow_added']"}</li>
+				<li title='{lang="follow_how"}' data-role='followFrequency'>
+					{{if $row->_followData['follow_notify_freq'] == 'none'}}
+						<i class='fa fa-bell-slash-o'></i>
+					{{else}}
+						<i class='fa fa-bell'></i>
+					{{endif}} {lang="follow_freq_{$row->_followData['follow_notify_freq']}"}
+				</li>
+			</ul>
+		</div>
+
+		<div class='ipsDataItem_generic ipsDataItem_size6 ipsType_center'>
+			{template="manageFollow" group="system" app="core" params="$row->_followData['follow_app'], $row->_followData['follow_area'], $row->_followData['follow_rel_id']"}
+		</div>
+
+		{{if $table->canModerate()}}
+			<div class='ipsDataItem_modCheck'>
+				<span class='ipsCustomInput'>
+					<input type='checkbox' data-role='moderation' name="moderate[{$row->_id}]" data-actions="{expression="implode( ' ', $table->multimodActions( $row ) )"}" data-state=''>
+					<span></span>
+				</span>
+			</div>
+		{{endif}}
+	</li>
+{{endforeach}}

@@ -1,0 +1,31 @@
+<ips:template parameters="" />
+
+{{if ( theme.headline_font && theme.headline_font !== 'default' ) || ( theme.body_font && theme.body_font !== 'default' ) }}
+	{{if theme.headline_font == theme.body_font}}
+		<link href="https://fonts.googleapis.com/css?family={expression="\IPS\Http\Url::encodeComponent( \IPS\Http\Url::COMPONENT_FRAGMENT, \IPS\Theme::i()->settings['body_font'] )"}:300,300i,400,400i,500,700,700i" rel="stylesheet" referrerpolicy="origin">
+	{{else}}
+		{{if ( theme.headline_font && theme.headline_font !== 'default' )}}
+			<link href="https://fonts.googleapis.com/css?family={expression="\IPS\Http\Url::encodeComponent( \IPS\Http\Url::COMPONENT_FRAGMENT, \IPS\Theme::i()->settings['headline_font'] )"}:300,300i,400,500,400i,700,700i" rel="stylesheet" referrerpolicy="origin">
+		{{endif}}
+		{{if ( theme.body_font && theme.body_font !== 'default' )}}
+			<link href="https://fonts.googleapis.com/css?family={expression="\IPS\Http\Url::encodeComponent( \IPS\Http\Url::COMPONENT_FRAGMENT, \IPS\Theme::i()->settings['body_font'] )"}:300,300i,400,400i,500,700,700i" rel="stylesheet" referrerpolicy="origin">
+		{{endif}}
+	{{endif}}
+{{endif}}
+
+{{foreach array_unique( \IPS\Output::i()->cssFiles, SORT_STRING ) as $file}}
+	<link rel='stylesheet' href='{expression="\IPS\Http\Url::external( $file )->setQueryString( 'v', \IPS\Theme::i()->cssCacheBustKey() )"}' media='all'>
+{{endforeach}}
+
+{{if \IPS\Dispatcher::i()->controllerLocation == 'front'}}
+{{$customCss = \IPS\Theme::i()->css( 'custom.css', 'core', 'front' );}}
+{{foreach $customCss as $css}}
+<link rel='stylesheet' href='{expression="\IPS\Http\Url::external( $css )->setQueryString( 'v', \IPS\Theme::i()->cssCacheBustKey() )"}' media='all'>
+{{endforeach}}
+{{endif}}
+
+{{if \IPS\Output::i()->headCss}}
+<style type='text/css'>
+	{expression="\IPS\Output::i()->headCss" raw="true"}
+</style>
+{{endif}}

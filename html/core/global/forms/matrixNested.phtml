@@ -1,0 +1,16 @@
+<ips:template parameters="$id, $headers, $rows, $action, $hiddenValues, $actionButtons, $langPrefix, $widths=array(), $manageable=TRUE, $checkAlls=array(), $checkAllRows=FALSE, $classes=array(), $showTooltips=FALSE, $squashFields=TRUE, $sortable=FALSE" />
+<div data-ipsMatrix data-ipsMatrix-manageable='{{if $manageable}}true{{else}}false{{endif}}' {{if $sortable}}data-ipsMatrix-sortable='true'{{endif}} {{if $squashFields}}data-ipsMatrix-squashFields{{endif}}>
+	{{foreach $rows as $rowId => $row}}
+		<input type='hidden' name='{$id}_matrixRows[{$rowId}]' data-matrixrowid='{$rowId}' value='1'>
+	{{endforeach}}
+	{{if $manageable}}
+		<div class='ipsClearfix'>
+			<div class="ipsJS_show">
+				{template="buttons" group="global" app="core" location="admin" params="array( 'add' => array( 'link' => \IPS\Http\Url::internal( '#' ), 'icon' => 'plus', 'title' => 'add_button', 'class' => 'matrixAdd', 'data' => array( 'matrixID' => $id ) ) )"}
+			</div>
+		</div>
+	{{endif}}
+	<table class='ipsTable ipsMatrix ipsClear ipsTable_responsive {{if \count( $classes )}}{expression="implode( ' ', $classes )"}{{endif}}' role='grid' data-matrixID='{$id}'>
+		{template="matrixRows" group="forms" app="core" location="global" params="$headers, $rows, $langPrefix, $manageable, $widths, $checkAlls, $checkAllRows, $showTooltips, $sortable ? $id : FALSE"}
+	</table>	
+</div>

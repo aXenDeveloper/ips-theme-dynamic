@@ -1,0 +1,47 @@
+<ips:template parameters="$topics, $orientation='vertical'" />
+{{if !empty( $topics ) }}
+	<h3 class='ipsWidget_title ipsType_reset'>{lang="block_hotTopics"}</h3>
+
+	{{if $orientation == 'vertical'}}
+		<div class='ipsPad_half ipsWidget_inner'>
+			<ul class='ipsDataList ipsDataList_reducedSpacing'>
+				{{foreach $topics as $topic}}
+					<li class='ipsDataItem{{if $topic->hidden()}} ipsModerated{{endif}}'>
+						<div class='ipsDataItem_icon ipsPos_top'>
+							{template="userPhoto" group="global" app="core" params="$topic->author(), 'tiny'"}
+						</div>
+						<div class='ipsDataItem_main cWidgetComments'>
+							<div class="ipsCommentCount ipsPos_right {{if ( $topic->posts - 1 ) === 0}}ipsFaded{{endif}}" data-ipsTooltip title='{lang="replies_number" pluralize="$topic->posts - 1"}'>{expression="\IPS\Member::loggedIn()->language()->formatNumber( $topic->posts - 1 )"}</div>
+							
+							<div class='ipsType_break ipsContained'>
+								{{if $topic->mapped('featured') || $topic->hidden() === -1 || $topic->hidden() === 1}}
+									{{if $topic->hidden() === -1}}
+										<span><span class="ipsBadge ipsBadge_icon ipsBadge_small ipsBadge_warning" data-ipsTooltip title='{$topic->hiddenBlurb()}'><i class='fa fa-eye-slash'></i></span></span>
+									{{elseif $topic->hidden() === 1}}
+										<span><span class="ipsBadge ipsBadge_icon ipsBadge_small ipsBadge_warning" data-ipsTooltip title='{lang="pending_approval"}'><i class='fa fa-warning'></i></span></span>
+									{{endif}}
+									{{if $topic->mapped('featured')}}
+										<span><span class="ipsBadge ipsBadge_icon ipsBadge_small ipsBadge_positive" data-ipsTooltip title='{lang="featured"}'><i class='fa fa-star'></i></span></span>
+									{{endif}}
+								{{endif}}
+								<a href="{$topic->url( "getPrefComment" )}" title='{lang="view_this_topic" sprintf="$topic->title"}' class='ipsDataItem_title'>{$topic->title}</a>
+							</div>
+							<p class='ipsType_reset ipsType_medium ipsType_blendLinks ipsContained'>
+								<span>{lang="byline_nodate" htmlsprintf="$topic->author()->link()"}</span><br>
+								<span class='ipsType_light'>{lang="topic_started_date" htmlsprintf="\IPS\DateTime::ts( $topic->mapped('date') )->html()"}</span>
+							</p>
+						</div>
+					</li>
+				{{endforeach}}
+			</ul>
+		</div>
+	{{else}}
+		<div class='ipsWidget_inner'>
+			<ul class='ipsDataList'>
+				{{foreach $topics as $topic}}
+					{template="row" group="global" app="forums" params="NULL, NULL, $topic, FALSE"}
+				{{endforeach}}
+			</ul>
+		</div>
+	{{endif}}
+{{endif}}

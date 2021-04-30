@@ -1,0 +1,381 @@
+<ips:template parameters="$baseUrl, $count=NULL, $id, $action, $elements, $hiddenValues, $actionButtons, $uploadField, $class='', $attributes=array(), $sidebar, $form=NULL, $errorTabs=NULL" />
+
+{{$countFields = array( 'search_min_comments', 'search_min_replies', 'search_min_reviews', 'search_min_views');}}
+<form accept-charset='utf-8' class="ipsForm ipsForm_vertical" method='post' action='{$action}' data-ipsForm id='elSearchFilters_content'>
+	<input type="hidden" name="{$id}_submitted" value="1">
+	{{foreach $hiddenValues as $k => $v}}
+		<input type="hidden" name="{$k}" value="{$v}">
+	{{endforeach}}
+
+	{{if $form->error}}
+		<div class="ipsMessage ipsMessage_error ipsSpacer_bottom">
+			{$form->error}
+		</div>
+	{{endif}}
+
+	<div class='ipsFlex ipsFlex-ai:start ipsGap cSearchMainBar'>
+		<button type='submit' class='ipsFlex-flex:00 cSearchPretendButton' tabindex='-1'><i class='fa fa-search ipsType_huge'></i></button>
+		<div class='ipsFlex-flex:11'>
+			<div class='cSearchWrapper'>
+				<input type='text' id='elMainSearchInput' name='q' value='{expression="\IPS\Request::i()->q"}' placeholder='{lang="q"}' autofocus class='ipsField_primary ipsField_fullWidth'>
+				<div class='cSearchWrapper__button'>
+					<button type='submit' id='elSearchSubmit' class='ipsButton ipsButton_primary ipsButton_verySmall ipsPos_right ipsResponsive_hidePhone {{if isset( $hiddenValues['__advanced'] )}}ipsHide{{endif}}' data-action='searchAgain'>{lang="search_again"}</button>
+				</div>
+			</div>
+			<div class='ipsFlex ipsFlex-ai:center ipsFlex-fw:wrap'>
+				<div class='ipsFlex-flex:11 ipsType_brandedLinks'>
+					<div class='ipsMargin_top' data-role="hints">
+					{template="hints" group="search" location="front" params="$baseUrl, $count"}
+				</div>
+				</div>
+				<div>
+					<p class='ipsType_reset ipsMargin_top {{if isset( $hiddenValues['__advanced'] )}}ipsHide{{endif}}' data-action='showFilters'>
+						<a href='#' class='ipsButton ipsButton_light ipsButton_verySmall'><i class='fa fa-plus'></i> {lang="search_more_options"}</a>
+					</p>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div data-role='searchFilters' class='ipsSpacer_top ipsBox ipsBox--child {{if !isset( $hiddenValues['__advanced'] )}}ipsHide{{endif}}'>
+		{{if member.canAccessModule( \IPS\Application\Module::get( 'core', 'members', 'front' ) )}}
+		<div class='ipsTabs ipsTabs_stretch ipsClearfix' id='elTabs_search' data-ipsTabBar data-ipsTabBar-contentArea='#elTabs_search_content'>
+			<a href="#elTabs_search" data-action="expandTabs"><i class="fa fa-caret-down"></i></a>
+			<ul role='tablist'>
+				<li>
+					<a href='#' id="elTab_searchContent" class="ipsTabs_item {{if \IPS\Request::i()->type != 'core_members'}}ipsTabs_activeItem{{endif}} ipsType_center" title="{lang="search_content_search_title"}" role="tab" {{if \IPS\Request::i()->type != 'core_members'}}aria-selected="true"{{endif}}>
+						{lang="search_content_search"}
+					</a>
+				</li>
+				<li>
+					<a href='#' id="elTab_searchMembers" class="ipsTabs_item {{if \IPS\Request::i()->type == 'core_members'}}ipsTabs_activeItem{{endif}} ipsType_center" title="{lang="search_member_search_title"}" role="tab" {{if \IPS\Request::i()->type == 'core_members'}}aria-selected="true"{{endif}}>
+						{lang="search_member_search"}
+					</a>
+				</li>
+			</ul>
+		</div>
+		{{endif}}
+		<section id='elTabs_search_content' class='ipsTabs_panels'>
+			<div id='ipsTabs_elTabs_search_elTab_searchContent_panel' class='ipsTabs_panel' data-tabType='content'>
+				<div class='ipsPad_double'>
+					<div class=''>		
+						<ul class='ipsList_reset'>
+							{{if \IPS\Settings::i()->tags_enabled}}
+								{{if isset( $elements['search_tab_content']['tags'] )}}
+									<li class='ipsSpacer_half {{if !$elements['search_tab_content']['tags']->value}}ipsHide{{endif}} ipsFieldRow_fullWidth' data-role='searchTags'>
+										<h3 class="ipsType_reset ipsType_large cStreamForm_title ipsSpacer_bottom ipsSpacer_half">{lang="search_by_tags"}</h3>
+										{$elements['search_tab_content']['tags']->html()|raw}
+										<span class='ipsType_light ipsType_small'>{lang="tags_desc"}</span>
+									</li>
+								{{endif}}
+								{{if isset( $elements['search_tab_content']['eitherTermsOrTags'] )}}
+									<li class='ipsSpacer_top ipsSpacer_half {{if !$elements['search_tab_content']['tags']->value || !$elements['search_tab_all']['q']->value}}ipsHide{{endif}}' data-role='searchTermsOrTags'>
+										<ul class='ipsFieldRow_content ipsList_reset'>
+											<li class='ipsFieldRow_inlineCheckbox'>
+												<span class='ipsCustomInput'>
+													<input type='radio' name="eitherTermsOrTags" value="or" id='elRadio_eitherTermsOrTags_or' {{if $elements['search_tab_content']['eitherTermsOrTags']->value == 'or'}}checked{{endif}}>
+													<span></span>
+												</span> <label for='elRadio_eitherTermsOrTags_or'>{lang="termsortags_or_desc"}</label>
+											</li>
+											<li class='ipsFieldRow_inlineCheckbox'>
+												<span class='ipsCustomInput'>
+													<input type='radio' name="eitherTermsOrTags" value="and" id='elRadio_eitherTermsOrTags_and' {{if $elements['search_tab_content']['eitherTermsOrTags']->value == 'and'}}checked{{endif}}>
+													<span></span>
+												</span> <label for='elRadio_eitherTermsOrTags_and'>{lang="termsortags_and_desc"}</label>
+											</li>
+										</ul>
+									</li>
+								{{endif}}
+							{{endif}}
+							{{if isset( $elements['search_tab_content']['author'] )}}
+								<li class='ipsSpacer_top {{if !$elements['search_tab_content']['author']->value}}ipsHide{{endif}} ipsFieldRow_fullWidth' data-role='searchAuthors'>
+									<h3 class="ipsType_reset ipsType_large cStreamForm_title ipsSpacer_bottom ipsSpacer_half">{lang="search_by_author"}</h3>
+									{$elements['search_tab_content']['author']->html()|raw}
+								</li>
+							{{endif}}
+						</ul>
+						{{if isset( $elements['search_tab_content']['tags'] ) || isset( $elements['search_tab_content']['author'] )}}
+							<ul class="ipsList_inline ipsType_normal ipsJS_show">
+								{{if \IPS\Settings::i()->tags_enabled and isset( $elements['search_tab_content']['tags'] ) && !$elements['search_tab_content']['tags']->value}}
+									<li><a href="#" data-action="searchByTags" data-opens='searchTags,searchTermsOrTags'><i class="fa fa-plus"></i> {lang="search_by_tags"}</a></li>
+								{{endif}}
+								{{if isset( $elements['search_tab_content']['author'] ) && !$elements['search_tab_content']['author']->value}}
+									<li><a href="#" data-action="searchByAuthors" data-opens='searchAuthors'><i class="fa fa-plus"></i> {lang="search_by_author"}</a></li>
+								{{endif}}
+							</ul>
+						{{endif}}
+					</div>
+
+					<div class='ipsGrid ipsGrid_collapsePhone ipsSpacer_top ipsSpacer_double'>
+						{{if isset( $elements['search_tab_content']['type'] )}}
+							{{$type = $elements['search_tab_content']['type'];}}
+							<div class='ipsGrid_span3'>
+								<h3 class="ipsType_reset ipsType_large cStreamForm_title ipsSpacer_bottom ipsSpacer_half">{lang="searchType"}</h3>
+								<ul class="ipsSideMenu_list ipsSideMenu_withRadios ipsSideMenu_small ipsType_normal" data-role='searchApp' data-ipsSideMenu data-ipsSideMenu-type="radio" data-ipsSideMenu-responsive="false">
+									{{foreach $type->options['options'] as $k => $lang}}
+										{{if $k == 'core_members'}}{{continue;}}{{endif}}
+										<li>
+											<span id='elSearchToggle_{$k}' class='ipsSideMenu_item {{if (string) $type->value == (string) $k}}ipsSideMenu_itemActive{{endif}}' data-ipsMenuValue='{$k}'>
+												<input type="radio" name="type" value="{$k}" {{if (string) $type->value == (string) $k}}checked{{endif}} id="elRadio_type_{$k}" data-control="toggle" data-toggles="{expression="implode( ',', $type->options['toggles'][ $k ] )"}" data-toggle-visibleCheck='#elSearchToggle_{$k}'>
+												<label for='elRadio_type_{$k}' id='elField_type_{$k}_label' data-role='searchAppTitle'>{lang="$lang"}</label>
+											</span>
+										</li>
+									{{endforeach}}
+								</ul>
+								
+								{{if isset( $elements['search_tab_nodes'] )}}
+									<br>
+									{{foreach $elements['search_tab_nodes'] as $element}}
+										<div id="{$element->htmlId}">
+											<h3 class="ipsType_reset ipsType_large cStreamForm_title ipsSpacer_bottom ipsSpacer_half">{lang="$element->label"}</h3>
+											{$element->html()|raw}
+										</div>
+									{{endforeach}}
+								{{endif}}
+								
+								{{if isset( $elements['search_tab_content']['club'] )}}
+									<div id="{$elements['search_tab_content']['club']->htmlId}" class='ipsContained'>
+										<h3 class="ipsType_reset ipsType_large cStreamForm_title ipsSpacer_bottom ipsSpacer_half">{lang="club"}</h3>
+										{$elements['search_tab_content']['club']->html()|raw}
+									</div>
+								{{endif}}
+
+								<hr class='ipsHr ipsSpacer_both ipsResponsive_showPhone ipsResponsive_block'>
+							</div>
+						{{endif}}
+						<div class='ipsGrid_span9'>
+							<div class='ipsGrid_span9' data-role='searchFilters' id='elSearchFiltersMain'>
+								<div class='ipsGrid ipsGrid_collapsePhone'>
+									<div class='ipsGrid_span6'>
+										<h3 class="ipsType_reset ipsType_large cStreamForm_title">{lang="searchIn"}</h3>
+										<ul class='ipsSideMenu_list ipsSideMenu_withRadios ipsSideMenu_small ipsType_normal ipsSpacer_top ipsSpacer_half' role="radiogroup" data-ipsSideMenu data-ipsSideMenu-type="radio" data-ipsSideMenu-responsive="false" data-filterType='searchIn'>
+											{{foreach $elements['search_tab_content']['search_in']->options['options'] as $k => $lang}}
+												<li>
+													<span class='ipsSideMenu_item {{if (string) $elements['search_tab_content']['search_in']->value == (string) $k}}ipsSideMenu_itemActive{{endif}}' data-ipsMenuValue='{$k}'>
+														<input type="radio" name="search_in" value="{$k}" {{if (string) $elements['search_tab_content']['search_in']->value == (string) $k}}checked{{endif}} id="elRadio_searchIn_full_{$k}">
+														<label for='elRadio_searchIn_full_{$k}' id='elField_searchIn_full_label_{$k}'>{lang="$lang"}</label>
+													</span>
+												</li>
+											{{endforeach}}
+										</ul>
+									</div>
+									<div class='ipsGrid_span6'>
+										<h3 class="ipsType_reset ipsType_large cStreamForm_title">{lang="andOr"}</h3>
+										<ul class='ipsSideMenu_list ipsSideMenu_withRadios ipsSideMenu_small ipsType_normal ipsSpacer_top ipsSpacer_half' role="radiogroup" data-ipsSideMenu data-ipsSideMenu-type="radio" data-ipsSideMenu-responsive="false" data-filterType='andOr'>
+											{{foreach $elements['search_tab_content']['search_and_or']->options['options'] as $k => $lang}}
+												<li>
+													<span class='ipsSideMenu_item {{if (string) $elements['search_tab_content']['search_and_or']->value == (string) $k}}ipsSideMenu_itemActive{{endif}}' data-ipsMenuValue='{$k}'>
+														<input type="radio" name="search_and_or" value="{$k}" {{if (string) $elements['search_tab_content']['search_and_or']->value == (string) $k}}checked{{endif}} id="elRadio_andOr_full_{$k}">
+														<label for='elRadio_andOr_full_{$k}' id='elField_andOr_full_label_{$k}'>{lang="$lang"}</label>
+													</span>
+												</li>
+											{{endforeach}}
+										</ul>
+									</div>
+								</div>
+								<br>
+								<div class='ipsGrid ipsGrid_collapsePhone'>
+									{{if isset( $elements['search_tab_content']['startDate'] )}}
+										<div class='ipsGrid_span6'>
+											<h3 class="ipsType_reset ipsType_large cStreamForm_title">{lang="startDate"}</h3>
+											<ul class="ipsSideMenu_list ipsSideMenu_withRadios ipsSideMenu_small ipsType_normal ipsSpacer_top ipsSpacer_half" role="radiogroup" data-ipsSideMenu data-ipsSideMenu-type="radio" data-ipsSideMenu-responsive="false" data-filterType='dateCreated'>
+												{{foreach $elements['search_tab_content']['startDate']->options['options'] as $k => $lang}}
+													<li>
+														<span class='ipsSideMenu_item {{if (string) $elements['search_tab_content']['startDate']->value == (string) $k}}ipsSideMenu_itemActive{{endif}}' data-ipsMenuValue='{$k}'>
+															<input type="radio" name="startDate" value="{$k}" {{if (string) $elements['search_tab_content']['startDate']->value == (string) $k}}checked{{endif}} id="elRadio_startDate_{$k}">
+															<label for='elRadio_startDate_{$k}' id='elField_startDate_label_{$k}'>{lang="$lang"}</label>
+														</span>
+													</li>
+												{{endforeach}}
+												<li class='ipsGrid ipsGrid_collapsePhone cStreamForm_dates ipsAreaBackground_light ipsPad_half {{if $elements['search_tab_content']['startDate']->value !== 'custom'}}ipsJS_hide{{endif}}' data-role="dateForm">
+													<div class='ipsGrid_span6'>
+														<h4 class='ipsType_minorHeading'>{lang="start"}</h4>
+														<input type='date' name='{$elements['search_tab_content']['startDateCustom']->name}[start]' data-control='date' data-role='start' value='{$elements['search_tab_content']['startDateCustom']->value['start']}'>	
+													</div>
+													<div class='ipsGrid_span6'>
+														<h4 class='ipsType_minorHeading'>{lang="end"}</h4>
+														<input type='date' name='{$elements['search_tab_content']['startDateCustom']->name}[end]' data-control='date' data-role='end' value='{$elements['search_tab_content']['startDateCustom']->value['end']}'>
+													</div>
+												</li>
+											</ul>
+											<hr class='ipsHr ipsSpacer_both ipsResponsive_showPhone ipsResponsive_block'>
+										</div>
+									{{endif}}
+									{{if isset( $elements['search_tab_content']['updatedDate'] )}}
+										<div class='ipsGrid_span6'>
+											<h3 class="ipsType_reset ipsType_large cStreamForm_title">{lang="updatedDate"}</h3>
+											<ul class="ipsSideMenu_list ipsSideMenu_withRadios ipsSideMenu_small ipsType_normal ipsSpacer_top ipsSpacer_half" role="radiogroup" data-ipsSideMenu data-ipsSideMenu-type="radio" data-ipsSideMenu-responsive="false" data-filterType='dateUpdated'>
+												{{foreach $elements['search_tab_content']['updatedDate']->options['options'] as $k => $lang}}
+													<li>
+														<span class='ipsSideMenu_item {{if (string) $elements['search_tab_content']['updatedDate']->value == (string) $k}}ipsSideMenu_itemActive{{endif}}' data-ipsMenuValue='{$k}'>
+															<input type="radio" name="updatedDate" value="{$k}" {{if (string) $elements['search_tab_content']['updatedDate']->value == (string) $k}}checked{{endif}} id="elRadio_updatedDate_{$k}">
+															<label for='elRadio_updatedDate_{$k}' id='elField_updatedDate_label_{$k}'>{lang="$lang"}</label>
+														</span>
+													</li>
+												{{endforeach}}
+												<li class='ipsGrid ipsGrid_collapsePhone cStreamForm_dates ipsAreaBackground_light ipsPad_half {{if $elements['search_tab_content']['updatedDate']->value !== 'custom'}}ipsJS_hide{{endif}}' data-role="dateForm">
+													<div class='ipsGrid_span6'>
+														<h4 class='ipsType_minorHeading'>{lang="start"}</h4>
+														<input type='date' name='{$elements['search_tab_content']['updatedDateCustom']->name}[start]' data-control='date' data-role='start' value='{$elements['search_tab_content']['updatedDateCustom']->value['start']}'>	
+													</div>
+													<div class='ipsGrid_span6'>
+														<h4 class='ipsType_minorHeading'>{lang="end"}</h4>
+														<input type='date' name='{$elements['search_tab_content']['updatedDateCustom']->name}[end]' data-control='date' data-role='end' value='{$elements['search_tab_content']['updatedDateCustom']->value['end']}'>
+													</div>
+												</li>
+											</ul>
+										</div>
+									{{endif}}
+								</div>
+
+								<hr class='ipsHr'>
+
+								<h3 class="ipsType_reset ipsType_large cStreamForm_title" id="elSearch_filter_by_number">{lang="search_filter_by_number"}</h3>
+								<ul class="ipsList_inline ipsSpacer_top ipsSpacer_half ipsType_normal">
+									{{foreach $elements['search_tab_content'] as $inputName => $input}}
+										{{if \in_array( $inputName, $countFields )}}
+											<li id='{$inputName}'>
+												<a href="#elSearch_{$inputName}_menu" data-ipsMenu data-ipsMenu-appendTo='#elSearchFilters_content' data-ipsMenu-closeOnClick='false' id='elSearch_{$inputName}' data-role='{$inputName}_link'><span class='ipsBadge ipsBadge_small ipsBadge_style1 {{if $input->value <= 0}}ipsHide{{endif}}' data-role='fieldCount'>{$input->value}</span> {lang="$inputName"} <i class='fa fa-caret-down'></i></a>
+												<div class='ipsMenu ipsMenu_medium ipsFieldRow_fullWidth ipsPad ipsHide' id='elSearch_{$inputName}_menu'>
+													<h4 class="ipsType_reset ipsType_minorHeading ipsSpacer_bottom ipsSpacer_half">{lang="{$inputName}_title"}</h4>
+													<div class='ipsFieldRow_fullWidth'>
+														{$input->html()|raw}
+													</div>
+												</div>
+											</li>
+										{{endif}}
+									{{endforeach}}
+								</ul>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			{{if member.canAccessModule( \IPS\Application\Module::get( 'core', 'members', 'front' ) )}}
+				<div id='ipsTabs_elTabs_search_elTab_searchMembers_panel' class='ipsTabs_panel' data-tabType='members'>
+					{{$exclude = array( 'joinedDate', 'joinedDateCustom', 'group');}}
+					{{$totalCustomFields = \count( $elements['search_tab_member'] ) - \count( $exclude ); // Don't count joined, joined custom or group}}
+					{{$perCol = ceil( $totalCustomFields / 2 );}}
+					<div class='ipsPad_double'>
+						<span class='ipsJS_hide'>
+							<input type="radio" name="type" value="core_members" {{if (string) $elements['search_tab_content']['type']->value == (string) 'core_members'}}checked{{endif}} id="elRadio_type_core_members">
+							<label for='elRadio_type_core_members' id='elField_type_core_members_label' data-role='searchAppTitle'>{lang="core_members_pl"}</label>
+						</span>
+						<div class='ipsGrid ipsGrid_collapsePhone'>
+							<div class='ipsGrid_span4'>
+								{{if isset( $elements['search_tab_member']['joinedDate'] )}}
+									<h3 class="ipsType_reset ipsType_large cStreamForm_title">{lang="joinedDate"}</h3>
+									<ul class="ipsSideMenu_list ipsSideMenu_withRadios ipsSideMenu_small ipsType_normal ipsSpacer_top ipsSpacer_half" role="radiogroup" data-ipsSideMenu data-ipsSideMenu-type="radio" data-ipsSideMenu-responsive="false" data-filterType='joinedDate'>
+										{{foreach $elements['search_tab_member']['joinedDate']->options['options'] as $k => $lang}}
+											<li>
+												<span class='ipsSideMenu_item {{if (string) $elements['search_tab_member']['joinedDate']->value == (string) $k}}ipsSideMenu_itemActive{{endif}}' data-ipsMenuValue='{$k}'>
+													<input type="radio" name="joinedDate" value="{$k}" {{if (string) $elements['search_tab_member']['joinedDate']->value == (string) $k}}checked{{endif}} id="elRadio_joinedDate_{$k}">
+													<label for='elRadio_joinedDate_{$k}' id='elField_joinedDate_label_{$k}'>{lang="$lang"}</label>
+												</span>
+											</li>
+										{{endforeach}}
+										<li class='ipsGrid ipsGrid_collapsePhone cStreamForm_dates ipsAreaBackground_light ipsPad_half {{if $elements['search_tab_member']['joinedDate']->value !== 'custom'}}ipsJS_hide{{endif}}' data-role="dateForm">
+											<div class='ipsGrid_span6'>
+												<h4 class='ipsType_minorHeading'>{lang="start"}</h4>
+												<input type='date' name='{$elements['search_tab_member']['joinedDateCustom']->name}[start]' data-control='date' data-role='start' value='{$elements['search_tab_member']['joinedDateCustom']->value['start']}'>	
+											</div>
+											<div class='ipsGrid_span6'>
+												<h4 class='ipsType_minorHeading'>{lang="end"}</h4>
+												<input type='date' name='{$elements['search_tab_member']['joinedDateCustom']->name}[end]' data-control='date' data-role='end' value='{$elements['search_tab_member']['joinedDateCustom']->value['end']}'>
+											</div>
+										</li>
+									</ul>
+									<hr class='ipsHr ipsSpacer_both ipsResponsive_showPhone ipsResponsive_block'>
+								{{endif}}
+							</div>
+							<div class='ipsGrid_span8' data-role='searchFilters' id='elSearchFiltersMembers'>
+								<div class='ipsGrid ipsGrid_collapsePhone'>
+									<div class='ipsGrid_span6'>
+										{{if isset( $elements['search_tab_member']['group'] )}}
+											<h3 class="ipsType_reset ipsType_large cStreamForm_title">{lang="group"}</h3>
+											<ul class="ipsSideMenu_list ipsSideMenu_withChecks ipsSideMenu_small ipsType_normal ipsSpacer_top ipsSpacer_half" data-ipsSideMenu data-ipsSideMenu-type="check" data-ipsSideMenu-responsive="false" data-filterType='group'>
+												{{foreach $elements['search_tab_member']['group']->options['options'] as $k => $group}}
+													<li>
+														<span class='ipsSideMenu_item {{if \is_array( $elements['search_tab_member']['group']->value ) AND \in_array( $k, $elements['search_tab_member']['group']->value )}}ipsSideMenu_itemActive{{endif}}' data-ipsMenuValue='{$k}'>
+															<input type="checkbox" name="group" value="{$k}" {{if \is_array( $elements['search_tab_member']['group']->value ) AND \in_array( $k, $elements['search_tab_member']['group']->value )}}checked{{endif}} id="elCheck_group_{$k}">
+															<label for='elCheck_group_{$k}' id='elField_group_label_{$k}'>{$group|raw}</label>
+														</span>
+													</li>
+												{{endforeach}}
+											</ul>
+										{{endif}}
+	
+										{{$countOne = 0;}}
+										{{if $totalCustomFields > 1}}
+											{{foreach $elements['search_tab_member'] as $id => $element}}
+												{{if \in_array( $id, $exclude )}}
+													{{continue;}}
+												{{endif}}
+												{{$countOne++;}}
+	
+												<hr class='ipsHr'>
+												<h3 class="ipsType_reset ipsType_large cStreamForm_title ipsSpacer_bottom ipsSpacer_half">{lang="$id"}</h3>
+												<div class='ipsFieldRow_fullWidth'>
+													{$element->html()|raw}
+												</div>
+												
+												{{if $countOne >= $perCol}}
+													{{break;}}
+												{{endif}}
+											{{endforeach}}
+										{{endif}}
+										<hr class='ipsHr ipsSpacer_both ipsResponsive_showPhone ipsResponsive_block'>
+									</div>
+									<div class='ipsGrid_span6'>
+										{{$countTwo = 0;}}
+										{{$realCount = 0;}}
+										{{foreach $elements['search_tab_member'] as $id => $element}}
+											{{if \in_array( $id, $exclude )}}
+												{{continue;}}
+											{{endif}}
+											{{$countTwo++;}}
+	
+											{{if $countTwo <= $countOne}}
+												{{continue;}}
+											{{endif}}
+
+											{{if $countTwo !== ( $countOne + 1 )}}
+												<!-- HR except for first item -->
+												<hr class='ipsHr'>
+											{{endif}}
+
+											<h3 class="ipsType_reset ipsType_large cStreamForm_title ipsSpacer_bottom ipsSpacer_half">{lang="$id"}</h3>
+											<div class='ipsFieldRow_fullWidth'>
+												{$element->html()|raw}
+											</div>
+											{{$realCount++;}}
+											{{if $realCount >= $perCol}}
+												{{break;}}
+											{{endif}}
+										{{endforeach}}
+									</div>			
+								</div>			
+							</div>
+						</div>
+					</div>
+				</div>
+			{{endif}}
+		</section>
+		<div class='ipsBorder_top ipsPadding cSearchFiltersSubmit'>
+			<ul class='ipsToolList ipsToolList_horizontal ipsClearfix'>
+				<li class='ipsPos_right'>
+					<button type="submit" class="ipsButton ipsButton_primary ipsButton_medium ipsButton_fullWidth" data-action="updateResults">
+						{{if \IPS\Request::i()->type == 'core_members'}}
+							{lang="search_members"}
+						{{else}}
+							{lang="search_content"}
+						{{endif}}
+					</button>
+				</li>
+				<li class='ipsPos_right'>
+					<button type="button" class="ipsButton ipsButton_link ipsButton_medium ipsButton_fullWidth {{if isset( $hiddenValues['__advanced'] )}}ipsHide{{endif}}" data-action="cancelFilters">{lang="cancel"}</button>
+				</li>
+			</ul>
+		</div>
+	</div>
+</form>

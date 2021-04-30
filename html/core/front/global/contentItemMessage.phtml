@@ -1,0 +1,42 @@
+<ips:template parameters="$message, $item, $id" />
+{{$member = \IPS\Member::load( $message['added_by'] );}}
+{{$class = \get_class( $item );}}
+<div class='cContentMessage {{if isset( $message['color'] ) && $message['color'] !== 'none'}}cContentMessage_color ipsMessage_{$message['color']}{{else}} ipsBox{{endif}} ipsMargin_vertical'>
+	<div class='cContentMessage__header ipsPadding:half'>
+		<div class='ipsFlex ipsFlex-ai:center ipsFlex-fw:wrap ipsGap:3'>
+			<div class='cContentMessage__header--avatar ipsFlex-flex:00'>
+				{{if isset( $message['is_public'] ) AND $message['is_public'] }}
+					{template="userPhoto" group="global" app="core" params="$member, 'tiny'"}
+				{{else}}
+					<span class='cContentMessage__badge'><i class="fa fa-lock" aria-hidden="true"></i> {lang="message_staff_badge"}</span>
+				{{endif}}
+			</div>
+			<div class='cContentMessage__header--text ipsFlex-flex:11 ipsFlex ipsFlex-fw:wrap ipsFlex-ai:center ipsFlex-jc:between'>
+				<div class='ipsFlex-flex:11 ipsMargin_right'>
+					{{if $member->member_id}}
+						<strong class='cContentMessage_author'>{lang="content_item_message" sprintf="$member->name"}</strong>{{if isset( $message['date'] ) }}<span class='ipsType_light'>, {datetime="$message['date']"}</span>{{endif}}
+					{{else}}
+						{{if isset( $message['date'] ) }}<span class='ipsType_light'>{datetime="$message['date']"}</span>{{endif}}
+					{{endif}}
+				</div>
+				{{if $item->canOnMessage( 'edit' ) || $item->canOnMessage( 'delete' )}}
+					<ul class='ipsFlex-flex:00 ipsFlex ipsGap:5 ipsGap_row:0'>
+						{{if $item->canOnMessage( 'edit' )}}
+							<li>
+								<a href='{$item->url()->csrf()->setQueryString( array( 'do' => 'messageForm', 'meta_id' => $id ) )}' data-ipsDialog data-ipsDialog-title='{lang="edit"}'>{lang="edit"}</a>
+							</li>
+						{{endif}}
+						{{if $item->canOnMessage( 'delete' )}}
+							<li>
+								<a href='{$item->url()->csrf()->setQueryString( array( 'do' => 'messageDelete', 'meta_id' => $id ) )}' data-confirm>{lang="delete"}</a>
+							</li>
+						{{endif}}
+					</ul>
+				{{endif}}
+			</div>
+		</div>
+	</div>
+	<div class='ipsPad'>
+		{template="richText" group="global" app="core" location="global" params="$message['message'], array('ipsType_normal', 'ipsClearfix')"}
+	</div>
+</div>

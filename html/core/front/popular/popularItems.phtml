@@ -1,0 +1,15 @@
+<ips:template parameters="$results" />
+{{$currentSeparator = NULL;}}
+{{if \count( $results )}}
+	{{foreach $results as $result}}
+		{{if $result !== NULL}}
+			{$result->html( 'expanded', FALSE, TRUE, array( \IPS\Theme::i()->getTemplate( 'popular', 'core', 'front' ), 'popularItem' ) )|raw}
+		{{endif}}
+	{{endforeach}}
+{{else}}
+	<li class='ipsType_center ipsPad' data-role="streamNoResultsMessage">
+		<p class='ipsType_reset ipsType_light ipsType_normal'>
+			{lang="popular_no_results"}
+		</p>
+	</li>
+{{endif}}

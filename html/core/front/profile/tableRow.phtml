@@ -1,0 +1,28 @@
+<ips:template parameters="$table, $headers, $members" />
+{{foreach $members as $member}}
+	{{$loadedMember = \IPS\Member::load( $member->member_id );}}
+	<li class='ipsDataItem'>
+		<div class='ipsDataItem_icon'>
+			{template="userPhoto" group="global" app="core" params="$loadedMember, 'medium'"}
+		</div>
+		<div class='ipsDataItem_main'>
+			<h3 class='ipsType_sectionHead'>{$loadedMember->link()|raw}</h3> {{if $loadedMember->isOnline()}}<i class="fa fa-circle ipsOnlineStatus_online" data-ipsTooltip title='{lang="online_now" sprintf="$member->name"}'></i>{{endif}}<br>
+			<span class='ipsType_normal'>{expression="\IPS\Member\Group::load( $member->member_group_id )->formattedName" raw="true"}</span>
+			<ul class='ipsList_inline ipsType_light'>
+				<li><strong>{lang="members_member_posts"}: {$loadedMember->member_posts}</strong></li>
+				<li>{lang="members_joined"} {datetime="$loadedMember->joined"}</li>
+				{{if $loadedMember->last_activity}}
+					<li>{lang="members_last_visit"} {datetime="$loadedMember->last_activity"}</li>
+				{{endif}}
+			</ul>
+		</div>
+		{{if $table->canModerate()}}
+			<div class='ipsDataItem_modCheck'>
+				<span class='ipsCustomInput'>
+					<input type='checkbox' data-role='moderation' name="moderate[{$member->member_id}]" data-actions="{expression="implode( ' ', $table->multimodActions( $member ) )"}" data-state=''>
+					<span></span>
+				</span>
+			</div>
+		{{endif}}
+	</li>
+{{endforeach}}

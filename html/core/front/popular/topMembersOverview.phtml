@@ -1,0 +1,4 @@
+<ips:template parameters="$filters" />
+{{foreach $filters as $k => $lang}}
+	{template="topMembersResults" group="popular" params="$k, $lang, \IPS\Member::topMembers( $k, \IPS\Settings::i()->reputation_overview_max_members )"}
+{{endforeach}}

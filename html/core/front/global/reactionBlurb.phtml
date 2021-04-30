@@ -1,0 +1,43 @@
+<ips:template parameters="$content" />
+{{if !\IPS\Content\Reaction::isLikeMode()}}
+	{{$reactions = \IPS\Content\Reaction::roots();}}
+	<ul class='ipsReact_reactions'>
+		{{if \IPS\Member::loggedIn()->group['gbw_view_reps']}}
+			<li class="ipsReact_overview ipsType_blendLinks">
+				{$content->whoReacted()}
+			</li>
+		{{endif}}
+		{{foreach $content->reactBlurb() AS $key => $count}}
+			{{if isset( $reactions[ $key ] )}}
+				{{$reaction = $reactions[ $key ];}}
+				<li class='ipsReact_reactCount'>
+					{{if \IPS\Member::loggedIn()->group['gbw_view_reps']}}
+						<a href='{$content->url('showReactions')->setQueryString( 'reaction', $reaction->id )}' data-ipsDialog data-ipsDialog-size='medium' data-ipsDialog-title='{lang="see_who_reacted"}' data-ipsTooltip data-ipsTooltip-label="<strong>{lang="reaction_title_{$reaction->id}"}</strong><br>{lang="loading"}" data-ipsTooltip-ajax="{$content->url('showReactions')->setQueryString( array( 'reaction' => $reaction->id, 'tooltip' => 1 ) )}" data-ipsTooltip-safe title="{lang="see_who_reacted_x" sprintf="\IPS\Member::loggedIn()->language()->addToStack( 'reaction_title_' . $reaction->id )" escape="true"}">
+					{{else}}
+						<span data-ipsTooltip title="{lang="reaction_title_{$reaction->id}" escape="true"}">
+					{{endif}}
+							<span>
+								<img src='{$reaction->_icon->url}' alt="{lang="reaction_title_{$reaction->id}" escape="true"}">
+							</span>
+							<span>
+								{$count}
+							</span>
+					{{if \IPS\Member::loggedIn()->group['gbw_view_reps']}}
+						</a>
+					{{else}}
+						</span>
+					{{endif}}
+				</li>
+			{{endif}}
+		{{endforeach}}
+	</ul>
+{{else}}
+	{{if \IPS\Member::loggedIn()->group['gbw_view_reps']}}
+	<span class='ipsType_blendLinks'>
+		{$content->whoReacted()}
+		{{if \IPS\Member::loggedIn()->modPermission('can_remove_reactions')}}
+			<a href='{$content->url('showReactions')}' data-ipsDialog data-ipsDialog-size='medium' data-ipsDialog-title='{lang="edit_who_reacted"}' data-ipsTooltip title='{lang="edit_who_reacted"}'>&nbsp;<i class="fa fa-pencil"></i></a>
+		{{endif}}
+	</span>
+	{{endif}}
+{{endif}}

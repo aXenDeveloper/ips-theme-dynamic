@@ -1,0 +1,167 @@
+/* PHONES */
+@media screen and (max-width: 767px) {
+
+	.ipsStream {
+		clear: both;
+		margin-top: 12px;
+	}
+
+	.ipsStream .ipsStreamItem_time:first-child {
+		margin-bottom: 15px;
+	}
+
+	.ipsStreamItem_terminator {
+		display: none;
+	}
+
+	html[dir] .ipsStreamItem_bar hr.ipsHr {
+		margin-left: 0;
+		margin-right: 0;
+	}
+
+	html[dir] .ipsStreamItem_loadMore {
+		margin-left: 0;
+		margin-right: 0;
+		margin-bottom: 5px;
+	}
+
+	html[dir="ltr"] .ipsStream.ipsStream_withTimeline {
+		margin-left: 0;
+		border: 0;
+	}
+	html[dir="rtl"] .ipsStream.ipsStream_withTimeline {
+		margin-right: 0;
+		border: 0;
+	}
+
+	.ipsStream.ipsStream_withTimeline .ipsStreamItem_contentType {
+		box-shadow: 0 0 0 2px rgb( var(--theme-area_background_reset) );
+	}
+	
+		html[dir="ltr"] .ipsStream.ipsStream_withTimeline .ipsStreamItem_contentType {
+			top: 15px;
+			left: 50px;
+		}
+
+		html[dir="rtl"] .ipsStream.ipsStream_withTimeline .ipsStreamItem_contentType {
+			top: 15px;
+			right: 50px;
+		}
+
+	.ipsStreamItem.ipsStreamItem_contentBlock {
+		margin-top: 20px;
+		margin-bottom: 20px;
+	}
+	
+	.ipsApp .ipsStreamItem.ipsStreamItem_actionBlock {
+		margin-top: 0;
+		margin-bottom: 0;
+		padding-left: 10px;
+		padding-right: 10px;
+	}
+	
+	html[dir="ltr"] .ipsStream_withTimeline .ipsStreamItem {
+		margin-left: 0;
+	}
+	html[dir="rtl"] .ipsStream_withTimeline .ipsStreamItem {
+		margin-right: 0;
+	}
+
+		.ipsStream_withTimeline .ipsStreamItem:before,
+		.ipsStream_withTimeline .ipsStreamItem:after {
+			display: none;
+		}
+
+	.ipsStream_withTimeline .ipsStreamItem_time {
+		display: block;
+		text-align: center;
+		margin: 0 var(--sp-3) !important;
+	}
+
+	html[dir] .ipsStreamItem .ipsPhotoPanel > .ipsUserPhoto {
+		float: none;
+		margin: -22px auto 15px;
+	}
+
+		html[dir="ltr"] .ipsStreamItem .ipsPhotoPanel.ipsPhotoPanel_mini > div,
+		html[dir="ltr"] .ipsStreamItem_snippet, 
+		html[dir="ltr"] .ipsStreamItem_meta {
+			margin-left: 0;
+		}
+		html[dir="rtl"] .ipsStreamItem.ipsStreamItem_expanded .ipsPhotoPanel.ipsPhotoPanel_mini > div,
+		html[dir="rtl"] .ipsStreamItem_snippet, 
+		html[dir="rtl"] .ipsStreamItem_meta {
+			margin-right: 0;
+		}
+
+	html[dir] .ipsStream_snippetInfo {
+		border-width: 1px 0 0 0;
+		padding-top: 7px !important;
+	}
+
+	html[dir="ltr"] .ipsStream_comment {
+		margin-left: 0;
+	}
+	html[dir="rtl"] .ipsStream_comment {
+		margin-right: 0;
+	}
+
+	.ipsStream_comment:before {
+		display: none;
+	}
+
+	.ipsStreamItem .ipsLikeRep {
+		margin-bottom: 0;
+	}
+
+	.ipsStreamItem.ipsStreamItem_expanded .ipsStreamItem_status {
+		margin: 3px 0;
+	}
+
+	html[dir] .ipsStreamItem.ipsStreamItem_actionBlock.ipsStreamItem_expanded {
+		padding-left: 10px;
+		padding-right: 10px;
+		margin: 7px 0;
+	}
+
+	/* Condensed-specific */
+	.ipsStreamItem.ipsStreamItem_condensed {
+		margin: 10px 0;
+	}
+
+	.ipsStreamItem.ipsStreamItem_condensed ~ .ipsStreamItem_time {
+		margin-top: 15px;
+		margin-bottom: 15px;
+	}
+
+	html[dir] .ipsStreamItem.ipsStreamItem_actionBlock.ipsStreamItem_condensed {
+		padding-left: 10px;
+		padding-right: 10px;
+	}
+
+	html[dir] .ipsStreamItem_condensed .ipsPhotoPanel_mini > div {
+		margin-left: 0;
+		margin-right: 0;
+	}
+
+	.ipsStreamItem.ipsStreamItem_condensed .ipsUserPhoto,
+	.ipsStreamItem.ipsStreamItem_condensed .ipsStreamItem_contentType {
+		display: none;
+	}
+
+	.ipsStreamItem.ipsStreamItem_condensed .ipsStreamItem_status > li:first-child {
+		margin: 7px 0;
+		color: rgb( var(--theme-text_color) );
+	}
+
+	html[dir] .ipsStreamItem.ipsStreamItem_condensed .ipsStreamItem_stats {
+		width: auto;
+		float: none;
+		position: static;
+		border: 0;
+		padding: 0;
+		line-height: 1.2;
+		margin: 5px 0;
+		transform: none;
+	}
+}

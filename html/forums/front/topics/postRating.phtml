@@ -1,0 +1,53 @@
+<ips:template parameters="$item, $comment, $votes=array()" />
+{{$idField = $comment::$databaseColumnId;}}
+<div class='cRatingColumn ipsClearfix {{if $comment->post_bwoptions['best_answer']}}cRatingColumn_on{{else}}ipsAreaBackground_light{{endif}} {{if isset( $votes[ $comment->$idField ] ) && $votes[ $comment->$idField ] === 1}}cRatingColumn_up{{elseif isset( $votes[ $comment->$idField ] ) && $votes[ $comment->$idField ] === -1}}cRatingColumn_down{{endif}} ipsColumn ipsColumn_narrow ipsType_center' data-controller='forums.front.topic.answers'>
+	
+	<ul class='ipsList_reset cPostRating_controls'>
+	{{if !$item->isArchived() }}
+		{{if $comment->post_bwoptions['best_answer'] or $item->canSetBestAnswer()}}
+			<li class='cPostRating_bestAnswer'>
+				{{if $item->canSetBestAnswer() and !$comment->post_bwoptions['best_answer']}}
+					<a href='{$item->url()->csrf()->setQueryString( array( 'do' => 'bestAnswer', 'answer' => $comment->pid ) )}' title='{lang="set_as_best_answer"}' class='cBestAnswerIndicator cBestAnswerIndicator_off' data-ipsTooltip><i class='fa fa-check'></i></a>
+				{{else}}
+					{{if $item->canSetBestAnswer()}}
+						<a href='{$item->url()->csrf()->setQueryString( array( 'do' => 'unsetBestAnswer', 'answer' => $comment->pid ) )}' title='{lang="unset_as_best_answer"}' class='cBestAnswerIndicator' data-ipsTooltip><i class='fa fa-check'></i></a>
+					{{else}}
+						<strong class='cBestAnswerIndicator' data-ipsTooltip title='{lang="best_answer_tooltip"}'><i class='fa fa-check'></i></strong>
+					{{endif}}
+				{{endif}}
+			</li>
+		{{endif}}
+	
+		{{if $comment->canVote()}}
+			<li class='cPostRating_up'>
+				<a href='{$item->url()->setQueryString( array( 'do' => 'rateAnswer', 'answer' => $comment->pid, 'rating' => 1 ) )->csrf()}' class='cAnswerRate cAnswerRate_up {{if isset( $votes[ $comment->$idField ] ) && $votes[ $comment->$idField ] === 1}}ipsType_positive{{endif}}' title='{{if isset( $votes[ $comment->$idField ] ) && $votes[ $comment->$idField ] === 1}}{lang="remove_your_vote"}{{else}}{lang="vote_answer_up"}{{endif}}' data-ipsTooltip><i class='fa fa-angle-up'></i></a>
+			</li>
+		{{else}}
+			<li class='cPostRating_up'>
+				<span class='cAnswerRate cAnswerRate_up cAnswerRate_noPermission' {{if !\IPS\Member::loggedIn()->member_id}}data-ipsTooltip title='{lang="sign_in_rate_answer"}'{{endif}}><i class='fa fa-angle-up'></i></span>
+			</li>
+		{{endif}}
+
+			<li class='cPostRating_count'>
+				<span title="{lang="votes_no_number" pluralize="$comment->post_field_int"}" data-role="voteCount" data-voteCount="{$comment->post_field_int}" class='cAnswerRating {{if isset( $votes[ $comment->$idField ] ) && $votes[ $comment->$idField ] === 1}}ipsType_positive{{elseif isset( $votes[ $comment->$idField ] ) && $votes[ $comment->$idField ] === -1}}ipsType_negative{{endif}}'>{$comment->post_field_int}</span>
+			</li>
+
+		{{if $comment->canVote() && \IPS\Settings::i()->forums_answers_downvote}}
+			<li  class='cPostRating_down'>
+				<a href='{$item->url()->setQueryString( array( 'do' => 'rateAnswer', 'answer' => $comment->pid, 'rating' => -1 ) )->csrf()}' class='cAnswerRate cAnswerRate_down {{if isset( $votes[ $comment->$idField ] ) && $votes[ $comment->$idField ] === -1}}ipsType_negative{{endif}}' title='{{if isset( $votes[ $comment->$idField ] ) && $votes[ $comment->$idField ] === -1}}{lang="remove_your_vote"}{{else}}{lang="vote_answer_down"}{{endif}}' data-ipsTooltip><i class='fa fa-angle-down'></i></a>
+			</li>
+		{{elseif \IPS\Settings::i()->forums_answers_downvote}}
+			<li  class='cPostRating_down'>
+				<span class='cAnswerRate cAnswerRate_down cAnswerRate_noPermission' {{if !\IPS\Member::loggedIn()->member_id}}data-ipsTooltip title='{lang="sign_in_rate_answer"}'{{endif}}><i class='fa fa-angle-down'></i></span>
+			</li>
+		{{endif}}
+	{{else}}
+		{{if isset($comment->post_field_int) }}
+			<li class='cPostRating_count'>
+				<span title="{lang="votes_no_number" pluralize="$comment->post_field_int"}" data-role="voteCount" data-voteCount="{$comment->post_field_int}" class='cAnswerRating {{if isset( $votes[ $comment->$idField ] ) && $votes[ $comment->$idField ] === 1}}ipsType_positive{{elseif isset( $votes[ $comment->$idField ] ) && $votes[ $comment->$idField ] === -1}}ipsType_negative{{endif}}'>{$comment->post_field_int}</span>
+			</li>
+		{{endif}}
+	{{endif}}
+	</ul>
+
+</div>

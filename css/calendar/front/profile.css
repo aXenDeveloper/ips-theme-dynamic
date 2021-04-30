@@ -1,0 +1,33 @@
+.cCalendarDate {
+	width: 80px;
+	display: block;
+	border: 1px solid rgba( var(--theme-text_color), 0.25 );
+	background: rgb( var(--theme-area_background_reset) );
+	padding: 8px 0;
+	border-radius: 3px;
+	overflow: hidden;
+}
+	
+	.cCalendarDate {
+		background: rgb( var(--theme-area_background_reset) );
+	}
+	
+	.cCalendarDate > span {
+		display: block;
+		text-align: center;
+	}
+
+	.cCalendarDate_month {
+		color: #a93848;
+		text-transform: uppercase;
+		font-size: {fontsize="x_large"};
+		line-height: 1;
+		font-weight: 500;
+	}
+
+	.cCalendarDate_date {
+		font-size: {fontsize="4x_large"};
+		line-height: 1;
+		font-weight: 300;
+		color: rgb( var(--theme-text_light) );
+	}

@@ -1,0 +1,38 @@
+<ips:template parameters="$table, $headers, $rows" />
+{{if empty($rows)}}
+	<li class='ipsDataItem'>
+		<div class='ipsPad ipsType_light ipsType_center'><br><br>{lang="no_results"}</div>
+	</li>
+{{else}}
+	{{foreach $rows as $r}}
+		<li class='ipsDataItem ipsGrid_span6 ipsFaded_withHover' id='elIgnoreRow{$r['ignore_ignore_id']}' data-role="ignoreRow" data-ignoreUserID='{$r['ignore_ignore_id']}' data-controller='core.front.ignore.existing'>
+			<p class='ipsType_reset ipsDataItem_icon'>
+				{template="userPhoto" app="core" group="global" params="\IPS\Member::load( $r['ignore_ignore_id'] ), 'tiny'"}
+			</p>
+			<div class='ipsDataItem_main'>
+				<h4 class='ipsDataItem_title'><strong data-role="ignoreRowName">{member="name" id="$r['ignore_ignore_id']"}</strong></h4>
+				<ul class='ipsList_inline'>
+					{{foreach \IPS\core\Ignore::types() as $t}}
+						{{if $r["ignore_{$t}"]}}
+							<li class='ipsType_light'><i class='fa fa-check'></i> {lang="ignore_$t"}</li>
+						{{endif}}
+					{{endforeach}}
+					<li class='ipsFaded'>
+						<a href='#elUserIgnore{$r['ignore_ignore_id']}_menu' id='elUserIgnore{$r['ignore_ignore_id']}' class='ipsType_large ipsPos_middle ipsType_blendLinks' data-ipsMenu data-ipsMenu-appendTo='#elIgnoreRow{$r['ignore_ignore_id']}' data-action='ignoreMenu'>
+							<i class='fa fa-cog'></i> <i class='fa fa-caret-down'></i>
+						</a>
+					</li>
+				</ul>
+
+				<ul class='ipsMenu ipsJS_hide' id='elUserIgnore{$r['ignore_ignore_id']}_menu'>
+					<li class='ipsMenu_item' data-ipsMenuValue='edit'>
+						<a href='{url="app=core&module=system&controller=ignore&do=edit&id={$r['ignore_ignore_id']}"}' data-ipsDialog data-ipsDialog-remoteSubmit data-ipsDialog-size='narrow' data-ipsDialog-title='{lang="edit_ignore_for" sprintf="\IPS\Member::load( $r['ignore_ignore_id'] )->name"}'>{lang="change_ignored_content"}</a>
+					</li>
+					<li class='ipsMenu_item' data-ipsMenuValue='remove'>
+						<a href='{url="app=core&module=system&controller=ignore&do=remove&id={$r['ignore_ignore_id']}" csrf="true"}'>{lang="stop_ignoring_user"}</a>
+					</li>
+				</ul>
+			</div>
+		</li>
+	{{endforeach}}
+{{endif}}

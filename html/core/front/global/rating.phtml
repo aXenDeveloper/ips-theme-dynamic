@@ -1,0 +1,35 @@
+<ips:template parameters="$size, $value, $max=5, $memberRating=NULL" />
+<div {{if $memberRating}}data-ipsTooltip title='{lang="you_rated_x_stars" sprintf="$memberRating, $max, $value"}'{{endif}} class='ipsClearfix ipsRating {{if $memberRating}}ipsRating_rated{{endif}} {{if $size}}ipsRating_{$size}{{endif}}'>
+	{{if $memberRating}}
+		<ul class='ipsRating_mine'>
+			{{foreach range( 1, $max ) as $i}}
+				{{if $i <= $memberRating}}
+					<li class='ipsRating_on'>
+						<i class='fa fa-star'></i>
+					</li>
+				{{else}}
+					<li class='ipsRating_off'>
+						<i class='fa fa-star'></i>
+					</li>
+				{{endif}}
+			{{endforeach}}
+		</ul>
+	{{endif}}
+	<ul class='ipsRating_collective'>
+		{{foreach range( 1, $max ) as $i}}
+			{{if $i <= $value}}
+				<li class='ipsRating_on'>
+					<i class='fa fa-star'></i>
+				</li>
+			{{elseif ( $i - 0.5 ) <= $value}}
+				<li class='ipsRating_half'>
+					<i class='fa fa-star-half'></i><i class='fa fa-star-half fa-flip-horizontal'></i>
+				</li>
+			{{else}}
+				<li class='ipsRating_off'>
+					<i class='fa fa-star'></i>
+				</li>
+			{{endif}}
+		{{endforeach}}
+	</ul>
+</div>

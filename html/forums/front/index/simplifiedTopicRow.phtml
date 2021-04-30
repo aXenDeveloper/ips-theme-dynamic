@@ -1,0 +1,180 @@
+<ips:template parameters="$table, $headers, $rows" />
+{{$rowIds = array();}}
+{{foreach $rows as $row}}
+	{{$idField = $row::$databaseColumnId;}}
+	{{$rowIds[] = $row->$idField;}}
+{{endforeach}}
+{{if \count( $rows )}}
+	{{$rowCount=0; $adShown=0;}}
+	{{foreach $rows as $row}}
+		{{if $rowCount == 1 AND $advertisement = \IPS\core\Advertisement::loadByLocation( 'ad_forum_listing' )}}
+			<li class="ipsDataItem">
+				{$advertisement|raw}
+			</li>
+		{{endif}}
+		{{$rowCount++;}}
+		{{$idField = $row::$databaseColumnId;}}
+		{{if $row->mapped('moved_to')}}
+			{{if $movedTo = $row->movedTo() AND $movedTo->container()->can('view')}}
+				<li class="ipsDataItem">
+					<div class='ipsDataItem_icon ipsType_center ipsType_noBreak'>
+						<i class="fa fa-arrow-left ipsType_large"></i>
+					</div>
+					<div class='ipsDataItem_main'>
+						<h4 class='ipsDataItem_title ipsContained_container'>
+							<span class='ipsType_break ipsContained'>
+								<em><a href='{$movedTo->url( "getPrefComment" )}' title='{lang="go_to_new_location"}'>{$row->mapped('title')}</a></em>
+							</span>
+						</h4>
+						<div class='ipsDataItem_meta'>
+							{{if isset( $row::$databaseColumnMap['status'] )}}
+								{{$statusField = $row::$databaseColumnMap['status'];}}
+								{{if $row->$statusField == 'merged'}}
+									<p class='ipsType_reset ipsType_light ipsType_blendLinks'>{lang="topic_merged_to" sprintf="$movedTo->url( 'getPrefComment' ), $movedTo->mapped('title')"}</p>
+								{{else}}
+									<p class='ipsType_reset ipsType_light ipsType_blendLinks'>{lang="topic_moved_to" sprintf="$movedTo->container()->url(), $movedTo->container()->_title"}</p>
+								{{endif}}
+							{{else}}
+								<p class='ipsType_reset ipsType_light ipsType_blendLinks'>{lang="topic_moved_to" sprintf="$movedTo->container()->url(), $movedTo->container()->_title"}</p>
+							{{endif}}
+						</div>
+					</div>
+					{{if $table->canModerate()}}
+						<div class='ipsDataItem_modCheck'>
+							<span class='ipsCustomInput'>
+								<input type='checkbox' data-role='moderation' name="moderate[{$row->$idField}]" data-actions="{{if $row->mapped('featured')}}unfeature{{endif}} {{if $row->mapped('pinned')}}unpin{{endif}} delete" data-state='{{if $row->mapped('pinned')}}pinned{{endif}} {{if $row->mapped('featured')}}featured{{endif}}'>
+								<span></span>
+							</span>
+						</div>
+					{{endif}}
+				</li>
+			{{endif}}
+		{{else}}
+			<li class="ipsDataItem ipsDataItem_responsivePhoto {{if $row->unread()}}ipsDataItem_unread{{endif}} {{if method_exists( $row, 'tableClass' ) && $row->tableClass()}}ipsDataItem_{$row->tableClass()}{{endif}} {{if $row->hidden()}}ipsModerated{{endif}}" data-rowID='{$row->$idField}'>
+				<div class='ipsDataItem_icon ipsType_blendLinks'>
+					{template="userPhoto" app="core" group="global" params="$row->author(), 'tiny'"}
+				</div>
+				<div class='ipsDataItem_main'>
+					<h4 class='ipsDataItem_title ipsContained_container'>
+						{{if member.member_id}}
+							{{if $row->unread()}}
+								<span>
+									<a href='{$row->url( 'getNewComment' )}' title='{lang="first_unread_post"}' data-ipsTooltip>
+										<span class='ipsItemStatus'><i class="fa {{if \in_array( $row->$idField, $table->contentPostedIn )}}fa-star{{else}}fa-circle{{endif}}"></i></span>
+									</a>
+								</span>
+							{{else}}
+								{{if \in_array( $row->$idField, $table->contentPostedIn )}}
+									<span>
+										<span class='ipsItemStatus ipsItemStatus_read ipsItemStatus_posted'><i class="fa fa-star"></i></span>
+									</span>
+								{{endif}}
+							{{endif}}
+						{{endif}}
+						{{if $row->locked()}}
+							<span>
+								<i class='ipsType_medium fa fa-lock' data-ipsTooltip title='{lang="topic_locked"}'></i>
+							</span>	
+							{{if $row->topic_open_time && $row->topic_open_time > time()}}
+								<span><strong class='ipsType_small ipsType_noBreak' data-ipsTooltip title='{lang="topic_unlocks_at" sprintf="\IPS\DateTime::ts( $row->topic_open_time )->relative(), \IPS\DateTime::ts( $row->topic_open_time )->localeTime( FALSE )"}'>{lang="topic_unlocks_at_short" sprintf="\IPS\DateTime::ts($row->topic_open_time)->relative(1)"}</strong>&nbsp;&nbsp;</span>
+							{{endif}}
+						{{elseif !$row->locked() && $row->topic_close_time && $row->topic_close_time > time()}}
+							<span><strong class='ipsType_small ipsType_noBreak' data-ipsTooltip title='{lang="topic_locks_at" sprintf="\IPS\DateTime::ts( $row->topic_close_time )->relative(), \IPS\DateTime::ts( $row->topic_close_time )->localeTime( FALSE )"}'><i class='fa fa-clock-o'></i> {lang="topic_locks_at_short" sprintf="\IPS\DateTime::ts($row->topic_close_time)->relative(1)"}</strong>&nbsp;&nbsp;</span>
+						{{endif}}
+
+						{{if $row->mapped('poll')}}
+							<span><span class="ipsBadge ipsBadge_icon ipsBadge_small ipsBadge_neutral" data-ipsTooltip title='{lang="topic_has_poll"}'><i class='fa fa-question'></i></span></span>
+						{{endif}}
+						
+						{{if $row->mapped('pinned') || $row->mapped('featured') || $row->hidden() === -1 || $row->hidden() === 1 || $row->isSolved()}}
+							{{if $row->hidden() === -1}}
+								<span><span class="ipsBadge ipsBadge_icon ipsBadge_small ipsBadge_warning" data-ipsTooltip title='{$row->hiddenBlurb()}'><i class='fa fa-eye-slash'></i></span></span>
+							{{elseif $row->hidden() === 1}}
+								<span><span class="ipsBadge ipsBadge_icon ipsBadge_small ipsBadge_warning" data-ipsTooltip title='{lang="pending_approval"}'><i class='fa fa-warning'></i></span></span>
+							{{endif}}				
+							{{if $row->mapped('pinned')}}
+								<span><span class="ipsBadge ipsBadge_icon ipsBadge_small ipsBadge_positive" data-ipsTooltip title='{lang="pinned"}'><i class='fa fa-thumb-tack'></i></span></span>
+							{{endif}}
+							{{if $row->mapped('featured')}}
+								<span><span class="ipsBadge ipsBadge_icon ipsBadge_small ipsBadge_positive" data-ipsTooltip title='{lang="featured"}'><i class='fa fa-star'></i></span></span>
+							{{endif}}
+							{{if $row->isSolved()}}
+								<span><span class="ipsBadge ipsBadge_icon ipsBadge_small ipsBadge_positive" data-ipsTooltip title='{lang="this_is_solved"}'><i class='fa fa-check'></i></span></span>
+							{{endif}}
+						{{endif}}
+										
+						{{if $row->prefix()}}
+							<span>{template="prefix" group="global" app="core" params="$row->prefix( TRUE ), $row->prefix()"}</span>
+						{{endif}}						
+						
+						<span class='ipsType_break ipsContained'>
+							<a href='{$row->url( "getPrefComment" )}' class='' title='{{if $row->mapped('title')}}{$row->mapped('title')}{{else}}{lang="content_deleted"}{{endif}} {{if $row->canEdit()}}{lang="click_hold_edit"}{{endif}}' {{if $row->tableHoverUrl and $row->canView()}} data-ipsHover data-ipsHover-target='{$row->url()->setQueryString('preview', 1)}' data-ipsHover-timeout='1.5'{{endif}}{{if $row->canEdit()}} data-role="editableTitle"{{endif}}>
+								<span>
+									{{if $row->mapped('title') or $row->mapped('title') == 0}}{$row->mapped('title')}{{else}}<em class="ipsType_light">{lang="content_deleted"}</em>{{endif}}
+								</span>
+							</a>
+						</span>
+						{{if $row->commentPageCount() > 1}}
+							{$row->commentPagination( array(), 'miniPagination' )|raw}
+						{{endif}}
+					</h4>
+					<div class='ipsDataItem_meta ipsType_reset ipsType_light ipsType_blendLinks'>
+						<span>
+							{lang="byline_itemprop" htmlsprintf="$row->author()->link()"}
+						</span>{datetime="$row->mapped('date')" lowercase="true"}
+						{lang="in"} <a href="{$row->container()->url()}">{{if $club = $row->container()->club()}}{lang="club_node" sprintf="$club->name, $row->container()->_title"}{{else}}{$row->container()->_formattedTitle|raw}{{endif}}</a>
+						
+						{{if \count( $row->tags() )}}
+							&nbsp;&nbsp;
+							{template="tags" group="global" app="core" params="$row->tags(), true"}
+						{{endif}}
+					</div>
+				</div>
+				<ul class='ipsDataItem_stats'>
+					{{foreach $row->stats(FALSE) as $k => $v}}
+						<li {{if $k == 'num_views'}}class='ipsType_light'{{elseif \in_array( $k, $row->hotStats )}}class="ipsDataItem_stats_hot" data-text='{lang="hot_item"}' data-ipsTooltip title='{lang="hot_item_desc"}'{{endif}}>
+							<span class='ipsDataItem_stats_number'>{number="$v" format="short"}</span>
+							<span class='ipsDataItem_stats_type'>{lang="{$k}" pluralize="$v" format="short"}</span>
+							{{if ( $k == 'forums_comments' OR $k == 'answers_no_number' ) && \IPS\forums\Topic::modPermission( 'unhide', NULL, $row->container() ) AND $unapprovedComments = $row->mapped('unapproved_comments')}}
+								&nbsp;<a href='{$row->url()->setQueryString( 'queued_posts', 1 )}' class='ipsType_warning ipsType_small ipsPos_right ipsResponsive_noFloat' data-ipsTooltip title='{lang="queued_posts_badge" pluralize="$row->topic_queuedposts"}'><i class='fa fa-warning'></i> <strong>{$unapprovedComments}</strong></a>
+							{{endif}}
+						</li>
+					{{endforeach}}
+					<li class="ipsType_light ipsResponsive_hideDesktop">
+						<a href='{$row->url( 'getLastComment' )}' title='{lang="get_last_post"}' class='ipsType_blendLinks'>
+							{lang="updated"} {{if $row->mapped('last_comment')}}{datetime="$row->mapped('last_comment')"}{{else}}{datetime="$row->mapped('date')"}{{endif}}
+						</a>
+					</li>
+				</ul>
+				<ul class='ipsDataItem_lastPoster ipsDataItem_noPhoto ipsType_blendLinks ipsResponsive_hidePhone ipsResponsive_hideTablet'>
+					<li>
+						{{if $row->mapped('num_comments')}}
+							{$row->lastCommenter()->link()|raw}
+						{{else}}
+							{$row->author()->link()|raw}
+						{{endif}}
+					</li>
+					<li class="ipsType_light">
+						<a href='{$row->url( 'getLastComment' )}' title='{lang="get_last_post"}' class='ipsType_blendLinks'>
+							{{if $row->mapped('last_comment')}}{datetime="$row->mapped('last_comment')"}{{else}}{datetime="$row->mapped('date')"}{{endif}}
+						</a>
+					</li>
+				</ul>
+				{{if $table->canModerate()}}
+					<div class='ipsDataItem_modCheck'>
+						<span class='ipsCustomInput'>
+							<input type='checkbox' data-role='moderation' name="moderate[{$row->$idField}]" data-actions="{expression="implode( ' ', $table->multimodActions( $row ) )"}" data-state='{{if $row->tableStates()}}{$row->tableStates()}{{endif}}'>
+							<span></span>
+						</span>
+					</div>
+				{{endif}}
+		</li>
+		{{endif}}
+		{{if $advertisement = \IPS\core\Advertisement::loadByLocation( 'ad_fluid_index_view' ) and ( $rowCount + 1 > $advertisement->_additional_settings['ad_fluid_index_view_number'] and ( ( $rowCount + 1 ) % $advertisement->_additional_settings['ad_fluid_index_view_number'] === 1 ) )}}
+			{{if $advertisement->_additional_settings['ad_fluid_index_view_repeat'] == -1 or ( $advertisement->_additional_settings['ad_fluid_index_view_repeat'] > $adShown )}}
+				<li>{$advertisement|raw}</li>
+				{{$adShown++;}}
+			{{endif}}
+		{{endif}}
+	{{endforeach}}
+{{endif}}

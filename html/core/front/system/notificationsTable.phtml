@@ -1,0 +1,35 @@
+<ips:template parameters="$table, $headers, $rows, $quickSearch" />
+<div class='ipsPageHeader ipsClearfix ipsSpacer_bottom'>
+	<h1 class='ipsType_pageTitle'>{lang="notifications"}</h1>
+	<div class="ipsPos_right">
+		<a class="ipsButton ipsButton_light ipsButton_verySmall" href="{url="app=core&module=system&controller=notifications&do=options" seoTemplate="notifications_options"}"><i class="fa fa-cog"></i> {lang="notification_options"}</a>
+	</div>
+</div>
+
+<div class='ipsBox'>
+	{{if $table->pages > 1}}
+	<div class="ipsButtonBar ipsPad_half ipsClearfix ipsClear">
+		<div data-role="tablePagination">
+			{template="pagination" group="global" app="core" location="global" params="$table->baseUrl, $table->pages, $table->page, $table->limit, TRUE, $table->getPaginationKey()"}
+		</div>
+	</div>
+	{{endif}}
+
+	{{if \is_array( $rows ) AND \count( $rows )}}
+		<ol class='ipsDataList ipsClear cForumTopicTable {{foreach $table->classes as $class}}{$class} {{endforeach}}' id='elTable_{$table->uniqueId}' data-role="tableRows">
+			{template="$table->rowsTemplate[1]" params="$table, $headers, $rows" object="$table->rowsTemplate[0]"}
+		</ol>
+	{{else}}
+		<div class='ipsType_center ipsPadding:half'>
+			<p class='ipsType_large'>{lang="notifications_none"}</p>
+		</div>
+	{{endif}}
+
+	{{if $table->pages > 1}}
+		<div class="ipsButtonBar ipsPad_half ipsClearfix ipsClear">
+			<div data-role="tablePagination">
+				{template="pagination" group="global" app="core" location="global" params="$table->baseUrl, $table->pages, $table->page, $table->limit, TRUE, $table->getPaginationKey()"}
+			</div>
+		</div>
+	{{endif}}
+</div>

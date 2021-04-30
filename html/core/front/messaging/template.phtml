@@ -1,0 +1,165 @@
+<ips:template parameters="$folder, $folders, $counts, $conversations, $pagination, $conversation, $baseUrl, $baseUrlTemplate, $sortBy, $filter" />
+
+<div data-controller='core.front.messages.main, core.front.messages.responsive'>
+	<div class='ipsPageHeader ipsBox ipsPadding ipsResponsive_pull ipsClearfix ipsSpacer_bottom' id='elMessageHeader'>
+		<div class='ipsGrid ipsGrid_collapsePhone'>
+			<h1 class='ipsType_pageTitle ipsGrid_span6'>
+				<a href='#elMessageFolders_menu' id='elMessageFolders' data-ipsMenu data-ipsMenu-appendTo="#elMessageHeader" class='ipsType_blendLinks'><span data-role='currentFolder'>{$folders[ $folder ]}</span> &nbsp;<i class='fa fa-caret-down'></i></a>
+				&nbsp;&nbsp;<a href='#elFolderSettings_menu' id='elFolderSettings' data-ipsMenu data-ipsMenu-appendTo="#elMessageHeader" class='ipsType_blendLinks'><i class='fa fa-cog'></i></a>
+				&nbsp;&nbsp;<a href='{url="app=core&module=messaging&controller=messenger&do=compose" seoTemplate="messenger_compose"}' data-ipsDialog data-ipsDialog-url='{url="app=core&module=messaging&controller=messenger&do=compose" seoTemplate="messenger_compose"}' data-ipsDialog-title='{lang="compose_new"}' class='ipsButton ipsButton_important ipsResponsive_hidePhone'>{lang="compose_new"}</a>
+				<a href='{url="app=core&module=messaging&controller=messenger&do=compose" seoTemplate="messenger_compose"}' data-action="composeNew" data-ipsDialog data-ipsDialog-url='{url="app=core&module=messaging&controller=messenger&do=compose" seoTemplate="messenger_compose"}' data-ipsDialog-title='{lang="compose_new"}' class='ipsButton ipsButton_primary ipsButton_verySmall ipsButton_narrow ipsPos_right ipsResponsive_showPhone ipsResponsive_block'>{lang="new"}</a>
+				&nbsp;&nbsp;<span data-role="loadingFolderAction" class='ipsType_light ipsType_normal' style='display: none'><i class='icon-spinner2 ipsLoading_tinyIcon'></i> &nbsp;{lang="loading"}</span>
+			</h1>
+			{template="messengerQuota" app="core" group="members" location="global" params="\IPS\Member::loggedIn(), array_sum( $counts )"}
+		</div>
+		
+		<ul class='ipsMenu ipsMenu_auto ipsHide' id='elMessageFolders_menu'>
+			{{foreach $folders as $id => $name}}
+				{{if $id === 'myconvo'}}
+					<li class='ipsMenu_item' data-ipsMenuValue='{$id}'><a href='{url="app=core&module=messaging&controller=messenger" seoTemplate="messaging"}'><span class='ipsMenu_itemCount'>{{if isset( $counts[ $id ] )}}{$counts[ $id ]}{{else}}0{{endif}}</span> <span data-role='folderName'>{$name}</span></a></li>
+				{{else}}
+					<li class='ipsMenu_item' data-ipsMenuValue='{$id}'><a href='{url="app=core&module=messaging&controller=messenger&folder={$id}" seoTemplate="messaging"}'><span class='ipsMenu_itemCount'>{{if isset( $counts[ $id ] )}}{$counts[ $id ]}{{else}}0{{endif}}</span> <span data-role='folderName'>{$name}</span></a></li>
+				{{endif}}
+			{{endforeach}}
+			<li class='ipsPad_half'><a class='ipsButton ipsButton_fullWidth ipsButton_light ipsButton_small' href="{url="app=core&module=messaging&controller=messenger&do=addFolder" csrf="true"}" data-action="addFolder" id='elAddFolder'>{lang="messenger_add_folder"}</a></li>
+		</ul>
+		<ul class='ipsMenu ipsMenu_auto ipsHide' id='elFolderSettings_menu'>
+			<li class='ipsMenu_title'>{lang="messenger_action_with" sprintf="$folders[ $folder ]"}</li>
+			<li class='ipsMenu_item' data-ipsMenuValue='markRead'><a href='{url="app=core&module=messaging&controller=messenger&do=readFolder&folder={$folder}" csrf="true"}'>{lang="messenger_action_read"}</a></li>
+			<li class='ipsMenu_item {{if $folder == 'myconvo'}}ipsMenu_itemDisabled ipsHide{{endif}}' data-ipsMenuValue='rename' id='elFolderRename'><a href='{url="app=core&module=messaging&controller=messenger&do=renameFolder&folder={$folder}" csrf="true"}'>{lang="messenger_action_rename"}</a></li>
+			<li class='ipsMenu_item' data-ipsMenuValue='empty'><a href='{url="app=core&module=messaging&controller=messenger&do=emptyFolder&folder={$folder}" csrf="true"}'>{lang="messenger_action_empty"}</a></li>
+			<li class='ipsMenu_item {{if $folder == 'myconvo'}}ipsMenu_itemDisabled ipsHide{{endif}}' data-ipsMenuValue='delete'><a href='{url="app=core&module=messaging&controller=messenger&do=deleteFolder&folder={$folder}" csrf="true"}'>{lang="messenger_action_delete_folder"}</a></li>
+		</ul>
+	</div>
+
+	<div class='ipsColumns ipsColumns_collapseTablet' data-ipsFilterBar data-ipsFilterBar-on='phone,tablet' data-ipsFilterBar-viewDefault='{{if \IPS\Request::i()->id && !isset( \IPS\Request::i()->_list)}}filterContent{{else}}filterBar{{endif}}'>
+		<div class='ipsColumn ipsColumn_veryWide' data-role='filterBar'>
+			<div id='elMessageSidebar' class='ipsBox ipsResponsive_pull lg:ipsPos_sticky' data-controller='core.front.messages.list' data-folderID='{$folder}'
+				data-ipsInfScroll
+				data-ipsInfScroll-scrollScope='#elMessageList'
+				data-ipsInfScroll-container='#elMessageList [data-role="messageList"]'
+				data-ipsInfScroll-url='{$baseUrl->setQueryString( array( 'sortBy' => $sortBy, 'filter' => $filter ) )->stripQueryString( 'id' )}'
+				data-ipsInfScroll-pageParam='listPage'
+			>
+				<!--<h2 class='ipsType_sectionTitle ipsType_reset'>{lang="menu_messages"}</h2>-->
+				{{if request.q}}
+					<p class='ipsMessage ipsMessage_info ipsType_reset'>{lang="messenger_filtering" sprintf="\IPS\Request::i()->q"}</p>
+				{{endif}}
+				<div class='ipsButtonBar ipsPad_half ipsClearfix' data-role="messageListFilters">
+					<ul class='ipsButtonRow ipsClearfix'>
+						<li>
+							<a class="ipsJS_show" href="#elCheck_menu" id="elCheck" title='{lang="select_rows_tooltip"}' data-ipsTooltip data-ipsAutoCheck data-ipsAutoCheck-context="#elMessageList" data-ipsMenu data-ipsMenu-activeClass="ipsButtonRow_active">
+								<span class="cAutoCheckIcon ipsType_medium"><i class="fa fa-square-o"></i></span> <i class="fa fa-caret-down"></i>
+								<span class='ipsNotificationCount' data-role='autoCheckCount'>0</span>
+							</a>
+							<ul class="ipsMenu ipsMenu_auto ipsMenu_withStem ipsHide" id="elCheck_menu">
+								<li class="ipsMenu_title">{lang="select_rows"}</li>
+								<li class="ipsMenu_item" data-ipsMenuValue="all"><a href="#">{lang="all"}</a></li>
+								<li class="ipsMenu_item" data-ipsMenuValue="none"><a href="#">{lang="none"}</a></li>
+							</ul>
+						</li>
+					</ul>
+					<ul class='ipsButtonRow ipsPos_right ipsClearfix'>
+						<li>
+							<a href='#elSortByMenu_menu' id='elSortByMenu' data-ipsMenu data-ipsMenu-activeClass='ipsButtonRow_active' data-ipsMenu-selectable="radio">{lang="sort_by"} <i class='fa fa-caret-down'></i></a>
+							<ul class='ipsMenu ipsMenu_auto ipsMenu_withStem ipsMenu_selectable ipsHide' id='elSortByMenu_menu'>
+								{{foreach array( 'mt_last_post_time', 'mt_start_time', 'mt_replies' ) as $k}}
+									<li class='ipsMenu_item {{if $k == \IPS\Request::i()->sortBy or ( !\IPS\Request::i()->sortBy and $k === 'mt_last_post_time')}}ipsMenu_itemChecked{{endif}}' data-ipsMenuValue='{$k}'><a href='{$baseUrl->setQueryString( array( 'sortBy' => $k, 'filter' => $filter ) )}'>{lang="$k"}</a></li>
+								{{endforeach}}
+							</ul>
+						</li>
+						<li>
+							<a href='#elFilterMenu_menu' id='elFilterMenu' data-ipsMenu data-ipsMenu-activeClass='ipsButtonRow_active' data-ipsMenu-selectable="radio">{lang="filter_by"} <i class='fa fa-caret-down'></i></a>
+							<ul class='ipsMenu ipsMenu_auto ipsMenu_withStem ipsMenu_selectable ipsHide' id='elFilterMenu_menu'>
+								<li class='ipsMenu_item {{if !\IPS\Request::i()->filter}}ipsMenu_itemChecked{{endif}}' data-ipsMenuValue='all'><a href='{$baseUrl->setQueryString( array( 'sortBy' => $sortBy ) )}'>{lang="messenger_filter_all"}</a></li>
+								{{foreach array( 'mine', 'not_mine', 'read', 'not_read' ) as $k}}
+									<li class='ipsMenu_item {{if $k === \IPS\Request::i()->filter or ( !\IPS\Request::i()->filter and $k === 'all' )}}ipsMenu_itemChecked{{endif}}' data-ipsMenuValue='{$k}'><a href='{$baseUrl->setQueryString( array( 'sortBy' => $sortBy, 'filter' => $k ) )}'>{lang="messenger_filter_{$k}"}</a></li>
+								{{endforeach}}
+							</ul>
+						</li>
+					</ul>
+				</div>
+				<div id='elMessageList' class='ipsClear ipsScrollbar'>
+					<form action="{url="app=core&module=messaging&controller=messenger" seoTemplate="messaging" csrf="true"}" method="post" data-role='moderationTools' data-ipsPageAction>
+						<ol class='ipsDataList' data-role='messageList' data-ipsKeyNav data-ipsKeyNav-observe='return'>
+							{template="messageListRows" app="core" group="messaging" params="$conversations, NULL, TRUE, $folders"}
+						</ol>
+						<noscript><div class="ipsPad">{$pagination|raw}</div></noscript>
+						<div class="ipsAreaBackground ipsPad ipsClearfix ipsJS_hide" data-role="pageActionOptions">
+							<div class="ipsPos_right">
+								<select name="modaction" data-role="moderationAction">
+									<option value='delete' data-icon='trash'>{lang="messenger_leave"}</option>
+									<option value='move' data-icon='arrow-right'>{lang="messenger_move"}</option>
+								</select>
+								<button type="submit" class="ipsButton ipsButton_alternate ipsButton_verySmall">{lang="submit"}</button>
+							</div>
+						</div>
+					</form>
+				</div>
+				<div class='ipsResponsive_showPhone ipsResponsive_block ipsAreaBackground_light ipsPad' data-role='messageListPagination'>
+					{$pagination|raw}
+				</div>
+				<div class='ipsAreaBackground_light ipsBorder_top ipsPadding' id='elMessageSearch'>
+					<form accept-charset='utf-8' method='post' action="{url="app=core&module=messaging&controller=messenger" seoTemplate="messaging"}" data-role='messageSearch' id='elMessageSearchForm'>
+						<a href='#' data-action='messageSearchCancel' class='ipsHide'><i class='fa fa-times'></i></a>
+						<a href='#elSearchTypes_menu' id='elSearchTypes' data-ipsMenu data-ipsMenu-selectable='checkbox' data-ipsMenu-appendTo='#elMessageSearchForm' data-ipsMenu-closeOnClick='false' class="ipsButton ipsButton_small ipsButton_light ipsPos_right">
+							<i class='fa fa-cog'></i>
+						</a>
+						<input type='text' data-role='messageSearchText' class='ipsField_fullWidth' name='q' placeholder='{lang="messenger_search"}' value="{request="q"}">
+						<ul class='ipsMenu ipsMenu_selectable ipsMenu_auto ipsHide' id='elSearchTypes_menu'>
+							<li class='ipsMenu_title'>{lang="messenger_search_menu_title"}</li>
+							<li class='ipsMenu_item ipsMenu_itemChecked' data-ipsMenuValue='post'><a href='#'><input type="checkbox" name="search[post]" checked value="1" id="search_post"> {lang="messenger_search_in_post"}</a></li>
+							<li class='ipsMenu_item ipsMenu_itemChecked' data-ipsMenuValue='topic'><a href='#'><input type="checkbox" name="search[topic]" checked value="1" id="search_topic"> {lang="messenger_search_in_topic"}</a></li>
+							<li class='ipsMenu_item {{if ! empty(request.search['recipient'])}}ipsMenu_itemChecked{{endif}}' data-ipsMenuValue='recipient'><a href='#'><input type="checkbox" name="search[recipient]" {{if ! empty(request.search['recipient'])}}checked="checked"{{endif}} recipientvalue="1" id="search_recipient"> {lang="messenger_recipient_name"}</a></li>
+							<li class='ipsMenu_item {{if ! empty(request.search['sender'])}}ipsMenu_itemChecked{{endif}}' data-ipsMenuValue='sender'><a href='#'><input type="checkbox" name="search[sender]" {{if ! empty(request.search['sender'])}}checked="checked"{{endif}} value="1" id="search_sender"> {lang="messenger_sender_name"}</a></li>
+						</ul>
+					</form>
+				</div>
+			</div>
+
+			<p class='ipsBox_alt ipsType_right ipsType_medium ipsType_light ipsType_blendLinks'>
+				<a href='{url="app=core&module=messaging&controller=messenger&do=disableMessenger" seoTemplate="messaging" csrf="true"}' data-confirm>{lang="disable_messenger"}</a>
+			</p>
+		</div>
+		<div class='ipsColumn ipsColumn_fluid' data-role='filterContent'>
+			<div id='elMessageViewer' class='ipsResponsive_pull' data-controller='core.front.messages.view' {{if $conversation !== NULL}}data-current-id="{$conversation->id}"{{endif}}>
+				{{if $conversation === NULL}}
+					{template="nomessage" group="messaging"}
+				{{else}}
+					{template="conversation" group="messaging" params="$conversation, $folders"}
+				{{endif}}
+			</div>
+		</div>
+	</div>
+
+	{{if \IPS\Member::loggedIn()->group['g_max_messages'] > 0}}
+		<div class='ipsResponsive_showPhone ipsResponsive_block'>
+			<div class='ipsType_center' data-role="quotaTooltip">
+				<span class="ipsAttachment_progress"><span data-role='quotaWidth' style='width: {expression="min( 100, 100 / \IPS\Member::loggedIn()->group['g_max_messages'] * array_sum( $counts ) )"}%'></span></span><br>
+				<span class='ipsType_light ipsResponsive_showPhone ipsResponsive_inline'>{lang="messenger_quota_short" sprintf="100 / \IPS\Member::loggedIn()->group['g_max_messages'] * array_sum( $counts )"}</span>
+			</div>
+		</div>
+	{{endif}}
+
+	<div id='elFolderRename_content' style='display: none' data-controller="core.front.messages.folderDialog" data-type='rename'>
+		<form action='#' method='get'>
+			<div class='ipsPad'>
+				<input type='text' class='ipsField_primary ipsField_fullWidth' data-role="folderName">
+			</div>
+			<div class='ipsBorder_top ipsPadding ipsType_right'>
+				<button type='submit' class='ipsButton ipsButton_primary' data-action='saveFolderName'>{lang="save"}</button>
+			</div>
+		</form>
+	</div>
+
+	<div id='elAddFolder_content' style='display: none' data-controller="core.front.messages.folderDialog" data-type='add'>
+		<form action='#' method='get'>
+			<div class='ipsPad'>
+				<input type='text' class='ipsField_primary ipsField_fullWidth' data-role="folderName" placeholder="{lang="messenger_add_folder_name"}">
+			</div>
+			<div class='ipsBorder_top ipsPadding ipsType_right'>
+				<button type='submit' class='ipsButton ipsButton_primary' data-action='saveFolderName'>{lang="messenger_add_folder"}</button>
+			</div>
+		</form>
+	</div>
+</div>

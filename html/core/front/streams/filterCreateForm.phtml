@@ -1,0 +1,54 @@
+<ips:template parameters="$id, $action, $elements, $hiddenValues, $actionButtons, $uploadField, $class='', $attributes=array(), $sidebar, $form=NULL" />
+<div data-controller='core.front.streams.form' data-formType='createStream'>
+	<form accept-charset='utf-8' class="ipsForm ipsForm_vertical" action="{$action}" method="post" {{if $uploadField}}enctype="multipart/form-data"{{endif}} {{foreach $attributes as $k => $v}}{$k}="{$v}"{{endforeach}} data-ipsForm>
+		<input type="hidden" name="{$id}_submitted" value="1">
+		{{foreach $hiddenValues as $k => $v}}
+			<input type="hidden" name="{$k}" value="{$v}">
+		{{endforeach}}
+		{{if $uploadField}}
+			<input type="hidden" name="MAX_FILE_SIZE" value="{$uploadField}">
+			<input type="hidden" name="plupload" value="{expression="md5( mt_rand() )"}">
+		{{endif}}
+		<div class='ipsBox ipsResponsive_pull ipsSpacer_bottom' id='elStreamFilterForm'>
+			<div class='ipsPadding'>
+				<h2 class='ipsType_sectionHead'>{lang="create_new_stream"}</h2>
+				<ul class='ipsList_inline ipsPos_right ipsResponsive_noFloat'>
+					<li>
+						<a href='#elStreamSortEdit_menu' class='ipsButton ipsButton_light ipsButton_verySmall' id='elStreamSortEdit' data-ipsMenu data-ipsMenu-selectable='radio' data-ipsMenu-appendTo='#elStreamFilterForm' data-ipsMenu-closeOnClick='false'>{lang="stream_sorting"} <i class='fa fa-caret-down'></i></a>
+					</li>
+				</ul>
+
+				<ul class='ipsMenu ipsMenu_selectable ipsMenu_auto ipsHide' id='elStreamSortEdit_menu'>
+					<li class='ipsMenu_item {{if $elements['']['stream_sort']->value == 'newest'}}ipsMenu_itemChecked{{endif}}'>
+						<a href='#'>
+							<input type="radio" name="stream_sort" value="newest" {{if (string) $elements['']['stream_sort']->value == 'newest'}}checked{{endif}} id="elRadio_stream_sort_newest">
+							{lang="stream_sort_newest"}
+						</a>
+					</li>
+					<li class='ipsMenu_item {{if $elements['']['stream_sort']->value == 'oldest'}}ipsMenu_itemChecked{{endif}}'>
+						<a href='#'>
+							<input type="radio" name="stream_sort" value="oldest" {{if (string) $elements['']['stream_sort']->value == 'oldest'}}checked{{endif}} id="elRadio_stream_sort_oldest">
+							{lang="stream_sort_oldest"}
+						</a>
+					</li>
+				</ul>
+				<hr class='ipsHr'>
+				{{if isset( $elements['']['stream_title'] )}}
+					<div class="ipsSpacer_bottom ipsAreaBackground_light ipsPad">
+						<input type='text' name='stream_title' value='{$elements['']['stream_title']->value}' class='ipsField_primary ipsField_fullWidth' placeholder='{lang="stream_title"}' autofocus>
+						{{if $elements['']['stream_title']->error}}
+							<br>
+							<span class="ipsType_warning">{lang="$elements['']['stream_title']->error"}</span>
+						{{endif}}
+					</div>
+				{{endif}}
+				{template="filterForm" group="streams" params="$id, $action, $elements, $hiddenValues, $actionButtons, $uploadField, $class, $attributes, $sidebar, $form"}
+			</div>
+			<div class='ipsPadding ipsBorder_top'>
+				<ul class="ipsToolList ipsToolList_horizontal ipsClearfix ipsMargin:none">
+					<li class='ipsToolList_primaryAction ipsPos_right'><button type='submit' class='ipsButton ipsButton_primary ipsButton_medium ipsButton_fullWidth' data-action='createStream'>{lang="stream_button_save"}</button></li>
+				</ul>
+			</div>
+		</div>
+	</form>
+</div>

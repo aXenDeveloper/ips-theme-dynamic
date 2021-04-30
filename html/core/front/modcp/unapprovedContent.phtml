@@ -1,0 +1,21 @@
+<ips:template parameters="$content, $tabs, $activeTab" />
+<div class='ipsLayout_contentSection'>
+	<div class='ipsTabs ipsClearfix' id='elmodCPTabs' data-ipsTabBar data-ipsTabBar-contentArea='#elModCPHiddenTabContent'>
+		<a href='#elmodCPTabs' data-action='expandTabs'><i class='fa fa-caret-down'></i></a>
+		<ul role='tablist' class='ipsList_reset'>
+			{{foreach $tabs as $key => $tab}}
+				<li>
+					<a href='{url="app=core&module=modcp&tab=approval&area=$key"}' id='modcp_{$key}' class='ipsTabs_item {{if $activeTab === $key}}ipsTabs_activeItem{{endif}}' role="tab" aria-selected="{{if $activeTab == $tab}}true{{else}}false{{endif}}">
+						{lang="$tab"}
+					</a>
+				</li>
+			{{endforeach}}
+		</ul>
+	</div>
+</div>
+<section id='elModCPHiddenTabContent' class='ipsPad'>
+	<div id="ipsTabs_elmodCPTabs_modcp_{$activeTab}_panel" class="ipsTabs_panel" aria-labelledby="modcp_{$activeTab}" aria-hidden="false">
+		{$content|raw}
+	</div>
+</section>
+	

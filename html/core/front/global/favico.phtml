@@ -1,0 +1,5 @@
+<ips:template parameters="" />
+{{if \IPS\Settings::i()->icons_favicon}}
+	{{$file = \IPS\File::get( 'core_Icons', \IPS\Settings::i()->icons_favicon );}}
+	<link rel='shortcut icon' href='{$file->url}' type="{expression="\IPS\File::getMimeType( $file->originalFilename )"}">
+{{endif}}

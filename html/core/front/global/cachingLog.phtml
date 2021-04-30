@@ -1,0 +1,32 @@
+<ips:template parameters="$log" />
+<div id="elCachingLog">
+	{{foreach $log as $i => $log}}
+		{{$i = \str_replace( '.', '_', $i);}}
+		<div class="cCachingLog" data-ipsDialog data-ipsDialog-content="#elCachingLog{$i}_menu">
+			{{if $log[0] === 'get'}}
+				<span class="cCachingLogMethod cCachingLogMethod_get">get</span>
+				<span class="cCachingLogKey">{$log[1]}</span>
+			{{elseif $log[0] === 'set'}}
+				<span class="cCachingLogMethod cCachingLogMethod_set">set</span>
+				<span class="cCachingLogKey">{$log[1]}</span>
+			{{elseif $log[0] === 'check'}}
+				<span class="cCachingLogMethod cCachingLogMethod_check">check</span>
+				<span class="cCachingLogKey">{$log[1]}</span>
+			{{elseif $log[0] === 'delete'}}
+				<span class="cCachingLogMethod cCachingLogMethod_delete">delete</span>
+				<span class="cCachingLogKey">{$log[1]}</span>
+			{{else}}
+				<span class="cCachingLogMethod">Redis</span>
+				<span class="cCachingLogKey">{$log[1]}</span>
+			{{endif}}
+		</div>
+		<div id='elCachingLog{$i}_menu' class='ipsPad ipsHide'>
+			{{if ! empty( $log[2] )}}
+				<pre class="prettyprint lang-php">{$log[2]}</pre>
+				<hr class="ipsHr">
+			{{endif}}
+			{{if isset( $log[3] )}}<pre class="prettyprint lang-php">{$log[3]}</pre>{{endif}}
+		</div>
+		<hr class="ipsHr">
+	{{endforeach}}
+</div>

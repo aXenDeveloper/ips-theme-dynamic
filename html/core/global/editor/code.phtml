@@ -1,0 +1,24 @@
+<ips:template parameters="$val, $editorId, $randomString, $language='html'" />
+<div class="ipsPad ipsForm ipsForm_vertical" data-controller='core.global.editor.code' data-editorid='{$editorId}' data-randomstring='{$randomString}'>
+	<form method='get' action='#'>
+		<div class="ipsPad ipsAreaBackground_light">
+			<div class="ipsFieldRow ipsFieldRow_fullWidth ipsFieldRow_primary ipsLoading" data-role="codeContainer">
+				<textarea id='elCodeInput{$randomString}'>{$val}</textarea>
+			</div>
+			<div class='ipsFieldRow'>
+				<button type='submit' class="ipsButton ipsButton_primary cEditorURLButton cEditorURLButtonInsert" data-action="linkButton">{lang="editor_media_insert"}</button>
+				<div class="ipsPos_right">
+					<select id='elCodeMode{$randomString}' data-role="codeModeSelect" data-codeLanguage="{$language}">
+						<option value="null">{lang="editor_code_null"}</option>
+						<option value="htmlmixed" {{if $language == 'html' OR $language == 'htmlmixed'}}selected{{endif}}>{lang="editor_code_htmlmixed"}</option>
+						<option value="css" {{if $language == 'css'}}selected{{endif}}>{lang="editor_code_css"}</option>
+						<option value="javascript" {{if $language == 'javascript'}}selected{{endif}}>{lang="editor_code_javascript"}</option>
+						<option value="php" {{if $language == 'php'}}selected{{endif}}>{lang="editor_code_php"}</option>
+						<option value="sql" {{if $language == 'sql'}}selected{{endif}}>{lang="editor_code_sql"}</option>
+						<option value="xml" {{if $language == 'xml'}}selected{{endif}}>{lang="editor_code_xml"}</option>
+					</select>
+				</div>
+			</div>
+		</div>
+	</form>
+</div>

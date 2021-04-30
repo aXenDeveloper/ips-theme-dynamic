@@ -1,0 +1,23 @@
+<ips:template parameters="$url, $pagination, $followers, $anonymous, $removeAllUrl" />
+<div data-ipsInfScroll data-ipsInfScroll-scrollScope="#elFollowerList" data-ipsInfScroll-container="#elFollowerListContainer" data-ipsInfScroll-url="{$url}" data-ipsInfScroll-pageParam="followerPage" data-ipsInfScroll-pageBreakTpl="">
+	<div class="ipsJS_hide">{$pagination|raw}</div>
+	<div class='ipsFollowerList ipsPad ipsBox_alt ipsScrollbar' id="elFollowerList">
+		<ul class="ipsDataList ipsList_reset" id='elFollowerListContainer'>
+			{template="followersRows" group="system" params="$followers"}
+		</ul>
+		{{if $anonymous}}
+			{{if $followers !== NULL and \count( $followers )}}
+				<div class="ipsPad_half ipsType_center ipsType_light">{lang="and_x_others" pluralize="$anonymous"}</div>
+			{{else}}
+				<div class="ipsPad_half ipsType_center ipsType_light">{lang="x_anonymous_members" pluralize="$anonymous"}</div>
+			{{endif}}
+		{{endif}}
+	</div>
+	{{if \IPS\Member::loggedIn()->modPermission('can_remove_followers')}}
+		<ul class="ipsPad ipsToolList ipsToolList_horizontal ipsList_reset ipsClearfix ipsAreaBackground">
+			<li>
+				<a href="{$removeAllUrl}" data-confirm data-confirmmessage='{lang="remove_followers_confirm"}' class="ipsButton ipsButton_medium ipsButton_fullWidth ipsButton_negative">{lang="remove_followers"}</a>
+			</li>
+		</ul>
+	{{endif}}
+</div>

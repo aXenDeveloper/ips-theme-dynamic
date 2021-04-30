@@ -1,0 +1,4 @@
+<ips:template parameters="$content, $orientation='horizontal'" />
+<div class='ipsWidget_inner {{if $orientation == 'vertical'}}ipsPad{{endif}}'>
+	{$content|raw}
+</div>

@@ -1,0 +1,75 @@
+/* PHONES */
+@media screen and (max-width: 767px) {
+	.cFollowedContent .ipsFollow {
+		margin-top: 10px;
+	}
+
+	html[dir="ltr"] .cFollowedContent .ipsDataItem_modCheck {
+		right: 10px;
+		left: auto;
+		top: 15px;
+	}
+	html[dir="rtl"] .cFollowedContent .ipsDataItem_modCheck {
+		left: 10px;
+		right: auto;
+		top: 15px;
+	}
+}
+
+/* BOTH */
+@media screen and (max-width: 979px) {
+	html[dir="ltr"] .cFollowedContent .ipsDataItem_imageColumn {
+		margin-left: 25px;
+	}
+	html[dir="rtl"] .cFollowedContent .ipsDataItem_imageColumn {
+		margin-right: 25px;
+	}
+
+	html[dir="ltr"] .cFollowedContent .ipsDataItem_main {
+		margin-left: 25px;
+	}
+	html[dir="rtl"] .cFollowedContent .ipsDataItem_main {
+		margin-right: 25px;
+	}
+
+	html[dir="ltr"] .cFollowedContent .cFollowedContent_anon {
+		float: right;
+		margin-top: -35px;
+	}
+	html[dir="rtl"] .cFollowedContent .cFollowedContent_anon {
+		float: left;
+		margin-top: -35px;
+	}
+
+	html[dir="ltr"] .cFollowedContent .cFollowedContent_info {
+		margin: 10px 0 10px 25px;
+		text-align: left;
+	}
+	html[dir="rtl"] .cFollowedContent .cFollowedContent_info {
+		margin: 10px 25px 10px 0;
+		text-align: right;
+	}
+		html[dir="ltr"] .cFollowedContent .cFollowedContent_info ul li {
+			display: inline;
+			margin-right: 25px;
+		}
+		html[dir="rtl"] .cFollowedContent .cFollowedContent_info ul li {
+			display: inline;
+			margin-left: 25px;
+		}
+
+	html[dir="ltr"] .cFollowedContent .cFollowedContent_manage {
+		text-align: left;
+		margin-left: 40px;
+	}
+	html[dir="rtl"] .cFollowedContent .cFollowedContent_manage {
+		text-align: right;
+		margin-right: 40px;
+	}
+	.cFollowedContent .cFollowedContent_manage .ipsFollow {
+		float: none;
+	}
+	.cFollowedContent .ipsDataItem_modCheck {
+		top: 15px;
+	}
+}

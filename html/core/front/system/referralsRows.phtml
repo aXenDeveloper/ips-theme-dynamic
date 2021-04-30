@@ -1,0 +1,16 @@
+<ips:template parameters="$table, $headers, $rows" />
+{{if \count( $rows )}} 
+	{{foreach $rows as $row}}
+		{{$member = \IPS\Member::load( $row['member_id'] );}}
+		<li class='ipsPhotoPanel ipsPhotoPanel_tiny'>
+			{template="userPhoto" app="core" group="global" params="$member, 'tiny'"}	
+			<div>
+				<strong>
+					<a href="{$member->url()}">{member="name" id="$row['member_id']"}</a>
+				</strong>
+				<br>
+				<span class='ipsType_light ipsType_small'>{datetime="$row['joined']"}</span>
+			</div>
+		</li>
+	{{endforeach}}
+{{endif}}

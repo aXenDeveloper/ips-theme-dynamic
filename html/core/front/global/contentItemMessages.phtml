@@ -1,0 +1,4 @@
+<ips:template parameters="$messages, $item" />
+{{foreach $messages AS $id => $message}}
+	{template="contentItemMessage" app="core" group="global" params="$message, $item, $id"}
+{{endforeach}}

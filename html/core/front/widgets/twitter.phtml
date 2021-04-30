@@ -1,0 +1,5 @@
+<ips:template parameters="$username, $locale, $style=NULL, $color=NULL" />
+
+<div class='ipsPad_half'>
+	<a class="twitter-timeline" data-lang="{$locale}" data-height="500" {{if $style}}data-theme="{$style}"{{endif}} {{if $color}}data-link-color="{$color}"{{endif}} href="https://twitter.com/{$username}?ref_src=twsrc%5Etfw">Tweets by {$username}</a> 		<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+</div>

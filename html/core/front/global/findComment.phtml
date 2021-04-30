@@ -1,0 +1,47 @@
+<ips:template parameters="$header, $item, $comment" />
+{{$idField = $comment::$databaseColumnId;}}
+{{$itemClassSafe = str_replace( '\\', '_', mb_substr( $comment::$itemClass, 4 ) );}}
+{{if ! \IPS\Request::i()->isAjax()}}
+	<h1 class='ipsType_pageTitle'><a href="{$item->url()->setQueryString( array( 'do' => 'findComment', 'comment' => $comment->$idField ) )}">{$header}</a></h1>
+	<br />
+{{endif}}
+<article id='elComment_{$comment->$idField}' class='ipsComment {{if \IPS\IPS::classUsesTrait( $comment, 'IPS\Content\Reactable' ) and settings.reputation_highlight and $comment->reactionCount() >= settings.reputation_highlight}}ipsComment_popular{{endif}} ipsComment_parent ipsClearfix ipsClear {{if $comment->hidden()}}ipsModerated{{endif}}'>
+	<div id='comment-{$comment->$idField}_wrap' data-controller='core.front.core.comment' data-commentApp='{$comment::$application}' data-commentType='{$item::$module}' data-commentID="{$comment->$idField}" data-quoteData='{expression="json_encode( array('userid' => $comment->author()->member_id, 'username' => $comment->author()->name, 'timestamp' => $comment->mapped('date'), 'contentapp' => $comment::$application, 'contenttype' => $item::$module, 'contentclass' => $itemClassSafe, 'contentid' => $item->id, 'contentcommentid' => $comment->$idField) )"}' class='ipsComment_content ipsType_medium'>
+		{{if settings.reputation_enabled and \IPS\IPS::classUsesTrait( $comment, 'IPS\Content\Reactable' ) and settings.reputation_highlight and $comment->reactionCount() >= settings.reputation_highlight}}
+			<strong class='ipsComment_popularFlag' data-ipsTooltip title='{lang="this_is_a_popular_comment"}'><i class='fa fa-heart'></i></strong>
+		{{endif}}
+		
+		<div class='ipsComment_header ipsPhotoPanel ipsPhotoPanel_mini ipsPhotoPanel_notPhone'>
+			{template="userPhoto" app="core" group="global" params="$comment->author(), 'mini', $comment->warningRef()"}
+			<div>
+				<h3 class='ipsComment_author ipsType_blendLinks'>
+					<strong class='ipsType_sectionHead'>{template="userLink" app="core" group="global" params="$comment->author(), $comment->warningRef()"}</strong>
+				</h3>
+				<p class='ipsComment_meta ipsType_light ipsType_medium'>
+					<a href='{$comment->item()->url()->setQueryString( array( 'do' => 'findComment', 'comment' => $comment->id ) )}' class='ipsType_blendLinks'>{$comment->dateLine()|raw}</a>
+					{{if $comment->editLine()}}
+						&middot; {$comment->editLine()|raw}
+					{{endif}}
+					{{if $comment->hidden()}}
+						&middot; {$comment->hiddenBlurb()}
+					{{endif}}
+				</p>
+				{{if member.modPermission('mod_see_warn') and $comment->warning}}
+					{template="commentWarned" group="global" app="core" params="$comment"}
+				{{endif}}
+			</div>
+		</div>
+		<div class='ipsAreaBackground_reset ipsPadding_vertical sm:ipsPadding_vertical:half ipsPadding_horizontal'>			
+			<div data-role='commentContent' class='ipsType_richText ipsContained' data-controller='core.front.core.lightboxedImages'>
+				{{if $comment->hidden() === 1 && $comment->author()->member_id == \IPS\Member::loggedIn()->member_id}}
+					<strong class='ipsType_medium ipsType_warning'><i class='fa fa-info-circle'></i> {lang="comment_awaiting_approval"}</strong>
+				{{endif}}
+				{$comment->content()|raw}
+			</div>
+			{{if $comment->hidden() !== 1 && \IPS\IPS::classUsesTrait( $comment, 'IPS\Content\Reactable' ) and settings.reputation_enabled}}
+				<br>
+				{template="reputation" group="global" app="core" params="$comment"}
+			{{endif}}
+		</div>
+	</div>
+</article>

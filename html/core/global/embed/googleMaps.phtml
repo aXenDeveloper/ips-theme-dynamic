@@ -1,0 +1,18 @@
+<ips:template parameters="$q, $mapType, $zoom = NULL" />
+<div class='ipsEmbeddedOther' contenteditable="false">
+	<iframe height="450"
+	{{if $mapType == 'place'}}
+		src="https://www.google.com/maps/embed/v1/place?key={setting="google_maps_api_key"}&q={$q}"
+	{{elseif $mapType == 'dir'}}
+		{{if isset( $q['waypoints'] )}}
+			src="https://www.google.com/maps/embed/v1/directions?key={setting="google_maps_api_key"}&origin={$q['origin']}&waypoints={$q['waypoints']}&destination={$q['destination']}"
+		{{else}}
+			src="https://www.google.com/maps/embed/v1/directions?key={setting="google_maps_api_key"}&origin={$q['origin']}&destination={$q['destination']}"
+		{{endif}}
+	{{elseif $mapType == 'search'}}
+		src="https://www.google.com/maps/embed/v1/search?key={setting="google_maps_api_key"}&q={$q}"
+	{{elseif $mapType =='coordinates'}}
+		src="https://www.google.com/maps/embed/v1/view?key={setting="google_maps_api_key"}&center={$q}&zoom={$zoom}"
+	{{endif}}>
+	</iframe>
+</div>

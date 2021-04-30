@@ -1,0 +1,121 @@
+<ips:template parameters="$poll, $url" />
+{{if !isset( \IPS\Request::i()->fetchPoll )}}
+<section data-controller='core.front.core.poll'>
+{{endif}}
+	{{if $poll->canVote() and request._poll != 'results' and ( !$poll->getVote() or request._poll == 'form') and $pollForm = $poll->buildForm()}}
+		<h2 class='ipsType_sectionTitle ipsType_reset'>
+			<span class='ipsType_break ipsContained'>
+				{$poll->poll_question}&nbsp;&nbsp;
+				{{if $poll->votes}}<p class='ipsType_reset ipsPos_right ipsResponsive_hidePhone ipsType_light ipsType_unbold ipsType_medium'><i class='fa fa-check-square-o'></i> {lang="poll_num_votes" pluralize="$poll->votes"}</p>{{endif}}
+			</span>
+		</h2>
+		<div class='ipsPadding ipsClearfix' data-role='pollContents'>
+			{$pollForm->customTemplate( array( \IPS\Theme::i()->getTemplate( 'global', 'core', 'global' ), 'pollForm' ), $url, $poll )|raw}
+		</div>
+	{{elseif ( $poll->canViewResults() and !$poll->canVote() ) or $poll->getVote() or ( request._poll == 'results' and $poll->canViewResults() )}}
+		<h2 class='ipsType_sectionTitle ipsType_reset'>
+			<span class='ipsType_break ipsContained'>
+				{$poll->poll_question}&nbsp;&nbsp;
+				{{if $poll->votes}}<p class='ipsType_reset ipsPos_right ipsResponsive_hidePhone ipsType_light ipsType_unbold ipsType_medium'><i class='fa fa-check-square-o'></i> {lang="poll_num_votes" pluralize="$poll->votes"}</p>{{endif}}
+			</span>
+		</h2>
+		<div class='ipsPadding ipsClearfix' data-role='pollContents'>
+			<ol class='ipsList_reset cPollList'>
+				{{$i = 0;}}
+				{{foreach $poll->choices as $questionId => $question}}
+					{{$i++;}}
+					<li>
+						<h3 class='ipsType_sectionHead'><span class='ipsType_break ipsContained'>{$i}. {$question['question']}</span></h3>
+						<ul class='ipsList_reset cPollList_choices'>
+							{{foreach $question['choice'] as $k => $choice}}
+								<li class='ipsGrid ipsGrid_collapsePhone'>
+									<div class='ipsGrid_span4 ipsType_richText ipsType_break'>
+										{$choice|raw}
+									</div>
+									<div class='ipsGrid_span7'>
+										<span class='cPollVoteBar'>
+											<span style='width: {{if array_sum( $question['votes'] ) > 0 }}{expression="\intval( ( $question['votes'][ $k ] / array_sum( $question['votes'] ) ) * 100 )"}{{else}}0{{endif}}%' data-votes='{{if array_sum( $question['votes'] ) > 0}}{expression="round( ( $question['votes'][ $k ] / array_sum( $question['votes'] ) ) * 100, 2 )"}{{else}}0{{endif}}%' {{if array_sum( $question['votes'] ) && \intval( ( $question['votes'][ $k ] / array_sum( $question['votes'] ) ) * 100 ) > 30}}class='cPollVoteBar_inside'{{endif}}></span>
+										</span>
+									</div>
+									<div class='ipsGrid_span1 ipsType_small'>
+										{{if $poll->canSeeVoters() && $question['votes'][ $k ] > 0}}
+											<a href='{url="app=core&module=system&controller=poll&do=voters&id={$poll->pid}&question={$questionId}&option={$k}"}' title='{lang="view_voters"}' class='ipsType_blendLinks' data-ipsTooltip data-ipsDialog data-ipsDialog-size="narrow" data-ipsDialog-title="{$choice}">
+										{{else}}
+											<span class='ipsFaded'>
+										{{endif}}
+											<i class='fa fa-user'></i> {$question['votes'][ $k ]}
+										{{if $poll->canSeeVoters() && $question['votes'][ $k ] > 0}}
+											</a>
+										{{else}}
+											</span>
+										{{endif}}
+									</div>
+								</li>
+							{{endforeach}}
+						</ul>
+					</li>
+				{{endforeach}}
+			</ol>
+			{{if $poll->canVote() || !member.member_id || $poll->canClose() || ( ( $poll->poll_close_date instanceof \IPS\DateTime ) and !$poll->poll_closed ) || ( ( $poll->poll_close_date instanceof \IPS\DateTime ) and $poll->poll_closed )}}
+				<hr class='ipsHr'>
+				{{if $poll->poll_closed}}
+					<p class="ipsType_reset ipsType_medium ipsType_unbold ipsMargin_vertical:half">
+						<i class='fa fa-lock'></i> {lang="poll_closed_for_votes"}
+					</p>
+				{{endif}}
+				<ul class='ipsToolList ipsToolList_horizontal ipsClearfix cPollButtons'>
+					{{if $poll->canVote()}}
+						<li class='ipsPos_left ipsResponsive_noFloat ipsToolList_primaryAction'>
+							<a href="{$url->setQueryString( '_poll', 'form' )}" title='{lang="show_vote_options"}' class='ipsButton ipsButton_small ipsButton_light ipsButton_fullWidth' data-action='viewResults'><i class='fa fa-caret-left'></i> {lang="show_vote_options"}</a>
+						</li>
+					{{endif}}
+					{{if !member.member_id}}
+						<li class='ipsPos_left ipsResponsive_noFloat'>
+							{lang="poll_guest" sprintf="\IPS\Http\Url::internal( 'app=core&module=system&controller=login', 'front', 'login' ), \IPS\Http\Url::internal( 'app=core&module=system&controller=register', 'front', 'register' )"}
+						</li>
+					{{endif}}
+					{{if $poll->canClose()}}
+						{{if ! $poll->poll_closed}}
+							<li class='ipsPos_right ipsResponsive_noFloat'><a class='ipsButton ipsButton_link ipsButton_small ipsButton_fullWidth' href='{$url->setQueryString( array( 'do' => 'pollStatus', 'value' => 0 ) )->csrf()}'><i class="fa fa-lock"></i> {lang="poll_close"}</a></li>
+						{{else}}
+							<li class='ipsPos_right ipsResponsive_noFloat'><a class='ipsButton ipsButton_link ipsButton_small ipsButton_fullWidth' href='{$url->setQueryString( array( 'do' => 'pollStatus', 'value' => 1 ) )->csrf()}'><i class="fa fa-unlock"></i> {lang="poll_open"}</a></li>
+						{{endif}}
+					{{endif}}
+					{{if ( $poll->poll_close_date instanceof \IPS\DateTime ) and !$poll->poll_closed}}
+						<li class='ipsPos_right cPollCloseDate ipsResponsive_noFloat'><span class='ipsType_light ipsType_medium'>{lang="poll_auto_closes_on" sprintf="$poll->poll_close_date->localeDate(), $poll->poll_close_date->localeTime( FALSE )"}</span></li>
+					{{elseif ( $poll->poll_close_date instanceof \IPS\DateTime ) and $poll->poll_closed}}
+						<li class='ipsPos_right cPollCloseDate ipsResponsive_noFloat'><span class='ipsType_light ipsType_medium'>{lang="poll_auto_closed_on" sprintf="$poll->poll_close_date->localeDate(), $poll->poll_close_date->localeTime( FALSE )"}</span></li>
+					{{endif}}
+			{{endif}}
+		</div>
+	{{else}}
+		<h2 class='ipsType_sectionTitle ipsType_reset'>
+			<span class='ipsType_break ipsContained'>
+				{$poll->poll_question}&nbsp;&nbsp;
+				{{if $poll->votes}}<p class='ipsType_reset ipsPos_right ipsResponsive_hidePhone ipsType_light'><i class='fa fa-check-square-o'></i> {lang="poll_num_votes" pluralize="$poll->votes"}</p>{{endif}}
+			</span>			
+		</h2>
+		<div class='ipsPadding ipsClearfix' data-role='pollContents'>
+			{lang="no_permission_poll"}{{if !\IPS\Member::loggedIn()->member_id}} {lang="poll_guest" sprintf="\IPS\Http\Url::internal( 'app=core&module=system&controller=login', 'front', 'login' ), \IPS\Http\Url::internal( 'app=core&module=system&controller=register', 'front', 'register' )"}{{endif}}
+
+            {{if $poll->canClose() || ( ( $poll->poll_close_date instanceof \IPS\DateTime ) and !$poll->poll_closed ) || ( ( $poll->poll_close_date instanceof \IPS\DateTime ) and $poll->poll_closed )}}
+            <hr class='ipsHr'>
+            <ul class='ipsToolList ipsToolList_horizontal ipsClearfix cPollButtons'>
+                {{if !$poll->poll_closed}}
+                    <li class='ipsPos_right ipsResponsive_noFloat'><a class='ipsButton ipsButton_link ipsButton_small ipsButton_fullWidth' href='{$url->setQueryString( array( 'do' => 'pollStatus', 'value' => 0 ) )->csrf()}'><i class="fa fa-lock"></i> {lang="poll_close"}</a></li>
+                {{else}}
+                    <li class='ipsPos_right ipsResponsive_noFloat'><a class='ipsButton ipsButton_link ipsButton_small ipsButton_fullWidth' href='{$url->setQueryString( array( 'do' => 'pollStatus', 'value' => 1 ) )->csrf()}'><i class="fa fa-unlock"></i> {lang="poll_open"}</a></li>
+                {{endif}}
+
+                {{if ( $poll->poll_close_date instanceof \IPS\DateTime ) and !$poll->poll_closed}}
+                    <li class='ipsPos_right ipsResponsive_noFloat cPollCloseDate'><span class='ipsType_light ipsType_medium'>{lang="poll_auto_closes_on" sprintf="$poll->poll_close_date->localeDate(), $poll->poll_close_date->localeTime( FALSE )"}</span></li>
+                {{elseif ( $poll->poll_close_date instanceof \IPS\DateTime ) and $poll->poll_closed}}
+                    <li class='ipsPos_right ipsResponsive_noFloat cPollCloseDate'><span class='ipsType_light ipsType_medium'>{lang="poll_auto_closed_on" sprintf="$poll->poll_close_date->localeDate(), $poll->poll_close_date->localeTime( FALSE )"}</span></li>
+                {{endif}}
+            </ul>
+            {{endif}}
+        </div>
+	{{endif}}
+{{if !isset( \IPS\Request::i()->fetchPoll )}}
+</section>
+{{endif}}

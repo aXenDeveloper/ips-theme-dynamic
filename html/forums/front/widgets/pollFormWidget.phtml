@@ -1,0 +1,43 @@
+<ips:template parameters="$url, $id, $action, $elements, $hiddenValues, $actionButtons, $uploadField, $class='', $attributes=array(), $sidebar, $form=NULL" />
+<form accept-charset='utf-8' class="ipsForm {$class}" action="{$url->setQueryString( 'do', 'widgetPoll' )}" method="post" {{if $uploadField}}enctype="multipart/form-data"{{endif}} {{foreach $attributes as $k => $v}}{$k}="{$v}"{{endforeach}} data-ipsForm>
+	<input type="hidden" name="{$id}_submitted" value="1">
+	{{foreach $hiddenValues as $k => $v}}
+		<input type="hidden" name="{$k}" value="{$v}">
+	{{endforeach}}		
+	{{foreach $elements as $collection}}
+		<ol class='ipsList_reset cPollList cPollList_questions'>
+			{{$i = 0;}}
+			{{foreach $collection as $idx => $input}}
+				{{$i++;}}
+				<li class='ipsFieldRow ipsFieldRow_noLabel'>
+					<h4 class='ipsType_normal ipsType_reset'><span class='ipsType_break ipsContained'>{$i}. {$input->label}</span></h4>
+					{{if !$input->options['multiple']}}
+						{template="radio" app="core" location="global" group="forms" params="$input->name, $input->value, $input->required, $input->options['options'], $input->options['disabled'], '', $input->options['disabled']"}
+					{{else}}
+						{template="checkboxset" app="core" location="global" group="forms" params="$input->name, $input->value, $input->required, $input->options['options'], $input->options['disabled'], $input->options['toggles'], isset( $input->options['descriptions'] ) ? $input->options['descriptions'] : NULL, $input->options['userSuppliedInput']"}
+					{{endif}}
+					{{if $input->error}}
+						<br>
+						<span class="ipsType_warning">{lang="$input->error"}</span>
+					{{endif}}
+				</li>
+			{{endforeach}}
+		</ol>
+	{{endforeach}}
+	<hr class='ipsHr'>
+	<ul class="ipsList_reset ipsFieldRow_fullWidth ipsClearfix">
+		{{foreach $actionButtons as $button}}
+			<li class='ipsSpacer_bottom ipsSpacer_half'>{$button|raw}</li>
+		{{endforeach}}
+		<li class='ipsSpacer_bottom ipsSpacer_half'>
+			<a class='ipsButton ipsButton_fullWidth ipsButton_link ipsButton_small' title='{lang="show_results_title"}' href="{$url->setQueryString('do', 'widgetPoll')->setQueryString( array( '_poll' => 'results', 'nullVote' => 1 ) )->csrf()}" {{if !settings.allow_result_view}}data-viewResults-confirm="{lang="warn_allow_result_view"}"{{endif}} data-action='viewResults'>
+				{lang="show_results"}
+			</a>
+		</li>
+		<li>
+			<a class='ipsButton ipsButton_fullWidth ipsButton_link ipsButton_small' title='{lang="show_results_title"}' href="{$url}">
+				{lang="poll_view_topic"}
+			</a>
+		</li>
+	</ul>
+</form>

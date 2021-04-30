@@ -1,0 +1,17 @@
+<ips:template parameters="$id, $action, $elements, $hiddenValues, $actionButtons, $uploadField, $class='', $attributes=array(), $sidebar" />
+
+<form accept-charset='utf-8' method="post" action="{$action}" id='elCoppaForm' class='ipsType_center' data-ipsForm>
+	<input type="hidden" name="{$id}_submitted" value="1">
+	{{foreach $hiddenValues as $k => $v}}
+		<input type="hidden" name="{$k}" value="{$v}">
+	{{endforeach}}
+
+	{{foreach $elements as $collection}}
+		{{foreach $collection as $input}}
+			{{if $input instanceof \IPS\Helpers\Form\Date}}
+				<input type="date" class='ipsField_short ipsField_primary' required placeholder="{lang="$input->name"}" name='{$input->name}' id='{$input->htmlId}'>
+			{{endif}}
+		{{endforeach}}
+	{{endforeach}}
+	&nbsp;&nbsp;<button type='submit' class='ipsButton ipsButton_large ipsButton_primary'>{lang="continue"}</button>
+</form>

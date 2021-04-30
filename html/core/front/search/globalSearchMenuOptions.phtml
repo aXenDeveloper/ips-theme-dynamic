@@ -1,0 +1,11 @@
+<ips:template parameters="$exclude" />
+{{foreach output.globalSearchMenuOptions() as $type => $name}}
+	{{if !\in_array( $type, $exclude )}}
+		<li>
+			<a href='#' class='ipsSideMenu_item' data-ipsMenuValue='{$type}'>
+				<input type="radio" name="type" value="{$type}" id="elQuickSearchRadio_type_{$type}">
+				<label for='elQuickSearchRadio_type_{$type}' id='elQuickSearchRadio_type_{$type}_label'>{lang="$name"}</label>
+			</a>
+		</li>
+	{{endif}}
+{{endforeach}}

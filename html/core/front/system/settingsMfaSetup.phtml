@@ -1,0 +1,10 @@
+<ips:template parameters="$configurationScreen, $url" />
+<div id='elTwoFactorAuthentication' class='ipsModal' data-controller='core.global.core.2fa'>
+	<div>
+		<form action="{$url}" method="post" accept-charset='utf-8' data-ipsForm class="ipsForm ipsForm_fullWidth">
+			<input type="hidden" name="mfa_setup" value="1">
+			<input type="hidden" name="csrfKey" value="{expression="\IPS\Session::i()->csrfKey"}">
+			{$configurationScreen|raw}
+		</form>
+	</div>
+</div>

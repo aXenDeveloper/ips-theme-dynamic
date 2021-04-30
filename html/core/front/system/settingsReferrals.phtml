@@ -1,0 +1,57 @@
+<ips:template parameters="$table, $url, $rules" />
+<div class='ipsAreaBackground_light ipsPadding ipsBorder_bottom'>
+	<h2 class="ipsType_pageTitle">{lang="referrals"}</h2>
+</div>
+
+<div class='ipsPadding'>
+	<div class='ipsBox ipsBox--child ipsSpacer_bottom cReferralLinks' data-controller='core.front.system.referrals'>
+		<div class='ipsPad cReferrals_directLink'>
+			<h3 class='ipsType_sectionHead'>{lang="referral_directlink"}</h3>
+			<span class='cReferrals_directLink_link'>{$url}</span>
+			<input class='cReferrals_directLink_input ipsHide' type="text" value="{$url}">
+			<button class="cReferrer_copy cReferrer_copy_link ipsButton ipsButton_alternate ipsButton_veryVerySmall" data-clipboard-text="{$url}">{lang="copy"}</button>
+		</div>
+		{{if \count( \IPS\core\ReferralBanner::roots() )}}
+		<div class='cReferrals_grid ipsPad_half'>
+		{{$count = 0;}}
+		<div class='cReferrals_grid_row ipsSpacer_top'>
+			{{foreach \IPS\core\ReferralBanner::roots() as $banner}}
+				<div class='cReferrals_grid_item ipsClear ipsClearfix ipsBox'>
+					<div class='cReferrals_grid_item__image' style='background-image: url("{file="$banner->url" extension="core_ReferralBanners"}")'>
+						{$banner->_title|raw}
+					</div>
+					<div class='cReferrals_grid_item__body ipsPad'>
+						<div>
+							<div class='ipsSpacer_bottom'>
+								<h3 class='ipsType_minorHeading'>{lang="referral_html_banner"}</h3>
+								<input type='text' class='ipsField_fullWidth' id="bannerValue_{$banner->id}" value="&lt;a href='{$url}'&gt;&lt;img src='{file="$banner->url" extension="core_ReferralBanners"}' alt='{setting="board_name"}'&gt;&lt;/a&gt;">
+								<button class="cReferrer_copy ipsButton ipsButton_light ipsButton_small ipsButton_fullWidth ipsSpacer_top ipsSpacer_half" data-clipboard-target="#bannerValue_{$banner->id}">{lang="copy"}</button>
+							</div>
+						</div>
+					</div>
+				</div>
+				{{$count++;}}
+				{{if $count % 3 == 0 and $count !== \count( \IPS\core\ReferralBanner::roots() )}}
+					</div>
+					<div class='cBlog_grid_row ipsSpacer_top'>
+				{{endif}}
+			{{endforeach}}
+		</div>
+	</div>
+	{{endif}}
+
+	</div>
+
+	<div class="ipsBox ipsBox--child ipsSpacer_bottom ipsClearfix">
+		<div class="ipsAreaBackground_light ipsClearfix ipsPad">
+			<strong><i class="fa fa-users"></i> {lang="referrals_yours"}</strong>
+		</div>
+		<div class="ipsPad">
+			{$table|raw}
+		</div>
+	</div>
+
+	{{if $rules}}
+	{template="referralRulesCommission" app="nexus" group="global" location="front" params="$rules"}
+	{{endif}}
+</div>

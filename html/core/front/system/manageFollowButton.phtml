@@ -1,0 +1,9 @@
+<ips:template parameters="$app, $area, $id" />
+
+{{if member.member_id}}
+	{{if member.following( $app, $area, $id )}}
+		<div class="ipsFollow" data-role="followButton">
+			<a href="{url="app=core&module=system&controller=notifications&do=follow&follow_app={$app}&follow_area={$area}&follow_id={$id}"}" title="{lang="following_this_content"}" class='ipsButton ipsButton_light ipsButton_fullWidth ipsButton_verySmall' data-ipsHover data-ipsHover-cache='false' data-ipsHover-onClick>{lang="follow_change_preference"} <i class='fa fa-caret-down'></i></a>
+		</div>
+	{{endif}}
+{{endif}}

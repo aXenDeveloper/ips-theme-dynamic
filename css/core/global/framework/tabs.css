@@ -1,0 +1,158 @@
+/* Tab bars... bars of tabs, see? */
+.ipsTabs {
+	--ipsTabs--padding: 10px;
+	--ipsTabs-responsive--height: 48px;
+	background: rgb( var(--theme-tab_background) );
+	color: #fff;
+	padding: var(--ipsTabs--padding);
+	padding-bottom: 0;
+	margin: 0;
+	list-style: none;
+	border-top-left-radius: inherit;
+	border-top-right-radius: inherit;
+}
+
+	/* Remove radius on certain tabs */
+	.ipsType_sectionTitle + .ipsTabs{
+		border-radius: 0;
+	}
+	
+	/* action='expandTabs' is used to open tab menus on responsive views. We hide by default */
+	.ipsTabs [data-action='expandTabs'] {
+		display: none !important;
+	}
+
+	ul.ipsTabs,
+	.ipsTabs [role="tablist"] {
+		margin: 0;
+		padding: 0;
+		list-style: none;
+		display: flex;
+		flex-wrap: wrap;
+	}
+
+	.ipsTabs > li,
+	.ipsTabs [role="tablist"] > li{
+		flex: 0 1 auto;
+		min-width: 0;
+	}
+
+		/* Stretch tabs to evenly occupy the full space */
+		.ipsTabs.ipsTabs_stretch [role="tablist"]{
+			flex-wrap: nowrap;
+		}
+		.ipsTabs.ipsTabs_stretch [role="tablist"] > li {
+			flex: 1 1 100%;
+		}
+
+	.ipsTabs_small {
+		--ipsTabs--padding: 4px;
+	}
+
+.ipsTabs_item {
+	display: block;
+	white-space: nowrap;
+	line-height: 3;
+	font-size: {fontsize="medium"};
+	padding: 0 var(--sp-5);
+	text-overflow: ellipsis;
+	max-width: 100%;
+	overflow: hidden;
+	border-radius: var(--radius-1) var(--radius-1) 0 0;
+}
+
+	.ipsTabs_item:not( .ipsHide ) {
+		display: block !important;
+	}
+
+	.ipsTabs_item,
+	a.ipsTabs_item{
+		color: inherit;
+	}
+
+	.ipsTabs_item.ipsTabs_itemDisabled {
+		opacity: 0.6;
+		font-style: italic;
+		pointer-events: none;
+	}
+
+		.ipsTabs.ipsTabs_stretch.ipsTabs_small .ipsTabs_item {
+			padding: 0 10px;
+			text-align: center;
+		}
+
+	.ipsTabs.ipsTabs_small .ipsTabs_item {
+		font-size: {fontsize="x_small"};
+		line-height: 2.83;
+		margin: 0;
+	}
+
+	.ipsTabs_activeItem {
+		background: rgb( var(--theme-area_background_reset) );
+		color: rgb( var(--theme-text_dark) ) !important;
+		font-weight: bold;
+	}
+
+	.ipsTabs_item:not( .ipsTabs_activeItem ):hover {
+		background: rgba(255,255,255,0.05);
+	}
+
+	@media (min-width: 768px){
+		.ipsTabs_withIcons .ipsTabs_item {
+			line-height: 24px;
+			padding: 8px 15px;
+			min-width: 125px;
+		}
+	}
+
+	.ipsTabs_withIcons .ipsTabs_item {
+		text-align: center;
+	}
+
+		.ipsTabs_withIcons .ipsTabs_item i {
+			font-size: 20px;
+			display: block;
+			margin: 0 auto;
+			text-align: center;
+		}
+
+.ipsTabs_dummyItem {
+	background: #4e5b62;
+	color: #fff;
+}
+
+.ipsTabs_panel {
+	height: 100%;
+	background: rgb( var(--theme-area_background_reset) );
+}
+
+	/* Remove the background from .ipsTabs_panel in profiles since a background is assigned by .ipsBox children */
+	#elUserContent .ipsTabs_panel{
+		background: none;
+	}
+
+/* 'Contained' tabs with a border */
+.ipsTabs_panels.ipsTabs_contained {
+	border: 1px solid rgb( var(--theme-area_background) );
+	border-top-width: 0;
+	/* Future-proof tabbed content from breaking on a dark background. Helps to fix #2639 */
+	background-color: rgb( var(--theme-area_background_reset) );
+}
+
+	.ipsTabs_panels.ipsTabs_contained .ipsTabs_panel {
+		padding: var(--sp-5);
+	}
+
+		.ipsTabs_panels.ipsTabs_contained .ipsTabs_panel .ipsTabs_pullOut {
+			margin: calc( var(--sp-5) * -1 );
+		}
+
+/*.ipsTabs.ipsTabs_contained {
+	padding: 0;
+	border: 1px solid rgb( var(--theme-area_background) );
+	border-bottom-width: 0px;
+}*/
+
+.ipsTabs_loadingContent {
+	min-height: 150px;
+}

@@ -1,0 +1,37 @@
+<ips:template parameters="$table, $headers, $rows, $quickSearch" />
+<div data-baseurl='{$table->baseUrl}' data-resort='{$table->resortKey}' data-controller='core.global.core.table' {{if $table->getPaginationKey() != 'page'}}data-pageParam='{$table->getPaginationKey()}'{{endif}}>
+
+	{{if $table->pages > 1}}
+		<div class="ipsButtonBar ipsPad_half ipsClearfix ipsClear">
+			<div data-role="tablePagination">
+				{template="pagination" group="global" app="core" location="global" params="$table->baseUrl, $table->pages, $table->page, $table->limit, TRUE, $table->getPaginationKey()"}
+			</div>
+		</div>
+	{{endif}}
+
+
+	{{if \count( $rows )}}
+		<ol class='ipsGrid ipsGrid_collapsePhone ipsPad ipsClear {{foreach $table->classes as $class}}{$class} {{endforeach}}' id='elTable_{$table->uniqueId}' data-role="tableRows">
+			{template="$table->rowsTemplate[1]" params="$table, $headers, $rows" object="$table->rowsTemplate[0]"}
+		</ol>
+	{{else}}
+		<div class='ipsType_center ipsPad'>
+			<p class='ipsType_large ipsType_light'>{lang="no_rows_in_table"}</p>
+			{{if method_exists( $table, 'container' ) AND $table->container() !== NULL}}
+				{{if $table->container()->can('add')}}
+					<a href='{$table->container()->url()->setQueryString( 'do', 'add' )}' class='ipsButton ipsButton_primary ipsButton_medium'>
+						{lang="submit_first_row"}
+					</a>
+				{{endif}}
+			{{endif}}
+		</div>
+	{{endif}}
+				
+	{{if $table->pages > 1}}
+		<div class="ipsButtonBar ipsPad_half ipsClearfix ipsClear">
+			<div data-role="tablePagination">
+				{template="pagination" group="global" app="core" location="global" params="$table->baseUrl, $table->pages, $table->page, $table->limit, TRUE, $table->getPaginationKey()"}
+			</div>
+		</div>
+	{{endif}}
+</div>

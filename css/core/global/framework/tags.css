@@ -1,0 +1,148 @@
+/* Tag lists & prefixes */
+.ipsType_pageTitle + .ipsTags{
+	margin-top: 8px;
+}
+
+.ipsTags_inline {
+	display: inline-block;
+	vertical-align: middle;
+}
+
+	/* Show inline tags as a block all the time on mobile */
+	@media screen and (max-width: 767px) {
+		.ipsTags_inline {
+			display: block;
+		}
+	}
+
+html[dir="ltr"] .ipsTags > li {
+	margin-right: 0;
+}
+html[dir="rtl"] .ipsTags > li {
+	margin-left: 0;
+}
+
+.ipsTags li {
+	position: relative;
+	display: inline-block;
+	vertical-align: top;
+}
+
+/*html[dir="ltr"] .ipsTags li:first-child .ipsTag {
+	margin-left: 8px;
+}
+html[dir="rtl"] .ipsTags li:first-child .ipsTag {
+	margin-right: 8px;
+}*/
+
+	html[dir="ltr"] .ipsTags li.ipsTags_edit:not( :only-child ) a {
+		margin-left: 5px;
+	}
+	html[dir="rtl"] .ipsTags li.ipsTags_edit:not( :only-child ) a {
+		margin-right: 5px;
+	}
+
+.ipsTags .ipsTag, .ipsTag_prefix {
+	background: rgb( var(--theme-tag) );
+	color: rgb( var(--theme-tag_font) ) !important; /* important required to override title coloring */
+	font-size: 11px;
+	vertical-align: middle;
+	line-height: 20px;
+	padding: 0 12px;
+	margin: 0 2px 0 2px;
+	display: inline-block;
+	border-radius: 50px;
+	letter-spacing: 0;
+	font-weight: normal;
+}
+
+	.ipsTags .ipsTag{
+		vertical-align: top;
+	}
+
+	.ipsTags .ipsTag > span, .ipsTag_prefix > span {
+		display: block;
+		max-width: 250px;
+		text-overflow: ellipsis;
+		overflow: hidden;
+		white-space: nowrap;
+	}
+	
+	.ipsTags .ipsTag:hover {
+		opacity: .7;
+	}
+
+	/* If a gap is already specified, don't add more margin to each tag */
+	.ipsApp .ipsTags[class*="ipsGap"] .ipsTag {
+		margin: 0;
+	}
+
+	/* Search results */
+	.ipsTags a mark, .ipsTag_prefix mark {
+		background: #fff !important;
+		border-bottom: none;
+	}
+
+html[dir="ltr"] .ipsTags > li:first-child .ipsTag {
+	margin-left: 0;
+}
+html[dir="rtl"] .ipsTags > li:first-child .ipsTag {
+	margin-right: 0;
+}
+
+/* Tag management stuff */
+[dir='ltr'] .ipsTags_deletable .ipsTag {
+	padding-right: 24px;
+}
+[dir='rtl'] .ipsTags_deletable .ipsTag {
+	padding-left: 24px;
+}
+
+.ipsTag_remove {
+	color: rgb( var(--theme-tag_font) ) !important;
+	width: 16px;
+	height: 16px;
+	position: absolute;
+	top: 50%;
+	transform: translateY(-50%);
+	text-align: center;
+	line-height: 14px;
+	font-size: 13px;
+	transition: 0.1s all linear;
+	border-radius: 50px;
+}
+
+	.ipsTag_remove::before{
+		content: '';
+		position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+		border-radius: inherit;
+		background-color: rgb( var(--theme-area_background_reset) );
+		opacity: 1;
+		z-index: -1;
+	}
+
+html[dir="ltr"] .ipsTag_remove {
+	right: 4px;
+}
+html[dir="rtl"] .ipsTag_remove {
+	left: 4px;
+}
+
+.ipsTag_remove:hover::before {
+	opacity: .3
+}
+
+.ipsTags_edit .ipsButton_veryVerySmall {
+	line-height: 15px;
+    height: 18px;
+    margin-top: -3px;
+}
+
+/* Prefix: shown before titles on content items */
+.ipsTag_prefix {
+	background: rgb( var(--theme-prefix) );
+	color: #fff !important;
+}
+	/*.ipsContained_container .ipsTag_prefix {
+		display: inline-block;
+	}*/

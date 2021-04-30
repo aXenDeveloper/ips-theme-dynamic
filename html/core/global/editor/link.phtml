@@ -1,0 +1,24 @@
+<ips:template parameters="$val, $editorId" />
+<div class="ipsPad ipsForm ipsForm_vertical" data-controller='core.global.editor.link' data-editorid='{$editorId}' {{if request.image}}data-image="1"{{else}}data-image="0"{{endif}}>
+	<form method='get' action='#'>
+		<div class="ipsPad ipsAreaBackground_light">
+			<div class="ipsFieldRow ipsFieldRow_fullWidth ipsFieldRow_primary">
+				<label for='elLinkURL{$editorId}' class='ipsFieldRow_title'>{lang="url"}</label>
+				<input type="text" id='elLinkURL{$editorId}' class="ipsField_fullWidth ipsField_primary cEditorURL" placeholder="{lang="editor_link_url_label"}" data-role="linkURL" value="{$val}" autofocus>
+			</div>
+			{{if !request.image and !request.block}}
+				<div class="ipsFieldRow ipsFieldRow_fullWidth" data-role="linkTextRow">
+					<label for='elLinkText{$editorId}' class='ipsFieldRow_title'>{lang="editor_link_text"}</label>
+					<input type="text" id='elLinkText{$editorId}' class="ipsField_fullWidth cEditorURL" placeholder="{lang="editor_link_text_label"}" data-role="linkText" {{if request.title}}value="{expression="\IPS\Request::i()->title"}"{{else}}value=""{{endif}}>
+				</div>
+			{{endif}}
+			<div class='ipsFieldRow'>
+				<button type='submit' class="ipsButton ipsButton_primary cEditorURLButton cEditorURLButtonInsert" data-action="linkButton">{lang="editor_media_insert"}</button>
+				{{if $val}}
+					&nbsp;{lang="or"}&nbsp;
+					<button type="button" class="ipsButton ipsButton_light ipsButton_small" data-action="linkRemoveButton">{lang="editor_link_remove"}</button>
+				{{endif}}
+			</div>
+		</div>
+	</form>
+</div>

@@ -1,0 +1,64 @@
+<ips:template parameters="$title, $message, $code, $extra, $member, $faultyPluginOrApp=NULL" />
+
+<section id='elError' class='ipsType_center'>
+	<div class='ipsBox ipsPad'>
+		<i class='fa fa-exclamation-circle ipsType_huge'></i>
+		<p class='ipsType_reset ipsType_light ipsType_large'>
+			{lang="something_went_wrong"}
+		</p>
+		<div id='elErrorMessage' class='ipsPos_center'>
+			{$message|raw}
+		</div>
+		<p class='ipsType_light ipsType_reset ipsType_normal'>
+			{lang="error_page_code"} <strong>{$code}</strong>
+		</p>
+		{{if ( \IPS\IN_DEV or $member->isAdmin() ) and $extra}}
+			{{if $faultyPluginOrApp}}
+			<p class="ipsType_reset  ipsType_large ipsPos_center">
+				{$faultyPluginOrApp}
+			</p>
+			{{endif}}
+
+			<div class="ipsPad ipsType_left">
+				<h3 class="ipsType_minorHeading">{lang="error_technical_details"}</h3>
+				<textarea rows="13" style="font-family: monospace;">{$extra}</textarea>
+				<p class="ipsType_small ipsType_light">
+					{{if $member->isAdmin()}}
+						{lang="error_technical_details_desc"}
+						{{if $member->hasAcpRestriction( 'core', 'support', 'system_logs_view' )}}
+							{lang="error_technical_details_logs"}
+						{{endif}}
+					{{elseif \IPS\IN_DEV}}
+						{lang="error_technical_details_dev"}
+					{{endif}}
+				</p>
+			</div>
+		{{endif}}
+		{{if ( member.isAdmin() and member.hasAcpRestriction( 'core', 'support', 'get_support' ) ) || ( member.canUseContactUs() and !( \IPS\Dispatcher::i()->application->directory == 'core' and \IPS\Dispatcher::i()->module and \IPS\Dispatcher::i()->module->key == 'contact' ) ) || !member.member_id}}
+		<hr class='ipsHr'>
+
+		<ul class='ipsList_inline'>
+			{{if member.isAdmin() and member.hasAcpRestriction( 'core', 'support', 'get_support' )}}
+				<li>
+					<a href='{url="app=core&module=support&controller=support" base="admin"}' title='{lang="get_support"}' class='ipsButton ipsButton_light ipsButton_medium'>
+						<i class="fa fa-lock"></i> {lang="get_support"}
+					</a>
+				</li>
+			{{elseif \IPS\Member::loggedIn()->canUseContactUs() and !( \IPS\Dispatcher::i()->application->directory == 'core' and \IPS\Dispatcher::i()->module and \IPS\Dispatcher::i()->module->key == 'contact' )}}
+				<li>
+					<a href='{url="app=core&module=contact&controller=contact" seoTemplate="contact"}' title='{lang="contact_admin"}' class='ipsButton ipsButton_light ipsButton_medium'>
+						{lang="contact_admin"}
+					</a>
+				</li>
+			{{endif}}
+			{{if !member.member_id}}
+				<li>
+					<a href='{url="app=core&module=system&controller=login" seoTemplate="login"}' class='ipsButton ipsButton_primary ipsButton_medium' title='{lang="sign_in"}'>
+						{lang="sign_in"}
+					</a>
+				</li>
+			{{endif}}
+		</ul>
+		{{endif}}
+	</div>
+</section>

@@ -1,0 +1,98 @@
+body {
+	padding: 0;
+	margin: 0;
+}
+body[data-role="internalEmbed"] {
+	background: rgb( var(--theme-area_background_reset) );
+	/* iOS responsive fix */
+	width: 1px;
+	min-width: 100%;
+}
+body[data-role="externalEmbed"]{
+	background: none !important;
+}
+body #ipsEmbedLoading {
+	display: none;
+}
+body.unloaded #ipsEmbedLoading {
+	display: block;
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	border: 1px solid rgba( var(--theme-text_color), 0.08 );
+	background: rgb( var(--theme-area_background_reset) );
+}
+
+@keyframes dummy_anim {
+	0% { background-color: rgba( var(--theme-area_background), 0.6 ); }
+	50% { background-color: rgba( var(--theme-area_background), 0.9 ); }
+	99% { background-color: rgba( var(--theme-area_background), 0.6 ); }
+}
+#ipsEmbedLoading:before,
+#ipsEmbedLoading:after,
+#ipsEmbedLoading span:before,
+#ipsEmbedLoading span:after {
+	display: block;
+	content: '';
+	position: absolute;
+	animation: dummy_anim 1s infinite;
+}
+
+body[data-role="internalEmbed"] #ipsEmbedLoading:before {
+	width: 40px;
+	height: 40px;
+	border-radius: 40px;
+	top: 15px;
+	left: 15px;
+}
+body[data-role="internalEmbed"] #ipsEmbedLoading:after {
+	width: 300px;
+	height: 17px;
+	top: 15px;
+	left: 70px;
+}
+body[data-role="internalEmbed"] #ipsEmbedLoading span:before {
+	width: 200px;
+	height: 12px;
+	top: 40px;
+	left: 70px;
+}
+body[data-role="internalEmbed"] #ipsEmbedLoading span:after {
+	opacity: 0.5;
+	left: 15px;
+	right: 15px;
+	top: 70px;
+	bottom: 15px;
+}
+
+body[data-role="externalEmbed"] #ipsEmbedLoading:before {
+	width: 50px;
+	height: 50px;
+	top: 15px;
+	left: 15px;
+}
+body[data-role="externalEmbed"] #ipsEmbedLoading:after {
+	width: 300px;
+	height: 17px;
+	top: 15px;
+	left: 80px;
+}
+body[data-role="externalEmbed"] #ipsEmbedLoading span:before {
+	width: 200px;
+	height: 12px;
+	top: 40px;
+	left: 80px;
+}
+body[data-role="externalEmbed"] #ipsEmbedLoading span:after {
+	width: 90%;
+	opacity: 0.5;
+	left: 15px;
+	top: 80px;
+	bottom: 15px;
+}
+
+.ipsJS_has#ipsEmbed {
+	opacity: 0.0001;
+}

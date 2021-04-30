@@ -1,0 +1,15 @@
+<ips:template parameters="$html, $title=NULL" />
+<!DOCTYPE html>
+<html lang="{expression="\IPS\Member::loggedIn()->language()->bcp47()"}" dir="{{if member.language()->isrtl}}rtl{{else}}ltr{{endif}}">
+	<head>
+		<title>{expression="output.getTitle( $title )"}</title>
+		{template="includeMeta" app="core" group="global" location="global" params=""}
+		{template="includeCSS" app="core" group="global" location="global" params=""}
+		{template="includeJS" if="theme.js_include != 'footer'" app="core" group="global" location="global" params=""}
+	</head>
+	<body class='ipsApp ipsApp_front ipsClearfix ipsLayout_noBackground {{if isset( \IPS\Request::i()->cookie['hasJS'] )}}ipsJS_has{{else}}ipsJS_none{{endif}} ipsClearfix{{foreach output.bodyClasses as $class}} {$class}{{endforeach}}' {{if output.globalControllers}}data-controller='{expression="implode( ',', output.globalControllers )"}'{{endif}} {{if isset( output.inlineMessage )}}data-message="{expression="output.inlineMessage"}"{{endif}}>
+		{$html|raw}
+		{template="includeJS" if="theme.js_include == 'footer'" app="core" group="global" location="global" params=""}
+		{expression="output.endBodyCode" raw="true"}
+	</body>
+</html>

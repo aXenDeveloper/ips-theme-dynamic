@@ -1,0 +1,86 @@
+<ips:template parameters="$countryCode, $phoneNumber, $showingMultipleForms, $methods, $error" />
+<div id="elAuthy">
+	<div class='ipsPad'>
+		{{if !$showingMultipleForms}}
+			<h1 class='ipsType_center ipsType_pageTitle ipsSpacer_bottom ipsSpacer_half'>{lang="mfa_popup_setup_title"}</h1>
+		{{endif}}
+		<div class="ipsType_medium ipsType_richText ipsType_center c2FA_info">
+			{{if \in_array( 'authy', $methods )}}
+				{{if !$showingMultipleForms}}
+					{lang="authy_mfa_desc_authy_prefix"}
+				{{endif}}
+				{lang="authy_mfa_desc_authy_only"}
+				{{if \count( $methods ) > 1}}
+					{{if \count( $methods ) == 3}}
+						{lang="authy_mfa_desc_fallback_sms_or_phone"}
+					{{elseif \in_array( 'phone', $methods )}}
+						{lang="authy_mfa_desc_fallback_phone"}
+					{{else}}
+						{lang="authy_mfa_desc_fallback_sms"}
+					{{endif}}
+				{{endif}}
+			{{else}}
+				{{if !$showingMultipleForms}}
+					{lang="authy_mfa_desc_phone_prefix"}
+				{{endif}}
+				{{if \count( $methods ) == 2}}
+					{lang="authy_mfa_desc_sms_or_phone"}
+				{{elseif \in_array( 'phone', $methods )}}
+					{lang="authy_mfa_desc_phone"}
+				{{else}}
+					{lang="authy_mfa_desc_sms"}
+				{{endif}}
+			{{endif}}
+		</div>
+	</div>
+	{{if \in_array( 'authy', $methods )}}
+		<div class='ipsType_center'>
+			{{$langCode = mb_substr( \IPS\Member::loggedIn()->language()->bcp47(), 0, 2 );}}
+			<a href="{url="authy_ios" ips="true"}" target="_blank" rel="noopener"><img src="{resource="appstores/ios/{$langCode}.svg" app="core" location="global"}" class="ipsSpacer_both"></a>
+			<a href="{url="authy_android" ips="true"}" target="_blank" rel="noopener"><img src="{resource="appstores/android/{$langCode}.png" app="core" location="global"}" style="height: 60px"></a>
+		</div>
+	{{endif}}
+	<div class="ipsPad">
+		<div class='ipsGrid'>
+			<div class='ipsGrid_span3 ipsType_center'>
+				<select data-control="diallingCode" data-sort name="countryCode">
+					{{foreach \IPS\Helpers\Form\Tel::$diallingCodes as $country => $codes}}
+						{{foreach $codes as $code}}
+							<option value="{$country}-{$code}" data-code="+{$code}" data-text="{lang="country-{$country}"} (+{$code})" {{if $country == $countryCode or "{$country}-{$code}" == $countryCode}}selected{{endif}}>{lang="country-{$country}"} (+{$code})</option>
+						{{endforeach}}
+					{{endforeach}}
+				</select>
+			</div>
+			<div class='ipsGrid_span9 ipsType_center'>
+				<input name="phoneNumber" type="tel" value="{$phoneNumber}" placeholder="{lang="authy_placeholder"}" autocomplete="tel-national">
+			</div>
+		</div>
+		{{if request.countryCode}}
+			<p class="ipsType_warning">{lang="$error"}</p>
+		{{endif}}
+	</div>
+	<div class="ipsPad ipsAreaBackground ipsGrid">
+		{{if \in_array( 'authy', $methods )}}
+			<div class="ipsGrid_span12">
+				<button type='submit' name="method" value="authy" class='ipsButton ipsButton_primary ipsButton_fullWidth ipsButton_medium'>
+					<i class='fa fa-lock'></i>&nbsp; {lang="authy_submit_authy"}
+				</button>
+			</div>
+		{{else}}
+			{{if \in_array( 'phone', $methods )}}
+				<div class="ipsGrid_span{{if \in_array( 'sms', $methods )}}6{{else}}12{{endif}}">
+					<button type='submit' name="method" value="phone" class='ipsButton ipsButton_primary ipsButton_fullWidth ipsButton_medium'>
+						<i class='fa fa-phone'></i>&nbsp; {lang="authy_submit_call"}
+					</button>
+				</div>
+			{{endif}}
+			{{if \in_array( 'sms', $methods )}}
+				<div class="ipsGrid_span{{if \in_array( 'phone', $methods )}}6{{else}}12{{endif}}">
+					<button type='submit' name="method" value="sms" class='ipsButton ipsButton_primary ipsButton_fullWidth ipsButton_medium'>
+						<i class='fa fa-commenting'></i>&nbsp; {lang="authy_submit_sms"}
+					</button>
+				</div>
+			{{endif}}
+		{{endif}}
+	</div>
+</div>

@@ -1,0 +1,134 @@
+<ips:template parameters="$topic, $location" />
+{{$lastPoster = \IPS\Member::load( $topic->last_poster_id);}}
+{{$members = $topic->topPosters(4);}}
+{{$busy = $topic->showSummaryFeature('popularDays') ? $topic->popularDays(4) : FALSE;}}
+{{$reacted = $topic->showSummaryFeature('topPost') ? $topic->topReactedPosts(3) : FALSE;}}
+{{$images = $topic->showSummaryFeature('uploads') ? $topic->imageAttachments(4) : FALSE;}}
+{{$isQA = $topic->container()->forums_bitoptions['bw_enable_answers'];}}
+{{if $location == 'sidebar'}}
+<div class="ipsBox ipsResponsive_hideTablet ipsResponsive_hidePhone cTopicOverview cTopicOverview--sidebar ipsFlex ipsFlex-fd:column md:ipsFlex-fd:row sm:ipsFlex-fd:column" data-controller='forums.front.topic.activity'>
+{{else}}
+<div class="ipsBox cTopicOverview cTopicOverview--inline ipsFlex ipsFlex-fd:row md:ipsFlex-fd:row sm:ipsFlex-fd:column ipsMargin_bottom sm:ipsMargin_bottom:half sm:ipsMargin_top:half ipsResponsive_pull {{if $topic->showSummaryOnDesktop() != 'post'}}ipsResponsive_hideDesktop ipsResponsive_block{{endif}} {{if ! $topic->showSummaryOnMobile()}}ipsResponsive_hidePhone ipsResponsive_block{{endif}}" data-controller='forums.front.topic.activity'>
+{{endif}}
+	<div class='cTopicOverview__header ipsAreaBackground_light ipsFlex sm:ipsFlex-fw:wrap sm:ipsFlex-jc:center'>
+		<ul class='cTopicOverview__stats ipsPadding ipsMargin:none sm:ipsPadding_horizontal:half ipsFlex ipsFlex-flex:10 ipsFlex-jc:around ipsFlex-ai:center'>
+			<li class='cTopicOverview__statItem ipsType_center'>
+				<span class='cTopicOverview__statTitle ipsType_light ipsTruncate ipsTruncate_line'>{{if $isQA}}{lang="forum_preview_posts_answers"}{{else}}{lang="replies"}{{endif}}</span>
+				<span class='cTopicOverview__statValue'>{number="$topic->posts-1" format="short"}</span>
+			</li>
+			<li class='cTopicOverview__statItem ipsType_center'>
+				<span class='cTopicOverview__statTitle ipsType_light ipsTruncate ipsTruncate_line'>{lang="topicactivity_created"}</span>
+				<span class='cTopicOverview__statValue'>{datetime="$topic->start_date" short="true"}</span>
+			</li>
+			<li class='cTopicOverview__statItem ipsType_center'>
+				<span class='cTopicOverview__statTitle ipsType_light ipsTruncate ipsTruncate_line'>{lang="last_reply"}</span>
+				<span class='cTopicOverview__statValue'>{datetime="$topic->last_post" short="true"}</span>
+			</li>
+		</ul>
+		<a href='#' data-action='toggleOverview' class='cTopicOverview__toggle cTopicOverview__toggle--inline ipsType_large ipsType_light ipsPad ipsFlex ipsFlex-ai:center ipsFlex-jc:center'><i class='fa fa-chevron-down'></i></a>
+	</div>
+	{{if $location !== 'sidebar'}}
+		<div class='cTopicOverview__preview ipsFlex-flex:10' data-role="preview">
+			<div class='cTopicOverview__previewInner ipsPadding_vertical ipsPadding_horizontal ipsResponsive_hidePhone ipsFlex ipsFlex-fd:row'>
+				{{if $members}}
+					<div class='cTopicOverview__section--users ipsFlex-flex:00'>
+						<h4 class='ipsType_reset cTopicOverview__sectionTitle ipsType_dark ipsType_uppercase ipsType_noBreak'>{{if $isQA}}{lang="topicactivity_topposters_qa"}{{else}}{lang="topicactivity_topposters"}{{endif}}</h4>
+						<ul class='cTopicOverview__dataList ipsMargin:none ipsPadding:none ipsList_style:none ipsFlex ipsFlex-jc:between ipsFlex-ai:center'>
+							{{foreach $members as $data}}
+								<li class="cTopicOverview__dataItem ipsMargin_right ipsFlex ipsFlex-jc:start ipsFlex-ai:center">
+									{template="userPhoto" app="core" group="global" params="$data['member'], 'tiny'"}
+									<p class='ipsMargin:none ipsPadding_left:half ipsPadding_right ipsType_right'>{$data['count']}</p>
+								</li>
+							{{endforeach}}
+						</ul>
+					</div>
+				{{endif}}
+				{{if $busy}}
+					<div class='cTopicOverview__section--popularDays ipsFlex-flex:00 ipsPadding_left ipsPadding_left:double'>
+						<h4 class='ipsType_reset cTopicOverview__sectionTitle ipsType_dark ipsType_uppercase ipsType_noBreak'>{lang="topicactivity_populardays"}</h4>
+						<ul class='cTopicOverview__dataList ipsMargin:none ipsPadding:none ipsList_style:none ipsFlex ipsFlex-jc:between ipsFlex-ai:center'>
+							{{foreach $busy as $row}}
+								<li class='ipsFlex-flex:10'>
+									<a href="{$topic->url()->setQueryString( array( 'do' => 'findComment', 'comment' => $row['commentId'] ) )}" rel="nofollow" class='cTopicOverview__dataItem ipsMargin_right ipsType_blendLinks ipsFlex ipsFlex-jc:between ipsFlex-ai:center'>
+										<p class='ipsMargin:none'>{$row['date']->dayAndShortMonth()}</p>
+										<p class='ipsMargin:none ipsMargin_horizontal ipsType_light'>{$row['count']}</p>
+									</a>
+								</li>
+							{{endforeach}}
+						</ul>
+					</div>
+				{{endif}}
+			</div>
+		</div>
+	{{endif}}
+	<div class='cTopicOverview__body ipsPadding {{if $location !== 'sidebar'}}ipsHide ipsFlex ipsFlex-flex:11 ipsFlex-fd:column{{endif}}' data-role="overview">
+		{{if $members}}
+			<div class='cTopicOverview__section--users ipsMargin_bottom'>
+				<h4 class='ipsType_reset cTopicOverview__sectionTitle ipsType_withHr ipsType_dark ipsType_uppercase ipsMargin_bottom'>{{if $isQA}}{lang="topicactivity_topposters_qa"}{{else}}{lang="topicactivity_topposters"}{{endif}}</h4>
+				<ul class='cTopicOverview__dataList ipsList_reset ipsFlex {{if $location == 'sidebar'}}ipsFlex-jc:between{{else}}ipsFlex-jc:start{{endif}} ipsFlex-ai:center ipsFlex-fw:wrap ipsGap:8 ipsGap_row:5'>
+					{{foreach $members as $data}}
+						<li class="cTopicOverview__dataItem cTopicOverview__dataItem--split ipsFlex ipsFlex-jc:start ipsFlex-ai:center ipsFlex-flex:11">
+							{template="userPhoto" app="core" group="global" params="$data['member'], 'tiny'"}
+							<p class='ipsMargin:none ipsMargin_left:half cTopicOverview__dataItemInner ipsType_left'>
+								<strong class='ipsTruncate ipsTruncate_line'><a href='{$data['member']->url()}' class='ipsType_blendLinks'>{$data['member']->name}</a></strong>
+								<span class='ipsType_light'>{lang="topicactivity_number_posts" pluralize="$data['count']"}</span>
+							</p>
+						</li>
+					{{endforeach}}
+				</ul>
+			</div>
+		{{endif}}
+		{{if $busy}}
+			<div class='cTopicOverview__section--popularDays ipsMargin_bottom'>
+				<h4 class='ipsType_reset cTopicOverview__sectionTitle ipsType_withHr ipsType_dark ipsType_uppercase ipsMargin_top:half ipsMargin_bottom'>{lang="topicactivity_populardays"}</h4>
+				<ul class='cTopicOverview__dataList ipsList_reset ipsFlex {{if $location == 'sidebar'}}ipsFlex-jc:between{{else}}ipsFlex-jc:start{{endif}} ipsFlex-ai:center ipsFlex-fw:wrap ipsGap:8 ipsGap_row:5'>
+					{{foreach $busy as $row}}
+						<li class='ipsFlex-flex:10'>
+							<a href="{$topic->url()->setQueryString( array( 'do' => 'findComment', 'comment' => $row['commentId'] ) )}" rel="nofollow" class='cTopicOverview__dataItem ipsType_blendLinks'>
+								<p class='ipsMargin:none ipsType_bold'>{$row['date']->dayAndShortMonth()} {$row['date']->format('Y')}</p>
+								<p class='ipsMargin:none ipsType_light'>{lang="topicactivity_number_posts" pluralize="$row['count']"}</p>
+							</a>
+						</li>
+					{{endforeach}}
+				</ul>
+			</div>
+		{{endif}}
+		{{if $reacted}}
+			<div class='cTopicOverview__section--topPost ipsMargin_bottom'>
+				<h4 class='ipsType_reset cTopicOverview__sectionTitle ipsType_withHr ipsType_dark ipsType_uppercase ipsMargin_top:half'>{lang="topicactivity_popularposts"}</h4>
+				{{foreach $reacted as $data}}
+					<div class='ipsPhotoPanel ipsPhotoPanel_tiny ipsClearfix ipsMargin_top'>
+						{template="userPhoto" group="global" app="core" params="$data['comment']->author(), 'tiny'"}
+						<div>
+							<h5 class='ipsType_reset ipsType_bold ipsType_normal ipsType_blendLinks'><a href='{$data['comment']->author()->url()}'>{$data['comment']->author()->name}</a></h5>
+							<p class='ipsMargin:none ipsType_light ipsType_resetLh'><a href="{$data['comment']->url()}" class="ipsType_blendLinks">{datetime="$data['comment']->mapped('date')"}</a></p>
+						</div>
+					</div>
+					<p class='ipsMargin:none ipsMargin_top:half ipsType_medium ipsType_richText' data-ipsTruncate data-ipsTruncate-size='3 lines' data-ipsTruncate-type='remove'>
+						{$data['comment']->truncated(true, 200)}
+					</p>
+				{{endforeach}}
+			</div>
+		{{endif}}
+		{{if $images}}
+			<div class='cTopicOverview__section--images'>
+				<h4 class='ipsType_reset cTopicOverview__sectionTitle ipsType_withHr ipsType_dark ipsType_uppercase ipsMargin_top:half'>{lang="topicactivity_images"}</h4>
+				<div class="ipsMargin_top:half" data-controller='core.front.core.lightboxedImages'>
+					<ul class='cTopicOverview__imageGrid ipsMargin:none ipsPadding:none ipsList_style:none ipsFlex ipsFlex-fw:wrap'>
+						{{foreach $images as $row}}
+							{{$image = \IPS\File::get( 'core_Attachment', ( $row['attach_thumb_location'] ) ? $row['attach_thumb_location'] : $row['attach_location'] )->url;}}
+							<li class='cTopicOverview__image'>
+								<a href="{$image}" class='ipsThumb ipsThumb_bg' style='background-image: url( "{backgroundimage="$image"}" )' data-ipsLightbox data-ipsLightbox-group="overviewAttachments_{$location}">
+									<img src="{$image}" class="ipsImage">
+								</a>
+							</li>
+						{{endforeach}}
+					</ul>
+				</div>
+			</div>
+		{{endif}}
+	</div>
+	{{if $location !== 'sidebar'}}
+		<a href='#' data-action='toggleOverview' class='cTopicOverview__toggle cTopicOverview__toggle--afterStats ipsType_large ipsType_light ipsPad ipsFlex ipsFlex-ai:center ipsFlex-jc:center'><i class='fa fa-chevron-down'></i></a>
+	{{endif}}
+</div>

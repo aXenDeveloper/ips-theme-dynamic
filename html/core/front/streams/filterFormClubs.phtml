@@ -1,0 +1,10 @@
+<ips:template parameters="$field" />
+<div>
+	{{if $field}}
+		<div class='ipsFieldRow ipsFieldRow_fullWidth'>
+			<div class='ipsFieldRow_content'>
+				<ul class='ipsList_inline'>{$field|raw}</ul>
+			</div>
+		</div>
+	{{endif}}
+</div>

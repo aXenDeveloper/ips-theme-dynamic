@@ -1,0 +1,28 @@
+<ips:template parameters="$clubs, $title=NULL, $orientation=NULL" />
+
+{{if $title}}
+	<h3 class="ipsType_reset ipsWidget_title">{$title}</h3>
+{{endif}}
+<section class="ipsWidget_inner ipsPad_half">
+	<ul class='ipsDataList ipsDataList_reducedSpacing'>
+		{{foreach $clubs as $club}}
+			<li class='ipsDataItem ipsClearfix'>
+				<div class='ipsDataItem_icon'>
+					{template="clubIcon" group="clubs" app="core" params="$club, 'tiny', 'ipsPos_left'"}
+				</div>
+				<div class='ipsDataItem_main'>
+					<h3 class='ipsType_sectionHead ipsType_large ipsContained_container'>
+						<span class='ipsContained ipsType_break'><a href='{$club->url()}'>{$club->name}</a></span>
+					</h3>
+					<p class='ipsType_reset ipsType_medium ipsType_light'>
+						{lang="club_{$club->type}"}
+						{{if $club->type !== $club::TYPE_PUBLIC}}
+						&nbsp;&middot;&nbsp;
+						{lang="club_members_count" pluralize="$club->members"}
+						{{endif}}
+					</p>
+				</div>
+			</li>
+		{{endforeach}}
+	</ul>
+</section>

@@ -1,0 +1,51 @@
+<ips:template parameters="$results, $pagination, $baseUrl, $hideSort=FALSE, $count = 0" />
+
+<div class='ipsBox ipsMargin_bottom'>
+	<p class='ipsType_sectionTitle'>{lang="search_found" pluralize="$count"}</p>
+	{{if $pagination OR !$hideSort}}
+	<div class="ipsButtonBar ipsPad_half ipsClearfix ipsClear">
+		{{if $pagination}}
+			{$pagination|raw}
+		{{endif}}
+		{{if !$hideSort}}
+			<ul class="ipsButtonRow ipsPos_right ipsClearfix">
+				<li>
+					<a href="#elSortByMenu_menu" id="elSortByMenu_search_results" data-role="sortButton" data-ipsMenu data-ipsMenu-activeClass="ipsButtonRow_active" data-ipsMenu-selectable="radio">{lang="sort_by"} <i class="fa fa-caret-down"></i></a>
+					<ul class="ipsMenu ipsMenu_auto ipsMenu_withStem ipsMenu_selectable ipsHide" id="elSortByMenu_search_results_menu">
+						{{if !isset( \IPS\Request::i()->type ) OR \IPS\Request::i()->type != 'core_members'}}
+							<li class="ipsMenu_item{{if \IPS\Request::i()->sortby == 'newest'}} ipsMenu_itemChecked{{endif}}" data-sortDirection='desc'><a href="{$baseUrl->setQueryString( array( 'sortby' => 'newest' ) )->setPage( 'page', 1 )}">{lang="date"}</a></li>
+							<li class="ipsMenu_item{{if \IPS\Request::i()->sortby == 'relevancy'}} ipsMenu_itemChecked{{endif}}" data-sortDirection='desc'><a href="{$baseUrl->setQueryString( array( 'sortby' => 'relevancy' ) )->setPage( 'page', 1 )}">{lang="sort_relevancy"}</a></li>
+						{{else}}
+							<li class="ipsMenu_item{{if \IPS\Request::i()->sortby == 'joined'}} ipsMenu_itemChecked{{endif}}" data-sortDirection='desc'><a href="{$baseUrl->setQueryString( array( 'sortby' => 'joined', 'sortdirection' => 'desc' ) )->setPage( 'page', 1 )}">{lang="sort_joined"}</a></li>
+							<li class="ipsMenu_item{{if \IPS\Request::i()->sortby == 'name' || !isset( \IPS\Request::i()->sortby )}} ipsMenu_itemChecked{{endif}}" data-sortDirection='asc'><a href="{$baseUrl->setQueryString( array( 'sortby' => 'name', 'sortdirection' => 'asc' ) )->setPage( 'page', 1 )}">{lang="sort_mname"}</a></li>
+							<li class="ipsMenu_item{{if \IPS\Request::i()->sortby == 'member_posts'}} ipsMenu_itemChecked{{endif}}" data-sortDirection='desc'><a href="{$baseUrl->setQueryString( array( 'sortby' => 'member_posts', 'sortdirection' => 'desc' ) )->setPage( 'page', 1 )}">{lang="sort_posts"}</a></li>
+							<li class="ipsMenu_item{{if \IPS\Request::i()->sortby == 'pp_reputation_points'}} ipsMenu_itemChecked{{endif}}" data-sortDirection='desc'><a href="{$baseUrl->setQueryString( array( 'sortby' => 'pp_reputation_points', 'sortdirection' => 'desc' ) )->setPage( 'page', 1 )}">{lang="sort_reputation"}</a></li>
+						{{endif}}
+					</ul>
+				</li>	
+			</ul>
+		{{endif}}
+	</div>
+	{{endif}}
+</div>
+
+{{if \count( $results ) }}
+	<ol class="ipsStream ipsList_reset {{if request.type == 'core_members'}}cStream_members ipsGrid ipsGrid_collapsePhone{{endif}}" data-role='resultsContents' {{if request.type == 'core_members'}}data-ipsGrid data-ipsGrid-equalHeights='row' data-ipsGrid-minItemSize='250' data-ipsGrid-maxItemSize='400'{{endif}}>
+		{{foreach $results as $result}}
+			{{if request.type == 'core_members'}}
+				{$result->searchResultHtml()|raw}
+			{{elseif $result !== NULL}}
+				{$result->html()|raw}
+			{{endif}}
+		{{endforeach}}
+	</ol>
+{{else}}
+	<div class='ipsAreaBackground_light ipsType_center ipsPad' data-role='resultsContents'>
+		<p class='ipsType_large ipsType_light'>{lang="no_search_results"}</p>
+	</div>
+{{endif}}
+{{if $pagination}}
+	<div class="ipsButtonBar ipsPad_half ipsClearfix ipsClear">
+		{$pagination|raw}
+	</div>
+{{endif}}

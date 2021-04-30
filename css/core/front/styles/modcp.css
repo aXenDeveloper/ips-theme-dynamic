@@ -1,0 +1,63 @@
+html[dir="ltr"] #elReportSidebar {
+	margin-left: 15px;
+}
+html[dir="rtl"] #elReportSidebar {
+	margin-right: 15px;
+}
+
+#elApprovalToolbar {
+	width: auto;
+}
+
+#elModCPSearchIcon {
+	position: absolute;
+	font-size: 20px;
+	top: 23px;
+	left: 25px;
+}
+html[dir="ltr"] #elModCPSearchIcon {
+	left: 25px;
+}
+html[dir="rtl"] #elModCPSearchIcon {
+	right: 25px;
+}
+
+#elModCPMemberSearch {
+	position: relative;
+}
+	
+	#elModCPMemberSearch #elInput_modcp_member_find_wrapper {
+		width: 100%;
+		max-width: 100%;
+	}
+
+#elModCPApprovalSplash {
+	max-width: 500px;
+	margin: 0 auto;
+}
+
+.cReportSidebar_icon {
+	font-size: 30px;
+}
+
+.cIPInfo_map {
+	padding-top: 0;
+	padding-left: 0;
+}
+
+.cIPInfo_value {
+	font-size: 34px;
+}
+
+html[dir="ltr"] .cModCP_header {
+	border-bottom-left-radius: 0;
+}
+html[dir="rtl"] .cModCP_header {
+	border-bottom-right-radius: 0;
+}
+
+#modcp_menu {
+	border-top-left-radius: 0;
+	border-top-right-radius: 0;
+	margin-top: calc( var(--sp-5) * -1 );
+}

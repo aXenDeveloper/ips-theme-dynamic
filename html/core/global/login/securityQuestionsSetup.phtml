@@ -1,0 +1,37 @@
+<ips:template parameters="$securityQuestions, $showingMultipleForms" />
+{{if !$showingMultipleForms}}
+	<div class='ipsPad'>
+		<h1 class='ipsType_center ipsType_pageTitle ipsSpacer_bottom ipsSpacer_half'>{lang="mfa_popup_setup_title"}</h1>
+		<div class="ipsType_normal ipsType_richText ipsType_center">
+			{lang="security_questions_setup_blurb" pluralize="\IPS\Settings::i()->security_questions_number ?: 3"}
+		</div>
+	</div>
+{{endif}}
+<ul class="ipsList_reset ipsPad ipsClearfix">
+	{{foreach range( 1, min( settings.security_questions_number ?: 3, \count( $securityQuestions ) ) ) as $i}}
+		<li class="ipsFieldRow ipsClearfix">
+			<div class="ipsFieldRow_content">
+				<select name="security_question[{$i}]">
+					{{foreach $securityQuestions as $k => $v}}
+						<option value="{$k}" {{if \is_array( request.security_question ) AND request.security_question[$i] == $k}}selected{{endif}}>{$v}</option>
+					{{endforeach}}
+				</select>
+			</div>
+		</li>
+		<li class="ipsFieldRow ipsClearfix">
+			<div class="ipsFieldRow_content">
+				<input type="text" name="security_answer[{$i}]" value="{{if isset( request.security_answer[$i] )}}{expression="\IPS\Request::i()->security_answer[$i]"}{{endif}}">
+			</div>
+		</li>
+	{{endforeach}}
+</ul>
+{{if \is_array( \IPS\Request::i()->security_answer ) and \count( array_filter( \IPS\Request::i()->security_answer ) )}}
+	<div class="ipsPad ipsType_warning">{lang="security_questions_unique" pluralize="\IPS\Settings::i()->security_questions_number ?: 3"}</div>
+{{endif}}
+<ul class="ipsList_reset ipsPad ipsClearfix ipsAreaBackground">
+	<li>
+		<button type='submit' class='ipsButton ipsButton_primary ipsButton_fullWidth ipsButton_medium'>
+			{lang="security_questions_save"}
+		</button>
+	</li>
+</ul>

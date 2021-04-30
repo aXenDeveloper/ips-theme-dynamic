@@ -1,0 +1,8 @@
+<ips:template parameters="$tags" />
+
+<input type="hidden" name="stream_tags_type" value="custom">
+<h3 class='ipsType_reset ipsType_large cStreamForm_title ipsSpacer_bottom ipsSpacer_half'>{lang="stream_tags"}</h3>
+<div class='ipsFieldRow_fullWidth'>
+	{$tags->html()|raw}
+	<p class='ipsType_reset ipsType_small ipsType_light ipsPadding_top:half'>{lang="tags_desc"}</p>
+</div>

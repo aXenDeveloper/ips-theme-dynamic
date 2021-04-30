@@ -1,0 +1,38 @@
+<ips:template parameters="$name, $type, $value, $required, $maxlength=NULL, $size=NULL, $disabled=FALSE, $autoComplete=NULL, $placeholder=NULL, $regex=NULL, $nullLang=NULL, $htmlId=NULL, $showMeter=FALSE, $htmlAutocomplete=NULL, $pwCheckAgainstMember=NULL, $pwCheckAgainstRequest=array()" />
+{{$valueAsArray = \is_array( $value ) ? $value : explode( ',', $value );}}
+{{if $showMeter}}
+	<div data-ipsPasswordStrength{{if settings.password_strength_meter_enforce}} data-ipsPasswordStrength-enforced data-ipsPasswordStrength-enforcedStrength='{setting="password_strength_option"}'{{endif}}{{if $pwCheckAgainstMember !== NULL}} data-ipsPasswordStrength-checkAgainstMember='{expression="json_encode( array( $pwCheckAgainstMember->name, $pwCheckAgainstMember->email ) )" raw="true"}'{{endif}}{{if \count( $pwCheckAgainstRequest )}} data-ipsPasswordStrength-checkAgainstRequest='{expression="json_encode($pwCheckAgainstRequest)" raw="true"}'{{endif}}>
+{{endif}}
+{{if $autoComplete}}
+	{template="autocomplete" group="forms" location="global" app="core" params="$name, $value, $required, $maxlength, $disabled, '', $placeholder, $nullLang, $autoComplete"}
+{{else}}
+	<input
+		type="{$type}"
+		name="{$name}"
+		value="{{if \is_array( $value )}}{expression="implode( ',', $value )"}{{else}}{$value}{{endif}}"
+		id="elInput_{{if ! empty($htmlId)}}{$htmlId}{{else}}{$name}{{endif}}"
+		{{if $required === TRUE}}aria-required='true'{{endif}}
+		{{if $maxlength !== NULL}}maxlength="{$maxlength}"{{endif}}
+		{{if $size !== NULL}}size="{$size}"{{endif}}
+		{{if $disabled}}disabled aria-disabled='true'{{endif}}
+		{{if $placeholder !== NULL}}placeholder='{$placeholder}'{{endif}}
+		{{if $regex !== NULL and $regex}}pattern="{$regex}"{{endif}}
+		{{if $htmlAutocomplete !== NULL and $htmlAutocomplete}}autocomplete="{$htmlAutocomplete}"{{endif}}
+	>
+	{{if $showMeter}}
+		<div data-role='strengthInfo' class='ipsHide'>
+			<meter max="100" value="0" class='ipsForm_meter' data-role='strengthMeter'></meter>
+			<span data-role='strengthText' class='ipsForm_meterAdvice'></span>
+		</div>
+	{{endif}}
+	{{if $nullLang}}
+		{lang="or"} 
+		<span class='ipsCustomInput'>
+			<input type="checkbox" data-control="unlimited" name="{$name}_null" id='{$name}_null' value="1" {{if $value === NULL}}checked aria-checked='true'{{endif}} {{if $disabled}}disabled aria-disabled='true'{{endif}} aria-labelledby='{$name}_null_label'>
+			<span></span>
+		</span> <label for='{$name}_null' id='{$name}_null_label' class='ipsField_unlimited'>{lang="$nullLang"}</label>
+	{{endif}}
+	{{if $showMeter}}
+	</div>
+	{{endif}}
+{{endif}}

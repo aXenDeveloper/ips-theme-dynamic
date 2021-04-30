@@ -1,0 +1,77 @@
+<ips:template parameters="$login, $text, $title, $orientation='vertical'" />
+{{$buttonMethods = $login->buttonMethods();}}
+{{$usernamePasswordMethods = $login->usernamePasswordMethods();}}
+{{if $orientation == 'vertical'}}
+	<div class='ipsWidget_inner ipsPos_center ipsPad'>
+		<div class="ipsAreaBackground_light ipsPad">
+		    <h2 class="ipsType_sectionHead ipsSpacer_bottom ipsSpacer_half">{$title}</h2>
+		    <p class="ipsType_richText ipsType_contained">
+		        {$text|raw}
+		    </p>
+		    
+		    {{if $usernamePasswordMethods}}
+			    <ul class="ipsList_inline">
+			        <li>
+			            <a href='{url="app=core&module=system&controller=login" seoTemplate="login"}' class="ipsButton ipsButton_primary ipsButton_verySmall ipsPos_right">{lang="sign_in_short"}</a>
+			        </li>
+			        <li>{lang="or"}</li>
+			        <li>
+			            <a href='{url="app=core&module=system&controller=register" seoTemplate="register"}' class="ipsButton ipsButton_primary ipsButton_verySmall ipsPos_right">{lang="sign_up"}</a>
+			        </li>
+			    </ul>
+			{{endif}}
+		
+		    {{if $buttonMethods}}
+			    <div class=''>
+					<form accept-charset='utf-8' method='post' action='{$login->url}' data-controller="core.global.core.login">
+						<input type="hidden" name="csrfKey" value="{expression="\IPS\Session::i()->csrfKey"}">
+						<input type="hidden" name="ref" value="{expression="base64_encode( \IPS\Request::i()->url() )"}">
+				        {{foreach $buttonMethods as $method}}
+					        <div class='ipsType_center ipsPos_center ipsSpacer_top'>
+					            {$method->button()|raw}
+					        </div>
+				        {{endforeach}}
+				    </form>
+			    </div>
+		    {{endif}}
+		</div>
+	</div>
+{{else}}
+	<div class='ipsWidget_inner ipsPos_center ipsPad_half'>
+		<div class="ipsAreaBackground_light ipsPad">
+		    <div class="ipsGrid ipsGrid_collapsePhone">
+		        <div class='ipsGrid_span{{if $buttonMethods}}8{{endif}}'>
+		            <h2 class="ipsType_sectionHead ipsSpacer_bottom ipsSpacer_half">{$title}</h2>
+		            <div class="ipsType_richText ipsType_contained">
+						{$text|raw}
+		            </div>
+		            
+		            {{if $usernamePasswordMethods}}
+			            <ul class="ipsList_inline">
+			                <li>
+			                    <a href='{url="app=core&module=system&controller=login" seoTemplate="login"}' class="ipsButton ipsButton_primary ipsButton_verySmall ipsPos_right">{lang="sign_in_short"}</a>
+			                </li>
+			                <li>{lang="or"}</li>
+			                <li>
+			                    <a href='{url="app=core&module=system&controller=register" seoTemplate="register"}' class="ipsButton ipsButton_primary ipsButton_verySmall ipsPos_right">{lang="sign_up"}</a>
+			                </li>
+			            </ul>
+			        {{endif}}
+		        </div>
+		        {{if $buttonMethods}}
+			        <div class='ipsGrid_span4 cSignInTeaser_right'>
+						<form accept-charset='utf-8' method='post' action='{$login->url}' data-controller="core.global.core.login">
+							<input type="hidden" name="csrfKey" value="{expression="\IPS\Session::i()->csrfKey"}">
+							<input type="hidden" name="ref" value="{expression="base64_encode( \IPS\Request::i()->url() )"}">
+				            {{foreach $buttonMethods as $method}}
+					            <div class='ipsPad_half ipsType_center ipsPos_center'>
+					                {$method->button()|raw}
+					            </div>
+				            {{endforeach}}
+				        </form>
+			        </div>
+		        {{endif}}
+		    </div>
+		</div>
+	</div>
+{{endif}}

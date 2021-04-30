@@ -1,0 +1,8 @@
+<ips:template parameters="$promote" />
+{{$objectTitle = $promote->objectTitle;}}
+<h1 class="ipsType_pageTitle">{$objectTitle}</h1>
+{{if $promote->schedule_auto or $promote->scheduled > ( time() + 60 )}}
+	{lang="promote_scheduled_future" sprintf="$promote->scheduledDateTime()->dayAndMonth() . ' ' . $promote->scheduledDateTime()->localeTime( FALSE )"}
+{{else}}
+	{lang="promote_scheduled_now"}
+{{endif}}

@@ -1,0 +1,11 @@
+/* PHONES */
+@media screen and (max-width: 767px) {
+	.cStaffDirectory .cStaffDirectory_half {
+		margin-bottom: 0;
+	}
+
+	.cStaffDirectory .cStaffDirectory_blocks .ipsGrid_span3,
+	.cStaffDirectory .cStaffDirectory_half .ipsGrid_span6 {
+		margin-bottom: 15px;
+	}
+}

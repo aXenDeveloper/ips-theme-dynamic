@@ -1,0 +1,58 @@
+<ips:template parameters="$terms, $privacy, $form, $subprocessors" />
+
+<div class="ipsBox">
+	<div class="ipsPadding">
+
+		{{if member.joined->getTimestamp() < ( time() - 60 )}}
+			<div class="ipsType_large ipsSpacer_bottom">
+				{{if $terms and $privacy}}
+					{lang="reconfirm_terms_and_policy_blurb"}
+				{{elseif $terms}}
+					{lang="reconfirm_terms_blurb"}
+				{{else}}
+					{lang="reconfirm_privacy_blurb"}
+				{{endif}}
+			</div>
+		{{endif}}
+
+		{{if $terms}}
+			<div class="ipsSpacer_bottom">
+				<h2 class="ipsType_sectionHead">{lang="reg_terms"}</h2>
+				<div class='ipsType_normal ipsType_richText ipsPadding'>
+					{lang="reg_rules_value"}
+				</div>
+			</div>
+		{{endif}}
+		
+		{{if $privacy}}
+			<div class="ipsSpacer_bottom">
+				<h2 class="ipsType_sectionHead">{lang="privacy"}</h2>
+				<div class='ipsType_normal ipsType_richText ipsPadding'>
+					{{if \IPS\Settings::i()->privacy_type == 'external'}}
+						<a href='{setting="privacy_link"}' rel='external'>{lang="view_privacy_policy"}</a>
+					{{else}}
+						{template="richText" group="global" app="core" location="global" params="\IPS\Member::loggedIn()->language()->addToStack('privacy_text_value'), array('ipsType_normal')"}
+					{{endif}}
+					{{if \IPS\Settings::i()->site_address and \IPS\Settings::i()->site_address != "null"}}
+						<p>{setting="board_name"}, {address="\IPS\Settings::i()->site_address"}</p>
+					{{endif}}
+					{{if $subprocessors and \count($subprocessors)}}
+					<div>
+						<h3 class="ipsType_large">{lang="pp_third_parties"}</h3>
+						{{foreach $subprocessors as $processor}}
+							<div class="ipsPadding_bottom">
+								<strong>{$processor['title']}</strong>
+								<div>{$processor['description']}</div>
+								<div><a href="{$processor['privacyUrl']}">{lang="pp_privacy_policy"}</a></div>
+							</div>
+						{{endforeach}}
+					</div>
+					{{endif}}
+				</div>
+			</div>
+		{{endif}}
+	</div>
+	<div class="ipsAreaBackground ipsPadding ipsType_center">
+		{$form|raw}
+	</div>
+</div>

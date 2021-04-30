@@ -1,0 +1,7 @@
+<ips:template parameters="$member" />
+<li class='ipsMenu_item ipsCursor_pointer' data-mentionhref='{$member->url()}' data-mentionid='{$member->member_id}' data-mentionhover='{$member->url()->setQueryString('do', 'hovercard')}'>
+	<a>
+		<img src='{$member->photo}' alt='' class='ipsUserPhoto ipsUserPhoto_tiny'>
+		<span class="ipsPad_half" data-role='mentionname'>{$member->name}</span>
+	</a>
+</li>

@@ -1,0 +1,19 @@
+<ips:template parameters="$forum, $hideMobile=FALSE" />
+{{if settings.forums_view_list_choose and member.member_id}}
+{{$chosen = \IPS\forums\Forum::getMemberListView();}}
+<li>
+	<ul class='ipsButton_split'>
+		<li>
+			<a href="{$forum->url()->setQueryString( array( 'do' => 'setMethod', 'method' => 'list') )->csrf()}" class='ipsButton {{if $chosen == 'list'}}ipsButton_primary{{else}}ipsButton_veryLight{{endif}} ipsButton_narrow ipsButton_medium' data-ipsTooltip data-ipsTooltip-safe title='{lang="forums_topic_list_list"}' rel="nofollow">
+				<i class='fa fa-align-justify'></i>
+			</a>
+		</li>
+		<li>
+			<a href="{$forum->url()->setQueryString( array( 'do' => 'setMethod', 'method' => 'snippet') )->csrf()}" class='ipsButton {{if $chosen == 'snippet'}}ipsButton_primary{{else}}ipsButton_veryLight{{endif}} ipsButton_narrow ipsButton_medium' data-ipsTooltip data-ipsTooltip-safe title='{lang="forums_topic_list_snippet"}' rel="nofollow">
+				<i class='fa fa-th-list'></i>
+			</a>
+		</li>
+	
+	</ul>
+</li>
+{{endif}}

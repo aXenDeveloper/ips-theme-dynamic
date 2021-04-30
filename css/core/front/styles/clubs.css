@@ -1,0 +1,315 @@
+/* GENERAL CLUB STYLES  */
+.cClubIcon {
+	border: 2px solid rgb( var(--theme-area_background_reset) );
+}
+
+.cClubStatus > .fa {
+	font-size: 40px;
+	line-height: 40px;
+}
+
+/* FULL CLUB HEADER */
+#elClubHeader .ipsCoverPhoto {
+    min-height: 140px;
+    padding-top: 50px;
+    background-size: cover;
+}
+
+#elClubHeader .ipsUserPhoto_medium {
+	width: 95px;
+	height: 95px;
+}
+
+#elClubHeader .ipsColumn_narrow {
+	width: 105px;
+}
+
+#elClubControls {
+	background: rgb( var(--theme-area_background_dark) );
+	padding: var(--sp-2);
+	border-bottom-left-radius: var(--radius-1);
+	border-bottom-right-radius: var(--radius-1);
+}
+
+#elClubControls .ipsButton_link {
+	color: #fff;
+}
+
+.cClubControls__tabs{
+	flex-basis: 250px;
+}
+
+#elClubControls .ipsTabs {
+	background: transparent;
+	--ipsTabs-responsive--height: 40px;
+	--ipsTabs--padding: 0px;
+}
+
+	#elClubControls .ipsTabs_item {
+		font-size: {fontsize="small"};
+		padding: 0 15px;
+		border-radius: 4px;
+	}
+
+#elClubHeader [data-action="editPhoto"] {
+	position: absolute;
+	top: 70px;
+}
+html[dir="ltr"] #elClubHeader [data-action="editPhoto"] {
+	left: 0;
+}
+html[dir="rtl"] #elClubHeader [data-action="editPhoto"] {
+	right: 0;
+}
+
+/* SMALL CLUB HEADER */
+#elClubHeader_small{
+	margin-bottom: var(--sp-5);
+}
+
+#elClubHeader_small #elEditPhoto {
+	display: none;
+}
+
+#elClubHeader_small .ipsType_pageTitle {
+	font-size: {fontsize="2x_large"};
+}
+
+#elContextualTools .cClubHeader{
+	flex: 1 1 250px;
+}
+
+/* CLUB CARDS */
+.cClubCard {
+	min-height: 200px;
+	position: relative;
+}
+
+.cClubCard_status {
+	position: absolute;
+	top: -5px;
+	z-index: 1000;
+}
+html[dir="ltr"] .cClubCard_status {
+	right: -5px;
+}
+html[dir="rtl"] .cClubCard_status {
+	left: -5px;
+}
+
+.cClubCard .ipsPageHead_special {
+	background-repeat: no-repeat;
+	background-size: cover;
+	background-position: bottom;
+	height: 85px;
+	width: 100%;
+	background-color: rgb( var(--theme-profile_header) );
+}
+
+.cClubCard .ipsPageHead_special .ipsUserPhoto {
+	position: absolute;
+	top: 35px;
+	width: 80px;
+	height: 80px
+}
+html[dir="ltr"] .cClubCard .ipsPageHead_special .ipsUserPhoto {
+	left: 10px;
+}
+html[dir="rtl"] .cClubCard .ipsPageHead_special .ipsUserPhoto {
+	right: 10px;
+}
+
+.cClubCard .ipsPageHead_special .cClubCard_title, 
+.cClubCard .ipsPageHead_special p {
+	position: absolute;
+	color: #fff;
+}
+	.cClubCard .ipsPageHead_special a{
+		color: inherit !important;
+	}
+
+html[dir="ltr"] .cClubCard .ipsPageHead_special .cClubCard_title, 
+html[dir="ltr"] .cClubCard .ipsPageHead_special p {
+	left: 105px;
+}
+html[dir="rtl"] .cClubCard .ipsPageHead_special .cClubCard_title, 
+html[dir="rtl"] .cClubCard .ipsPageHead_special p {
+	right: 105px;
+}
+
+.cClubCard .ipsPageHead_special p {
+	top: 45px;
+}
+
+.cClubCard .ipsPageHead_special .cClubCard_title {
+	top: 40px;
+	font-size: {fontsize="2x_large"};
+	max-width: calc(100% - 120px);
+	display: inline-block;
+}
+
+html[dir="ltr"] .cClubCard .cClubCard_info {
+	margin-left: 105px;
+	margin-top: 7px;
+}
+html[dir="rtl"] .cClubCard .cClubCard_info {
+	margin-right: 105px;
+	margin-top: 7px;
+}
+
+.cClubCard .cClubCard_memberList {
+	white-space: nowrap;
+	overflow: hidden;
+}
+
+.cClubCard .ipsBadge.ipsBadge_small {
+	margin-top: -5px;
+	vertical-align: middle;
+}
+
+.cClubRequestCover {
+	text-align: center;
+	padding-top: 40px;
+}
+	
+.cClubRequestCover_icon {
+	display: inline-block;
+	color: #fff;
+	width: 80px;
+	height: 80px;
+	border-radius: 80px;
+	line-height: 110px;
+	margin-bottom: 5px;
+}
+
+	.cClubRequestCover_icon .fa {
+		font-size: 54px;
+		line-height: 1;
+	}
+
+/* MEMBER LIST */
+.cClubMemberStatus {
+	width: 80px;
+}
+
+/* MY CLUBS SIDEBAR */
+#elMyClubs .ipsDataItem_size2 {
+	width: 60px;
+	max-width: 60px;
+}
+
+/* CLUBS ACTIVITY STREAM */
+#elMyClubsActivity .ipsStreamItem.ipsStreamItem_contentBlock {
+	border: 0;
+	border-bottom: 1px solid rgba( var(--theme-text_color), 0.15 );
+	padding: 0 0 20px 0;
+	border-radius: 0;
+	box-shadow: none;
+	margin-bottom: 20px;
+}
+
+	#elMyClubsActivity .ipsStreamItem.ipsStreamItem_contentBlock:last-child {
+		border-bottom: 0;
+		margin-bottom: 0;
+		padding-bottom: 0;
+	}
+	
+	#elMyClubsActivity .ipsStreamItem.ipsStreamItem_contentBlock.ipsAreaBackground_reset {
+		background: transparent;
+	}
+
+#elMyClubsActivity .ipsStreamItem_header {
+	margin-bottom: 10px;
+}
+
+#elMyClubsActivity .ipsUserPhoto_mini {
+	width: 35px;
+	height: 35px;
+}
+
+html[dir="ltr"] #elMyClubsActivity .ipsPhotoPanel.ipsPhotoPanel_mini > div {
+	margin-left: 45px;
+}
+html[dir="rtl"] #elMyClubsActivity .ipsPhotoPanel.ipsPhotoPanel_mini > div {
+	margin-right: 45px;
+}
+
+#elMyClubsActivity .ipsStreamItem_contentType,
+#elMyClubsActivity .ipsItemStatus,
+#elMyClubsActivity .ipsTags {
+	display: none;
+}
+
+#elMyClubsActivity .ipsStreamItem_title {
+	font-size: {fontsize="base"};
+	margin-bottom: 5px;
+}
+
+#elMyClubsActivity .ipsStreamItem_status {
+	font-size: {fontsize="small"};
+}
+
+#elMyClubsActivity .ipsStreamItem_meta {
+	margin: 5px 0 0 0;
+}
+
+#elMyClubsActivity .ipsStreamItem_snippet {
+	margin: 0;
+}
+
+	#elMyClubsActivity .ipsStreamItem_snippet .ipsColumn {
+		display: block;
+		padding-left: 0;
+		padding-right: 0;
+		width: auto;
+	}
+
+	#elMyClubsActivity .ipsStreamItem_snippet .ipsStream_snippetInfo {
+		border: 0;
+		padding: 0;
+	}
+
+#elMyClubsActivity .ipsNoThumb {
+	max-width: 100%;
+	width: auto;
+}
+
+#elMyClubsActivity .ipsCalendarDate.ipsCalendarDate_large {
+	width: 100%;
+	margin-bottom: 5px;
+	text-align: center;
+}
+
+#elMyClubsActivity .ipsCalendarDate > span {
+	display: inline-block;
+}
+
+#elMyClubsActivity .ipsCalendarDate.ipsCalendarDate_large .ipsCalendarDate_month,
+#elMyClubsActivity .ipsCalendarDate.ipsCalendarDate_large .ipsCalendarDate_date {
+	font-size: {fontsize="x_large"};
+	line-height: 1.4;
+	font-weight: 500;
+}
+
+#elMyClubsActivity .ipsStream_thumbnail {
+	max-height: 150px;
+}
+
+#elMyClubsActivity .cGalleryStreamPreview {
+	background: rgb( var(--theme-area_background_light) );
+}
+
+#elMyClubsActivity .ipsStream_comment {
+	background: transparent;
+	margin: 5px 0 0 0;
+	padding: 0;
+}
+
+	#elMyClubsActivity .ipsStream_comment:before {
+		display: none;
+	}
+
+.cClubPrice {
+	color: rgb( var(--theme-price) );
+	font-weight: 500;
+}

@@ -1,0 +1,20 @@
+<ips:template parameters="$subprocessors" />
+{template="pageHeader" if="!\IPS\Request::i()->isAjax()" group="global" params="\IPS\Member::loggedIn()->language()->addToStack('privacy')"}
+<div class='ipsBox_alt ipsType_normal ipsType_richText ipsPad'>
+	{template="richText" group="global" app="core" location="global" params="\IPS\Member::loggedIn()->language()->addToStack('privacy_text_value'), array('ipsType_normal')"}
+	{{if \IPS\Settings::i()->site_address and \IPS\Settings::i()->site_address != "null"}}
+		<p>{setting="board_name"}, {address="\IPS\Settings::i()->site_address"}</p>
+	{{endif}}
+	{{if $subprocessors and \count($subprocessors)}}
+	<div>
+		<h3 class="ipsType_large">{lang="pp_third_parties"}</h3>
+		{{foreach $subprocessors as $processor}}
+			<div class="ipsPadding_bottom">
+				<strong>{$processor['title']}</strong>
+				<div>{$processor['description']}</div>
+				<div><a href="{$processor['privacyUrl']}">{lang="pp_privacy_policy"}</a></div>
+			</div>
+		{{endforeach}}
+	</div>
+	{{endif}}
+</div>

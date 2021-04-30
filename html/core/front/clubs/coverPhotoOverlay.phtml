@@ -1,0 +1,49 @@
+<ips:template parameters="$club, $position='full'" />
+
+{{if $position == 'full'}}
+	<div class='ipsColumns ipsColumns_collapsePhone'>
+		<div class='ipsColumn ipsColumn_fixed ipsColumn_narrow ipsPos_center'>
+			{template="clubIcon" group="clubs" app="core" params="$club, 'medium', 'ipsResponsive_hidePhone'"}
+			{{if $club->isLeader()}}
+				<a href='{$club->url()->setQueryString( 'do', 'editPhoto' )}' class='ipsButton ipsButton_verySmall ipsButton_light ipsButton_narrow' data-action='editPhoto' data-ipsDialog data-ipsDialog-forceReload='true' data-ipsDialog-modal='true' data-ipsDialog-title='{lang="club_profile_photo"}' title='{lang="club_profile_photo"}' data-ipsTooltip><i class='fa fa-photo'></i></a>
+			{{endif}}
+		</div>
+		<div class='ipsColumn ipsColumn_fluid cClubHeaderInfo ipsTruncate'>
+			<h2 class='ipsType_pageTitle ipsType_blendLinks ipsPageHead_barText'>
+				{{if settings.clubs_require_approval and !$club->approved}}
+					<span class="ipsBadge ipsBadge_small ipsBadge_icon ipsBadge_warning" data-ipsTooltip title='{lang="club_unapproved"}'><i class='fa fa-eye-slash'></i></span>
+				{{elseif $club->featured}}
+					<span class="ipsBadge ipsBadge_icon ipsBadge_positive" data-ipsTooltip title='{lang="featured"}'><i class='fa fa-star'></i></span>
+				{{endif}}
+				<a href='{$club->url()}' title='{$club->name}'>{$club->name}</a>
+			</h2>
+			<br>
+			<p class='ipsType_reset ipsType_normal ipsPageHead_barText_small'>
+				{lang="club_{$club->type}"}
+				{{if $club->type !== $club::TYPE_PUBLIC}}
+					&nbsp;&middot;&nbsp;
+					{lang="club_members_count" pluralize="$club->members"}
+				{{endif}}
+				{{if $club->isLeader() and $club->type === $club::TYPE_CLOSED and $pendingMembers = $club->members( array( $club::STATUS_REQUESTED ), NULL, NULL, 4 )}}
+					&nbsp;&middot;&nbsp;
+					<a href='{$club->url()->setQueryString('do', 'members')->setQueryString('filter', 'requested')->setQueryString('filter', 'requested')}' class='ipsType_issue'><i class='fa fa-info-circle'></i> &nbsp;{lang="club_pending_members" pluralize="$pendingMembers"}</a>
+				{{endif}}
+				{{if $club->rules}}
+					&nbsp;&middot;&nbsp;
+					<a href='{$club->url()->setQueryString('do', 'rules')}' data-ipsDialog data-ipsDialog-title='{lang="club_rules"}'>{lang="club_rules"}</a>
+				{{endif}}
+				{{if ( \in_array( $club->type, array( $club::TYPE_OPEN, $club::TYPE_CLOSED ) ) or ( $memberStatus = $club->memberStatus( \IPS\Member::loggedIn() ) and \in_array( $memberStatus, array( $club::STATUS_MEMBER, $club::STATUS_MODERATOR, $club::STATUS_LEADER, $club::STATUS_INVITED, $club::STATUS_INVITED_BYPASSING_PAYMENT, $club::STATUS_REQUESTED, $club::STATUS_EXPIRED, $club::STATUS_EXPIRED_MODERATOR ) ) ) ) and $priceBlurb = $club->priceBlurb()}}
+					&nbsp;&middot;&nbsp;
+					<span class="ipsType_medium">{$priceBlurb}</span>
+					{{if $club->isPaid() and $club->joiningFee() and \IPS\Member::loggedIn()->language()->checkKeyExists('nexus_tax_explain_val')}}
+						<span class="ipsType_small">{lang="nexus_tax_explain_val"}</span>
+					{{endif}}
+				{{endif}}
+			</p>
+		</div>
+	</div>
+{{else}}
+	<div class='ipsPos_center ipsType_center'>
+		{template="clubIcon" group="clubs" app="core" params="$club, 'large'"}
+	</div>
+{{endif}}

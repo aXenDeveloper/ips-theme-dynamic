@@ -1,0 +1,53 @@
+<ips:template parameters="$calendars, $date, $featured, $events, $thisCalendar, $jump, $pagination" />
+
+<div class='ipsBox'>
+	<div class='ipsPager cCalendarNav ipsPadding ipsAreaBackground_light ipsBorder_bottom lg:ipsPos_sticky'>
+		<div class='ipsPager_prev'>
+			<a href="{{if $thisCalendar}}{url="app=calendar&module=calendar&controller=view&view=stream&id={$thisCalendar->_id}&y={$date->lastMonth('year')}&m={$date->lastMonth('mon')}" seoTemplate="calendar_calstream" seoTitle="$thisCalendar->title_seo"}{{else}}{url="app=calendar&module=calendar&controller=view&view=stream&y={$date->lastMonth('year')}&m={$date->lastMonth('mon')}" seoTemplate="calendar_stream"}{{endif}}" title='{lang="cal_month_stream_title" sprintf="$date->lastMonth('monthName'), $date->lastMonth('year')"}' rel='prev nofollow' data-action='changeView'>
+				<span class='ipsPager_type ipsType_normal'>{$date->lastMonth('monthName')}</span>
+				<span class='ipsPager_title ipsType_light'>{$date->lastMonth('year')}</span>
+			</a>
+		</div>
+		<div class='ipsPager_center' data-role='calendarNav'>
+			<h1 class='ipsType_pageTitle ipsType_center'>{lang="cal_month_title" sprintf="$date->monthName, $date->year"}</h1>
+			<ul class='ipsButton_split ipsType_noBreak'>
+				<li><a href='{{if $thisCalendar}}{url="app=calendar&module=calendar&controller=view&view=month&id={$thisCalendar->_id}&y={$date->year}&m={$date->mon}" seoTemplate="calendar_calmonth" seoTitle="$thisCalendar->title_seo"}{{else}}{url="app=calendar&module=calendar&controller=view&view=month&y={$date->year}&m={$date->mon}" seoTemplate="calendar_month"}{{endif}}' title='{lang="cal_month_title" sprintf="$date->monthName, $date->year"}' class='ipsButton ipsButton_veryLight ipsButton_verySmall' data-action='changeView'>{lang="month"}</a></li>
+				<li><a href='{{if $thisCalendar}}{url="app=calendar&module=calendar&controller=view&view=week&id={$thisCalendar->_id}&w={$date->year}-{$date->mon}-{$date->mday}" seoTemplate="calendar_calweek" seoTitle="$thisCalendar->title_seo"}{{else}}{url="app=calendar&module=calendar&controller=view&view=week&w={$date->year}-{$date->mon}-{$date->mday}" seoTemplate="calendar_week"}{{endif}}' title='{lang="cal_week_title" sprintf="$date->firstDayOfWeek('monthNameShort'), $date->firstDayOfWeek('mday'), $date->firstDayOfWeek('year'), $date->lastDayOfWeek('monthNameShort'),	$date->lastDayOfWeek('mday'), $date->lastDayOfWeek('year')"}' class='ipsButton ipsButton_veryLight ipsButton_verySmall' data-action='changeView'>{lang="week"}</a></li>
+				<li><a href='{{if $thisCalendar}}{url="app=calendar&module=calendar&controller=view&view=day&id={$thisCalendar->_id}&y={$date->year}&m={$date->mon}&d={$date->mday}" seoTemplate="calendar_calday" seoTitle="$thisCalendar->title_seo"}{{else}}{url="app=calendar&module=calendar&controller=view&view=day&y={$date->year}&m={$date->mon}&d={$date->mday}" seoTemplate="calendar_day"}{{endif}}' title='{lang="cal_month_day" sprintf="$date->monthName, $date->mday, $date->year"}' class='ipsButton ipsButton_veryLight ipsButton_verySmall' data-action='changeView'>{lang="day"}</a></li>
+				<li><a href='#' class='ipsButton ipsButton_primary ipsButton_verySmall' title='{lang="cal_month_stream_title" sprintf="$date->monthName, $date->year"}' data-action='changeView'><span class='ipsResponsive_hidePhone ipsResponsive_inline'>{lang="event_stream"}</span><span class='ipsResponsive_showPhone ipsResponsive_inline'>{lang="event_stream_short"}</span></a></li>
+			</ul>
+		</div>
+		<div class='ipsPager_next'>
+			<a href="{{if $thisCalendar}}{url="app=calendar&module=calendar&controller=view&view=stream&id={$thisCalendar->_id}&y={$date->nextMonth('year')}&m={$date->nextMonth('mon')}" seoTemplate="calendar_calstream" seoTitle="$thisCalendar->title_seo"}{{else}}{url="app=calendar&module=calendar&controller=view&view=stream&y={$date->nextMonth('year')}&m={$date->nextMonth('mon')}" seoTemplate="calendar_stream"}{{endif}}" title='{lang="cal_month_stream_title" sprintf="$date->nextMonth('monthName'), $date->nextMonth('year')"}' rel='next nofollow' data-action='changeView'>
+				<span class='ipsPager_type ipsType_normal'>{$date->nextMonth('monthName')}</span>
+				<span class='ipsPager_title ipsType_light'>{$date->nextMonth('year')}</span>
+			</a>
+		</div>
+	</div>
+
+	{{if $thisCalendar}}
+		{template="pagination" group="global" app="core" location="global" params="\IPS\Http\Url::internal( 'app=calendar&module=calendar&controller=view&view=stream&id=' . $thisCalendar->_id . '&y=' . $date->year . '&m=' . $date->mon, NULL, 'calendar_calstream', $thisCalendar->title_seo ), $pagination['pages'], $pagination['page'], $pagination['limit']"}
+	{{else}}
+		{template="pagination" group="global" app="core" location="global" params="\IPS\Http\Url::internal( 'app=calendar&module=calendar&controller=view&view=stream&y=' . $date->year . '&m=' . $date->mon, NULL, 'calendar_stream' ), $pagination['pages'], $pagination['page'], $pagination['limit']"}
+	{{endif}}
+	
+	<section class='ipsPadding sm:ipsPadding:half' id='calendarStream'>
+		{{if \count($events) }}
+				<div>
+					{{foreach $events as $event}}
+						<div>
+							{template="eventStreamBlock" app="calendar" group="view" params="$event, $date, TRUE, array( 240, 185 ), TRUE"}
+						</div>
+					{{endforeach}}
+				</div>
+		{{else}}
+			<div class='ipsType_light ipsType_large'>{lang="no_events_month"}</div>
+		{{endif}}
+	</section>
+	<br>
+	{{if $thisCalendar}}
+		{template="pagination" group="global" app="core" location="global" params="\IPS\Http\Url::internal( 'app=calendar&module=calendar&controller=view&view=stream&id=' . $thisCalendar->_id . '&y=' . $date->year . '&m=' . $date->mon, NULL, 'calendar_calstream', $thisCalendar->title_seo ), $pagination['pages'], $pagination['page'], $pagination['limit']"}
+	{{else}}
+		{template="pagination" group="global" app="core" location="global" params="\IPS\Http\Url::internal( 'app=calendar&module=calendar&controller=view&view=stream&y=' . $date->year . '&m=' . $date->mon, NULL, 'calendar_stream' ), $pagination['pages'], $pagination['page'], $pagination['limit']"}
+	{{endif}}
+</div>

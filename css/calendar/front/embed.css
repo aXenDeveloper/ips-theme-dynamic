@@ -1,0 +1,66 @@
+.ipsRichEmbed_phone .ipsRichEmbed .cCalendarEmbed_calendar {
+	float: none !important;
+	width: 100%;
+}
+
+.ipsRichEmbed .ipsCalendarDate {
+	width: 75px;
+	height: 75px;
+	padding: 7px 0;
+	background: rgb( var(--theme-area_background_reset) );
+}
+
+	.ipsRichEmbed .ipsPhotoPanel_small .ipsCalendarDate {
+		width: 55px;
+		height: 55px;
+	}
+
+	.ipsRichEmbed_phone .ipsRichEmbed .ipsCalendarDate {
+		width: 100%;
+		margin-bottom: 7px;
+		height: 65px;
+	}
+
+.ipsRichEmbed .ipsCalendarDate_month {
+	font-size: {fontsize="large"};
+	font-weight: 500;
+}
+
+	.ipsRichEmbed .ipsPhotoPanel_small .ipsCalendarDate_month {
+		font-size: {fontsize="small"};
+	}
+
+	.ipsRichEmbed_phone .ipsRichEmbed .ipsCalendarDate_month {
+		font-size: {fontsize="base"};
+	}
+
+.ipsRichEmbed .ipsCalendarDate_date {
+	font-size: {fontsize="4x_large"};
+	font-weight: 300;
+	line-height: 1.125;
+}
+
+	.ipsRichEmbed .ipsPhotoPanel_small .ipsCalendarDate_date {
+		font-size: {fontsize="2x_large"};
+		line-height: 1.25;
+	}
+	
+	.ipsRichEmbed_phone .ipsRichEmbed .ipsCalendarDate_date {
+		font-size: {fontsize="3x_large"};
+	}
+
+.cCalendarEmbed_dates {
+	margin: 0;
+}
+
+.cCalendarEmbed_dates dt {
+	float: left;
+	width: 50px;
+	text-align: right;
+}
+html[dir="ltr"] .cCalendarEmbed_dates dt {
+	margin-right: 10px;
+}
+html[dir="rtl"] .cCalendarEmbed_dates dt {
+	margin-left: 10px;
+}

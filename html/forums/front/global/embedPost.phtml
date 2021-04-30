@@ -1,0 +1,24 @@
+<ips:template parameters="$comment, $item, $url" />
+
+<div data-embedInfo-maxSize='{{if settings.max_internalembed_width}}{setting="max_internalembed_width"}{{else}}100%{{endif}}' class='ipsRichEmbed'>
+	{template="embedHeader" group="embed" app="core" params="$comment, $item->mapped('title'), $comment->mapped('date'), $url"}
+	<div class='ipsPadding'>
+		<div class='ipsRichEmbed_originalItem ipsAreaBackground_reset ipsPad ipsSpacer_bottom ipsType_blendLinks'>
+			<div>
+				{template="embedOriginalItem" group="embed" app="core" params="$item, TRUE"}
+			</div>
+		</div>
+
+		<div class='ipsType_richText ipsType_medium' data-truncate='3'>
+			{$comment->truncated(TRUE)|raw}
+		</div>
+
+		{{if settings.reputation_enabled and \IPS\IPS::classUsesTrait( $comment, 'IPS\Content\Reactable' ) and \count( $comment->reactions() )}}
+			<ul class='ipsList_inline ipsSpacer_top ipsSpacer_half'>
+				<li>
+					{template="reactionOverview" app="core" group="global" params="$comment, TRUE, 'small'"}
+				</li>
+			</ul>
+		{{endif}}		
+	</div>
+</div>

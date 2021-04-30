@@ -1,0 +1,14 @@
+<ips:template parameters="$member, $status" />
+<div class='ipsPad' id='elSingleStatusUpdate'>
+	<h2 class='ipsType_pageTitle {{if !isset( \IPS\Request::i()->status )}}ipsSpacer_top{{endif}}'>
+		{lang="viewing_single_status"}
+	</h2>
+	<p class='ipsType_reset ipsType_normal ipsSpacer_bottom'>
+		<a href='{$member->url()->setQueryString( array( 'do' => 'content', 'type' => 'core_statuses_status', 'change_section' => 1 ) )}'><i class='fa fa-caret-left'></i> {lang="see_all_statuses_by_x" sprintf="$member->name"}</a>
+	</p>
+	<div data-controller='core.front.profile.statusFeed' class='cStatusUpdates ipsSpacer_top'>
+		<ol class='ipsType_normal ipsList_reset' data-role='commentFeed'>
+			{template="statusContainer" app="core" group="statuses" params="$status"}
+		</ol>
+	</div>
+</div>

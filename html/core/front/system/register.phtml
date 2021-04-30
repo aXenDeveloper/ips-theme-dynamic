@@ -1,0 +1,44 @@
+<ips:template parameters="$form, $login, $postBeforeRegister" />
+
+<section class='ipsBox_alt ipsPad'>
+	<div data-role='registerForm'>
+		<div class='ipsColumns ipsColumns_collapseTablet'>
+			{{$buttonMethods = $login->buttonMethods();}}
+			{{if $buttonMethods}}
+				<div class='ipsColumn ipsColumn_fluid'>
+			{{endif}}
+					<div class='ipsBox {{if !$buttonMethods}}cRegister_noSocial ipsPos_center{{endif}}'>
+						<div class='ipsPadding ipsBorder_bottom'>
+							{{if $postBeforeRegister}}
+								<h1 class='ipsType_pageTitle ipsType_reset'>{lang="post_before_register_headline"}</h1>
+								{{if !\IPS\Request::i()->hidereminder}}<p class='ipsType_reset ipsType_large ipsType_light'>{lang="post_before_register_subtext"}</p>{{endif}}
+							{{else}}
+								<h1 class='ipsType_pageTitle ipsType_reset'>{lang='sign_up'}</h1>
+								<p class='ipsType_reset ipsType_large ipsType_light'>{lang="existing_user"} <a href='{$login->url}'>{lang="sign_in_short"}</a></p>
+							{{endif}}
+						</div>
+						{$form|raw}
+					</div>
+			{{if $buttonMethods}}
+				</div>
+				<div class='ipsColumn ipsColumn_wide' id='elRegisterSocial'>
+					<div class='ipsBox ipsPad'>
+						<h2 class='ipsType_sectionHead'>{lang='reg_start_faster'}</h2>
+						<p class='ipsType_normal ipsType_reset ipsType_light'>{lang='reg_connect'}</p>
+						<br>
+						<form accept-charset='utf-8' method='post' action='{$login->url}' data-controller="core.global.core.login">
+							<input type="hidden" name="csrfKey" value="{expression="\IPS\Session::i()->csrfKey"}">
+							<div class='ipsGap:2'>
+								{{foreach $buttonMethods as $method}}
+									<div class='ipsType_center'>
+										{$method->button()|raw}
+									</div>
+								{{endforeach}}
+							</div>
+						</form>
+					</div>
+				</div>
+			{{endif}}
+		</div>
+	</div>
+</section>

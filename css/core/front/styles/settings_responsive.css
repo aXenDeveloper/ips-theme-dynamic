@@ -1,0 +1,14 @@
+/* BOTH */
+@media screen and (max-width: 979px) {	
+	#elSettingsTabs .ipsColumn_wide {
+		width: 190px;
+	}	
+}
+
+/* PHONES */
+@media screen and (max-width: 767px) {
+	#elSettingsTabs .ipsColumn_wide {
+		width: 100%;
+		margin-bottom: 0;
+	}
+}

@@ -1,0 +1,18 @@
+<ips:template parameters="$club" />
+
+{{if ! \IPS\Request::i()->isAjax()}}
+	{{if \IPS\Settings::i()->clubs_header != 'sidebar'}}
+		{template="header" group="clubs" app="core" params="$club"}
+	{{endif}}
+
+	<h1 class='ipsType_pageTitle'>{lang="club_rules"}</h1>
+	<br>
+{{endif}}
+
+<div id='elClubContainer'>
+	<div class='ipsBox ipsPad'>
+		<div class='ipsType_normal ipsType_richText ipsContained'>
+			{$club->rules|raw}
+		</div>
+	</div>
+</div>

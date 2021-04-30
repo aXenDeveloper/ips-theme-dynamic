@@ -1,0 +1,87 @@
+/* BOTH */
+@media screen and (max-width: 979px) {
+	.ipsPagination.ipsPagination_mini a {
+		padding: 0 15px;
+	}
+}
+
+/* PHONES */
+@media screen and (max-width: 767px) {
+
+	/* Responsive pagination */
+
+	/* Hide all the page numbers */
+	.ipsPagination:not( .ipsPagination_mini ) .ipsPagination_page:not( .ipsPagination_active ) {
+		display: none;
+	}
+
+	.ipsPagination:not( .ipsPagination_mini ) {
+		display: flex;
+		padding: 0;
+		font-weight: bold;
+		text-align: center;
+		clear: both;
+	}
+
+		[dir] .ipsPagination:not(.ipsPagination_mini) > li{
+			margin: 0;
+		}
+
+		.ipsPagination:not(.ipsPagination_mini) a{
+			padding: 2px 10px;
+		}
+
+	.ipsPagination:not( .ipsPagination_mini ) .ipsPagination_active {
+		display: none;
+	}
+
+	.ipsPagination .ipsPagination_prev a .fa,
+	.ipsPagination .ipsPagination_next a .fa {
+		opacity: 1;
+	}
+
+	/* Reorder buttons using flexbox */
+	.ipsPagination:not( .ipsPagination_mini ) .ipsPagination_first,
+	.ipsPagination:not( .ipsPagination_mini ) .ipsPagination_prev{
+		order: 1;
+	}
+
+	.ipsPagination:not( .ipsPagination_mini ) .ipsPagination_next,
+	.ipsPagination:not( .ipsPagination_mini ) .ipsPagination_last{
+		order: 3;
+	}
+
+	.ipsPagination:not( .ipsPagination_mini ) .ipsPagination_pageJump{
+		order: 2;
+		flex: 1 1 auto;
+		text-align: center;
+		margin: 0 !important;
+	}
+
+	.ipsPagination .ipsPagination_pageJump .fa {
+		display: none;
+	}
+
+	/* Show the 'inactive' buttons that we don't show on desktop */
+	.ipsPagination > li.ipsPagination_inactive {
+		display: block;
+		opacity: 0.35;
+		pointer-events: none;
+	}
+
+	/* Mini pagination */
+	.ipsPagination.ipsPagination_mini {
+		margin: 5px 0 !important;
+		opacity: 1 !important;
+	}
+
+	/* Pager */
+	.ipsPager{
+		flex-wrap: wrap;
+	}
+	.ipsPager_center{
+		order: -1;
+		flex: 1 1 100%;
+		margin-bottom: var(--sp-2);
+	}
+}

@@ -1,0 +1,81 @@
+<ips:template parameters="$poll, $url" />
+{{if !isset( \IPS\Request::i()->fetchPoll )}}
+<section data-controller='core.front.core.poll'>
+{{endif}}
+	{{if $poll->canVote() and request._poll != 'results' and ( !$poll->getVote() or request._poll == 'form') and $pollForm = $poll->buildForm()}}
+		<h3 class='ipsWidget_title ipsType_reset'>
+			<span class='ipsType_break ipsContained'>
+				<span class='ipsType_small ipsType_light ipsPos_right' data-ipsTooltip title='{lang="poll_num_votes" pluralize="$poll->votes"}'><i class='fa fa-check-square-o'></i> {$poll->votes}</span>
+				{$poll->poll_question}
+			</span>
+		</h3>
+		<div class='ipsPad ipsWidget_inner ipsClearfix' data-role='pollContents'>
+			{$pollForm->customTemplate( array( \IPS\Theme::i()->getTemplate( 'widgets', 'forums', 'front' ), 'pollFormWidget' ), $url )|raw}
+		</div>
+	{{elseif ( $poll->canViewResults() and !$poll->canVote() ) or $poll->getVote() or ( request._poll == 'results' and settings.allow_result_view )}}
+		<h3 class='ipsWidget_title ipsType_reset'>
+			<span class='ipsType_break ipsContained'>
+				<span class='ipsType_small ipsType_light ipsPos_right' data-ipsTooltip title='{lang="poll_num_votes" pluralize="$poll->votes"}'><i class='fa fa-check-square-o'></i> {$poll->votes}</span>
+				{$poll->poll_question}
+			</span>
+		</h3>
+		<div class='ipsPad ipsWidget_inner ipsClearfix' data-role='pollContents'>
+			<ol class='ipsList_reset cPollList'>
+				{{$i = 0;}}
+				{{foreach $poll->choices as $questionId => $question}}
+					{{$i++;}}
+					<li>
+						<h3 class='ipsType_normal ipsType_reset'><span class='ipsType_break ipsContained'>{$i}. {$question['question']}</span></h3>
+						<br>
+						<ul class='ipsList_reset cPollList_choices'>
+							{{foreach $question['choice'] as $k => $choice}}
+								<li class='ipsGrid ipsGrid_collapsePhone'>
+									<div class='ipsGrid_span4 ipsType_right ipsType_richText ipsType_small ipsType_break'>
+										{$choice|raw}
+									</div>
+									<div class='ipsGrid_span7'>
+										<span class='cPollVoteBar'>
+											<span style='width: {{if array_sum( $question['votes'] ) > 0 }}{expression="\intval( ( $question['votes'][ $k ] / array_sum( $question['votes'] ) ) * 100 )"}{{else}}0{{endif}}%' data-votes='{{if array_sum( $question['votes'] ) > 0}}{expression="round( ( $question['votes'][ $k ] / array_sum( $question['votes'] ) ) * 100, 2 )"}{{else}}0{{endif}}%' {{if array_sum( $question['votes'] ) && \intval( ( $question['votes'][ $k ] / array_sum( $question['votes'] ) ) * 100 ) > 30}}class='cPollVoteBar_inside'{{endif}}></span>
+										</span>
+									</div>
+								</li>
+							{{endforeach}}
+						</ul>
+					</li>
+				{{endforeach}}
+			</ol>
+			<hr class='ipsHr'>
+			<ul class='ipsList_reset'>
+				{{if $poll->canVote() || !member.member_id}}
+					{{if $poll->canVote()}}
+						<li>
+							<a href="{$url->setQueryString('do', 'widgetPoll')->setQueryString( '_poll', 'form' )}" title='{lang="show_vote_options"}' class='ipsButton ipsButton_link ipsButton_small ipsButton_fullWidth' data-action='viewResults'>
+								<i class='fa fa-caret-left'></i> {lang="show_vote_options"}
+							</a>
+						</li>
+					{{endif}}
+					{{if !member.member_id}}
+						<li class='ipsType_light'>
+							{lang="poll_guest" sprintf="\IPS\Http\Url::internal( 'app=core&module=system&controller=login', 'front', 'login' ), \IPS\Http\Url::internal( 'app=core&module=system&controller=register', 'front', 'register' )"}
+						</li>
+					{{endif}}
+				{{endif}}
+				<li>
+					<a class='ipsButton ipsButton_link ipsButton_small ipsButton_fullWidth ipsSpacer_top' href="{$url}">{lang="poll_view_topic"}</a>
+				</li>
+			</ul>
+		</div>
+	{{else}}
+		<h3 class='ipsWidget_title ipsType_reset'>
+			<span class='ipsType_break ipsContained'>
+				<span class='ipsType_small ipsType_light ipsPos_right' data-ipsTooltip title='{lang="poll_num_votes" pluralize="$poll->votes"}'><i class='fa fa-check-square-o'></i> {$poll->votes}</span>
+				{$poll->poll_question}
+			</span>
+		</h3>
+		<div class='ipsPad_half ipsWidget_inner ipsClearfix' data-role='pollContents'>
+			{lang="no_permission_poll"}{{if !\IPS\Member::loggedIn()->member_id}} {lang="poll_guest" sprintf="\IPS\Http\Url::internal( 'app=core&module=system&controller=login', 'front', 'login' ), \IPS\Http\Url::internal( 'app=core&module=system&controller=register', 'front', 'register' )"}{{endif}}
+		</div>
+	{{endif}}
+{{if !isset( \IPS\Request::i()->fetchPoll )}}
+</section>
+{{endif}}

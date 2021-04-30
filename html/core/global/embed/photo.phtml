@@ -1,0 +1,8 @@
+<ips:template parameters="$imageUrl, $linkUrl=NULL, $title=NULL, $width=NULL, $height=NULL" />
+{{if $linkUrl}}<a href='{$linkUrl}' target='_blank' rel='noopener'>{{endif}}
+	{{if settings.lazy_load_enabled}}
+		<img src='{expression="\IPS\Text\Parser::blankImage()"}' data-src='{$imageUrl}' alt='{$title}' class='ipsImage' {{if $width}}width="{$width}"{{endif}} {{if $height}}height="{$height}"{{endif}}>
+	{{else}}
+		<img src='{$imageUrl}' alt='{$title}' class='ipsImage' {{if $width}}width="{$width}"{{endif}} {{if $height}}height="{$height}"{{endif}}>
+    {{endif}}
+{{if $linkUrl}}</a>{{endif}}

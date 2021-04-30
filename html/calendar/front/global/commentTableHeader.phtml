@@ -1,0 +1,20 @@
+<ips:template parameters="$comment, $event" />
+
+<div class='ipsFlex ipsFlex-ai:center sm:ipsFlex-ai:start sm:ipsMargin_top:double'>
+	{{$date = ( $event->nextOccurrence( \IPS\calendar\Date::getDate(), 'startDate' ) == NULL ) ? $event->lastOccurrence() : $event->nextOccurrence( \IPS\calendar\Date::getDate(), 'startDate' );}}
+	<div class='ipsFlex-flex:00 ipsMargin_right sm:ipsMargin_right:half'>
+		<time datetime='{$date->mysqlDatetime()}' class='ipsCalendarDate ipsCalendarDate_large'>
+			<span class='ipsCalendarDate_month'>{$date->monthNameShort}</span>
+			<span class='ipsCalendarDate_date'>{$date->mday}</span>
+		</time>
+	</div>
+	<div>
+		<h3 class='ipsType_sectionHead'><a href='{$event->url( "getPrefComment" )}'title='{lang="view_this_event" sprintf="$event->title"}'>{$event->title}</a></h3>
+		<p class='ipsType_normal ipsType_light ipsType_blendLinks ipsType_reset'>{lang="in"} <a href='{$event->container()->url()}'>{$event->container()->_title}</a></p>
+		{{if $event->container()->allow_reviews}}
+			{template="rating" group="global" location="front" app="core" params="'large', $event->rating, \IPS\Settings::i()->reviews_rating_out_of"} &nbsp;&nbsp;
+		{{endif}}
+
+		<span class='ipsType_medium ipsType_reset'>{{if $event->container()->allow_comments}}&nbsp;&nbsp;{{if !$event->comments}}<span class='ipsType_light'>{{endif}}<i class='fa fa-comment'></i> {$event->comments}{{endif}}{{if !$event->comments}}</span>{{endif}}</span>
+	</div>
+</div>

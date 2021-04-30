@@ -1,0 +1,16 @@
+<ips:template parameters="$error" />
+<div id="elAuthy">
+	<div class="ipsPad ipsType_normal ipsType_richText ipsType_center">
+		{lang="authy_error"}
+		{{if member.isAdmin()}}
+			<div class="ipsType_warning ipsSpacer_top">
+				{$error}
+			</div>
+		{{endif}}
+	</div>
+</div>
+{{if \IPS\Member::loggedIn()->canUseContactUs()}}
+	<div class="ipsAreaBackground ipsPad">
+		<a href="{url="app=core&module=contact&controller=contact" base="front" seoTemplate="contact"}" class="ipsButton ipsButton_primary ipsButton_fullWidth ipsButton_medium">{lang="mfa_recovery_contact"}</a>
+	</div>
+{{endif}}

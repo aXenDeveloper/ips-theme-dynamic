@@ -1,0 +1,106 @@
+<ips:template parameters="$stream, $html, $form, $rssLink=NULL, $canCopy" />
+<section data-controller='core.front.streams.main, core.front.core.ignoredComments' data-streamID='{{if isset( \IPS\Request::i()->id )}}{expression="\IPS\Request::i()->id"}{{else}}all{{endif}}'>	
+
+	{{if \IPS\Content\Search\Query::isRebuildRunning()}}
+	<div class="ipsMessage ipsMessage_info">{lang="stream_rebuild_is_running"}</div>
+	{{endif}}
+	<div class="ipsPageHeader ipsBox ipsResponsive_pull ipsClearfix ipsMargin_bottom md:ipsMargin_bottom:half">
+		<div class='ipsPadding_top ipsPadding_horizontal'>
+			<div class='ipsFlex sm:ipsFlex-fd:column ipsFlex-jc:between ipsFlex-ai:start ipsFlex-fw:wrap ipsGap:3 ipsPadding_bottom'>
+				<div class='ipsFlex-flex:11 sm:ipsMargin_bottom:half'>
+					<h1 class='ipsType_pageTitle'>
+						<span data-role='streamTitle'>{$stream->_title}</span>
+					</h1>
+					{{if $form}}
+						<p class='ipsType_reset ipsType_normal' data-role='streamOverview'>
+							<span data-role='streamBlurb'>{$stream->blurb()}</span>
+						</p>
+					{{endif}}
+				</div>
+
+				{{if $rssLink || ( $stream->member && $stream->member == \IPS\Member::loggedIn()->member_id ) || \IPS\Member::loggedIn()->member_id}}
+					<ul class="ipsList_reset sm:ipsFlex-as:stretch ipsFlex-flex:01 ipsFlex sm:ipsFlex-fd:column-reverse sm:ipsFlex-ai:stretch ipsFlex-ai:center ipsFlex-jc:center ipsType_blendLinks">
+						{{if $stream->member && $stream->member == \IPS\Member::loggedIn()->member_id}}
+							<li>
+								<a href='{$stream->url()}' title='{lang="stream_share_desc"}' data-ipsMenu data-ipsTooltip id='elStreamShare' class='ipsButton ipsButton_link ipsButton_verySmall ipsButton_fullWidth'><i class='fa fa-share-alt'></i> {lang="stream_share"}</a>
+								<div class='ipsMenu ipsMenu_wide ipsPad ipsHide' id='elStreamShare_menu'>
+									<h2 class='ipsType_sectionHead'>{lang="share_stream_title"}</h2>
+									<hr class='ipsHr'>
+									<p class='ipsType_medium'>
+										{lang="share_stream_info"}
+									</p>
+									<input type='text' value='{$stream->url()}' class='ipsField_fullWidth'>
+								</div>
+							</li>
+						{{endif}}
+						{{if \IPS\Member::loggedIn()->member_id}}
+							<li><a href='#' class='ipsButton ipsButton_light ipsButton_verySmall ipsButton_fullWidth' id='elStreamOptions' data-ipsMenu>{lang="stream_options"} <i class='fa fa-caret-down'></i></a></li>
+						{{endif}}
+					</ul>
+					{{if \IPS\Member::loggedIn()->member_id}}
+						<ul class='ipsMenu ipsMenu_auto ipsHide' id='elStreamOptions_menu'>
+							{{if $rssLink}}	
+								<li class='ipsMenu_item'><a href="{$rssLink}"><i class="fa fa-rss"></i> &nbsp;{lang="stream_rss"}</a></li>
+							{{endif}}
+							<li class='ipsMenu_item {{if \IPS\Member::loggedIn()->defaultStream === $stream->_id}}ipsHide{{endif}}'>
+								<a data-action="toggleStreamDefault" data-change="1" href="{$stream->url()->csrf()->setQueryString('default', 1)}" >{lang="stream_this_isnt_default"}</a>
+							</li>
+							<li class='ipsMenu_item {{if \IPS\Member::loggedIn()->defaultStream !== $stream->_id}}ipsHide{{endif}}'>
+								<a data-action="toggleStreamDefault" data-change="0" href="{$stream->url()->csrf()->setQueryString('default', 0)}">{lang="stream_this_is_default"}</a>
+							</li>
+							{{if $stream->member AND $stream->member === \IPS\Member::loggedIn()->member_id}}
+								<li class='ipsMenu_item'>
+									<a href='{$stream->url()->setQueryString( 'do', 'edit' )->csrf()}' data-ipsDialog data-ipsDialog-size='narrow' data-ipsDialog-title='{lang="stream_edit_title"}' data-action='editStream'>{lang="stream_edit_title"}</a>
+								</li>
+								<li class='ipsMenu_item'>
+									<a href='{$stream->url()->setQueryString( 'do', 'delete' )->csrf()}' data-action='removeStream'>{lang="stream_remove"}</a>
+								</li>
+							{{endif}}
+						</ul>
+					{{endif}}
+				{{endif}}
+			</div>
+
+			{{if $canCopy}}
+				{{$owner = \IPS\Member::load( $stream->member );}}
+				<div class='ipsAreaBackground ipsPad ipsPhotoPanel ipsPhotoPanel_mini ipsClearfix'>
+					{template="userPhoto" group="global" app="core" params="$owner, 'mini'"}
+					<div>
+						<a href='{$stream->url()->setQueryString('do', 'copy')->csrf()}' class='ipsButton ipsButton_primary ipsButton_large ipsPos_right ipsResponsive_noFloat'><i class='fa fa-plus'></i> &nbsp;{lang="stream_copy_feed"}</i></a>
+						<p class='ipsType_reset ipsType_normal'>
+							<strong>{lang="stream_copy_title" sprintf="$owner->name"}</strong><br>
+							{lang="stream_copy_desc"}
+						</p>
+					</div>
+				</div>
+			{{endif}}
+		</div>
+		{{if $form}}
+			{$form|raw}
+		{{endif}}
+	</div>
+	<div data-role='streamBody'>
+		{$html|raw}
+	</div>
+
+	{{if $rssLink || ( $stream->member && $stream->member == \IPS\Member::loggedIn()->member_id )}}
+		<ul class="ipsList_inline ipsType_blendLinks ipsSpacer_both ipsType_center ipsResponsive_showPhone ipsResponsive_block">
+			{{if $rssLink}}	
+				<li><a href="{$rssLink}"><i class="fa fa-rss"></i> {lang="rss"}</a></li>
+			{{endif}}
+			{{if $stream->member && $stream->member == \IPS\Member::loggedIn()->member_id}}
+				<li>
+					<a href='{$stream->url()}' title='{lang="stream_share_desc"}' data-ipsMenu data-ipsTooltip id='elStreamShare'><i class='fa fa-share-alt'></i> {lang="stream_share"}</a>
+					<div class='ipsMenu ipsMenu_wide ipsPad ipsHide' id='elStreamShare_menu'>
+						<h2 class='ipsType_sectionHead'>{lang="share_stream_title"}</h2>
+						<hr class='ipsHr'>
+						<p class='ipsType_medium'>
+							{lang="share_stream_info"}
+						</p>
+						<input type='text' value='{$stream->url()}' class='ipsField_fullWidth'>
+					</div>
+				</li>
+			{{endif}}
+		</ul>
+	{{endif}}
+</section>

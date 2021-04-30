@@ -1,0 +1,434 @@
+:root {
+	--vse-width: 360px;
+}
+
+.ipsApp.ipsApp_vse {
+	background: #fff !important;
+}
+
+#vseMainWrapper {
+	position: absolute;
+	left: 0;
+	top: 0;
+	right: var(--vse-width);
+	bottom: 0;
+}
+html[dir="rtl"] #vseMainWrapper {
+	left: var(--vse-width);
+	right: 0;
+}
+
+#vseMainFrame {
+	border: 0;
+	width: 100%;
+	height: 100%;
+}
+
+#vseToolbox_tabs {
+	position: absolute;
+	width: 100%;
+	top: 50px;
+	bottom: 0;
+}
+
+#vseToolbox .ipsTabs_panel
+{
+	background: transparent;
+}
+
+#ipsTabs_vseSection_vseCustomizeTab_panel {
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	width: 100%;
+}
+
+#vseToolbox {
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	width: var(--vse-width);
+	z-index: 5000;
+	box-shadow: -10px 0px 40px rgba(0,0,0,0.2);
+}
+html[dir="ltr"] #vseToolbox {
+	right: 0;
+}
+html[dir="rtl"] #vseToolbox {
+	left: 0;
+}
+
+#vseCustomCSS {
+	position: absolute;
+	left: 0;
+	right: var(--vse-width);
+	bottom: 0;
+	height: 300px;
+}
+html[dir="rtl"] #vseCustomCSS {
+	left: var(--vse-width);
+	right: 0;
+}
+
+#vseCustomCSS_editor {
+	height: 235px;
+}
+
+.vseIcon {
+	font-size: 36px;
+}
+
+/* Overwritten styles from the framework */
+#vseToolbox .ipsHr {
+	border-color: rgba(0,0,0,0.2);
+}
+
+#vseToolbox .ipsTabs {
+	background: #000;
+	color: #fff;
+}
+
+#vseToolbox .ipsTabs .ipsTabs_item:hover {
+	background: rgba(0,0,0,0.1);
+	color: #fff;
+}
+
+#vseToolbox .ipsTabs .ipsTabs_item {
+	color: #8b8b8b;
+	text-decoration: none;
+}
+
+#vseToolbox .ipsTabs .ipsTabs_activeItem {
+	background: #212223;
+	color: #fff !important;
+	font-weight: normal;
+}
+
+#vseToolbox .ipsButton_primary {
+	background: #000;
+	color: #fff;
+}
+
+#vseToolbox #ipsTabs_vseSection_vseSettingsTab_panel .ipsFieldRow_label,
+#vseToolbox #ipsTabs_vseSection_vseSettingsTab_panel .ipsField_fieldList_content
+{
+	color: #fff;
+}
+
+/*#vseClassEditor input[type="text"] {
+	background: rgba(255,255,255,0.3);
+	border: 1px solid rgba(0,0,0,0.2);
+	color: #fff;
+}
+
+#vseClassEditor input[type="text"]:focus {
+	background: rgba(255,255,255,0.4);
+}*/
+
+/* CLASS LIST */
+#vseClassWrap {
+	width: var(--vse-width);
+	overflow: hidden;
+	position: absolute;
+	top: 60px;
+	bottom: 0;
+	border-top: 1px solid rgba(0,0,0,0.6);
+}
+html[dir="ltr"] #vseClassWrap {
+	left: 0;
+}
+html[dir="rtl"] #vseClassWrap {
+	right: 0;
+}
+
+	#vseClassList, #vseClassEditor {
+		width: var(--vse-width);
+		position: absolute;
+		top: 0;
+		bottom: 0;
+		transition: all 0.3s ease;
+		overflow: auto;
+	}
+
+	html[dir="ltr"] #vseClassWrap #vseClassEditor {
+		left: var(--vse-width);
+	}
+	html[dir="ltr"] #vseClassWrap.vseShow_editor #vseClassList {
+		left: calc( var(--vse-width) * -1 );
+	}
+	html[dir="ltr"] #vseClassWrap #vseClassList {
+		left: 0;
+	}
+	html[dir="ltr"] #vseClassWrap.vseShow_editor #vseClassEditor {
+		left: 0;
+	}
+	html[dir="rtl"] #vseClassWrap #vseClassEditor {
+		right: var(--vse-width);
+	}
+	html[dir="rtl"] #vseClassWrap.vseShow_editor #vseClassList {
+		right: calc( var(--vse-width) * -1 );
+	}
+	html[dir="rtl"] #vseClassWrap #vseClassList {
+		right: 0;
+	}
+	html[dir="rtl"] #vseClassWrap.vseShow_editor #vseClassEditor {
+		right: 0;
+	}
+
+#vseClassList {
+	color: #fff;
+}
+
+#vseClassList .vseClass_title {
+	background: rgba(0,0,0,0.2);
+	color: #fff;
+	padding: 10px 15px;
+	font-size: 15px;
+	font-weight: 500;
+	color: #949494;
+}
+
+#vseClassList li[data-styleID] {
+	display: block;
+	color: #fff;
+	padding: 15px 0 15px 15px;
+	position: relative;
+	text-decoration: none;
+	/*border-top: 1px solid rgba(0,0,0,0.2);*/
+}
+html[dir="rtl"] #vseClassList li[data-styleID] {
+	padding: 15px 15px 15px 0;
+}
+
+	/*#vseClassList li[data-styleID] a:hover {
+		background: rgba(255,255,255,0.05);
+	}*/
+
+	#vseClassList li[data-styleID] .vseClass_swatch {
+		position: absolute;
+		top: 5px;
+	}
+	html[dir="ltr"] #vseClassList li[data-styleID] .vseClass_swatch--back {
+		right: 5px;
+	}
+	html[dir="rtl"] #vseClassList li[data-styleID] .vseClass_swatch--back {
+		left: 5px;
+	}
+
+	html[dir="ltr"] #vseClassList li[data-styleID] .vseClass_swatch--fore {
+		right: 50px;
+	}
+	html[dir="rtl"] #vseClassList li[data-styleID] .vseClass_swatch--fore {
+		left: 50px;
+	}
+
+
+.vseClass_swatch {
+	display: inline-block;
+	width: 39px;
+	height: 39px;
+	text-align: center;
+	line-height: 39px;
+	border-radius: 4px;
+	border: 1px solid rgba(255,255,255,0.3) !important;
+}
+
+	.vseClass_swatch--noStyle {
+		font-size: 18px;
+		font-weight: 300;
+		color: rgba(255,255,255,0.1);
+		border: 0 !important;
+	}
+
+.vseClass_swatch .sp-dd,
+.vseColorizer_swatch .sp-dd {
+	display: none !important;
+}
+
+.vseColorizer_swatch {
+	border-radius: 4px;
+	border: 1px solid rgba(255,255,255,0.3) !important;
+}
+
+/* PANELS */
+#vseSettingsWrap {
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	overflow: hidden;
+}
+
+#vseClassEditor {
+	padding-top: 0px;
+}
+
+.vseStyleSection h3 {
+	font-size: 10px;
+	font-weight: 500;
+	text-transform: uppercase;
+	border-top: 1px solid rgba(0,0,0,0.15);
+	background: rgba(0,0,0,0.1);
+	padding: 8px 15px;
+	margin: 0 -15px 15px;
+	color: #949494;
+}
+
+#vseToolbox .ipsType_sectionHead {
+	color: #fff;
+	font-weight: 500;
+}
+
+.vseStyleSection {
+	/*border-bottom: 2px solid rgba(0,0,0,0.1);*/
+	padding-bottom: 15px;
+}
+
+/* BACKGROUND WIDGET STYLES */
+.vseBackground_color {
+	margin-bottom: 5px;
+}
+.vseBackground_preview {
+	width: 68px;
+	height: 68px;
+	border: 1px solid rgba(0,0,0,0.5);
+}
+
+.vseBackground_gradient {
+	width: 100%;
+	height: 75px;
+	border: 1px solid rgba(0,0,0,0.5);
+	background-position-x: initial;
+	background-position-y: initial;
+	background-size: 100% 350px;
+	background-repeat-x: no-repeat;
+	background-repeat-y: no-repeat;
+	background-attachment: initial;
+	background-origin: initial;
+	background-clip: initial;
+	background-color: initial;
+	margin-bottom: 10px;
+}
+
+[data-role='gradientStops'] > li {
+	margin-bottom: 5px;
+}
+
+[data-role='gradientStops'] > li:first-child > [class*="ipsGrid_span"] {
+	min-height: 0;
+}
+
+[data-role='gradientStops'] {
+	margin-bottom: 15px;
+}
+
+[data-role='gradientStops'] > li:not( :first-child ) .ipsGrid_span1 {
+	padding-top: 7px;
+}
+
+[data-role='gradientEditor'] [data-angle='45'] i,
+[data-role='gradientEditor'] [data-angle='120'] i {
+	display: inline-block;
+	transform: rotate(45deg);
+}
+
+/* IN-PAGE ELEMENTS (e.g. xray) */
+#vseXRay {
+	background: rgba( 184, 227, 217, 0.5 );
+	border: 1px solid rgba( 184, 227, 217, 1 );
+	pointer-events: none;
+	position: absolute;
+	cursor: default;
+}
+
+/* BACK BUTTON */
+.vseNavBack {
+	background: rgba(0,0,0,0.2);
+	height: 50px;
+	position: relative;
+	margin: 0 -15px 0;
+	padding: 12px 0 0 78px;
+}
+html[dir="rtl"] .vseNavBack {
+	padding: 12px 78px 0 0;
+}
+
+.vseNavBack .ipsType_sectionHead {
+	color: #fff;
+}
+.vseNavBack a {
+    top:10px;
+    position:absolute;
+    background-repeat:repeat-x;
+    background-color: #292929;
+    height:30px;
+    z-index : 0;
+    border-radius: 6px;
+    font-size : 11px;
+    display : block;
+    text-align:center;
+    color:#fff !important;
+    text-shadow : 0px -1px 0px #000;
+    line-height : 30px;
+    font-weight: 700;
+	background-size: 30px;
+	text-decoration: none !important;
+}
+html[dir="ltr"] .vseNavBack a {
+    left:22px;
+    padding: 0 10px 0 8px;
+    -webkit-border-top-left-radius : 10px 15px;
+    -webkit-border-bottom-left-radius : 10px 15px;
+}
+html[dir="rtl"] .vseNavBack a {
+    left:22px;
+    padding: 0 8px 0 10px;
+    -webkit-border-top-right-radius : 10px 15px;
+    -webkit-border-bottom-right-radius : 10px 15px;
+}
+ 
+.vseNavBack a:before{
+    position:absolute;
+    top:8.2%;
+	background-size: 22px 22px;
+    background-position :-2px -1.5px;
+    background-color: #292929;
+    height : 25px;
+    width: 25px;
+    z-index : 1;
+    content : '';
+    -webkit-mask-image :
+        -webkit-gradient(linear, left top, right bottom,
+            from(#292929),
+            color-stop(0.33,#292929),
+            color-stop(0.5, transparent),
+            to(transparent));
+	transform: rotate(-45deg) skew(-10deg, -10deg);
+}
+html[dir="ltr"] .vseNavBack a:before{
+	left:-5px;
+    -webkit-border-top-right-radius : 100px 40px;
+    -webkit-border-top-left-radius : 30px 2px;
+    -webkit-border-bottom-right-radius : 2px 30px;
+    -webkit-border-bottom-left-radius : 40px 100px;
+}
+html[dir="rtl"] .vseNavBack a:before{
+	right:-5px;
+    -webkit-border-top-left-radius : 100px 40px;
+    -webkit-border-top-right-radius : 30px 2px;
+    -webkit-border-bottom-left-radius : 2px 30px;
+    -webkit-border-bottom-right-radius : 40px 100px;
+}
+
+/* COLORIZER */
+.vseColorizer_swatch {
+	width: 100%;
+	height: 70px;
+	display: block;
+	margin-bottom: 4px;
+	border-radius: 5px;
+	font-size: 0px;
+	text-indent: -400px;
+	cursor: pointer;
+}

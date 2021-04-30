@@ -1,0 +1,25 @@
+<ips:template parameters="$topContributorsThisWeek, $limit, $orientation='vertical'" />
+<h3 class='ipsType_reset ipsWidget_title'>{lang="block_topContributors"}</h3>
+<div class='ipsTabs ipsTabs_small ipsTabs_stretch ipsClearfix' id='elTopContributors' data-ipsTabBar data-ipsTabBar-updateURL='false' data-ipsTabBar-contentArea='#elTopContributors_content'>
+	<a href='#elTopContributors' data-action='expandTabs'><i class='fa fa-caret-down'></i></a>
+	<ul role="tablist" class='ipsList_reset'>
+		<li>
+			<a href='#ipsTabs_elTopContributors_el_topContributorsWeek_panel' id='el_topContributorsWeek' class='ipsTabs_item ipsTabs_activeItem' role="tab" aria-selected='true'>{lang="week"}</a>
+		</li>
+		<li>
+			<a href='{url="app=core&module=system&controller=ajax&do=topContributors&time=month&limit={$limit}&orientation={$orientation}"}' id='el_topContributorsMonth' class='ipsTabs_item' role="tab" aria-selected='false'>{lang="month"}</a>
+		</li>		
+		<li>
+			<a href='{url="app=core&module=system&controller=ajax&do=topContributors&time=year&limit={$limit}&orientation={$orientation}"}' id='el_topContributorsYear' class='ipsTabs_item' role="tab" aria-selected='false'>{lang="year"}</a>
+		</li>
+		<li>
+			<a href='{url="app=core&module=system&controller=ajax&do=topContributors&time=all&limit={$limit}&orientation={$orientation}"}' id='el_topContributorsAll' class='ipsTabs_item' role="tab" aria-selected='false'>{lang="alltime"}</a>
+		</li>
+	</ul>
+</div>
+
+<section id='elTopContributors_content' class='ipsWidget_inner ipsPad_half'>
+	<div id="ipsTabs_elTopContributors_el_topContributorsWeek_panel" class='ipsTabs_panel'>
+		{template="topContributorRows" group="widgets" app="core" params="$topContributorsThisWeek, 'week', $orientation"}
+	</div>
+</section>

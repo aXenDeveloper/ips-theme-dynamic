@@ -1,0 +1,8 @@
+<ips:template parameters="$table, $headers, $rows" />
+{{if \count( $rows )}} 
+	{{foreach $rows as $item}}
+		{{if ( $item->object() instanceof \IPS\Content and  $item->object()->hidden() === 0 ) or ( ! $item->object() instanceof \IPS\Content )}}
+			{template="promotePublicTableRow" params="$item" app="core" group="promote"}
+		{{endif}}
+	{{endforeach}}
+{{endif}}

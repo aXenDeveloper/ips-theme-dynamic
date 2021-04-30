@@ -1,0 +1,31 @@
+<ips:template parameters="$reactions, $itemUrl, $repCount" />
+
+{{if \IPS\Settings::i()->reaction_count_display == 'count'}}
+	<div class='ipsReact_reactCountOnly ipsReact_reactCountOnly_mini {{if $repCount >= 1}}ipsAreaBackground_positive{{elseif $repCount < 0}}ipsAreaBackground_negative{{else}}ipsAreaBackground_light{{endif}} ipsType_blendLinks {{if !\count( $reactions )}}ipsHide{{endif}}' data-role='reactCount'>
+		{$repCount}
+	</div>
+{{else}}
+	<div class='ipsReactOverview ipsReactOverview_small ipsType_light'>
+		<ul>
+			<li class='ipsReactOverview_repCount'>
+				{$repCount}
+			</li>
+			{{foreach $reactions AS $reactID => $count}}
+				{{$reaction = \IPS\Content\Reaction::load( $reactID );}}
+				<li>
+					{{if \IPS\Member::loggedIn()->group['gbw_view_reps']}}
+						<a href='{$itemUrl->setQueryString( 'reaction', $reaction->id )}' data-ipsDialog data-ipsDialog-size='medium' data-ipsDialog-title="{lang="see_who_reacted" escape="true"}" data-ipsTooltip title="{lang="see_who_reacted_x" sprintf="\IPS\Member::loggedIn()->language()->addToStack( 'reaction_title_' . $reaction->id )" escape="true"}">
+					{{else}}
+						<span data-ipsTooltip title="{lang="reaction_title_{$reaction->id}" escape="true"}">
+					{{endif}}
+							<img src='{file="$reaction->_icon" extension="core_Reaction"}' alt="{lang="reaction_title_{$reaction->id}" escape="true"}">
+					{{if \IPS\Member::loggedIn()->group['gbw_view_reps']}}
+						</a>
+					{{else}}
+						</span>
+					{{endif}}
+				</li>
+			{{endforeach}}
+		</ul>
+	</div>
+{{endif}}

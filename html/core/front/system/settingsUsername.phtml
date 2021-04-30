@@ -1,0 +1,16 @@
+<ips:template parameters="$form, $made, $allowed, $since, $days" />
+<div class='ipsAreaBackground_light ipsPadding ipsBorder_bottom'>
+	<h2 class='ipsType_pageTitle'>{lang="change_username"}</h2>
+</div>
+<div class='ipsPadding'>
+	{{if \IPS\Member::loggedIn()->group['g_dname_changes'] != -1}}
+		<div class='ipsType_textBlock ipsType_normal'>
+			<ul class='ipsList_bullets'>
+				<li>{lang="change_username_explain" sprintf="$made, $allowed, $since->localeDate(), $days" pluralize="$allowed"}</li>
+			</ul>
+		</div>
+		<br>
+	{{endif}}
+	
+	{$form|raw}
+</div>

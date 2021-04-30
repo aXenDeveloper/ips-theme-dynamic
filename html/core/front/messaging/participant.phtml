@@ -1,0 +1,37 @@
+<ips:template parameters="$map, $conversation" />
+<li class='ipsPhotoPanel ipsPhotoPanel_tiny {{if !$map['map_user_active'] or $map['map_user_banned'] or \IPS\Member::load( $map['map_user_id'] )->members_disable_pm}}cMessage_leftConvo{{endif}}' data-participant="{$map['map_user_id']}">
+	{template="userPhoto" app="core" group="global" params="\IPS\Member::load( $map['map_user_id'] ), 'tiny'"}	
+	<div>
+		{{if $map['map_user_id'] == \IPS\Member::loggedIn()->member_id}}
+			<strong>{member="name" id="$map['map_user_id']"}</strong><br>
+		{{elseif !\IPS\Member::load( $map['map_user_id'] )->member_id}}
+			{lang="messenger_deleted_member"}<br>
+		{{else}}
+			<a href='#' id='elMessage{$conversation->id}_user{$map['map_user_id']}' class="cMessage_name" data-role='userActions' data-username='{member="name" id="$map['map_user_id']"}' data-ipsMenu><strong>{member="name" id="$map['map_user_id']"} <i class='fa fa-caret-down'></i></strong></a><br>
+		{{endif}}
+		<span class='ipsType_light ipsType_small' data-role='userReadInfo'>
+			{{if $map['map_user_banned']}}
+				<span class="ipsType_warning"><i class="fa fa-ban"></i> {lang="messenger_map_removed"}</span>
+			{{elseif !$map['map_user_active']}}
+				{{if $map['map_left_time']}}{lang="messenger_map_left"}{datetime="$map['map_left_time']"}{{else}}{lang="messenger_map_left_notime"}{{endif}}
+			{{elseif \IPS\Member::load( $map['map_user_id'] )->members_disable_pm}}
+				<span title='{lang="messenger_map_disabled_desc" sprintf="\IPS\Member::load( $map['map_user_id'] )->name"}' data-ipsTooltip>{lang="messenger_map_disabled"}</span>
+			{{else}}
+				{{if $map['map_read_time']}}{lang="messenger_map_read"}{datetime="$map['map_read_time']"}{{else}}{lang="messenger_map_not_read"}{{endif}}
+			{{endif}}
+		</span>
+	</div>
+	{{if $map['map_user_id'] != \IPS\Member::loggedIn()->member_id and \IPS\Member::load( $map['map_user_id'] )->member_id}}
+		<ul id='elMessage{$conversation->id}_user{$map['map_user_id']}_menu' class='ipsMenu ipsMenu_auto ipsHide'>
+			{{if $conversation->starter_id == \IPS\Member::loggedIn()->member_id and ( $map['map_user_active'] or $map['map_user_banned'] )}}
+				{{if $map['map_user_banned']}}
+					<li class='ipsMenu_item' data-ipsMenuValue='unblock'><a href='{$conversation->url('addParticipant')->csrf()->setQueryString( 'member', $map['map_user_id'] )}'>{lang="messenger_map_unremove"}</a></li>
+				{{else}}
+					<li class='ipsMenu_item' data-ipsMenuValue='block'><a href='{$conversation->url('blockParticipant')->csrf()->setQueryString( 'member', $map['map_user_id'] )}'>{lang="messenger_map_remove"}</a></li>
+				{{endif}}
+				<li class='ipsMenu_sep'><hr></li>
+			{{endif}}
+			<li class='ipsMenu_item' data-ipsMenuValue='msg'><a href='{url="app=core&module=messaging&controller=messenger&do=compose&to={$map['map_user_id']}" seoTemplate="messenger_compose"}' data-ipsDialog data-ipsDialog-title='{lang="compose_new"}'>{lang="messenger_map_message"}</a></li>
+		</ul>
+	{{endif}}
+</li>

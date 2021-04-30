@@ -1,0 +1,38 @@
+<ips:template parameters="$types, $currentAppModule, $currentType, $table" />
+{{if !\IPS\Request::i()->isAjax()}}
+	{template="pageHeader" group="global" app="core" params="\IPS\Member::loggedIn()->language()->addToStack('menu_followed_content')"}
+<div class='ipsBox_alt'>
+	<div data-role="profileContent">
+{{endif}}
+		<div class="ipsColumns ipsColumns_collapsePhone">
+			<div class="ipsColumn ipsColumn_wide">
+				<div class="ipsSideMenu ipsBox ipsPad" data-ipsTabBar data-ipsTabBar-contentArea='#elFollowedContent' data-ipsTabBar-itemselector=".ipsSideMenu_item" data-ipsTabBar-activeClass="ipsSideMenu_itemActive" data-ipsSideMenu>
+					<h3 class="ipsSideMenu_mainTitle ipsAreaBackground_light ipsType_medium">
+						<a href="#user_content" class="ipsPad_double" data-action="openSideMenu"><i class="fa fa-bars"></i> &nbsp;{lang="user_content_type"}&nbsp;<i class="fa fa-caret-down"></i></a>
+					</h3>
+					<div>
+						{{foreach $types as $app => $_types}}
+							{{if $app != "core"}}
+								<h4 class='ipsSideMenu_subTitle'>{lang="module__{$app}"}</h4>
+								<ul class="ipsSideMenu_list">
+									{{foreach $_types as $key => $class}}
+										<li><a href="{$table->baseUrl->setQueryString( array( 'type' => $key, 'change_section' => 1 ) )->setPage( 'page', 1 )}" class="ipsSideMenu_item {{if $currentType == $key}}ipsSideMenu_itemActive{{endif}}">{{if is_subclass_of( $class, 'IPS\Content\Item' )}}{lang="{$class::$title}_pl"}{{else}}{lang="{$class::$nodeTitle}"}{{endif}}</a></li>	
+									{{endforeach}}
+								</ul>
+							{{endif}}
+						{{endforeach}}
+						<h4 class='ipsSideMenu_subTitle'>{lang="other"}</h4>
+						<ul class='ipsSideMenu_list'>
+							<li><a href="{$table->baseUrl->setQueryString( array( 'type' => 'core_member', 'change_section' => 1 ) )->setPage( 'page', 1 )}" class="ipsSideMenu_item {{if $currentType == 'core_member'}}ipsSideMenu_itemActive{{endif}}">{lang="members"}</a></li>
+						</ul>
+					</div>			
+				</div>
+			</div>
+			<div class="ipsColumn ipsColumn_fluid" id='elFollowedContent'>
+				{template="followedContentSection" group="system" app="core" params="$types, $currentAppModule, $currentType, (string) $table"}
+			</div>
+		</div>
+{{if !\IPS\Request::i()->isAjax()}}
+	</div>
+</div>
+{{endif}}

@@ -1,0 +1,2 @@
+<ips:template parameters="$url, $newWindow=TRUE, $length=50" />
+<a href='{$url}'{{if $newWindow === TRUE}} target='_blank' rel="noopener"{{endif}}>{truncate="$url" length="$length"}</a>

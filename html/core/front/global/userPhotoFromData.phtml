@@ -1,0 +1,10 @@
+<ips:template parameters="$id, $name, $seoName, $photoUrl, $size='small', $classes='', $hovercard=TRUE" />
+{{if $id and \IPS\Member::loggedIn()->canAccessModule( \IPS\Application\Module::get( 'core', 'members' ) )}}
+	<a href="{url="app=core&module=members&controller=profile&id={$id}" seoTemplate="profile" seoTitle="$seoName ?: \IPS\Http\Url::seoTitle( $name )"}" {{if $hovercard}}data-ipsHover data-ipsHover-target="{url="app=core&module=members&controller=profile&id={$id}&do=hovercard" seoTemplate="profile" seoTitle="$seoName ?: \IPS\Http\Url::seoTitle( $name )"}"{{endif}} class="ipsUserPhoto ipsUserPhoto_{$size}{{if $classes}} {$classes}{{endif}}" title="{lang="view_user_profile" sprintf="$name"}">
+		<img src='{$photoUrl}' alt='{$name}'>
+	</a>
+{{else}}
+	<span class='ipsUserPhoto ipsUserPhoto_{$size} {{if $classes}}{$classes}{{endif}}'>
+		<img src='{$photoUrl}' alt='{$name}'>
+	</span>
+{{endif}}

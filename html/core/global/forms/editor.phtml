@@ -1,0 +1,25 @@
+<ips:template parameters="$name, $value, $options, $toolbars, $postKey, $uploadControl, $emoticons, $tags=array()" />
+{{if !empty( $tags )}}
+<div class='ipsColumns ipsColumns_collapseTablet' data-controller='core.global.editor.customtags' data-tagFieldType='editor' data-tagFieldID='{$name}'>
+	<div class='ipsColumn_fluid ipsColumn'>
+{{endif}}
+		<div class='ipsComposeArea_editor' data-role="editor">
+			{template="editorRaw" group="forms" app="core" location="global" params="$name, $value, $options, $toolbars, $postKey, $uploadControl, $emoticons"}
+		</div>
+{{if !empty( $tags )}}
+	</div>
+	<div class='ipsColumn_medium ipsColumn ipsAreaBackground_light ipsComposeArea_sidebar {{if !isset( \IPS\Request::i()->cookie['tagSidebar'] )}}ipsComposeArea_sidebarOpen{{else}}ipsComposeArea_sidebarClosed{{endif}}'>
+		<a href='#' class="ipsJS_show" data-action='tagsToggle' data-ipsTooltip data-ipsTooltip-label="{lang="toggle_sidebar"}">{lang="toggle_sidebar"}</a>
+		<h3 class='ipsAreaBackground ipsPad_half ipsType_reset' data-role='tagsHeader'>{lang="editor_tags"}</h3>
+		<ul class='ipsList_reset ipsScrollbar' data-role='tagsList'>
+		{{foreach $tags as $tagKey => $tagValue }}
+			<li class='ipsPad_half'>
+				<label class="ipsJS_show" data-tagKey="{$tagKey}">{$tagKey}</label>
+				<div class='ipsJS_hide ipsType_light'><strong>{$tagKey}</strong></div>
+				<div class='ipsType_light '>{$tagValue}</div>
+			</li>
+		{{endforeach}}
+		</ul>
+	</div>
+</div>
+{{endif}}

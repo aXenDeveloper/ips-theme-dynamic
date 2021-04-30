@@ -1,0 +1,36 @@
+<ips:template parameters="$currentUrl" />
+{{$termsLang = \IPS\Member::loggedIn()->language()->addToStack( 'terms_of_use' );}}
+{{$privacyLang = \IPS\Member::loggedIn()->language()->addToStack( 'terms_privacy' );}}
+{{$glLang = \IPS\Member::loggedIn()->language()->addToStack( 'guidelines' );}}
+{{$termsUrl = (string) \IPS\Http\Url::internal( 'app=core&module=system&controller=terms', 'front', 'terms' );}}
+{{$terms = "<a href='$termsUrl'>$termsLang</a>";}}
+
+{{if \IPS\Settings::i()->privacy_type == 'internal'}}
+	{{$privacyUrl = (string) \IPS\Http\Url::internal( 'app=core&module=system&controller=privacy', 'front', 'privacy' );}}
+{{else}}
+	{{$privacyUrl = \IPS\Settings::i()->privacy_link;}}
+{{endif}}
+{{$privacy = "<a href='$privacyUrl'>$privacyLang</a>";}}
+
+{{if \IPS\Settings::i()->gl_type == 'internal'}}
+	{{$glUrl = (string) \IPS\Http\Url::internal( 'app=core&module=system&controller=guidelines', 'front', 'guidelines' );}}
+{{else}}
+	{{$glUrl = \IPS\Settings::i()->gl_link;}}
+{{endif}}
+{{$guidelines = "<a href='$glUrl'>$glLang</a>";}}
+{{$cookiesUrl = (string) \IPS\Http\Url::internal( 'app=core&module=system&controller=cookies', 'front', 'cookies' );}}
+{{$cookies = \IPS\Member::loggedIn()->language()->addToStack( 'cookies_message', NULL, array( 'sprintf' => array( $cookiesUrl, $cookiesUrl ) ) );}}
+
+<div id='elGuestTerms' class='ipsPad_half ipsJS_hide' data-role='guestTermsBar' data-controller='core.front.core.guestTerms'>
+	<div class='ipsLayout_container'>
+		<div class='ipsGrid ipsGrid_collapsePhone'>
+			<div class='ipsGrid_span10'>
+				<h2 class='ipsType_sectionHead'>{lang="guest_terms_title"}</h2>
+				<p class='ipsType_reset ipsType_medium cGuestTerms_contents'>{lang="guest_terms_bar_text_value" htmlsprintf="$terms, $privacy, $guidelines, $cookies"}</p>
+			</div>
+			<div class='ipsGrid_span2'>
+				<a href='{url="app=core&module=system&controller=terms&do=dismiss&ref={$currentUrl}" csrf="true"}' rel='nofollow' class='ipsButton ipsButton_veryLight ipsButton_large ipsButton_fullWidth' data-action='dismissTerms'><i class='fa fa-check'></i>&nbsp; {lang="guest_terms_close"}</a>
+			</div>
+		</div>
+	</div>
+</div>

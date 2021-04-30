@@ -1,0 +1,7 @@
+<ips:template parameters="$table, $totalCount" />
+{template="pageHeader" group="global" params="\IPS\Member::loggedIn()->language()->addToStack('online_users')"}
+<br>
+<div class='ipsBox'>
+	<h2 class='ipsType_sectionTitle ipsType_reset ipsType_medium'>{lang="online_user_count" pluralize="$totalCount"}</h2>
+	{$table|raw}
+</div>

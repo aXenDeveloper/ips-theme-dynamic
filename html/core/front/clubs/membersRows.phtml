@@ -1,0 +1,154 @@
+<ips:template parameters="$club, $members" />
+<ol class='ipsAreaBackground_reset ipsList_reset ipsPad ipsGrid ipsGrid_collapsePhone ipsClear' data-ipsGrid data-ipsGrid-equalHeights='row' data-ipsGrid-minItemSize='170' data-ipsGrid-maxItemSize='400'>
+{{if \count( $members )}}
+	{{foreach $members as $member}}
+		<li class='ipsGrid_span2 ipsClearfix ipsMemberCard ipsBox ipsBox--child ipsPadding:half ipsMargin_top:half ipsType_center'>
+			{template="userPhotoFromData" group="global" app="core" params="$member['core_members']['member_id'], $member['core_members']['name'], $member['core_members']['members_seo_name'], \IPS\Member::photoUrl( $member['core_members'] ), 'medium', 'ipsMemberCard_photo'"}
+
+			<h3 class='ipsType_sectionHead ipsMemberCard_name'>
+				{$member['core_members']['name']}
+			</h3>
+
+			{{if $club->owner and $member['core_members']['member_id'] === $club->owner->member_id}}
+				<span class="ipsBadge ipsBadge_positive cClubMemberStatus">{lang="club_owner"}</span>
+			{{elseif $member['core_clubs_memberships']['status'] === \IPS\Member\Club::STATUS_LEADER}}
+				<span class="ipsBadge ipsBadge_positive cClubMemberStatus">{lang="club_leader"}</span>
+			{{elseif \in_array( $member['core_clubs_memberships']['status'], array( \IPS\Member\Club::STATUS_MODERATOR, \IPS\Member\Club::STATUS_EXPIRED_MODERATOR ) )}}
+				<span class="ipsBadge ipsBadge_intermediary cClubMemberStatus">{lang="club_moderator"}</span>
+			{{endif}}
+
+			{{if $club->isLeader() and !\in_array( $member['core_clubs_memberships']['status'], array( \IPS\Member\Club::STATUS_REQUESTED ) ) and ( !$club->owner or $member['core_members']['member_id'] !== $club->owner->member_id )}}
+				<a href="#elMember{$member['core_members']['member_id']}Menu_menu" id="elMember{$member['core_members']['member_id']}Menu" data-ipsMenu class="ipsButton ipsButton_verySmall ipsButton_light ipsButton_narrow ipsMemberCard_controls"><i class="fa fa-cog"></i> <i class='fa fa-angle-down'></i></a>
+				<ul class="ipsMenu ipsMenu_auto ipsMenu_withStem ipsHide" id="elMember{$member['core_members']['member_id']}Menu_menu">
+					{{if \in_array( $member['core_clubs_memberships']['status'], array( \IPS\Member\Club::STATUS_DECLINED, \IPS\Member\Club::STATUS_BANNED ) )}}
+						<li class="ipsMenu_item" ><a href="{$club->url()->setQueryString( array( 'do' => 'reInvite', 'member' => $member['core_members']['member_id'] ) )->csrf()}" data-confirm>{lang="club_banned_invite"}</a></li>
+					{{else}}
+						{{if $club->isPaid() and $club->renewal_price}}
+							{{if $member['nexus_purchases']['ps_expire'] or \in_array( $member['core_clubs_memberships']['status'], array( \IPS\Member\Club::STATUS_INVITED, \IPS\Member\Club::STATUS_WAITING_PAYMENT ) )}}
+								<li class="ipsMenu_item" ><a href="{$club->url()->setQueryString( array( 'do' => 'bypassPayment', 'member' => $member['core_members']['member_id'] ) )->csrf()}" data-confirm data-confirmSubMessage="{{if $member['core_clubs_memberships']['status'] === \IPS\Member\Club::STATUS_INVITED}}{lang="club_bypass_fee_renew_warn"}{{else}}{lang="club_bypass_fee_existing_warn"}{{endif}}">{lang="club_bypass_fee"}</a></li>
+							{{elseif !$member['nexus_purchases']['ps_expire']}}
+								<li class="ipsMenu_item" ><a href="{$club->url()->setQueryString( array( 'do' => 'restorePayment', 'member' => $member['core_members']['member_id'] ) )->csrf()}" data-confirm {{if $member['nexus_purchases']['ps_expire'] === NULL and !\in_array( $member['core_clubs_memberships']['status'], array( \IPS\Member\Club::STATUS_INVITED_BYPASSING_PAYMENT ) )}}data-confirmSubMessage="{lang="club_restore_fee_no_purchase_warn"}"{{endif}}>{lang="club_restore_fee"}</a></li>
+							{{endif}}
+						{{endif}}
+						{{if !\in_array( $member['core_clubs_memberships']['status'], array( \IPS\Member\Club::STATUS_INVITED, \IPS\Member\Club::STATUS_INVITED_BYPASSING_PAYMENT, \IPS\Member\Club::STATUS_WAITING_PAYMENT ) )}}
+							{{if $member['core_clubs_memberships']['status'] === \IPS\Member\Club::STATUS_LEADER}}
+								<li class="ipsMenu_item" ><a href="{$club->url()->setQueryString( array( 'do' => 'demoteLeader', 'member' => $member['core_members']['member_id'] ) )->csrf()}" data-confirm>{lang="club_demote_leader"}</a></li>
+							{{else}}
+								<li class="ipsMenu_item" ><a href="{$club->url()->setQueryString( array( 'do' => 'makeLeader', 'member' => $member['core_members']['member_id'] ) )->csrf()}" data-confirm data-confirmSubMessage="{lang="club_make_leader_confirm"}">{lang="club_make_leader"}</a></li>
+							{{endif}}
+							{{if \in_array( $member['core_clubs_memberships']['status'], array( \IPS\Member\Club::STATUS_MODERATOR, \IPS\Member\Club::STATUS_EXPIRED_MODERATOR ) )}}
+								<li class="ipsMenu_item" ><a href="{$club->url()->setQueryString( array( 'do' => 'demoteModerator', 'member' => $member['core_members']['member_id'] ) )->csrf()}" data-confirm>{lang="club_demote_moderator"}</a></li>
+							{{elseif \IPS\Settings::i()->clubs_modperms != -1}}
+								<li class="ipsMenu_item" ><a href="{$club->url()->setQueryString( array( 'do' => 'makeModerator', 'member' => $member['core_members']['member_id'] ) )->csrf()}" data-confirm data-confirmSubMessage="{lang="club_make_moderator_confirm"}">{lang="club_make_moderator"}</a></li>
+							{{endif}}
+							<li class="ipsMenu_item" ><a href="{$club->url()->setQueryString( array( 'do' => 'removeMember', 'member' => $member['core_members']['member_id'] ) )->csrf()}" data-confirm data-confirmSubMessage="{lang="club_remove_member_confirm"}">{lang="club_remove_member"}</a></li>
+						{{else}}
+							<li class="ipsMenu_item" ><a href="{$club->url()->setQueryString( array( 'do' => 'removeMember', 'member' => $member['core_members']['member_id'] ) )->csrf()}" data-confirm data-confirmSubMessage="{{if $member['core_clubs_memberships']['status'] === \IPS\Member\Club::STATUS_INVITED}}{lang="club_remove_accepted_confirm"}{{else}}{lang="club_remove_invitation_confirm"}{{endif}}">{lang="club_remove_invitation"}</a></li>
+						{{endif}}
+					{{endif}}
+				</ul>
+			{{endif}}
+
+			<hr class='ipsHr ipsHr_small'>
+
+			<h4 class='ipsType_minorHeading ipsType_unbold'>
+				{{if $member['core_clubs_memberships']['status'] === \IPS\Member\Club::STATUS_REQUESTED}}
+					{lang="club_date_joined_request"}
+				{{elseif \in_array( $member['core_clubs_memberships']['status'], array( \IPS\Member\Club::STATUS_INVITED, \IPS\Member\Club::STATUS_INVITED_BYPASSING_PAYMENT ) )}}
+					{lang="club_date_joined_invite"}
+				{{else}}
+					{lang="club_date_joined"}
+				{{endif}}
+			</h4>
+			<p class='ipsType_reset ipsTruncate ipsTruncate_line'>
+				{expression="\IPS\DateTime::ts( $member['core_clubs_memberships']['joined'] )->relative()"}
+			</p>
+
+			{{if $club->isLeader()}}
+				{{if $club->isPaid() and $club->renewal_price}}
+					{{if $member['core_clubs_memberships']['status'] === \IPS\Member\Club::STATUS_INVITED_BYPASSING_PAYMENT}}
+						<p class='ipsType_reset ipsContained ipsType_break'>
+							{lang="club_fee_waived"}
+						</p>
+					{{elseif \in_array( $member['core_clubs_memberships']['status'], array( \IPS\Member\Club::STATUS_MEMBER, \IPS\Member\Club::STATUS_EXPIRED, \IPS\Member\Club::STATUS_MODERATOR, \IPS\Member\Club::STATUS_EXPIRED_MODERATOR ) )}}
+						<hr class='ipsHr ipsHr_small'>
+						<h4 class='ipsType_minorHeading ipsType_unbold'>
+							{lang="club_membership_renews"}
+						</h4>
+						<p class='ipsType_reset ipsContained ipsType_break'>
+							{{if $member['nexus_purchases']['ps_expire']}}
+								{{if !$member['nexus_purchases']['ps_active']}}
+								<span class="ipsType_warning">
+								{{endif}}
+								{datetime="$member['nexus_purchases']['ps_expire']"}
+								{{if !$member['nexus_purchases']['ps_active']}}
+								</span>
+								{{endif}}
+							{{else}}
+								{lang="never"}
+							{{endif}}
+						</p>
+					{{endif}}
+				{{endif}}
+				{{if ( $member['added_by']['name'] or $member['invited_by']['name'] )}}
+					<hr class='ipsHr ipsHr_small'>
+					<p class='ipsType_reset ipsContained ipsType_break'>
+						{{if \in_array( $member['core_clubs_memberships']['status'], array( \IPS\Member\Club::STATUS_DECLINED, \IPS\Member\Club::STATUS_BANNED ) )}}
+							{{if $member['added_by']['name']}}
+								{{if $member['core_clubs_memberships']['status'] === \IPS\Member\Club::STATUS_BANNED}}
+									{lang="club_banned_by" sprintf="$member['added_by']['name']"}
+								{{else}}
+									{lang="club_declined_by" sprintf="$member['added_by']['name']"}
+								{{endif}}
+							{{else}}
+								{{if $member['core_clubs_memberships']['status'] === \IPS\Member\Club::STATUS_BANNED}}
+									{lang="club_banned"}
+								{{else}}
+									{lang="club_declined"}
+								{{endif}}
+							{{endif}}
+						{{else}}
+							{{if $member['invited_by']['name']}}
+								{lang="club_invited_by" sprintf="$member['invited_by']['name']"}
+							{{else}}
+								{lang="club_added_by" sprintf="$member['added_by']['name']"}
+							{{endif}}
+						{{endif}}
+					</p>
+				{{endif}}
+			{{endif}}
+
+
+			{{if $club->isLeader() && $member['core_clubs_memberships']['status'] === \IPS\Member\Club::STATUS_REQUESTED}}
+				<hr class='ipsHr ipsHr_small'>
+				<ul class='ipsGrid ipsMemberCard_buttons'>
+					<li class='ipsGrid_span6'>
+						{{if $club->isPaid()}}
+							<ul class="ipsButton_split ipsButton_fullWidth">
+								<li>
+									<a href="{$club->url()->setQueryString( array( 'do' => 'acceptRequest', 'member' => $member['core_members']['member_id'] ) )->csrf()}" class="ipsButton ipsButton_small ipsButton_positive" data-ipsTooltip title='{lang="club_accept_request"}' data-action='requestApprove'>
+										<i class='fa fa-check'></i>
+									</a>
+								</li>
+								<li>
+									<a href="#elMember{$member['core_members']['member_id']}AcceptMenu_menu" id="elMember{$member['core_members']['member_id']}AcceptMenu" data-ipsMenu class="ipsButton ipsButton_small ipsButton_positive ipsButton_narrow"><i class='fa fa-caret-down'></i></a>
+									<ul class="ipsMenu ipsMenu_auto ipsMenu_withStem ipsHide" id="elMember{$member['core_members']['member_id']}AcceptMenu_menu" data-role="acceptMenu">
+										<li class="ipsMenu_item"><a href="{$club->url()->setQueryString( array( 'do' => 'acceptRequest', 'waiveFee' => 1, 'member' => $member['core_members']['member_id'] ) )->csrf()}" data-action='requestApprove'>{lang="club_bypass_fee"}</a></li>
+									</ul>
+								</li>
+							</ul>
+						{{else}}
+							<a href="{$club->url()->setQueryString( array( 'do' => 'acceptRequest', 'member' => $member['core_members']['member_id'] ) )->csrf()}" class="ipsButton ipsButton_small ipsButton_positive ipsButton_fullWidth" data-ipsTooltip title='{lang="club_accept_request"}' data-action='requestApprove'><i class='fa fa-check'></i></a>
+						{{endif}}
+					</li>
+					<li class='ipsGrid_span6'>
+						<a href="{$club->url()->setQueryString( array( 'do' => 'declineRequest', 'member' => $member['core_members']['member_id'] ) )->csrf()}" class="ipsButton ipsButton_small ipsButton_negative ipsButton_fullWidth" data-ipsTooltip title='{lang="club_decline_request"}' data-action='requestDecline'><i class='fa fa-times'></i></a>
+					</li>
+				</ul>
+			{{endif}}
+		</li>
+	{{endforeach}}
+{{else}}
+	<li>{lang="no_results"}</li>
+{{endif}}
+</ol>

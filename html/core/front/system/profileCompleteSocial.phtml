@@ -1,0 +1,8 @@
+<ips:template parameters="$step, $socialButton, $action" />
+	{$socialButton|raw}
+
+	{{if !$step->required OR $step->completed()}}
+		<ul class="ipsPad ipsToolList ipsToolList_horizontal ipsList_reset ipsClearfix ipsAreaBackground">
+			<li><a href="{$action->setQueryString('_moveToStep', $step->getNextStep())}" data-action="wizardLink" class="ipsButton ipsButton_link ipsJS_none">{lang="profile_complete_skip_step"}</a></li>
+		</ul>
+	{{endif}}

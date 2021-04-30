@@ -1,0 +1,23 @@
+@media screen and (max-width: 767px) {
+	#form_promote_social_content_facebook .ipsFieldRow_label,
+	#form_promote_social_content_twitter .ipsFieldRow_label,
+	#form_promote_social_content_internal .ipsFieldRow_label {
+		float: left !important;
+	}
+
+	.cPromoted > .ipsPad {
+		padding: 15px;
+	}
+
+	.ipsDialog .cPromoteSubmit {
+		position: fixed;
+	}
+
+	html[dir="ltr"] .cPromote_hide {
+		right: 3px;
+	}
+
+	html[dir="rtl"] .cPromote_hide {
+		left: 3px;
+	}
+}

@@ -1,0 +1,21 @@
+<ips:template parameters="$comment, $topic" />
+{{$iposted = $topic->container()->contentPostedIn();}}
+{{$idField = $topic::$databaseColumnId;}}
+<div class='sm:ipsMargin_top:double'>
+	<h3 class='ipsType_sectionHead ipsType_break'>
+		{{if $topic->unread()}}
+			<a href='{$topic->url( 'getNewComment' )}' title='{lang="first_unread_post"}' data-ipsTooltip>
+				<span class='ipsItemStatus'><i class="fa {{if \in_array( $topic->$idField, $iposted )}}fa-star{{else}}fa-circle{{endif}}"></i></span>
+			</a>
+		{{else}}
+			{{if \in_array( $topic->$idField, $iposted )}}
+				<span><span class='ipsItemStatus ipsItemStatus_read ipsItemStatus_posted'><i class="fa fa-star"></i></span></span>
+			{{endif}}
+		{{endif}}
+			<a href='{$comment->url()}' title='{lang="view_this_topic" sprintf="$topic->title"}'>{$topic->title}</a>
+		{{if $topic->container()->allow_rating}}
+			{template="rating" group="global" location="front" app="core" params="'large', $topic->rating_hits ? ( $topic->rating_total / $topic->rating_hits ) : 0"}
+		{{endif}}
+	</h3>
+	<p class='ipsType_normal ipsType_light ipsType_blendLinks ipsType_reset'>{lang="in"} <a href='{$topic->container()->url()}'>{$topic->container()->_title}</a></p>
+</div>

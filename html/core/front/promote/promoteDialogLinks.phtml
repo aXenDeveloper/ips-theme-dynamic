@@ -1,0 +1,12 @@
+<ips:template parameters="$normalLink, $shortLink" />
+
+<div class="ipsAreaBackground_light ipsPad cPromote_links {{if $shortLink}}ipsGrid{{endif}} ipsSpacer_bottom ">
+	<span {{if $shortLink}}class="ipsGrid_span6"{{endif}}>
+		<i class="fa fa-link"></i> {lang="promote_link_long"} <input type="text" name="link_normal" readonly="true" value="{$normalLink}">
+	</span>
+	{{if $shortLink}}
+		<span class="ipsGrid_span6">
+			<i class="fa fa-link"></i> {lang="promote_link_short"} <input type="text" name="link_short" readonly="true" value="{$shortLink}">
+		</span>
+	{{endif}}
+</div>

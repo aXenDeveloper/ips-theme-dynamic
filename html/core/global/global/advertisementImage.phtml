@@ -1,0 +1,41 @@
+<ips:template parameters="$advertisement, $acpLink=NULL" />
+{{if \count( $advertisement->_images )}}
+<div class='ips{expression="mb_ucfirst(\IPS\SUITE_UNIQUE_KEY)"} ipsSpacer_both ipsSpacer_half'>
+	<ul class='ipsList_inline ipsType_center ipsList_reset ipsList_noSpacing'>
+		{{$hmacKey = hash_hmac( "sha256", $advertisement->link, \IPS\Settings::i()->site_secret_key . 'a' );}}
+		<li class='ips{expression="mb_ucfirst(\IPS\SUITE_UNIQUE_KEY)"}_large ipsResponsive_showDesktop ipsResponsive_inlineBlock ipsAreaBackground_light'>
+			{{if $advertisement->link}}
+				<a href='{{if $acpLink}}{$acpLink}{{else}}{url="app=core&module=system&controller=redirect&do=advertisement&ad={$advertisement->id}&key={$hmacKey}" base="front"}{{endif}}' {{if $advertisement->new_window}}target='_blank'{{endif}} rel='nofollow noopener'>
+			{{endif}}
+				<img src='{file="$advertisement->_images['large']" extension="$advertisement->storageExtension()"}' alt="{{if $advertisement->image_alt}}{$advertisement->image_alt}{{else}}{lang="advertisement_alt"}{{endif}}" class='ipsImage ipsContained'>
+			{{if $advertisement->link}}
+				</a>
+			{{endif}}
+		</li>
+		{{if !$acpLink }}
+		<li class='ips{expression="mb_ucfirst(\IPS\SUITE_UNIQUE_KEY)"}_medium ipsResponsive_showTablet ipsResponsive_inlineBlock ipsAreaBackground_light'>
+			{{if $advertisement->link}}
+				<a href='{{if $acpLink}}{$acpLink}{{else}}{url="app=core&module=system&controller=redirect&do=advertisement&ad={$advertisement->id}&key={$hmacKey}" base="front"}{{endif}}' {{if $advertisement->new_window}}target='_blank'{{endif}} rel='nofollow noopener'>
+			{{endif}}
+				<img src='{{if !empty( $advertisement->_images['medium'] )}}{file="$advertisement->_images['medium']" extension="$advertisement->storageExtension()"}{{else}}{file="$advertisement->_images['large']" extension="$advertisement->storageExtension()"}{{endif}}' alt="{{if $advertisement->image_alt}}{$advertisement->image_alt}{{else}}{lang="advertisement_alt"}{{endif}}" class='ipsImage ipsContained'>
+			{{if $advertisement->link}}
+				</a>
+			{{endif}}
+		</li>
+
+		<li class='ips{expression="mb_ucfirst(\IPS\SUITE_UNIQUE_KEY)"}_small ipsResponsive_showPhone ipsResponsive_inlineBlock ipsAreaBackground_light'>
+			{{if $advertisement->link}}
+				<a href='{{if $acpLink}}{$acpLink}{{else}}{url="app=core&module=system&controller=redirect&do=advertisement&ad={$advertisement->id}&key={$hmacKey}" base="front"}{{endif}}' {{if $advertisement->new_window}}target='_blank'{{endif}} rel='nofollow noopener'>
+			{{endif}}
+				<img src='{{if !empty( $advertisement->_images['small'] )}}{file="$advertisement->_images['small']" extension="$advertisement->storageExtension()"}{{elseif !empty( $advertisement->_images['medium'] )}}{file="$advertisement->_images['medium']" extension="$advertisement->storageExtension()"}{{else}}{file="$advertisement->_images['large']" extension="$advertisement->storageExtension()"}{{endif}}' alt="{{if $advertisement->image_alt}}{$advertisement->image_alt}{{else}}{lang="advertisement_alt"}{{endif}}" class='ipsImage ipsContained'>
+			{{if $advertisement->link}}
+				</a>
+			{{endif}}
+		</li>
+		{{endif}}
+	</ul>
+	{{if $acpLink}}
+		<div class="ipsType_center ipsType_small"><a href="{$acpLink}" rel="noreferrer">{$acpLink}</a></div>
+	{{endif}}
+</div>
+{{endif}}

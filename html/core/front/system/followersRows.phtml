@@ -1,0 +1,12 @@
+<ips:template parameters="$followers" />
+{{foreach $followers as $follower}}
+	<li class='ipsDataItem ipsClearfix'>
+		<div class='ipsDataItem_icon ipsPos_top'>
+			{template="userPhoto" app="core" group="global" params="\IPS\Member::load( $follower['follow_member_id'] ), 'tiny'"}
+		</div>
+		<div class='ipsDataItem_main'>
+			<strong class='ipsDataItem_title'>{{$link = \IPS\Member::load( $follower['follow_member_id'] )->link();}}{$link|raw}</strong><br>
+			<span class='ipsType_light'>{datetime="$follower['follow_added']"}</span>
+		</div>
+	</li>
+{{endforeach}}

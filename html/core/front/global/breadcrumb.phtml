@@ -1,0 +1,38 @@
+<ips:template parameters="$position='top', $markRead=TRUE" />
+<nav class='ipsBreadcrumb ipsBreadcrumb_{$position} ipsFaded_withHover'>
+	{{if $position == 'bottom'}}
+		{template="rssMenu" group="global" app="core" params=""}
+	{{endif}}
+
+	<ul class='ipsList_inline ipsPos_right'>
+		{{$defaultStream = \IPS\core\Stream::defaultStream();}}
+		<li {{if !\IPS\Member::loggedIn()->canAccessModule( \IPS\Application\Module::get( 'core', 'discover' ) ) }} class='ipsHide'{{endif}}>
+			<a data-action="defaultStream" class='ipsType_light {{if ! $defaultStream}}ipsHide{{endif}}'  href='{{if $defaultStream}}{$defaultStream->url()}{{endif}}'><i class="fa fa-newspaper-o" aria-hidden="true"></i> <span>{{if $defaultStream}}{$defaultStream->_title}{{endif}}</span></a>
+		</li>
+		{{if $markRead && \IPS\Member::loggedIn()->member_id}}
+			<li>
+				<a data-action="markSiteRead" class='ipsType_light' data-controller="core.front.core.markRead" href='{url="app=core&module=system&controller=markread" seoTemplate="mark_site_as_read" csrf="true" ref="(string) \IPS\Request::i()->url()"}' title='{lang="mark_site_read"}' data-ipsTooltip><i class='fa fa-check' aria-hidden="true"></i> {lang="mark_site_read_button"}</a>
+			</li>
+		{{endif}}
+	</ul>
+
+	<ul data-role="breadcrumbList">
+		<li>
+			<a title="{lang="home"}" href='{setting="base_url"}'>
+				<span>{lang="home"}{{if \count( \IPS\Output::i()->breadcrumb )}} <i class='fa fa-angle-right'></i>{{endif}}</span>
+			</a>
+		</li>
+		{{$last = end(\IPS\Output::i()->breadcrumb);}}
+		{{foreach \IPS\Output::i()->breadcrumb as $k => $b}}
+			<li>
+				{{if $b[0] === NULL}}
+					{$b[1]}
+				{{else}}
+					<a href='{$b[0]}'>
+						<span>{$b[1]} {{if $b != $last}}<i class='fa fa-angle-right' aria-hidden="true"></i>{{endif}}</span>
+					</a>
+				{{endif}}
+			</li>
+		{{endforeach}}
+	</ul>
+</nav>

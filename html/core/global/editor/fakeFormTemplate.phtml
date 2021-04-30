@@ -1,0 +1,16 @@
+<ips:template parameters="$id, $action, $tabs, $hiddenValues, $actionButtons, $uploadField" />
+<form accept-charset='utf-8' action="{$action}" method="post" {{if $uploadField}}enctype="multipart/form-data"{{endif}}>
+	<input type="hidden" name="{$id}_submitted" value="1">
+	{{foreach $hiddenValues as $k => $v}}
+		<input type="hidden" name="{$k}" value="{$v}">
+	{{endforeach}}
+	{{if $uploadField}}
+		<input type="hidden" name="MAX_FILE_SIZE" value="{$uploadField}">
+		<input type="hidden" name="plupload" value="{expression="md5( mt_rand() )"}">
+	{{endif}}
+	{{foreach $tabs as $elements}}
+		{{foreach $elements as $element}}
+			{$element->html()|raw}
+		{{endforeach}}
+	{{endforeach}}
+</form>

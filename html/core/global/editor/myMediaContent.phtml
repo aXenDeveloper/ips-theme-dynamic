@@ -1,0 +1,9 @@
+<ips:template parameters="$files, $pagination, $url, $extension" />
+<div data-controller='core.global.editor.mymediasection' data-url="{$url}&search=1">
+	<div class='ipsAreaBackground ipsPad_half'>
+		<input type="search" class="ipsField_fullWidth" placeholder="{lang="editor_media_search"}" data-role="myMediaSearch">
+	</div>
+	<div data-role="myMediaResults" data-extension="{$extension}">
+		{template="myMediaResults" app="core" group="editor" location="global" params="$files, $pagination, $url, $extension"}
+	</div>	
+</div>

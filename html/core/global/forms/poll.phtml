@@ -1,0 +1,58 @@
+<ips:template parameters="$name, $value, $pollData, $allowPollOnly" />
+<div data-controller='core.front.core.pollEditor' data-pollName='{$name}' data-showCounts='{{if member.modPermission('can_edit_poll_votes')}}true{{else}}false{{endif}}' data-maxQuestions="{expression="\IPS\Settings::i()->max_poll_questions"}" data-maxChoices="{expression="\IPS\Settings::i()->max_poll_choices"}" class='cPoll'>	
+	<noscript>
+		{{if $value}}
+		<input type="hidden" name="{$name}[fallback]" value="{$value->pid}">
+		{{endif}}
+		{lang="poll_no_js"}
+	</noscript>
+	<div class='ipsForm_vertical ipsJS_show'>
+		<ul class='ipsList_reset ipsAreaBackground_light ipsBox ipsBox_transparent ipsPad'>
+			<li class='ipsFieldRow'>
+				<input type='text' class='ipsField_primary ipsField_fullWidth' placeholder='{lang="poll_title"}' name="{$name}[title]" maxlength="255" {{if $value}}value="{$value->poll_question}"{{endif}}>
+			</li>
+			<li class='ipsFieldRow'>
+				<ul class='ipsFieldRow_content ipsList_reset'>
+					{{if settings.poll_allow_public}}
+						<li class='ipsFieldRow_inlineCheckbox'>
+							<span class='ipsCustomInput'>
+								<input type="checkbox" name="{$name}[public]" id='elPoll_{$name}_public' {{if $value and $value->poll_view_voters}}checked{{endif}}>
+								<span></span>
+							</span>
+							<label for='elPoll_{$name}_public'>{lang="make_votes_public"}</label>
+						</li>
+					{{endif}}
+					{{if settings.ipb_poll_only and $allowPollOnly}}
+						<li class='ipsFieldRow_inlineCheckbox'>
+							<span class='ipsCustomInput'>
+								<input type="checkbox" name="{$name}[poll_only]" id='elPoll_{$name}_pollOnly' {{if $value and $value->poll_only}}checked{{endif}}>
+								<span></span>
+							</span>
+							<label for='elPoll_{$name}_pollOnly'>{lang="poll_only_content"}</label>
+						</li>
+					{{endif}}
+					<li class='ipsFieldRow_inlineCheckbox'>
+						<span class='ipsCustomInput'>
+							<input type="checkbox" name="{$name}[has_close_date]" id='elPoll_{$name}_hasCloseDate' value='1' data-control="toggle" data-toggles='elPoll_closeDate' {{if ($value and $value->poll_close_date instanceof \IPS\DateTime)}}checked{{endif}}>
+							<span></span>
+						</span>
+						<label for='elPoll_{$name}_hasCloseDate'>{lang="poll_specify_close_time"}</label>
+					</li>
+				</ul>
+			</li>
+			<li class='ipsFieldRow' id='elPoll_closeDate'>
+				<label class='ipsFieldRow_label' for='poll_close_date'>{lang="poll_close_date"}</label>
+				<div class='ipsFieldRow_content'>
+					{template="date" group="forms" app="core" location="global" params="$name . '[poll_close_date]', ( $value and $value->poll_close_date instanceof \IPS\DateTime ) ? $value->poll_close_date : ( isset( \IPS\Request::i()->topic_poll['poll_close_date'] ) ? \IPS\Request::i()->topic_poll['poll_close_date'] : \IPS\DateTime::create()->add( new \DateInterval( 'P1D' ) ) ), NULL, NULL, FALSE, FALSE, $name . '[poll_close_time]'"}
+				</div>
+			</li>
+		</ul>
+	</div>
+	<br> 
+
+	<section data-role='pollContainer'>
+
+	</section>
+
+	<a href='#' data-action='addQuestion' class='ipsButton ipsButton_small ipsButton_light ipsJS_show' title='{lang="add_poll_question_title"}'><i class='fa fa-plus'></i> {lang="add_poll_question"}</a>
+</div>

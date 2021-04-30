@@ -1,0 +1,33 @@
+<ips:template parameters="$name, $value=FALSE, $disabled=FALSE, $togglesOn=array(), $togglesOff=array(), $label='', $hiddenName='', $id=NULL, $fancyToggle=FALSE, $tooltip=NULL" />
+<input type="hidden" name="{$hiddenName}" value="0">
+{{if !$fancyToggle}}<span class='ipsCustomInput'>{{endif}}
+	<input
+		type='checkbox'
+		name='{$name}'
+		value='1'
+		id="check_{$id}"
+		data-toggle-id="{$id}"
+		{{if $value}}checked aria-checked='true'{{else}}aria-checked='false'{{endif}}
+		{{if $disabled}}disabled aria-disabled='true'{{endif}}
+		{{if !empty($togglesOn) OR !empty($togglesOff)}}
+			data-control="toggle"
+			{{if $fancyToggle}}
+				data-toggle-visibleCheck="#check_{$id}_wrapper"
+			{{endif}}
+		{{endif}}
+		{{if !empty($togglesOn)}} data-togglesOn="{expression="implode( ',', $togglesOn )"}" aria-controls="{expression="implode( ',', $togglesOn )"}"{{endif}}
+		{{if !empty($togglesOff)}} data-togglesOff="{expression="implode( ',', $togglesOff )"}" aria-controls="{expression="implode( ',', $togglesOff )"}"{{endif}}
+		{{if $fancyToggle}}
+			data-ipsToggle
+		{{endif}}
+		{{if $tooltip}}title='{$tooltip}' data-ipsTooltip{{endif}}
+	>
+	{{if !$fancyToggle}}
+	<span></span>
+</span>
+{{endif}}
+{{if $label}}
+<label for="check_{$id}">
+	{lang="$label"}
+</label>
+{{endif}}

@@ -1,0 +1,82 @@
+<ips:template parameters="$forum, $table" />
+
+{{if $club = $forum->club()}}
+	{{if settings.clubs and settings.clubs_header == 'full'}}
+		{template="header" app="core" group="clubs" params="$club, $forum"}
+	{{endif}}
+	<div id='elClubContainer'>
+{{endif}}
+
+{{if !\IPS\Request::i()->advancedSearchForm}}
+	{{$followerCount = \IPS\forums\Topic::containerFollowerCount( $forum );}}
+	<div class="ipsPageHeader {{if $forum->feature_color}}ipsPageHeader--hasFeatureColor{{endif}} ipsBox ipsResponsive_pull ipsPadding ipsClearfix" {{if $forum->feature_color}}style="border-color: {$forum->feature_color}"{{endif}}>
+		<header>
+			<h1 class="ipsType_pageTitle">{$forum->_title}</h1>
+			{{if $forum->description}}
+				{template="richText" group="global" app="core" location="global" params="$forum->description, array('ipsType_normal')"}
+			{{endif}}
+			{{if $forum->show_rules == 1}}
+				<hr class='ipsHr'>
+				<a href="#elForumRules" class='ipsJS_show ipsType_normal' data-ipsDialog data-ipsDialog-title="{lang="forums_forum_{$forum->id}_rulestitle"}" data-ipsDialog-content="#elForumRules">{lang="forums_forum_{$forum->id}_rulestitle"}</a>
+				<div id='elForumRules' class='ipsAreaBackground_light ipsPad ipsJS_hide'>
+					{template="richText" group="global" app="core" location="global" params="\IPS\Member::loggedIn()->language()->addToStack('forums_forum_' . $forum->id . '_rules'), array('ipsType_medium')"}
+				</div>
+			{{elseif $forum->show_rules == 2}}
+				<hr class='ipsHr'>
+				<strong class='ipsType_normal'>{lang="forums_forum_{$forum->id}_rulestitle"}</strong>
+				{template="richText" group="global" app="core" location="global" params="\IPS\Member::loggedIn()->language()->addToStack('forums_forum_' . $forum->id . '_rules'), array('ipsType_normal', 'ipsSpacer_top')"}
+			{{endif}}
+			{{if $forum->sub_can_post and !$forum->password}}
+				<hr class='ipsHr ipsResponsive_hidePhone' />
+				<div class='ipsClearfix ipsResponsive_hidePhone'>
+					<div class='ipsPos_right'>{template="follow" app="core" group="global" params="'forums','forum', $forum->_id, $followerCount"}</div>
+				</div>
+			{{endif}}
+		</header>
+	</div>
+	
+	{{if $forum->children()}}
+		<div class='ipsList_reset cForumList ipsBox ipsSpacer_bottom ipsResponsive_pull' data-controller='core.global.core.table, forums.front.forum.forumList' data-baseURL=''>
+			<h2 class='ipsType_sectionTitle ipsType_reset'>{{if $forum->sub_can_post}}{lang="subforums_header"}{{else}}{lang="subforums_header_category"}{{endif}}</h2>
+			{{if \IPS\forums\Forum::getMemberView() === 'grid'}}
+				<div class='ipsPadding' data-role="forums">
+					<div class='ipsForumGrid'>
+						{{foreach $forum->children( 'view' ) as $childforum}}
+							{template="forumGridItem" group="index" app="forums" params="$childforum"}
+						{{endforeach}}
+					</div>
+				</div>
+			{{else}}
+				<ol class="ipsDataList ipsDataList_zebra ipsDataList_large ipsAreaBackground_reset">
+					{{foreach $forum->children( 'view' ) as $childforum}}
+						{template="forumRow" group="index" app="forums" params="$childforum, TRUE"}
+					{{endforeach}}
+				</ol>
+			{{endif}}				
+		</div>
+	{{endif}}
+{{endif}}
+<div data-controller='forums.front.forum.forumPage'>
+	<ul class="ipsToolList ipsToolList_horizontal ipsToolList_horizontal--flex ipsClearfix ipsSpacer_both">
+		{template="forumButtons" group="forums" params="$forum"}
+	</ul>
+	{$table|raw}
+</div>
+{{if \IPS\Member::loggedIn()->member_id || !\IPS\Request::i()->advancedSearchForm && $forum->sub_can_post and !$forum->password}}
+	<div class='ipsBox ipsPadding ipsResponsive_pull ipsResponsive_showPhone ipsMargin_vertical'>
+		<div class='ipsGap_row:3'>
+			<div>
+				<a href="{$forum->url()->setQueryString( array( 'do' => 'markRead', 'fromForum' => 1 ) )->csrf()}" title='{lang="mark_forum_read_title"}' class='ipsButton ipsButton_verySmall ipsButton_link ipsButton_fullWidth'><i class="fa fa-check"></i> {lang="mark_forum_read"}</a>
+			</div>
+			{{if !\IPS\Request::i()->advancedSearchForm && $forum->sub_can_post and !$forum->password}}
+				<div>
+					{template="follow" app="core" group="global" params="'forums','forum', $forum->_id, $followerCount"}
+				</div>
+			{{endif}}
+		</div>
+	</div>
+{{endif}}
+
+{{if $forum->club()}}
+	</div>
+{{endif}}

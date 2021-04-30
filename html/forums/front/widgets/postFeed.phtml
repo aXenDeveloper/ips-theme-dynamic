@@ -1,0 +1,79 @@
+<ips:template parameters="$comments, $title, $orientation='vertical'" />
+{{if !empty( $comments ) }}
+	<h3 class='ipsType_reset ipsWidget_title'>{$title}</h3>
+	{{if $orientation == 'vertical'}}
+		<div class='ipsWidget_inner ipsPad_half'>
+			<ul class='ipsDataList ipsDataList_reducedSpacing'>
+				{{foreach $comments as $comment}}
+					<li class='ipsDataItem'>
+						<div class='ipsDataItem_icon ipsPos_top'>
+							{template="userPhoto" group="global" app="core" params="$comment->author(), 'tiny'"}
+						</div>
+						<div class='ipsDataItem_main'>
+							<div class='ipsType_break ipsContained'><a href="{$comment->url()}" title='{lang="view_this_topic" sprintf="$comment->item()->title"}' class='ipsType_medium ipsTruncate ipsTruncate_line'>{{if $comment->item()->isSolved()}}<span class="ipsBadge ipsBadge_icon ipsBadge_small ipsBadge_positive" data-ipsTooltip title='{lang="this_is_solved"}'><i class='fa fa-check'></i></span>{{endif}} {$comment->item()->title}</a></div>
+							<p class='ipsType_reset ipsType_light ipsType_medium ipsType_blendLinks'>{lang="byline_nodate" htmlsprintf="$comment->author()->link()"} &middot; <a href='{$comment->item()->url()->setQueryString( array( 'do' => 'findComment', 'comment' => $comment->pid ) )}' class='ipsType_blendLinks'>{$comment->dateLine()|raw}</a></p>
+							<div class='ipsType_medium ipsType_textBlock ipsType_richText ipsType_break ipsContained ipsSpacer_top ipsSpacer_half' data-ipsTruncate data-ipsTruncate-type='remove' data-ipsTruncate-size='{{if $orientation == 'vertical'}}6 lines{{else}}2 lines{{endif}}' data-ipsTruncate-watch='false'>
+								{$comment->truncated( TRUE, NULL )|raw}
+							</div>
+						</div>
+					</li>
+				{{endforeach}}
+			</ul>
+		</div>
+	{{else}}
+		<div class='ipsWidget_inner'>
+			<ul class='ipsList_reset ipsPadding sm:ipsPadding:half'>
+				{{foreach $comments as $comment}}
+					<li class='ipsBox ipsBox--child ipsClearfix ipsMargin_bottom'>
+						<div class='ipsComment_header ipsPhotoPanel ipsPhotoPanel_mini'>
+							{template="userPhoto" app="core" group="global" params="$comment->author(), 'mini', $comment->warningRef()"}
+							<div>
+								<h3 class='ipsComment_author ipsType_blendLinks'>
+									<strong class='ipsType_normal'>{template="userLink" app="core" group="global" params="$comment->author(), $comment->warningRef()"}</strong>
+									{template="reputationBadge" group="global" app="core" params="$comment->author()"}
+								</h3>
+								<p class='ipsComment_meta ipsType_light ipsType_medium'>
+									<a href='{$comment->item()->url()->setQueryString( array( 'do' => 'findComment', 'comment' => $comment->pid ) )}' class='ipsType_blendLinks'>{$comment->dateLine()|raw}</a>
+									{{if $comment->editLine()}}
+										({lang="edited_lc"})
+									{{endif}}
+									{{if $comment->hidden()}}
+										&middot; {$comment->hiddenBlurb()}
+									{{endif}}
+								</p>
+					
+								{{if member.modPermission('mod_see_warn') and $comment->warning}}
+									{template="commentWarned" group="global" app="core" params="$comment"}
+								{{endif}}
+							</div>
+						</div>
+
+						<div class='ipsPadding_vertical sm:ipsPadding_vertical:half ipsPadding_horizontal ipsClearfix'>
+							<div class='ipsType_break ipsContained'><a href="{$comment->url()}" title='{lang="view_this_topic" sprintf="$comment->item()->title"}' class='ipsDataItem_title ipsTruncate ipsTruncate_line'>{{if $comment->item()->isSolved()}}<span class="ipsBadge ipsBadge_icon ipsBadge_small ipsBadge_positive" data-ipsTooltip title='{lang="this_is_solved"}'><i class='fa fa-check'></i></span>{{endif}} {wordbreak="$comment->item()->title"}</a></div>
+							<div data-role='commentContent' class='ipsType_normal ipsType_richText ipsContained' data-controller='core.front.core.lightboxedImages'>
+								{{if $comment->hidden() === 1 && $comment->author()->member_id == \IPS\Member::loggedIn()->member_id}}
+									<strong class='ipsType_medium ipsType_warning'><i class='fa fa-info-circle'></i> {lang="comment_awaiting_approval"}</strong>
+								{{endif}}
+								{$comment->content()|raw}
+								
+								{{if $comment->editLine()}}
+									{$comment->editLine()|raw}
+								{{endif}}
+							</div>
+						</div>
+						<div class='ipsItemControls'>
+							<ul class='ipsComment_controls ipsClearfix ipsItemControls_left' data-role="commentControls">
+								{{if $comment->canReportOrRevoke() === TRUE}}
+									<li><a href='{$comment->url('report')}' data-ipsDialog data-ipsDialog-remoteSubmit data-ipsDialog-size='medium' data-ipsDialog-flashMessage='{lang="report_submit_success"}' data-ipsDialog-title="{lang="report"}" data-action='reportComment' title='{lang="report_content"}'>{lang="report"}</a></li>
+								{{endif}}
+							</ul>
+							{{if $comment->hidden() !== 1 && \IPS\IPS::classUsesTrait( $comment, 'IPS\Content\Reactable' ) and settings.reputation_enabled}}
+								{template="reputation" group="global" app="core" params="$comment"}
+							{{endif}}
+						</div>
+					</li>
+				{{endforeach}}
+			</ul>
+		</div>
+	{{endif}}
+{{endif}}

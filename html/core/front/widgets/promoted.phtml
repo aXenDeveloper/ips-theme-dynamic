@@ -1,0 +1,97 @@
+<ips:template parameters="$promoted, $orientation='vertical'" />
+
+<h3 class='ipsType_reset ipsWidget_title'>{lang="block_promoted"}</h3>
+<div class='{{if $orientation !== 'vertical'}}ipsPad{{else}}ipsPad_half{{endif}} ipsWidget_inner'>
+	{{if $orientation !== 'vertical'}}
+		<div class='ipsCarousel ipsClearfix cPromotedWidget_horizontal' data-ipsCarousel>
+			<div class='ipsCarousel_inner'>
+	{{endif}}
+		<ul class='ipsList_reset {{if $orientation == 'vertical'}}cPromotedWidget_vertical ipsDataList{{endif}}' data-role='carouselItems'>
+		{{foreach $promoted as $item}}
+			{{$photoCount = ( $imageObjects = $item->imageObjects() ) ? \count( $imageObjects ) : 0;}}
+			{{$staff = \IPS\Member::load( $item->added_by );}}
+			<li class='cPromoted cPromotedWidgetItem {{if $orientation !== 'vertical'}}ipsBox ipsBox--child ipsCarousel_item{{else}}ipsDataItem{{endif}}' data-ipsLazyLoad>
+				{{if $photoCount}}
+					{{$firstPhoto = $item->imageObjects()[0];}}
+					<a href='{$item->object()->url( "getPrefComment" )}' class='ipsAreaBackground_dark cPromotedHeader' {{if settings.lazy_load_enabled}}data-background-src='{backgroundimage="$firstPhoto->url"}'{{else}}style='background-image: url({$firstPhoto->url})'{{endif}}>
+						<img {{if settings.lazy_load_enabled}}src='{expression="\IPS\Text\Parser::blankImage()"}' data-{{endif}}src='{$firstPhoto->url}' class='ipsHide' alt="{$item->objectTitle}">
+					</a>
+				{{endif}}
+				{{if $photoCount > 1}}
+					<ul class='ipsGrid cPromotedImages ipsClearfix ipsAreaBackground_light' data-ipsGrid data-ipsGrid-minItemSize='40' data-ipsGrid-maxItemSize='60'>
+						{{foreach $item->imageObjects() as $file}}
+							<li class='ipsGrid_span4'>
+								<a href='{$file->url}' {{if settings.lazy_load_enabled}}data-background-src='{backgroundimage="$file->url"}'{{else}}style='background-image: url({backgroundimage="$file->url"})'{{endif}} data-ipsLightbox data-ipsLightbox-group='g{$item->id}'>
+									<img {{if settings.lazy_load_enabled}}src='{expression="\IPS\Text\Parser::blankImage()"}' data-{{endif}}src='{$file->url}' alt='' class='ipsHide'>
+								</a>
+							</li>
+						{{endforeach}}
+					</ul>
+				{{endif}}
+				<div class='ipsPad cPromotedWidgetItem_content'>
+					<h2 class='ipsType_reset ipsType_large ipsType_blendLinks ipsType_break cPromotedTitle'>
+						<a href="{$item->object()->url( "getPrefComment" )}">{$item->ourPicksTitle}</a>
+					</h2>
+					<p class='ipsType_reset ipsType_light ipsType_medium ipsType_blendLinks'>
+						{$item->objectMetaDescription|raw}
+					</p>
+					<div class='cPromotedWidgetItem_contentInner'>
+						{{if $text = $item->getText('internal', true)}}
+							<div class="ipsType_richText ipsType_medium ipsSpacer_both ipsSpacer_half" data-ipsTruncate data-ipsTruncate-type='remove' data-ipsTruncate-size='4 lines'>{$text|raw}</div>
+						{{endif}}
+						{{$reactionClass = $item->objectReactionClass;}}
+						{{if $reactionClass || $item->objectDataCount}}
+							<ul class='ipsList_inline ipsType_light ipsSpacer_bottom'>
+								{{if $reactionClass}}
+								<li>{template="reactionOverview" group="global" app="core" params="$reactionClass, FALSE"}</li>
+								{{endif}}
+								
+								{{if $counts = $item->objectDataCount}}
+									<li><i class='fa fa-comment'></i> {$counts['words']}</li>
+								{{endif}}
+							</ul>
+						{{endif}}
+					</div>
+
+					<div class='ipsPhotoPanel ipsPhotoPanel_tiny ipsType_blendLinks ipsType_light'>
+						{template="userPhoto" group="global" app="core" params="$staff, 'tiny'"}
+						<div>
+							{{if $item->sent AND $item->share_to AND \count( $item->share_to ) > 1}}
+								<ul class='ipsList_inline cPromotedNetworks'>
+									{{foreach $item->share_to as $service}}
+										{{if $service == 'internal'}}
+											{{continue;}}
+										{{endif}}
+										{{if $url = $item->getPublishedUrl( $service )}}
+											{{$sharer = $item->getPromoter( $service );}}
+											<li class='ipsPos_right'>
+												<a href='{$url}' class='cShareLink cShareLink_{$service}' data-ipsTooltip title='{lang="promote_shared_on" sprintf="$sharer->key"}'>
+													<i class='fa fa-{$sharer::$icon}'></i>
+												</a>
+											</li>
+										{{endif}}
+									{{endforeach}}
+								</ul>
+							{{endif}}
+							<h3 class='ipsType_minorHeading'>{lang="promoted_by"}</h3>
+							{template="userLink" group="global" app="core" params="$staff"}, {datetime="$item->sent"}
+						</div>
+					</div>
+				</div>
+			</li>
+		{{endforeach}}
+		</ul>
+	{{if $orientation !== 'vertical'}}
+			</div>
+			<span class='ipsCarousel_shadow ipsCarousel_shadowLeft'></span>
+			<span class='ipsCarousel_shadow ipsCarousel_shadowRight'></span>
+			<a href='#' class='ipsCarousel_nav ipsHide' data-action='prev'><i class='fa fa-chevron-left'></i></a>
+			<a href='#' class='ipsCarousel_nav ipsHide' data-action='next'><i class='fa fa-chevron-right'></i></a>
+		</div>
+	{{endif}}
+</div>
+<div class='ipsPad_half ipsWidget_inner ipsWidget_bottomBar'>
+	<div class='ipsType_center ipsAreaBackground_light ipsPad_half'>
+		<a href='{url="app=core&module=promote&controller=ourpicks" seoTemplate="promote_show"}'>{lang="view_all_picks"}</a>
+	</div>
+</div>

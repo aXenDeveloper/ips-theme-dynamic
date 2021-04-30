@@ -1,0 +1,7 @@
+<ips:template parameters="$index, $report, $content" />
+<div class="ipsPad ipsType_center">
+	<div class="ipsType_large">{lang="automoderation_already_reported" htmlsprintf="\IPS\DateTime::ts( $report['date_reported'] )->html()"}</div>
+	<div class="ipsPad">
+		<a data-confirm href="{$content->url()->setQueryString( array( 'do' => 'deleteReport', 'cid' => $report['id'] ) )->csrf()}" class='ipsButton ipsButton_primary'>{lang="automoderation_already_reported_delete"}</a>
+	</div>
+</div>

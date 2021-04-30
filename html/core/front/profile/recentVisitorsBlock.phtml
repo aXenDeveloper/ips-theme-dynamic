@@ -1,0 +1,53 @@
+<ips:template parameters="$member, $visitors" />
+
+{{if $member->members_bitoptions['pp_setting_count_visitors']}}
+	
+	<h2 class='ipsWidget_title ipsType_reset'>
+		{{if \IPS\Member::loggedIn()->modPermission('can_modify_profiles') or ( \IPS\Member::loggedIn()->member_id == $member->member_id and $member->group['g_edit_profile'] )}}
+			<a href='{url="app=core&module=members&controller=profile&do=visitors&id=$member->member_id" seoTemplate="profile" seoTitle="$member->members_seo_name" csrf="true"}' class='ipsType_light ipsType_normal ipsPos_right ipsFaded ipsFaded_more ipsFaded_withHover' data-ipsTooltip title='{lang="hide_recent_visitors"}' data-action='disable'><i class='fa fa-times'></i></a>
+		{{endif}}
+
+		{lang="profile_recent_visitors"}
+	</h2>
+	<div class='ipsWidget_inner ipsPad'>
+		<span class='ipsType_light'>
+			{lang="profile_views" pluralize="$member->members_profile_views"}
+		</span>
+		{{if \is_array( $visitors ) AND \count( $visitors ) }}
+			<ul class='ipsDataList ipsDataList_reducedSpacing ipsSpacer_top'>
+			{{foreach $visitors as $visitor}}
+				<li class='ipsDataItem'>
+					<div class='ipsType_center ipsDataItem_icon'>
+						{template="userPhoto" app="core" group="global" params="$visitor['member'], 'tiny'"}
+					</div>
+					<div class='ipsDataItem_main'>
+						<h3 class='ipsDataItem_title'>{$visitor['member']->link()|raw}</h3>
+						<p class='ipsDataItem_meta ipsType_light'>{datetime="$visitor['visit_time']"}</p>
+					</div>
+				</li>
+			{{endforeach}}
+			</ul>
+		{{else}}
+			<div class='ipsType_center ipsType_medium'>
+				<p class='ipsType_light'>
+					{lang="no_recent_visitors"}
+				</p>
+			</div>
+		{{endif}}
+	</div>
+{{else}}
+	<h2 class='ipsWidget_title ipsType_reset'>
+		{lang="profile_recent_visitors"}
+	</h2>
+	<div class='ipsWidget_inner ipsPad'>
+		<div class='ipsType_center ipsType_medium'>
+			<p class='ipsType_light'>
+				{lang="disabled_recent_visitors"}
+			</p>
+            {{if \IPS\Member::loggedIn()->modPermission('can_modify_profiles') or ( \IPS\Member::loggedIn()->member_id == $member->member_id and $member->group['g_edit_profile'] )}}
+			<a href='{url="app=core&module=members&controller=profile&do=visitors&id={$member->member_id}&state=1" seoTemplate="profile" seoTitle="$member->members_seo_name" csrf="TRUE"}' class='' data-action='enable'>{lang="enable"}</a>
+            {{endif}}
+		</div>
+	</div>
+{{endif}}
+		

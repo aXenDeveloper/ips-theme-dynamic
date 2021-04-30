@@ -1,0 +1,49 @@
+html[dir="ltr"] body {
+	margin-left: 300px;
+}
+html[dir="rtl"] body {
+	margin-right: 300px;
+}
+
+#elCachingLog {
+	position: fixed;
+	top: 0;
+	bottom: 0;
+	padding-top: 20px;
+	padding-bottom: 70px;
+	width: 300px;
+	background: #212223;
+	overflow: auto;
+}
+html[dir="ltr"] #elCachingLog {
+	left: 0;
+	padding-left: 10px;
+}
+html[dir="rtl"] #elCachingLog {
+	right: 0;
+	padding-right: 10px;
+}
+
+.cCachingLog {
+	font-family: monospace;
+	color: white;
+	cursor: pointer;
+}
+.cCachingLogMethod {
+	text-transform: uppercase;
+}
+.cCachingLogMethod_get {
+	color: orange;
+}
+.cCachingLogMethod_set {
+	color: green;
+}
+.cCachingLogMethod_check {
+	color: yellow;
+}
+.cCachingLogMethod_delete {
+	color: red;
+}
+.cCachingLogKey {
+	
+}

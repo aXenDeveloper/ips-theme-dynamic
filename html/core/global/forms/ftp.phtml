@@ -1,0 +1,49 @@
+<ips:template parameters="$name, $value, $showBypassValidationCheckbox=FALSE" />
+<div data-controller="core.global.core.ftp">
+	<ul class='ipsList_reset'>
+		<li class='ipsFieldRow_inlineCheckbox'>
+			<input type="radio" name="{$name}[protocol]" value="ftp" id="{$name}_ftp" data-role="portToggle" data-port="21" {{if !isset( $value['protocol'] ) or $value['protocol'] == 'ftp'}}checked{{endif}}> <label for='{$name}_ftp'>{lang="FTP"}</label>
+		</li>
+		<li class='ipsFieldRow_inlineCheckbox'>
+			<input type="radio" name="{$name}[protocol]" value="ssl_ftp" id="{$name}_ssl_ftp" data-role="portToggle" data-port="21" {{if isset( $value['protocol'] ) and $value['protocol'] == 'ssl_ftp'}}checked{{endif}}> <label for='{$name}_ssl_ftp'>{lang="ftp_with_ssl"}</label>
+		</li>
+		<li class='ipsFieldRow_inlineCheckbox'>
+			<input type="radio" name="{$name}[protocol]" value="sftp" id="{$name}_sftp" data-role="portToggle" data-port="22" {{if isset( $value['protocol'] ) and $value['protocol'] == 'sftp'}}checked{{endif}}> <label for='{$name}_sftp'>{lang="SFTP"}</label>
+		</li>
+	</ul>
+	<br>
+	<ul class='ipsField_translatable ipsList_inline ipsList_reset'>
+		<li class='ipsClearfix'>
+			<span class="ipsFlag fa fa-globe"></span>
+			<input type='text' name="{$name}[server]" placeholder="ftp.example.com" data-role="serverInput" {{if isset( $value['server'] )}}value="{$value['server']}"{{endif}} class="ipsField_medium">
+		</li>
+		<li class='ipsClearfix'>
+			<span class="ipsFlag fa fa-bolt"></span>
+			<input type='text' name="{$name}[port]" data-role="portInput" placeholder="{lang="port"}" value="{{if isset( $value['port'] )}}{$value['port']}{{else}}21{{endif}}" class="ipsField_tiny">
+		</li>
+	</ul>
+	<ul class='ipsField_translatable ipsList_reset'>
+		<li class='ipsClearfix'>
+			<span class="ipsFlag fa fa-user"></span>
+			<input type='text' name="{$name}[un]" data-role="usernameInput" placeholder="{lang="ftp_username"}" {{if isset( $value['un'] )}}value="{$value['un']}"{{endif}}>
+		</li>
+		<li class='ipsClearfix'>
+			<span class="ipsFlag fa fa-lock"></span>
+			<input type='password' name="{$name}[pw]" data-role="passwordInput" placeholder="{lang="password"}" {{if isset( $value['pw'] )}}value="{$value['pw']}"{{endif}}>
+		</li>
+		<li class='ipsClearfix'>
+			<span class="ipsFlag fa fa-folder-o"></span>
+			<input type='text' name="{$name}[path]" data-role="pathInput" placeholder="/path/" {{if isset( $value['path'] )}}value="{$value['path']}"{{endif}}>
+		</li>
+	</ul>
+	{{if $showBypassValidationCheckbox}}
+		<ul class='ipsList_reset'>
+			<li>
+				<label for='{$name}_bypassValidation'>
+					<input type='checkbox' name="{$name}[bypassValidation]" value="1" id='{$name}_bypassValidation'>
+					{lang="ftp_bypass_validation"}
+				</label>
+			</li>
+		</ul>
+	{{endif}}
+</div>

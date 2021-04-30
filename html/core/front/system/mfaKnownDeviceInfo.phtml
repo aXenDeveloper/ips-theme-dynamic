@@ -1,0 +1,19 @@
+<ips:template parameters="$url" />
+<div id='elTwoFactorAuthentication' class='ipsModal' data-controller='core.global.core.2fa'>
+	<div>
+		<h1 class='ipsType_center ipsType_pageTitle ipsSpacer_top'>{lang="mfa_account_recovery"}</h1>
+		<p class='ipsType_medium ipsType_richText ipsType_center c2FA_info'>
+			{lang="mfa_recovery_known_device_details"}
+		</p>
+		<div class="ipsPad">
+			<ul class="ipsList_reset">
+				<li class="ipsSpacer_bottom ipsSpacer_half">
+					<a href="{url="app=core&module=system&controller=login&do=logout" csrf="true" seoTemplate="logout"}" class="ipsButton ipsButton_primary ipsButton_fullWidth ipsButton_medium">{lang="sign_out"}</a>
+				</li>
+				<li>
+					<a href='{$url->setQueryString( array( '_mfa' => 'alt', '_mfaMethod' => '' ) )}' class='ipsButton ipsButton_link ipsButton_medium ipsButton_fullWidth'>{lang="mfa_try_another_method"} <i class='fa fa-angle-right'></i></a>
+				</li>
+			</ul>
+		</div>
+	</div>
+</div>

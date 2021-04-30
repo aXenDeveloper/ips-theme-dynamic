@@ -1,0 +1,20 @@
+<ips:template parameters="$images, $promote=NULL" />
+<li class="cPromote_attachList">
+	<ul class="ipsGrid" data-ipsGrid data-ipsGrid-minItemSize='100' data-ipsGrid-maxItemSize='200' data-ipsGrid-equalHeights='row'>
+		{{foreach $images as $image}}
+			{{foreach $image as $extension => $file}}
+				{{$checked = ( $promote ? ( $promote->hasImage( $file, $extension ) ? 'checked="checked"' : '' ) : '' );}}
+				<li class='ipsGrid_span4 cPromote_attachImage {{if !empty( $checked )}}cPromote_attachImageSelected{{endif}}'>
+					{{$image = \IPS\File::get( $extension, $file )->url;}}
+					<div class='ipsThumb ipsThumb_bg' data-role="preview" style='background-image: url( {expression="str_replace( array( '(', ')' ), array( '\(', '\)' ),$image)"} )'>
+						<img src="{file="$file" extension="$extension"}" class="ipsImage">
+					</div>
+					<a href='#' class="cPromote_attachList_checkbox ipsImageAttach_controls" data-action='selectImage'>
+						<span class='ipsAttach_selection {{if !empty( $checked )}}ipsAttach_selectionOn{{endif}}'><i class='fa fa-check'></i></span>
+						<input type="checkbox" name="attach_files[{$file}]" {$checked} value="1" class='ipsJS_hide'>
+					</a>
+				</li>
+			{{endforeach}}
+		{{endforeach}}
+	</ul>
+</li>

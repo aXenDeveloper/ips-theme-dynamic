@@ -1,0 +1,76 @@
+<ips:template parameters="$event" />
+<div class='cEvent_details'>
+	<h1 class='ipsType_pageTitle ipsContained_container ipsType_break'>
+		{{if $event->locked()}}<span><span><i class='fa fa-lock'></i></span></span> {{endif}}
+
+		{{if $event->mapped('pinned') || $event->mapped('featured') || $event->hidden() === -1 || $event->hidden() === 1 || $event->hidden() === -2}}
+			{{if $event->hidden() === -1}}
+				<span><span class="ipsBadge ipsBadge_icon ipsBadge_warning" data-ipsTooltip title='{$event->hiddenBlurb()}'><i class='fa fa-eye-slash'></i></span></span>
+			{{elseif $event->hidden() === -2}}
+				<span><span class="ipsBadge ipsBadge_icon ipsBadge_warning" data-ipsTooltip title='{$event->deletedBlurb()}'><i class='fa fa-trash'></i></span></span>
+			{{elseif $event->hidden() === 1}}
+				<span><span class="ipsBadge ipsBadge_icon ipsBadge_warning" data-ipsTooltip title='{lang="pending_approval"}'><i class='fa fa-warning'></i></span></span>
+			{{endif}}
+			{{if $event->mapped('pinned')}}
+				<span><span class="ipsBadge ipsBadge_icon ipsBadge_positive" data-ipsTooltip title='{lang="pinned"}'><i class='fa fa-thumb-tack'></i></span></span>
+			{{endif}}
+			{{if $event->mapped('featured')}}
+				<span><span class="ipsBadge ipsBadge_icon ipsBadge_positive" data-ipsTooltip title='{lang="featured"}'><i class='fa fa-star'></i></span></span>
+			{{endif}}
+		{{endif}}
+		{{if $event->canEdit()}}
+			<span class='ipsType_break ipsContained ipsPageHead_barText' data-controller="core.front.core.moderation">
+				{{if $event->prefix() OR ( $event->canEdit() AND $event::canTag() AND $event::canPrefix() )}}
+					<span {{if !$event->prefix()}}class='ipsHide'{{endif}} {{if ( $event->canEdit() AND $event::canTag() AND $event::canPrefix() )}}data-editablePrefix{{endif}}>
+						{template="prefix" group="global" app="core" params="$event->prefix( TRUE ), $event->prefix()"}
+					</span>
+				{{endif}}
+				<span data-role="editableTitle" title='{lang="click_hold_edit"}'>{$event->title}</span>
+			</span>
+		{{else}}
+			<span class='ipsType_break ipsContained ipsPageHead_barText'>
+				{{if $event->prefix() OR ( $event->canEdit() AND $event::canTag() AND $event::canPrefix() )}}
+					<span {{if !$event->prefix()}}class='ipsHide'{{endif}} {{if ( $event->canEdit() AND $event::canTag() AND $event::canPrefix() )}}data-editablePrefix{{endif}}>
+						{template="prefix" group="global" app="core" params="$event->prefix( TRUE ), $event->prefix()"}
+					</span>
+				{{endif}}
+				{$event->title}
+			</span>
+		{{endif}}
+	</h1>
+	<p class='ipsType_normal ipsType_reset ipsPageHead_barText_small'>
+		<time datetime='{expression="$event->_start_date->format( 'Y-m-d' )"}'>
+			{{if $event->nextOccurrence( \IPS\calendar\Date::getDate(), 'startDate' )}}
+				<span data-controller="core.global.core.datetime" data-time="{$event->nextOccurrence( \IPS\calendar\Date::getDate(), 'startDate' )->format('c')}" data-format="{expression="\IPS\calendar\Date::calendarDateFormat()"}{{if !$event->all_day}}, {expression="\IPS\calendar\Date::localeTimeFormat( FALSE )"} {{endif}}">
+					{$event->nextOccurrence( \IPS\calendar\Date::getDate(), 'startDate' )->calendarDate()}{{if !$event->all_day}}, {$event->nextOccurrence( \IPS\calendar\Date::getDate(), 'startDate' )->localeTime( FALSE )} {{endif}}
+				</span>
+			{{else}}
+				<span data-controller="core.global.core.datetime" data-time="{$event->lastOccurrence( 'startDate' )->format('c')}" data-format="{expression="\IPS\calendar\Date::calendarDateFormat()"}{{if !$event->all_day}} {expression="\IPS\calendar\Date::localeTimeFormat( FALSE )"} {{endif}}">
+					{$event->lastOccurrence( 'startDate' )->calendarDate()}{{if !$event->all_day}} {$event->lastOccurrence( 'startDate' )->localeTime( FALSE )} {{endif}}
+				</span>
+			{{endif}}
+		</time>
+		{{if $event->_end_date}}
+			&nbsp;&nbsp;<i class='fa fa-arrow-circle-right ipsType_large ipsType_light'></i>&nbsp;&nbsp;
+			<time datetime='{expression="$event->_end_date->format( 'Y-m-d' )"}'>
+				{{$sameDay = !( ($event->_start_date->mday != $event->_end_date->mday) or ($event->_start_date->mon != $event->_end_date->mon) or ($event->_start_date->year != $event->_end_date->year) );}}
+				{{if $endDate = $event->nextOccurrence( $event->nextOccurrence( \IPS\calendar\Date::getDate(), 'startDate' ) ?: \IPS\calendar\Date::getDate(), 'endDate' )}}
+					{{if !$sameDay}}
+						<span data-controller="core.global.core.datetime" data-time="{$endDate->format('c')}" data-format="{expression="\IPS\calendar\Date::calendarDateFormat()"}{{if !$event->all_day}}, {{endif}}">
+							{$endDate->calendarDate()}{{if !$event->all_day}}, {{endif}}
+						</span>
+					{{endif}}
+					{{if !$event->all_day}}
+						<span data-controller="core.global.core.datetime" data-time="{$endDate->format('c')}" data-format="{expression="\IPS\calendar\Date::localeTimeFormat( FALSE )"}">
+							{$endDate->localeTime( FALSE )}
+						</span>
+					{{endif}}
+				{{else}}
+					<span data-controller="core.global.core.datetime" data-time="{$event->lastOccurrence( 'endDate' )->format('c')}" data-format="{expression="\IPS\calendar\Date::calendarDateFormat()"}{{if !$event->all_day}} {expression="\IPS\calendar\Date::localeTimeFormat( FALSE )"}{{endif}}">
+						{$event->lastOccurrence( 'endDate' )->calendarDate()}{{if !$event->all_day}} {$event->lastOccurrence( 'endDate' )->localeTime( FALSE )}{{endif}}
+					</span>
+				{{endif}}
+			</time>
+		{{endif}}
+	</p>
+</div>

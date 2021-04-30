@@ -1,0 +1,12 @@
+<ips:template parameters="$details" />
+<div class="ipsType_richText ipsType_normal" data-ipsTruncate data-ipsTruncate-size="3 lines">
+	{$details['releasenotes']|raw}
+</div>
+<ul class='ipsList_inline ipsSpacer_top'>
+	<li>
+		<a href='{url="app=core&module=system&controller=upgrade&_new=1" base="admin"}' class='ipsButton ipsButton_small ipsButton_veryLight'>{lang="upgrade_now"}</a>
+	</li>
+    <li>
+        <a href='{url="release_notes" ips="true"}' target='_blank' rel='nofollow noopener' class='ipsButton ipsButton_small ipsButton_overlaid'>{lang="upgrade_more_information"}</a>
+    </li>
+</ul>

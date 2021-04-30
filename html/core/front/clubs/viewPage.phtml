@@ -1,0 +1,29 @@
+<ips:template parameters="$page" />
+
+{{if \IPS\Settings::i()->clubs_header != 'sidebar'}}
+	{template="header" group="clubs" app="core" params="$page->club"}
+{{endif}}
+
+<h1 class='ipsType_pageTitle'>{$page->title}</h1>
+<br>
+<div id='elClubContainer'>
+	<div class='ipsBox ipsPad'>
+		<div class='ipsType_normal ipsType_richText ipsContained' id='elPageContent'>
+			{$page->content|raw}
+		</div>
+		{{if $page->canEdit() OR $page->canDelete()}}
+			<br>
+			<hr class='ipsHr ipsHr_small'>
+			<a class="ipsButton ipsButton_verySmall ipsButton_light" href="#" id='elPageManage' data-ipsMenu>{lang="club_page_manage"} <i class='fa fa-caret-down'></i></a>
+		{{endif}}
+	</div>
+</div>
+
+<ul class='ipsMenu ipsMenu_auto ipsHide' id='elPageManage_menu'>
+	{{if $page->canEdit()}}
+		<li class='ipsMenu_item'><a href='{$page->url('edit')->csrf()}' data-ipsDialog data-ipsDialog-title='{lang="edit"}'>{lang="edit"}</a></li>
+	{{endif}}
+	{{if $page->canDelete()}}
+		<li class='ipsMenu_item'><a href='{$page->url('delete')->csrf()}' data-confirm>{lang="delete"}</a></li>
+	{{endif}}
+</ul>

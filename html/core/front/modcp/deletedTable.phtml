@@ -1,0 +1,103 @@
+<ips:template parameters="$table, $headers, $rows, $quickSearch" />
+<div data-baseurl='{$table->baseUrl}' data-resort='{$table->resortKey}' data-controller='core.global.core.table{{if $table->canModerate()}},core.front.core.moderation{{endif}}' {{if $table->getPaginationKey() != 'page'}}data-pageParam='{$table->getPaginationKey()}'{{endif}}>
+	{{if $table->title}}
+		<h2 class='ipsType_sectionTitle ipsType_reset ipsClear'>{lang="$table->title"}</h2>
+	{{endif}}
+	<div class="ipsButtonBar ipsPad_half ipsClearfix ipsClear">
+		<ul class="ipsButtonRow ipsPos_right ipsClearfix">
+			<li>
+				<a class="ipsJS_show" href="#elCheck_menu" id="elCheck_{$table->uniqueId}" title='{lang="{$table->langPrefix}select_rows_tooltip"}' data-ipsTooltip data-ipsAutoCheck data-ipsAutoCheck-context="#elTable_{$table->uniqueId}" data-ipsMenu data-ipsMenu-activeClass="ipsButtonRow_active">
+					<span class="cAutoCheckIcon ipsType_medium"><i class="fa fa-square-o"></i></span> <i class="fa fa-caret-down"></i>
+					<span class='ipsNotificationCount' data-role='autoCheckCount'>0</span>
+				</a>
+				<ul class="ipsMenu ipsMenu_auto ipsMenu_withStem ipsHide" id="elCheck_{$table->uniqueId}_menu">
+					<li class="ipsMenu_title">{lang="{$table->langPrefix}select_rows"}</li>
+					<li class="ipsMenu_item" data-ipsMenuValue="all"><a href="#">{lang="all"}</a></li>
+					<li class="ipsMenu_item" data-ipsMenuValue="none"><a href="#">{lang="none"}</a></li>
+				</ul>
+			</li>
+		</ul>
+		<ul class="ipsButtonRow ipsPos_right ipsClearfix">
+			{{if $table->showAdvancedSearch AND ( ( isset( $table->sortOptions ) and \count( $table->sortOptions ) > 1 ) OR $table->advancedSearch )}}
+				<li>
+					{{if isset($table->sortOptions) }}
+					<a href="#elSortByMenu_menu" id="elSortByMenu_{$table->uniqueId}" data-role="sortButton" data-ipsMenu data-ipsMenu-activeClass="ipsButtonRow_active" data-ipsMenu-selectable="radio">{lang="sort_by"} <i class="fa fa-caret-down"></i></a>
+					<ul class="ipsMenu ipsMenu_auto ipsMenu_withStem ipsMenu_selectable ipsHide" id="elSortByMenu_{$table->uniqueId}_menu">
+							{{$custom = TRUE;}}
+							{{foreach $table->sortOptions as $k => $col}}
+								<li class="ipsMenu_item {{if $col === $table->getSortByColumn()}}{{$custom = FALSE;}}ipsMenu_itemChecked{{endif}}" data-ipsMenuValue="{$col}" data-sortDirection='{$table->getSortDirection( $k )}'><a href="{$table->baseUrl->setQueryString( array( 'filter' => $table->filter, 'sortby' => $col, 'sortdirection' => $table->getSortDirection( $k ) ) )->setPage( 'page', 1 )}">{lang="{$col}"}</a></li>
+							{{endforeach}}
+						{{if $table->advancedSearch}}
+							<li class="ipsMenu_item {{if $custom}}ipsMenu_itemChecked{{endif}}" data-noSelect="true">
+								<a href='{$table->baseUrl->setQueryString( array( 'advancedSearchForm' => '1', 'filter' => $table->filter, 'sortby' => $table->sortBy, 'sortdirection' => $table->sortDirection ) )}' data-ipsDialog data-ipsDialog-title='{lang="custom_sort"}'>{lang="custom"}</a>
+							</li>
+						{{endif}}
+					</ul>
+					{{elseif $table->advancedSearch}}
+						<a href='{$table->baseUrl->setQueryString( array( 'advancedSearchForm' => '1', 'filter' => $table->filter, 'sortby' => $table->sortBy, 'sortdirection' => $table->sortDirection ) )}' data-ipsDialog data-ipsDialog-title='{lang="custom_sort"}'>{lang="custom"}</a>
+					{{endif}}
+				</li>
+			{{endif}}
+			{{if !empty( $table->filters )}}
+				<li>
+					<a href="#elFilterByMenu_{$table->uniqueId}_menu" data-role="tableFilterMenu" id="elFilterByMenu_{$table->uniqueId}" data-ipsMenu data-ipsMenu-activeClass="ipsButtonRow_active" data-ipsMenu-selectable="radio">{lang="filter_by"} <i class="fa fa-caret-down"></i></a>
+					<ul class='ipsMenu ipsMenu_auto ipsMenu_withStem ipsMenu_selectable ipsHide' id='elFilterByMenu_{$table->uniqueId}_menu'>
+						<li data-action="tableFilter" data-ipsMenuValue='' class='ipsMenu_item {{if !$table->filter}}ipsMenu_itemChecked{{endif}}'>
+							<a href='{$table->baseUrl->setQueryString( array( 'filter' => '', 'sortby' => $table->sortBy, 'sortdirection' => $table->sortDirection ) )->setPage( 'page', 1 )}'>{lang="{$table->langPrefix}all"}</a>
+						</li>
+						{{foreach $table->filters as $k => $q}}
+							<li data-action="tableFilter" data-ipsMenuValue='{$k}' class='ipsMenu_item {{if $k === $table->filter}}ipsMenu_itemChecked{{endif}}'>
+								<a href='{$table->baseUrl->setQueryString( array( 'filter' => $k, 'sortby' => $table->sortBy, 'sortdirection' => $table->sortDirection ) )->setPage( 'page', 1 )}'>{lang="{$table->langPrefix}{$k}"}</a>
+							</li>
+						{{endforeach}}
+					</ul>
+				</li>
+			{{endif}}
+		</ul>
+		{{if $table->pages > 1}}
+			<div data-role="tablePagination">
+				{template="pagination" group="global" app="core" location="global" params="$table->baseUrl, $table->pages, $table->page, $table->limit, TRUE, $table->getPaginationKey()"}
+			</div>
+		{{endif}}
+	</div>
+
+	{{if $table->canModerate()}}
+		<form action="{$table->baseUrl->csrf()}" method="post" data-role='moderationTools' data-ipsPageAction>
+	{{endif}}
+		{{if \count( $rows )}}
+			<ol class='ipsDataList ipsClear {{foreach $table->classes as $class}}{$class} {{endforeach}}' id='elTable_{$table->uniqueId}' data-role="tableRows" itemscope itemtype="http://schema.org/ItemList">
+				{template="$table->rowsTemplate[1]" params="$table, $headers, $rows" object="$table->rowsTemplate[0]"}
+			</ol>
+		{{else}}
+			<div class='ipsType_center ipsPad'>
+				<p class='ipsType_large ipsType_light'>{lang="no_rows_in_table"}</p>
+			</div>
+		{{endif}}
+
+	{{if $table->canModerate()}}
+			<div class="ipsAreaBackground ipsPad ipsClearfix ipsJS_hide" data-role="pageActionOptions">
+				<div class="ipsPos_right">
+					<select name="modaction" data-role="moderationAction">
+						{{if $table->canModerate('restore')}}
+							<option value='restore' data-icon='undo'>{lang="restore_as_visible"}</option>
+						{{endif}}
+						{{if $table->canModerate('restore_as_hidden')}}
+							<option value='restore_as_hidden' data-icon='low-vision'>{lang="restore_as_hidden"}</option>
+						{{endif}}
+						{{if $table->canModerate('delete')}}
+							<option value='delete' data-icon='trash'>{lang="delete_immediately"}</option>
+						{{endif}}
+					</select>
+					<button type="submit" class="ipsButton ipsButton_alternate ipsButton_verySmall">{lang="submit"}</button>
+				</div>
+			</div>
+		</form>
+	{{endif}}
+	{{if $table->pages > 1}}
+	<div class="ipsButtonBar ipsPad_half ipsClearfix ipsClear">
+		<div data-role="tablePagination">
+			{template="pagination" group="global" app="core" location="global" params="$table->baseUrl, $table->pages, $table->page, $table->limit, TRUE, $table->getPaginationKey()"}
+		</div>
+	</div>
+	{{endif}}
+</div>

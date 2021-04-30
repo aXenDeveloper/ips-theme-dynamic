@@ -1,0 +1,28 @@
+<ips:template parameters="$member" />
+{{if $member->canEditSignature() AND !\IPS\Member::loggedIn()->isIgnoring( $member, 'signatures' ) AND \IPS\Member::loggedIn()->members_bitoptions['view_sigs']}}
+	<div data-role="memberSignature" class='{{if !settings.signatures_mobile}}ipsResponsive_hidePhone{{endif}} ipsBorder_top ipsPadding_vertical'>
+		{{if \IPS\Member::loggedIn()->member_id}}
+			{{$uniqid = mt_rand();}}
+			<div class='ipsPos_right'>
+				<a href='#elSigIgnore{$uniqid}_menu' data-memberID="{$member->member_id}" id='elSigIgnore{$uniqid}' data-role='signatureOptions' data-ipsMenu class='ipsFaded ipsFaded_more ipsFaded_withHover ipsType_light' data-ipsTooltip title='{lang="edit_signature_options"}'>
+					<i class='fa fa-times'></i> <i class='fa fa-caret-down'></i>
+				</a>
+
+				<ul class='ipsMenu ipsMenu_medium ipsHide' id='elSigIgnore{$uniqid}_menu'>
+					{{if member.member_id != $member->member_id AND $member->canBeIgnored()}}
+						<li class='ipsMenu_item' data-ipsMenuValue='oneSignature'>
+							<a href='{url="app=core&module=system&controller=ignore&do=ignoreType&type=signatures&member_id={$member->member_id}" seoTemplate="ignore" csrf="true"}'>{lang="hide_members_signature" sprintf="$member->name"}</a>
+						</li>
+					{{endif}}
+					<li class='ipsMenu_item' data-ipsMenuValue='allSignatures'>
+						<a href='{url="app=core&module=system&controller=settings&do=toggleSigs" ref="(string) \IPS\Request::i()->url()" seoTemplate="settings" csrf="true"}'>{lang="hide_all_signatures"}</a>
+					</li>
+				</ul>
+			</div>
+		{{endif}}
+
+		<div class='ipsType_light ipsType_richText' data-ipsLazyLoad>
+			{$member->signature|raw}
+		</div>
+	</div>
+{{endif}}

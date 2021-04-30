@@ -1,0 +1,26 @@
+<ips:template parameters="$table, $headers, $rows" />
+
+{{if \count( $rows )}}
+	{{foreach $rows AS $row}}
+		{{$class = $row->content_class;}}
+		<li class="ipsDataItem ipsDataItem_withModCheck">
+			<div class='ipsDataItem_main'>
+				<h3 class='ipsType_sectionHead'><a href='{$row->url()}'>{$row->content_title}</a></h3>
+				<div class='ipsType_medium ipsType_reset ipsType_light ipsType_blendLinks'>
+					<i class='fa fa-{$class::$icon}'></i> {lang="$class::$title"} &mdash; 
+					{{if $row->_deleted_by}}
+						{lang="deleted_by_with_date" htmlsprintf="$row->_deleted_by->link(), $row->deleted_date->fullYearLocaleDate(), $row->deletion_date->fullYearLocaleDate()"} 
+					{{else}}
+						{lang="deleted_without_by_with_date" htmlsprintf="$row->deletion_date->fullYearLocaleDate()"} 
+					{{endif}}
+				</div>
+			</div>
+			<div class='ipsDataItem_modCheck'>
+				<span class='ipsCustomInput'>
+					<input type='checkbox' data-role='moderation' name="moderate[{$row->id}]" data-actions="{expression="implode( ' ', $table->multimodActions( $row ) )"}" data-state=''>
+					<span></span>
+				</span>
+			</div>
+		</li>
+	{{endforeach}}
+{{endif}}

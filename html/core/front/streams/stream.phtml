@@ -1,0 +1,24 @@
+<ips:template parameters="$stream, $results, $autoUpdate, $showTimeline=FALSE, $sort='date', $view='expanded'" />
+<div data-role='streamResults' data-controller='core.front.streams.results' data-streamReadType="{$stream->read}" {{if !$autoUpdate}}data-view='{$view}'{{endif}} {{if $autoUpdate && settings.auto_polling_enabled}}data-autoPoll{{endif}} data-streamUrl="{$stream->url()}" {{if isset( \IPS\Request::i()->id )}}data-streamID='{expression="\IPS\Request::i()->id"}'{{endif}}>
+	<div class='ipsBox_alt'>
+		<div class='ipsFlex ipsFlex-ai:center ipsFlex-jc:end sm:ipsMargin_bottom:half'>
+			<p id='elStreamUpdateMsg' class='ipsMargin_right {{if !( $autoUpdate && settings.auto_polling_enabled )}}ipsHide{{endif}} ipsType_light ipsType_small ipsType_reset ipsJS_show ipsResponsive_hidePhone' data-role='updateMessage'><i class='fa fa-refresh'></i> {lang="stream_auto_updates"}</p>
+			<ul class="ipsButton_split ipsClearfix">
+				<li>
+					<a href="{$stream->baseUrl->setQueryString( 'view', 'condensed')->csrf()}" data-action='switchView' data-view='condensed' data-ipsTooltip title="{lang="stream_condensed"}" class="ipsButton ipsButton_verySmall {{if $view == 'condensed'}}ipsButton_primary{{else}}ipsButton_veryLight{{endif}}" rel="nofollow"><i class="fa fa-list"></i> &nbsp;{lang="stream_results_as_condensed"}</a>
+				</li>
+				<li>
+					<a href="{$stream->baseUrl->setQueryString( 'view', 'expanded')->csrf()}" data-action='switchView' data-view='expanded' data-ipsTooltip title="{lang="stream_expanded"}" class="ipsButton ipsButton_verySmall {{if $view == 'expanded'}}ipsButton_primary{{else}}ipsButton_veryLight{{endif}}" rel="nofollow"><i class="fa fa-bars"></i>  &nbsp;{lang="stream_results_as_expanded"}</a>
+				</li>
+			</ul>
+		</div>
+		<ol class='ipsStream {{if $showTimeline !== FALSE && \count( $results )}}ipsStream_withTimeline{{endif}} ipsList_reset' data-role='streamContent'>
+			{template="streamItems" group="streams" app="core" params="$results, $showTimeline, $sort, $view"}
+		</ol>
+		<ol class="ipsList_reset">
+			<li class='ipsType_center ipsJS_show {{if !\count( $results )}}ipsHide{{endif}}' data-role="loadMoreContainer">
+				<a href='#' class='ipsButton ipsButton_veryLight ipsButton_small' data-action='loadMore'>{lang="load_more_activity"}</a>
+			</li>
+		</ol>
+	</div>
+</div>

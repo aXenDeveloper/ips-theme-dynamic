@@ -1,0 +1,19 @@
+/* PHONES */
+@media screen and (max-width: 767px) {
+	.cPastLeaders_row {
+		margin-bottom: 15px;
+	}
+
+		html[dir="ltr"] .cPastLeaders_cell {
+			padding-right: 40px;
+		}
+		html[dir="rtl"] .cPastLeaders_cell {
+			padding-left: 40px;
+		}
+
+		.cPastLeaders_cell:after {
+			font-size: 20px;
+			line-height: 28px;
+		}
+
+}

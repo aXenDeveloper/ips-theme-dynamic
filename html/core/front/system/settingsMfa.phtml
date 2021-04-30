@@ -1,0 +1,43 @@
+<ips:template parameters="$handlers" />
+
+{{if \count( $handlers )}}
+	<div class='ipsAreaBackground_light ipsPadding ipsBorder_bottom'>
+		<h2 class="ipsType_pageTitle">{lang="mfa_settings_title"}</h2>
+	</div>
+	<div class='ipsPadding'>
+		<p class='ipsType_normal ipsSpacer_bottom ipsSpacer_double'>{lang="mfa_ucp_blurb"}</p>
+
+		{{foreach $handlers as $key => $handler}}
+			<div class="ipsSpacer_bottom ipsPad ipsAreaBackground_light ipsClearfix">
+				<h2 class="ipsType_sectionHead ipsType_large">{$handler->ucpTitle()} {{if $handler->memberHasConfiguredHandler( \IPS\Member::loggedIn() )}}&nbsp;&nbsp;<span class='ipsType_positive ipsType_medium'><i class='fa fa-check'></i> {lang="enabled"}</span>{{endif}}</h2>
+				<p class='ipsType_medium'>{$handler->ucpDesc()}</p>
+				<ul class="ipsList_inline">
+				{{if $handler->memberHasConfiguredHandler( \IPS\Member::loggedIn() )}}
+					<li><a href="{url="app=core&module=system&controller=settings&area=mfa&act=enable&type={$key}&_new=1" seoTemplate="settings_mfa" csrf="true"}" class="ipsButton ipsButton_verySmall ipsButton_primary">{lang="mfa_{$key}_reauth"}</a></li>
+					<li>{lang="or"}</li>
+					<li><a href="{url="app=core&module=system&controller=settings&area=mfa&act=disable&type={$key}" seoTemplate="settings_mfa" csrf="true"}" class="ipsType_negative" data-confirm>{lang="mfa_disable"}</a></li>
+				{{else}}
+					<li><a href="{url="app=core&module=system&controller=settings&area=mfa&act=enable&type={$key}&_new=1" seoTemplate="settings_mfa" csrf="true"}" class="ipsButton ipsButton_verySmall ipsButton_primary">{lang="enable"}</a></li>
+				{{endif}}
+				</ul>
+			</div>
+		{{endforeach}}
+	</div>
+{{endif}}
+
+{{if !\IPS\Member::loggedIn()->group['g_hide_online_list']}}
+<div class='ipsAreaBackground_light ipsPadding ipsBorder_bottom {{if \count( $handlers )}}ipsBorder_top{{endif}}'>
+	<h2 class='ipsType_pageTitle'>{lang="settings_privacy_title"}</h2>
+</div>
+<div class='ipsPadding'>
+	<div class='ipsClearfix'>
+		<h2 class='ipsType_sectionHead ipsType_large'>{lang="online_visibility"}&nbsp;&nbsp;{{if \IPS\Member::loggedIn()->members_bitoptions['is_anon']}}<span class='ipsType_negative ipsType_medium'><i class='fa fa-times'></i> {lang="online_status_hidden"}</span>{{else}}<span class='ipsType_positive ipsType_medium'><i class='fa fa-check'></i> {lang="online_status_visible"}</span>{{endif}}</h2>
+		<p class='ipsType_medium'>{lang="online_visibility_desc"}</p>
+		{{if \IPS\Member::loggedIn()->members_bitoptions['is_anon']}}
+			<a href='{url="app=core&module=system&controller=settings&do=updateAnon&value=0" seoTemplate="settings" csrf="true"}' class='ipsButton ipsButton_verySmall ipsButton_primary'>{lang="show_online_status"}</a>
+		{{else}}
+			<a href='{url="app=core&module=system&controller=settings&do=updateAnon&value=1" seoTemplate="settings" csrf="true"}' class='ipsButton ipsButton_verySmall ipsButton_primary'>{lang="hide_online_status"}</a>
+		{{endif}}
+	</div>
+</div>
+{{endif}}

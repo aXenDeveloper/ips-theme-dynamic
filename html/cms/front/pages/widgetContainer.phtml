@@ -1,0 +1,12 @@
+<ips:template parameters="$id, $widgets, $orientation='horizontal'" />
+{{if ( ( isset( $widgets[ $id ] ) ) || \IPS\Dispatcher::i()->application->canManageWidgets() )}}
+	<div class='cWidgetContainer {{if ! isset( $widgets[ $id ] )}}ipsHide{{endif}}' {{if \IPS\Dispatcher::i()->application->canManageWidgets()}}data-controller='core.front.widgets.area'{{endif}} data-role='widgetReceiver' data-orientation='{$orientation}' data-widgetArea='{$id}'>
+		<ul class='ipsList_reset'>
+			{{if isset( $widgets[ $id ] )}}
+				{{foreach $widgets[ $id ] as $widget}}
+				<li class='{{if \get_class( $widget ) != 'IPS\cms\widgets\Database'}}ipsWidget ipsWidget_{$orientation}{{endif}} {{if isset($widget->configuration['devices_to_show'])}}ipsResponsive_block{{foreach array_diff( array( 'Phone', 'Tablet', 'Desktop' ), $widget->configuration['devices_to_show'] ) as $device }} ipsResponsive_hide{$device}{{endforeach}} {{endif}}' data-blockTitle="{$widget->title()}" data-blockID='{{if isset($widget->app)}}app_{$widget->app}_{{else}}plugin_{$widget->plugin}_{{endif}}{$widget->key}_{$widget->uniqueKey}'{{if $widget->hasConfiguration()}} data-blockConfig="true"{{endif}} data-blockErrorMessage="{lang="$widget->errorMessage" escape="true"}" data-controller='core.front.widgets.block'>{$widget|raw}</li>
+				{{endforeach}}
+			{{endif}}
+		</ul>
+	</div>
+{{endif}}

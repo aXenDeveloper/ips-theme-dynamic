@@ -1,0 +1,10 @@
+<ips:template parameters="$id, $action, $elements, $hiddenValues, $actionButtons, $uploadField, $class='', $attributes=array(), $sidebar, $form=NULL, $showTitle=TRUE" />
+{{if isset( $elements['']['stream_ownership'] )}}
+	{{if isset( $elements['']['stream_custom_members'] )}}
+		<li class='ipsPad ipsSpacer_top ipsSpacer_half cStreamForm_authors {{if $elements['']['stream_ownership']->value !== 'custom'}}ipsHide{{endif}}' data-role="ownershipMemberForm">
+			<h4 class='ipsType_minorHeading'>{lang="stream_custom_members"}</h4>
+			{$elements['']['stream_custom_members']->html()|raw}
+		</li>
+	{{endif}}
+{{endif}}
+				

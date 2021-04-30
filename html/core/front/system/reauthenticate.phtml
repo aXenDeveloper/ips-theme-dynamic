@@ -1,0 +1,100 @@
+<ips:template parameters="$login, $error, $blurb=NULL" />
+<form accept-charset='utf-8' method='post' action='{$login->url}' data-controller="core.global.core.login">
+	<input type="hidden" name="csrfKey" value="{expression="\IPS\Session::i()->csrfKey"}">
+	{{$usernamePasswordMethods = $login->usernamePasswordMethods();}}
+	{{$buttonMethods = $login->buttonMethods();}}
+	{{$usernamePasswordMethods = $login->usernamePasswordMethods();}}
+	{{$buttonMethods = $login->buttonMethods();}}
+	{{if $blurb}}
+		<p class='ipsType_normal ipsType_reset ipsSpacer_bottom'>
+			{lang="$blurb"}
+		</p>
+	{{endif}}
+	{{if $error}}
+		<div class="ipsMessage ipsMessage_error">{lang="$error"}</div>
+	{{endif}}
+	{{if $usernamePasswordMethods and $buttonMethods}}
+		<div class='ipsColumns ipsColumns_collapsePhone'>
+			<div class='ipsColumn ipsColumn_fluid'>
+				<p class='ipsType_normal ipsType_reset ipsSpacer_bottom'>
+					{{if $blurb}}
+						{lang="reauthenticate_password_blurb2"}
+					{{else}}
+						{lang="reauthenticate_password_blurb"}
+					{{endif}}
+				</p>
+				<ul class='ipsForm'>
+					<li class="ipsFieldRow ipsFieldRow_fullWidth ipsClearfix">
+						<div class="ipsFieldRow_content">
+							<input type="password" placeholder="{lang="password"}" name="password" id="password" {{if isset( \IPS\Request::i()->password )}}value="{request="password"}"{{endif}} autocomplete="current-password">
+						</div>
+					</li>
+					<li class="ipsFieldRow ipsFieldRow_fullWidth">
+						<button type="submit" name="_processLogin" value="usernamepassword" class="ipsButton ipsButton_primary ipsButton_small" id="elSignIn_submit">{lang="reauthenticate"}</button>
+					</li>
+				</ul>
+				{{if settings.allow_forgot_password != 'disabled'}}
+					<p class="ipsType_right ipsType_small">
+						{{if settings.allow_forgot_password == 'redirect'}}
+							<a href='{expression="\IPS\Settings::i()->allow_forgot_password_target"}' target="_blank" rel="noopener">
+						{{else}}
+							<a href='{url="app=core&module=system&controller=lostpass" seoTemplate="lostpassword"}' data-ipsDialog data-ipsDialog-title='{lang="forgotten_password"}'>
+						{{endif}}
+						{lang="forgotten_password"}</a>
+					</p>
+				{{endif}}
+			</div>
+			<div class='ipsColumn ipsColumn_veryWide'>
+				<p class='ipsType_normal ipsType_reset'>{lang='reauthenticate_alt_blurb'}</p>
+				<div class='ipsGap:2 ipsMargin_top:half'>
+					{{foreach $buttonMethods as $method}}
+						<div class='ipsType_center'>
+							{$method->button()|raw}
+						</div>
+					{{endforeach}}
+				</div>
+			</div>
+		</div>
+	{{elseif $usernamePasswordMethods}}
+		<p class='ipsType_normal ipsType_reset ipsSpacer_bottom'>
+			{{if $blurb}}
+				{lang="reauthenticate_password_blurb2"}
+			{{else}}
+				{lang="reauthenticate_password_blurb"}
+			{{endif}}
+		</p>
+		<ul class='ipsForm'>
+			<li class="ipsFieldRow ipsClearfix">
+				<div class="ipsFieldRow_content">
+					<input type="password" placeholder="{lang="password"}" name="password" id="password" {{if isset( \IPS\Request::i()->password )}}value="{request="password"}"{{endif}}>
+				</div>
+			</li>
+			<li class="ipsFieldRow">
+				<button type="submit" name="_processLogin" value="usernamepassword" class="ipsButton ipsButton_primary ipsButton_small" id="elSignIn_submit">{lang="reauthenticate"}</button>
+				{{if settings.allow_forgot_password != 'disabled'}}
+					&nbsp;&nbsp;&nbsp;
+					{{if settings.allow_forgot_password == 'redirect'}}
+						<a href='{expression="\IPS\Settings::i()->allow_forgot_password_target"}' target="_blank" rel="noopener" class="ipsType_small">
+					{{else}}
+						<a href='{url="app=core&module=system&controller=lostpass" seoTemplate="lostpassword"}' data-ipsDialog data-ipsDialog-title='{lang="forgotten_password"}' class="ipsType_small">
+					{{endif}}
+					{lang="forgotten_password"}</a>
+				{{endif}}
+			</li>
+		</ul>
+	{{elseif $buttonMethods}}
+		{{if !$blurb}}
+			<p class='ipsType_normal ipsType_reset ipsSpacer_bottom'>
+				{lang="reauthenticate_button_blurb"}
+			</p>
+		{{endif}}
+		<div class='ipsGap:2 ipsMargin_top:half'>
+			{{foreach $buttonMethods as $method}}
+				<div class='ipsType_center'>
+					{$method->button()|raw}
+				</div>
+			{{endforeach}}
+		</div>
+	{{endif}}
+	
+</form>

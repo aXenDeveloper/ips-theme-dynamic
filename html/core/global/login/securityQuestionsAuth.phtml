@@ -1,0 +1,24 @@
+<ips:template parameters="$question" />
+<div class="ipsPad ipsType_normal ipsType_richText ipsType_center">
+	{lang="security_questions_auth_blurb"}
+</div>
+<ul class="ipsList_reset ipsPad ipsClearfix">
+	<li class="ipsFieldRow ipsClearfix">
+		<label class='ipsFieldRow_label'>
+			{$question->_title}
+		</label>
+		<div class="ipsFieldRow_content">
+			<input type="text" name="security_answer" autocomplete="off" {{if request.security_answer}}class="ipsField_error"{{endif}}>
+			{{if request.security_answer}}
+				<p class="ipsType_warning">{lang="security_answer_incorrect"}</p>
+			{{endif}}
+		</div>
+	</li>
+</ul>
+<ul class="ipsList_reset ipsPad ipsClearfix ipsAreaBackground">
+	<li>
+		<button type='submit' class='ipsButton ipsButton_primary ipsButton_fullWidth ipsButton_medium'>
+			<i class='fa fa-lock'></i> {lang="security_answer_submit"}
+		</button>
+	</li>
+</ul>

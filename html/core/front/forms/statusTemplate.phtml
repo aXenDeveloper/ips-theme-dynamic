@@ -1,0 +1,40 @@
+<ips:template parameters="$id, $action, $elements, $hiddenValues, $actionButtons, $uploadField, $class=''" />
+<form accept-charset='utf-8' method="post" action="{$action}" id='elStatusSubmit' {{if $uploadField}}enctype="multipart/form-data"{{endif}}>
+	<input type="hidden" name="{$id}_submitted" value="1">
+	{{foreach $hiddenValues as $k => $v}}
+		<input type="hidden" name="{$k}" value="{$v}">
+	{{endforeach}}
+	{{if $uploadField}}
+		<input type="hidden" name="MAX_FILE_SIZE" value="{$uploadField}">
+		<input type="hidden" name="plupload" value="{expression="md5( mt_rand() )"}">
+	{{endif}}
+	{{foreach $elements as $collection}}
+		{{foreach $collection as $input}}
+			{{if $input instanceof \IPS\Helpers\Form\Editor}}
+				{$input->html( TRUE )|raw}
+				{{if $input->error}}
+					<br>
+					<span class="ipsType_warning">{lang="$input->error"}</span>
+				{{endif}}
+			{{endif}}
+		{{endforeach}}
+	{{endforeach}}
+<ul class='ipsToolList ipsToolList_horizontal ipsClear ipsClearfix' data-ipsEditor-toolList>
+	<li><button class='ipsButton ipsButton_primary ipsButton_fullWidth' data-action="submitComment">{lang="status_new"}</button></li>
+	{{foreach $elements as $collection}}
+		{{foreach $collection as $input}}
+			{{if $input instanceof \IPS\Helpers\Form\Checkbox}}
+				<li class='ipsPos_left ipsResponsive_noFloat ipsComposeArea_formControl ipsType_medium ipsType_light'>
+					{$input->html()|raw}
+					<label for="check_{$input->htmlId}">
+						{lang="$input->name"}
+					</label>
+					{{if $input->error}}
+						<div class="ipsType_warning ipsSpacer_top" data-role="commentFormError">{lang="$input->error"}</div>
+					{{endif}}
+				</li>
+			{{endif}}
+		{{endforeach}}
+	{{endforeach}}
+</ul>
+</form>	

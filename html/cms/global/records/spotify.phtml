@@ -1,0 +1,2 @@
+<ips:template parameters="$url, $params" />
+<iframe {{if settings.lazy_load_enabled}}src="{expression="\IPS\Text\Parser::blankPage()"}" data-embed-{{endif}}src="https://embed.spotify.com/?uri={$url}" {{foreach $params as $k => $v }}{$k}="{$v}" {{endforeach}} allowtransparency="true"></iframe>

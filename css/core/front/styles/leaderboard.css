@@ -1,0 +1,123 @@
+html[dir="ltr"] .ipsStreamItem .ipsLeaderboard_trophy {
+	position: absolute;
+	top: -10px;
+	left: -10px;	
+}
+html[dir="rtl"] .ipsStreamItem .ipsLeaderboard_trophy {
+	position: absolute;
+	top: -10px;
+	right: -10px;	
+}
+
+td.ipsLeaderTable_trophy .ipsLeaderboard_trophy {
+	margin-top: -12px;
+	transform: scale(0.8);
+}
+
+#elDateForm label {
+	display: none;
+}
+
+#elDateForm input[type="date"] {
+	display: block;
+	width: 100%;
+	max-width: 100%;
+	margin: 7px 0;
+}
+
+/* Popular content */
+.cPopularItem_content{
+	flex: 9999 1 450px;
+}
+
+.cPopularItem_stats {
+	flex: 1 1 200px;
+	font-size: {fontsize="x_large"};
+	color: rgb( var(--theme-text_light) );
+}
+	.cPopularItem_stats a {
+		color: inherit;
+	}
+	
+	.cPopularItem_stats span {
+		display: block;
+		margin-top: 5px;
+		font-size: {fontsize="x_small"};
+		text-transform: uppercase;
+		opacity: 0.5;
+	}
+
+/* Past leaders */
+.cPastLeaders_grid > *{
+	flex-basis: 230px;
+}
+
+.cPastLeaders_row {
+	margin-bottom: 30px;
+}
+
+.cPastLeaders_title {
+	font-weight: bold;
+	color: rgb( var(--theme-text_dark) );
+	font-size: {fontsize="large"};
+	padding: 0;
+	margin-bottom: 8px;
+	position: relative;
+}
+
+.cPastLeaders_cell {
+	background: rgb( var(--theme-area_background_light) );
+	border-radius: 5px;
+	padding: 10px;
+	position: relative;
+	min-height: 100%;
+}
+
+	html[dir="ltr"] .cPastLeaders_cell {
+		padding-right: 65px;
+	}
+	html[dir="rtl"] .cPastLeaders_cell {
+		padding-left: 65px;
+	}
+
+	html[dir="ltr"] .cPastLeaders_cell:after {
+		right: 10px;
+	}
+	html[dir="rtl"] .cPastLeaders_cell:after {
+		left: 10px;
+	}
+
+	.cPastLeaders_cell:after {
+		content: attr(data-position);
+		position: absolute;
+		top: 0;
+		line-height: 64px;
+		font-size: 30px;
+		font-weight: bold;
+		opacity: 0.1;
+	}
+
+.cPastLeaders_cellEmpty {
+	opacity: 0.4;
+	padding: 0;
+}
+
+.cPastLeaders_cell .ipsLeaderboard_trophy {
+	position: absolute;
+	top: -5px;
+	z-index: 1;
+	transform: scale(.5);
+}
+
+	[dir='ltr'] .cPastLeaders_cell .ipsLeaderboard_trophy{
+		left: -5px;
+	}
+	[dir='rtl'] .cPastLeaders_cell .ipsLeaderboard_trophy{
+		right: -5px;
+	}
+
+.cPastLeaders_rep {
+	opacity: 0.6;
+	text-transform: uppercase;
+	font-size: {fontsize="x_small"};
+}

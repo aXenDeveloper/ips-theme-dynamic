@@ -1,0 +1,12 @@
+<ips:template parameters="$status, $comment" />
+{{$idField = $comment::$databaseColumnId;}}
+{{$itemClassSafe = str_replace( '\\', '_', mb_substr( $comment::$itemClass, 4 ) );}}
+{{if $comment->isIgnored()}}
+	<li class='ipsComment ipsComment_ignored ipsPad_half ipsType_light' id='elIgnoreComment_{$comment->$idField}' data-ignoreCommentID='elComment_{$comment->$idField}' data-ignoreUserID='{$comment->author()->member_id}'>
+		{lang="status_ignoring" sprintf="$comment->author()->name"}
+	</li>
+{{endif}}	
+<li class="ipsComment ipsAreaBackground_light ipsClearfix{{if $comment->hidden() OR $status->hidden() == -2}} ipsModerated{{endif}} {{if $comment->isIgnored()}}ipsHide{{endif}}" data-commentid="{$comment->id}">
+	{template="userPhoto" app="core" group="global" params="$comment->author(), 'tiny'"}
+	{template="statusReply" group="statuses" app="core" params="$status, $comment"}
+</li>

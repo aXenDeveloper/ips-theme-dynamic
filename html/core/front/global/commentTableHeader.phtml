@@ -1,0 +1,15 @@
+<ips:template parameters="$comment, $status" />
+
+<div class='ipsFlex ipsFlex-ai:center sm:ipsFlex-ai:start sm:ipsMargin_top:double'>
+	<div class='ipsFlex-flex:00 ipsMargin_right sm:ipsMargin_right:half'>
+		{template="userPhoto" group="global" app="core" params="$status->author()"}
+	</div>
+	<div>
+		<p class='ipsType_medium ipsType_light ipsType_blendLinks ipsType_reset'>
+			{lang="status_updated_by" htmlsprintf="$status->author()->link()"}
+		</p>
+		<div class='ipsType_richText ipsType_medium' data-ipsTruncate data-ipsTruncate-size='5 lines' data-ipsTruncate-type='remove'>
+			{$status->truncated()|raw}
+		</div>
+	</div>
+</div>

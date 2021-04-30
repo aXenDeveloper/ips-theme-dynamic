@@ -1,0 +1,4 @@
+<ips:template parameters="$table, $headers, $rows" />
+{{foreach $rows as $status}}
+	{template="statusContainer" app="core" group="statuses" params="$status, NULL, NULL, NULL, $table"}
+{{endforeach}}

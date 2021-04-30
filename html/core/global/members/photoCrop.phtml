@@ -1,0 +1,18 @@
+<ips:template parameters="$name, $value, $photo" />
+
+<div data-controller='core.global.core.cropper' id='elPhotoCropper' class='ipsAreaBackground_light ipsType_center ipsPad'>
+	<h3 class='ipsType_sectionHead'>{lang="photo_crop_title"}</h3>
+	<p class='ipsType_light ipsType_reset'>{lang="photo_crop_instructions"}</p>
+	<br>
+
+	<div class='ipsForm_cropper'>
+		<div data-role='cropper'>
+			<img src="{$photo}" data-role='profilePhoto'>
+		</div>
+	</div>
+
+	<input type='hidden' name='{$name}[0]' value='{$value[0]}' data-role='topLeftX'>
+	<input type='hidden' name='{$name}[1]' value='{$value[1]}' data-role='topLeftY'>
+	<input type='hidden' name='{$name}[2]' value='{$value[2]}' data-role='bottomRightX'>
+	<input type='hidden' name='{$name}[3]' value='{$value[3]}' data-role='bottomRightY'>
+</div>

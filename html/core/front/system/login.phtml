@@ -1,0 +1,88 @@
+<ips:template parameters="$login, $ref, $error" />
+<form accept-charset='utf-8' method='post' action='{$login->url}' data-controller="core.global.core.login" class='ipsBox_alt'>
+	<input type="hidden" name="csrfKey" value="{expression="\IPS\Session::i()->csrfKey"}">
+	{{if $ref}}
+		<input type="hidden" name="ref" value="{$ref}">
+	{{endif}}
+	{{$usernamePasswordMethods = $login->usernamePasswordMethods();}}
+	{{$buttonMethods = $login->buttonMethods();}}
+	{{if $usernamePasswordMethods and $buttonMethods}}
+		{{if $error}}
+			<div class="ipsMessage ipsMessage_error">{lang="$error"}</div>
+		{{endif}}
+		<div class='ipsColumns ipsColumns_collapsePhone'>
+			<div class='ipsColumn ipsColumn_fluid'>
+				<div class='{{if !request.isAjax()}}ipsBox ipsResponsive_pull{{endif}} ipsPadding'>
+					{{if !request.isAjax()}}
+						<h1 class='ipsType_reset ipsType_pageTitle'>{lang='sign_in_short'}</h1>
+						{{if \IPS\Login::registrationType() != 'disabled'}}
+							<p class='ipsType_reset ipsType_large ipsType_light'>
+								{lang="dont_have_an_account"}
+								{{if \IPS\Login::registrationType() == 'redirect'}}
+									<a href='{expression="\IPS\Settings::i()->allow_reg_target"}' target="_blank" rel="noopener">
+								{{else}}
+									<a href='{url="app=core&module=system&controller=register" seoTemplate="register"}' {{if \IPS\Login::registrationType() == 'normal'}}data-ipsDialog data-ipsDialog-size='narrow' data-ipsDialog-title='{lang="sign_up"}'{{endif}}>
+								{{endif}}
+								{lang="sign_up"}</a>
+							</p>
+							<hr class='ipsHr ipsMargin_vertical'>
+						{{endif}}
+					{{endif}}
+					{template="loginForm" app="core" group="system" params="$login"}
+				</div>
+			</div>
+			<div class='ipsColumn ipsColumn_veryWide'>
+				<div class='{{if !request.isAjax()}}ipsBox ipsResponsive_pull{{endif}} ipsPadding'>
+					<h2 class='ipsType_sectionHead'>{lang="sign_in_faster"}</h2>
+					{{if \count( $buttonMethods ) > 1}}
+						<p class='ipsType_normal ipsType_reset ipsType_light'>{lang='sign_in_with_these'}</p>
+					{{endif}}
+					<div class='ipsGap:2 ipsMargin_top:half'>
+						{{foreach $buttonMethods as $method}}
+							<div class='cLogin_social ipsType_center'>
+								{$method->button()|raw}
+							</div>
+						{{endforeach}}
+					</div>
+				</div>
+			</div>
+		</div>
+	{{elseif $usernamePasswordMethods}}
+		<div class='cLogin_single ipsPos_center'>
+		{{if $error}}
+			<p class="ipsMessage ipsMessage_error">{lang="$error"}</p>
+		{{endif}}
+			<div class="{{if !request.isAjax()}}ipsBox ipsResponsive_pull{{endif}} ipsPadding">
+				{{if !request.isAjax()}}
+					<h1 class='ipsType_reset ipsType_pageTitle'>{lang='sign_in_short'}</h1>
+					{{if \IPS\Login::registrationType() != 'disabled'}}
+						<p class='ipsType_reset ipsType_large ipsType_light'>
+							{lang="dont_have_an_account"}
+							{{if \IPS\Login::registrationType() == 'redirect'}}
+								<a href='{expression="\IPS\Settings::i()->allow_reg_target"}' target="_blank" rel="noopener">
+							{{else}}
+								<a href='{url="app=core&module=system&controller=register" seoTemplate="register"}' {{if \IPS\Login::registrationType() == 'normal'}}data-ipsDialog data-ipsDialog-size='narrow' data-ipsDialog-title='{lang="sign_up"}'{{endif}}>
+							{{endif}}
+							{lang="sign_up"}</a>
+						</p>
+						<hr class='ipsHr ipsMargin_vertical'>
+					{{endif}}
+				{{endif}}
+				{template="loginForm" app="core" group="system" params="$login"}
+			</div>
+		</div>
+	{{elseif $buttonMethods}}
+		<div class="cLogin_single ipsPos_center">
+			{{if $error}}
+				<p class="ipsMessage ipsMessage_error">{lang="$error"}</p>
+			{{endif}}
+			<div class='ipsGap:2 ipsMargin_top:half'>
+				{{foreach $buttonMethods as $method}}
+					<div class='ipsType_center'>
+						{$method->button()|raw}
+					</div>
+				{{endforeach}}
+			</div>
+		</div>
+	{{endif}}
+</form>

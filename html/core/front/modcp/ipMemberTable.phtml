@@ -1,0 +1,36 @@
+<ips:template parameters="$table, $headers, $rows, $quickSearch" />
+<div data-baseurl="{$table->baseUrl}" data-resort='{$table->resortKey}' data-controller="core.global.core.table">
+	<div class='ipsClearfix'>
+		{{if $table->pages > 1}}
+			<div data-role="tablePagination">
+				{template="pagination" group="global" app="core" location="global" params="$table->baseUrl, $table->pages, $table->page, $table->limit"}
+			</div>
+			<br>
+		{{endif}}
+	</div>
+	<div class="ipsBox ipsClear">
+		<h2 class='ipsType_sectionTitle ipsType_reset ipsClear'>{lang="ips_used_member" sprintf="$table->extra->name"}</h2>
+		<table class='ipsTable ipsTable_responsive ipsTable_zebra {{foreach $table->classes as $class}}{$class} {{endforeach}}' data-role="table" data-ipsKeyNav data-ipsKeyNav-observe='e d return'>
+			<thead>
+				<tr class='ipsAreaBackground'>
+					{{foreach $headers as $k => $header}}
+						{{if $header !== '_buttons'}}
+							<th>{lang="{$table->langPrefix}{$header}"}</th>
+						{{elseif $header === '_buttons'}}
+							<th>&nbsp;</th>
+						{{endif}}
+					{{endforeach}}
+				</tr>
+			</thead>
+			<tbody data-role="tableRows">
+				{template="$table->rowsTemplate[1]" params="$table, $headers, $rows" object="$table->rowsTemplate[0]"}
+			</tbody>
+		</table>
+		<br>
+		{{if $table->pages > 1}}
+			<div data-role="tablePagination">
+				{template="pagination" group="global" app="core" location="global" params="$table->baseUrl, $table->pages, $table->page, $table->limit"}
+			</div>
+		{{endif}}
+	</div>
+</div>

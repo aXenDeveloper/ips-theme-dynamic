@@ -1,0 +1,40 @@
+html[dir="ltr"] body {
+	margin-right: 300px;
+}
+html[dir="rtl"] body {
+	margin-left: 300px;
+}
+
+#elQueryLog {
+	position: fixed;
+	top: 0;
+	bottom: 0;
+	padding-bottom: 70px;
+	width: 300px;
+	background: #212223;
+	overflow: auto;
+}
+html[dir="ltr"] #elQueryLog {
+	right: 0;
+	padding-left: 10px;
+}
+html[dir="rtl"] #elQueryLog {
+	left: 0;
+	padding-right: 10px;
+}
+
+#elQueryLog h3 {
+	color: #fff;
+	margin-bottom: 15px;
+}
+
+#elQueryLog span.pln {
+	color: #fff;
+}
+
+#elQueryLog .prettyprint {
+	border: 0;
+	cursor: pointer;
+	background: inherit;
+	white-space: pre-wrap;
+}

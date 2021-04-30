@@ -1,0 +1,18 @@
+<ips:template parameters="$events, $addScriptTags=true" />
+{{if \IPS\Settings::i()->fb_pixel_id and \IPS\Settings::i()->fb_pixel_enabled}}
+{{if $addScriptTags}}<script>{{endif}}
+setTimeout( function() {
+	{{foreach $events as $name => $params}}
+		{{$inlineParams = '';}}
+		{{if \count( $params )}}
+			{{$inlineParams = json_encode( $params );}}
+		{{endif}}
+		{{if $inlineParams}}
+		fbq('track', '{$name}', {$inlineParams|raw});
+		{{else}}
+		fbq('track', '{$name}');
+		{{endif}}
+	{{endforeach}}
+}, {expression="\intval( \IPS\Settings::i()->fb_pixel_delay * 1000 )"} );
+{{if $addScriptTags}}</script>{{endif}}
+{{endif}}

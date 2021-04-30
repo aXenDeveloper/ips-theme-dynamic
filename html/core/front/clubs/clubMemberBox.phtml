@@ -1,0 +1,39 @@
+<ips:template parameters="$club" />
+<div class="ipsWidget ipsWidget_vertical ipsBox">
+	<h2 class='ipsWidget_title ipsType_reset'>{lang="club_members_count" pluralize="$club->members"}</h2>
+	<div class='ipsWidget_inner'>
+		<ol class='ipsDataList'>
+			{{$membersToShow = $club->members( array('member', 'moderator', 'leader'), 15, "IF(core_clubs_memberships.status='leader' OR core_clubs_memberships.status='moderator',0,1), core_clubs_memberships.joined ASC", 1);}}
+			{{foreach $membersToShow as $memberData}}
+			{{$member = \IPS\Member::constructFromData( $memberData['core_members'] );}}
+			<li class='ipsDataItem ipsClearfix'>
+				<div class='ipsDataItem_icon ipsPos_top'>
+					{template="userPhoto" app="core" group="global" params="$member, 'mini'"}
+				</div>
+				<div class='ipsDataItem_main'>
+					<h3 class='ipsType_sectionHead ipsType_normal'>
+						{template="userLinkFromData" group="global" app="core" params="$member->member_id, $member->name, $member->seo_name, $member->member_group_id"}
+					</h3>
+
+					{{if $memberData['core_clubs_memberships']['status'] == \IPS\Member\Club::STATUS_LEADER && ( $club->owner and $club->owner->member_id == $member->member_id ) }}
+					<br><span class="ipsBadge ipsBadge_positive">{lang="club_owner"}</span>
+					{{elseif $memberData['core_clubs_memberships']['status'] == \IPS\Member\Club::STATUS_LEADER}}
+					<br><span class="ipsBadge ipsBadge_positive">{lang="club_leader"}</span>
+					{{elseif \in_array( $memberData['core_clubs_memberships']['status'], array( \IPS\Member\Club::STATUS_MODERATOR, \IPS\Member\Club::STATUS_EXPIRED_MODERATOR ) )}}
+					<br><span class="ipsBadge ipsBadge_intermediary">{lang="club_moderator"}</span>
+					{{endif}}
+
+					<p class='ipsType_reset ipsType_light ipsType_medium'>
+						{lang="club_joined" sprintf="\IPS\DateTime::ts( $memberData['core_clubs_memberships']['joined'] )->relative( \IPS\DateTime::RELATIVE_FORMAT_LOWER )"}
+					</p>
+				</div>
+			</li>
+			{{endforeach}}
+		</ol>
+		{{if $club->members > \count( $membersToShow	)}}
+		<div class='ipsType_center ipsType_medium ipsPad_half ipsType_blendLinks'>
+			<a href='{$club->url()->setQueryString('do', 'members')}'>{lang="club_see_all_members"} <i class='fa fa-angle-right'></i></a>
+		</div>
+		{{endif}}
+	</div>
+</div>

@@ -1,0 +1,210 @@
+<ips:template parameters="$event, $commentsAndReviews, $attendees, $address=NULL, $reminder=NULL" />
+
+{{if $club = $event->container()->club()}}
+	{{if settings.clubs and settings.clubs_header == 'full'}}
+		{template="header" app="core" group="clubs" params="$club, $event->container()"}
+	{{endif}}
+	<div id='elClubContainer'>
+{{endif}}
+
+<div>
+	<header class='ipsClearfix ipsSpacer_bottom'>
+		<div id="elEventHeader">{$event->coverPhoto()|raw}</div>
+		<div id='elEventHeader_details' class='ipsClearfix ipsAreaBackground ipsPad'>
+			<a href='{$event->container()->url()}' class='ipsPos_right ipsResponsive_noFloat cEvents_event cEvents_eventSmall cEvents_style{$event->container()->id}'>{$event->container()->_title}</a>
+			<div class="ipsPhotoPanel ipsPhotoPanel_tiny ipsPhotoPanel_notPhone ipsClearfix">
+				{template="userPhoto" app="core" group="global" params="$event->author(), 'tiny'"}
+				<div>
+					<p class="ipsType_reset ipsType_normal ipsType_blendLinks">
+						{lang="event_created_by" htmlsprintf="$event->author()->link( $event->warningRef() )"}
+					</p>
+					{{if $event->container()->allow_reviews}}
+						<div>
+							{template="rating" group="global" location="front" app="core" params="'large', $event->averageReviewRating(), \IPS\Settings::i()->reviews_rating_out_of, $event->memberReviewRating()"}&nbsp;&nbsp; <span class='ipsType_medium ipsType_light'>({lang="num_reviews" pluralize="$event->reviews"})</span>
+						</div>
+					{{endif}}
+				</div>
+			</div>
+		</div>
+	</header>
+
+	<section>
+		{{if $event->hidden() === 1 and $event->canUnhide()}}
+		<div class="ipsMessage ipsMessage_warning ipsSpacer_top">
+			<p class="ipsType_reset">{lang="event_pending_approval"}</p>
+			<ul class='ipsList_inline ipsSpacer_top'>
+				<li><a href="{$event->url()->csrf()->setQueryString( array( 'do' => 'moderate', 'action' => 'unhide' ) )}" class="ipsButton ipsButton_positive ipsButton_verySmall" title='{lang="approve_title_event"}'><i class="fa fa-check"></i> {lang="approve"}</a></li>
+				{{if $event->canDelete()}}
+				<li><a href='{$event->url()->csrf()->setQueryString( array( 'do' => 'moderate', 'action' => 'delete' ) )}' data-confirm  title='{lang="event_delete_title"}' class='ipsButton ipsButton_negative ipsButton_verySmall'><i class='fa fa-times'></i> {lang="delete"}</a></li>
+				{{endif}}
+			</ul>
+		</div>
+		{{endif}}
+
+		{template="contentItemMessages" group="global" app="core" params="$event->getMessages(), $event"}
+
+		{{if $event->rsvp || $address || $event->map( 270, 270 ) }}
+			<div class='ipsColumns ipsColumns_collapsePhone'>
+				<aside class='ipsColumn ipsColumn_wide'>
+					<div>
+						{template="eventSidebar" group="view" params="$event, $attendees, 'Mob', $address"}
+					</div>
+				</aside>
+				<div class='ipsColumn ipsColumn_fluid'>
+		{{endif}}
+			<div class='ipsBox ipsResponsive_pull ipsClearfix'>
+				<div class='ipsPadding_horizontal ipsPadding_top sm:ipsPadding_bottom'>
+					<div class='ipsPageHeader__meta ipsFlex ipsFlex-jc:between ipsFlex-ai:center ipsFlex-fw:wrap ipsGap:3'>
+						<div class='ipsFlex-flex:11'>
+							<h2 class='ipsFlex-flex:11 ipsType_sectionHead'>{lang="event_details"}</h2>
+							{{if $event->recurring}}
+									<p class='ipsType_medium ipsType_light ipsType_reset'><i class='fa fa-repeat'></i> {$event->_recurring_text}</p>
+							{{endif}}	
+							{{if \count( $event->tags() ) OR ( $event->canEdit() AND $event::canTag( NULL, $event->container() ) )}}
+								{template="tags" group="global" app="core" params="$event->tags(), FALSE, FALSE, ( $event->canEdit() AND $event::canTag( NULL, $event->container() ) ) ? $event->url() : NULL"}
+							{{endif}}
+						</div>
+						<div class='ipsFlex-flex:01 ipsResponsive_hidePhone'>
+							<div class='ipsFlex ipsFlex-ai:center ipsFlex-jc:center ipsGap:3 ipsGap_row:0'>
+								{{if \count( $event->shareLinks() )}}
+									{template="shareButton" app="core" group="sharelinks" params="$event"}
+								{{endif}}
+								{{if $event->canRemind()}}
+									{template="reminder" app="calendar" group="view" params="$event, $reminder"}
+								{{endif}}
+								{template="promote" app="core" group="global" params="$event"}
+								{template="follow" app="core" group="global" params="'calendar', 'event', $event->id, $event->followersCount()"}
+							</div>
+						</div>
+					</div>				
+					<div class='ipsComment_content ipsType_medium ipsMargin_top'>
+						{template="richText" group="global" app="core" location="global" params="$event->content(), array('ipsType_normal', 'ipsClear', 'ipsType_break')"}
+					</div>
+
+					{{if $event->_album}}
+						<br>
+						<div class='ipsAreaBackground_light ipsPad_half'>
+							<h3 class='ipsType_normal ipsType_reset ipsSpacer_bottom ipsSpacer_half'>{lang="event_images"}</h3>
+							{$event->_album|raw}
+						</div>
+					{{endif}}
+
+					{{if $event->editLine()}}
+                        {$event->editLine()|raw}
+					{{endif}}
+				</div>
+				<div class='ipsItemControls ipsMargin_top'>
+					{{if \IPS\IPS::classUsesTrait( $event, 'IPS\Content\Reactable' ) and settings.reputation_enabled}}
+						{template="reputation" app="core" group="global" params="$event"}
+					{{endif}}
+					<ul class='ipsComment_controls ipsClearfix ipsItemControls_left'>
+						{{if ( $event->canEdit() or $event->canFeature() or $event->canUnfeature() or $event->canHide() or $event->canUnhide() or $event->canMove() or $event->canLock() or $event->canUnlock() or $event->canDelete() ) or ( $event->hidden() == -2 AND \IPS\Member::loggedIn()->modPermission('can_manage_deleted_content') )}}
+							<li>
+								<a href='#elEventActions_menu' id='elEventActions' class='ipsButton ipsButton_light ipsButton_verySmall ipsButton_fullWidth' data-ipsMenu>{lang="manage_event"} <i class='fa fa-caret-down'></i></a>
+								<ul id='elEventActions_menu' class='ipsMenu ipsMenu_auto ipsHide'>
+									{{if $event->canReportOrRevoke() === TRUE}}
+										<li class='ipsMenu_item'>
+											<a href='{$event->url('report')}' data-ipsDialog data-ipsDialog-size='medium' data-ipsDialog-title="{lang="report_event"}" data-ipsDialog-remoteSubmit data-ipsDialog-flashMessage="{lang="report_submit_success"}" title="{lang="report_event"}">{lang="report_event"}</a>
+										</li>
+										<li class='ipsMenu_sep'><hr></li>
+									{{endif}}
+									{{if \IPS\Member::loggedIn()->modPermission('can_manage_deleted_content') AND $event->hidden() == -2}}
+										<li class='ipsMenu_item'><a href='{$event->url()->csrf()->setQueryString( array( 'do' => 'moderate', 'action' => 'restore' ) )}' data-confirm data-confirmSubMessage='{lang="restore_as_visible_desc"}'>{lang="restore_as_visible"}</a></li>
+										<li class='ipsMenu_item'><a href='{$event->url()->csrf()->setQueryString( array( 'do' => 'moderate', 'action' => 'restoreAsHidden' ) )}' data-confirm data-confirmSubMessage='{lang="restore_as_hidden_desc"}'>{lang="restore_as_hidden"}</a></li>
+										<li class='ipsMenu_item'><a href='{$event->url()->csrf()->setQueryString( array( 'do' => 'moderate', 'action' => 'delete', 'immediate' => 1 ) )}' data-confirm data-confirmSubMessage='{lang="delete_immediately_desc"}'>{lang="delete_immediately"}</a></li>
+									{{else}}
+										{{if $event->canEdit()}}				
+											<li class='ipsMenu_item'><a href='{$event->url()->setQueryString( array( 'do' => 'edit' ) )}' title="{lang="calendar_edit_details_title"}">{lang="calendar_edit_details"}</a></li>
+										{{endif}}
+										{{if $event->canFeature()}}				
+											<li class='ipsMenu_item'><a href='{$event->url()->csrf()->setQueryString( array( 'do' => 'moderate', 'action' => 'feature' ) )}' title='{lang="feature_title_event"}'>{lang="feature"}</a></li>
+										{{endif}}
+										{{if $event->canUnfeature()}}				
+											<li class='ipsMenu_item'><a href='{$event->url()->csrf()->setQueryString( array( 'do' => 'moderate', 'action' => 'unfeature' ) )}' title='{lang="unfeature_title_event"}'>{lang="unfeature"}</a></li>
+										{{endif}}
+										{{if $event->canHide()}}				
+											<li class='ipsMenu_item'><a href='{$event->url()->csrf()->setQueryString( array( 'do' => 'moderate', 'action' => 'hide' ) )}' title='{lang="hide_title_event"}' data-ipsDialog data-ipsDialog-title="{lang="hide"}">{lang="hide"}</a></li>
+										{{endif}}
+										{{if $event->canUnhide()}}				
+											<li class='ipsMenu_item'><a href='{$event->url()->csrf()->setQueryString( array( 'do' => 'moderate', 'action' => 'unhide' ) )}' title='{{if $event->hidden() === 1}}{lang="approve_title_event"}{{else}}{lang="unhide_title_event"}{{endif}}'>{{if $event->hidden() === 1}}{lang="approve"}{{else}}{lang="unhide"}{{endif}}</a></li>
+										{{endif}}
+										{{if $event->canLock()}}				
+											<li class='ipsMenu_item'><a href='{$event->url()->csrf()->setQueryString( array( 'do' => 'moderate', 'action' => 'lock' ) )}' title='{lang="lock_title_event"}'>{lang="lock"}</a></li>
+										{{endif}}
+										{{if $event->canUnlock()}}				
+											<li class='ipsMenu_item'><a href='{$event->url()->csrf()->setQueryString( array( 'do' => 'moderate', 'action' => 'unlock' ) )}' title='{lang="unlock_title_event"}'>{lang="unlock"}</a></li>
+										{{endif}}
+										{{if $event->canMove()}}				
+											<li class='ipsMenu_item'><a href='{$event->url()->csrf()->setQueryString( array( 'do' => 'move' ) )}' data-ipsDialog data-ipsDialog-size='narrow' data-ipsDialog-title="{lang="move"}"  title='{lang="event_move_title"}'>{lang="move"}</a></li>
+										{{endif}}
+										{{if $event->canDelete()}}				
+											<li class='ipsMenu_item'><a href='{$event->url()->csrf()->setQueryString( array( 'do' => 'moderate', 'action' => 'delete' ) )}' data-confirm  title='{lang="calendar_delete_title"}'>{lang="delete"}</a></li>
+										{{endif}}
+										{{if $event->canOnMessage( 'add' )}}
+											<li class='ipsMenu_item'><a href='{$event->url()->csrf()->setQueryString( array( 'do' => 'messageForm' ) )}' data-ipsDialog data-ipsDialog-title='{lang="add_message"}'>{lang="add_message"}</a></li>
+										{{endif}}
+										{{if \IPS\Member::loggedIn()->modPermission('can_view_moderation_log')}}
+											<li class='ipsMenu_sep'><hr></li>
+											<li class="ipsMenu_item"><a href='{$event->url()->csrf()->setQueryString( array( 'do' => 'modLog' ) )}' data-ipsDialog data-ipsDialog-title='{lang="moderation_history"}'>{lang="moderation_history"}</a></li>
+										{{endif}}
+									{{endif}}
+								</ul>
+							</li>
+						{{elseif $event->canReportOrRevoke() === TRUE}}
+							<li>
+								<a href='{$event->url('report')}' class='ipsButton ipsButton_link ipsButton_verySmall ipsButton_fullWidth' data-ipsDialog data-ipsDialog-size='medium' data-ipsDialog-title="{lang="report_event"}" data-ipsDialog-remoteSubmit data-ipsDialog-flashMessage="{lang="report_submit_success"}" title="{lang="report_event"}">{lang="report_event"}</a>
+							</li>
+						{{endif}}
+
+						<li><a href='{$event->url('download')}' rel="noindex nofollow" title='{lang="download_ical_title"}' class='ipsButton ipsButton_link ipsButton_verySmall ipsButton_fullWidth'>{lang="download_ical"}</a></li>
+						{{if $event->venue() and $event->venue()->can( 'view' )}}
+							<li><a href="{$event->venue()->url()}" class='ipsButton ipsButton_link ipsButton_verySmall ipsButton_fullWidth'>{lang="calendar_more_events_at_x" sprintf="$event->venue()->_title"}</a></li>
+						{{endif}}
+						{{if $event->author()->member_id == \IPS\Member::loggedIn()->member_id and \IPS\calendar\Calendar::canOnAny('add')}}
+							<li><a href='{url="app=calendar&module=calendar&controller=submit&do=copy&event_id={$event->id}"}' rel="noindex nofollow" title='' class='ipsButton ipsButton_link ipsButton_verySmall ipsButton_fullWidth'>{lang="add_similar_event"}</a></li>
+						{{endif}}
+					</ul>
+				</div>
+			</div>
+		{{if $event->rsvp || $address || $event->map( 270, 270 )}}
+				</div>
+			</div>
+		{{endif}}
+	</section>
+
+	<div class='ipsBox ipsPadding ipsResponsive_pull ipsResponsive_showPhone ipsMargin_top'>
+		<div class='ipsGap_row:3'>
+			{{if \count( $event->shareLinks() )}}
+				<div>
+					{template="shareButton" app="core" group="sharelinks" params="$event, 'verySmall', 'light'"}
+				</div>
+			{{endif}}
+			{{if $event->canRemind()}}
+				<div>
+					{template="reminder" app="calendar" group="view" params="$event, $reminder, 'ipsButton_fullWidth'"}
+				</div>
+			{{endif}}
+			<div>
+				{template="follow" app="core" group="global" params="'calendar', 'event', $event->id, $event->followersCount()"}
+			</div>
+			<div>
+				{template="promote" app="core" group="global" params="$event"}
+			</div>
+		</div>
+	</div>
+
+	{{if $commentsAndReviews}}
+		<br>
+		{{if $event->container()->allow_reviews && $event->container()->allow_comments}}
+			<a id="replies"></a>
+			<h2 class='ipsHide'>{lang="user_feedback"}</h2>
+		{{endif}}
+		<div class='ipsResponsive_pull'>
+			{$commentsAndReviews|raw}
+		</div>
+	{{endif}}
+</div>
+
+{{if $event->container()->club()}}
+	</div>
+{{endif}}

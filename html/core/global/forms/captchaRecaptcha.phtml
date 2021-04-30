@@ -1,0 +1,9 @@
+<ips:template parameters="$publicKey, $lang, $theme, $error" />
+<div data-ipsCaptcha data-ipsCaptcha-service='recaptcha' data-ipsCaptcha-key="{$publicKey}" data-ipsCaptcha-lang="{$lang}" data-ipsCaptcha-theme="{$theme}">
+	<noscript>
+		<iframe src="//www.google.com/recaptcha/api/noscript?k={$publicKey}&hl={$lang}&error={$error}" height="300" width="500"></iframe>
+		<br>
+		<textarea name="recaptcha_challenge_field" rows="3" cols="40"></textarea>
+		<input type="hidden" name="recaptcha_response_field" value="manual_challenge">
+	</noscript>
+</div>

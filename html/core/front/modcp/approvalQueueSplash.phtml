@@ -1,0 +1,18 @@
+<ips:template parameters="$skipNextTime" />
+<div class="ipsBox ipsPadding:double">
+	<div class="ipsType_center ipsType_large ipsPos_center">
+		<div id='elModCPApprovalSplash'>
+			{lang="approval_queue_splash"}
+		</div>
+		<br><br>
+		<form action="{url="app=core&module=modcp&controller=modcp&tab=approval&go=1" seoTemplate="modcp_approval"}" method="post">
+			<button type="submit" class="ipsButton ipsButton_large ipsButton_primary">{lang="approval_queue_start"}</button><br><br>
+			<span class="ipsType_normal ipsType_light">
+				<span class='ipsCustomInput'>
+					<input name="skipnext" value='1' type="checkbox" {{if $skipNextTime}}checked{{endif}}>
+					<span></span>
+				</span> &nbsp;{lang="approval_queue_skip"}
+			</span>
+		</form>
+	</div>
+</div>

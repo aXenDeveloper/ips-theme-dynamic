@@ -1,0 +1,20 @@
+<ips:template parameters="$table, $headers, $rows, $quickSearch" />
+
+<div class='ipsBox'>
+	<h2 class='ipsType_sectionTitle ipsType_reset'>{lang="modcp_recent_warnings"}</h2>
+	{{if $table->pages > 1}}
+		<div class="ipsButtonBar ipsPad_half ipsClearfix ipsClear">
+			{template="pagination" group="global" app="core" location="global" params="$table->baseUrl, $table->pages, $table->page, $table->limit"}
+		</div>
+	{{endif}}
+
+	<ul class='ipsDataList ipsDataList_large'>
+		{template="$table->rowsTemplate[1]" params="$table, $headers, $rows" object="$table->rowsTemplate[0]"}
+	</ul>
+
+	{{if $table->pages > 1}}
+		<div class="ipsButtonBar ipsPad_half ipsClearfix ipsClear">
+			{template="pagination" group="global" app="core" location="global" params="$table->baseUrl, $table->pages, $table->page, $table->limit"}
+		</div>
+	{{endif}}
+</div>

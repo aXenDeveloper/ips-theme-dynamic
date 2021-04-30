@@ -1,0 +1,19 @@
+<ips:template parameters="$item, $comment" />
+{{$idField = $comment::$databaseColumnId;}}
+{{$itemClassSafe = str_replace( '\\', '_', mb_substr( $comment::$itemClass, 4 ) );}}
+{{if $comment->isIgnored()}}
+	<div class='ipsComment ipsComment_ignored ipsPad_half ipsType_light' id='elIgnoreComment_{$comment->$idField}' data-ignoreCommentID='elComment_{$comment->$idField}' data-ignoreUserID='{$comment->author()->member_id}'>
+		{lang="ignoring_content" sprintf="$comment->author()->name"} <a href='#elIgnoreComment_{$comment->$idField}_menu' data-ipsMenu data-ipsMenu-menuID='elIgnoreComment_{$comment->$idField}_menu' data-ipsMenu-appendTo='#elIgnoreComment_{$comment->$idField}' data-action="ignoreOptions" title='{lang="see_post_ignore_options"}' class='ipsType_blendLinks'>{lang="options"} <i class='fa fa-caret-down'></i></a>
+		<ul class='ipsMenu ipsHide' id='elIgnoreComment_{$comment->$idField}_menu'>
+			<li class='ipsMenu_item' data-ipsMenuValue='showPost'><a href='#'>{lang="show_this_comment"}</a></li>
+			<li class='ipsMenu_sep'><hr></li>
+			<li class='ipsMenu_item' data-ipsMenuValue='stopIgnoring'><a href='{url="app=core&module=system&controller=ignore&do=remove&id={$comment->author()->member_id}" seoTemplate="ignore"}'>{lang="stop_ignoring_posts_by" sprintf="$comment->author()->name"}</a></li>
+			<li class='ipsMenu_item'><a href='{url="app=core&module=system&controller=ignore" seoTemplate="ignore"}'>{lang="change_ignore_preferences"}</a></li>
+		</ul>
+	</div>
+{{endif}}
+
+<a id='comment-{$comment->$idField}'></a>
+<article {{if $comment->author()->hasHighlightedReplies()}}data-memberGroup="{$comment->author()->member_group_id}" {{endif}} id='elComment_{$comment->$idField}' class='ipsBox ipsBox--child ipsComment {{if ( settings.reputation_enabled and \IPS\IPS::classUsesTrait( $comment, 'IPS\Content\Reactable' ) and settings.reputation_highlight and $comment->reactionCount() >= settings.reputation_highlight ) OR $comment->isFeatured()}}ipsComment_popular{{endif}} ipsComment_parent ipsClearfix ipsClear {{if $comment->isIgnored()}}ipsHide{{endif}} {{if $comment->author()->hasHighlightedReplies()}}ipsComment_highlighted{{endif}} {{if $comment->hidden() OR $item->hidden() == -2}}ipsModerated{{endif}}'>
+	{template="comment" group="global" app="core" params="$item, $comment, $item::$formLangPrefix . 'comment', $item::$application, $item::$module, $itemClassSafe"}
+</article>

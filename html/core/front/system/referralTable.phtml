@@ -1,0 +1,13 @@
+<ips:template parameters="$table, $headers, $rows, $quickSearch" />
+<div class='cReferal_members' data-baseurl='{$table->baseUrl}' data-resort='{$table->resortKey}' data-controller='core.global.core.table{{if $table->canModerate()}},core.front.core.moderation{{endif}}'>
+	{{if $table->title}}
+		<h2 class='ipsType_sectionTitle ipsType_reset ipsClear'>{lang="$table->title"}</h2>
+	{{endif}}
+	{{if \count( $rows )}}
+		<ol class='ipsList_inline ipsClearfix ipsSpacer_top ipsSpacer_half' id='elTable_{$table->uniqueId}' data-role="tableRows">
+			{template="$table->rowsTemplate[1]" params="$table, $headers, $rows" object="$table->rowsTemplate[0]"}
+		</ol>
+	{{else}}
+		{lang="referral_no_referrals"}
+	{{endif}}
+</div>

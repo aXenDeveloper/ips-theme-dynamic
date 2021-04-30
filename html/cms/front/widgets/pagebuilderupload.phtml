@@ -1,0 +1,43 @@
+<ips:template parameters="$images, $captions, $urls, $autoPlay, $maxHeight" />
+{{if ! \is_array( $images )}}
+<div>
+	{{if isset( $urls[0] )}}
+		<a href="{$urls[0]}">
+	{{endif}}
+	<img src="{$images}" alt='' class="ipsPageBuilderUpload">
+	{{if isset( $captions[0] )}}
+		<span class="ipsWidget_imageCarousel__caption">{$captions[0]}</span>
+	{{endif}}
+	{{if isset( $urls[0] )}}
+		</a>
+	{{endif}}
+</div>
+{{else}}
+<div class="ipsCarousel ipsClearfix" data-ipsCarousel {{if $autoPlay}}data-ipsCarousel-slideshow{{endif}} {{if ! $maxHeight}}data-ipsCarousel-fullSizeItems{{endif}} data-ipsCarousel-shadows='false'>
+	<div class='ipsCarousel_inner'>
+		<ul class='ipsClearfix ipsList_reset' data-role='carouselItems'>
+			{{foreach $images as $id => $image}}
+				<li class='ipsCarousel_item ipsAreaBackground_reset'>
+					<div class='ipsWidget_imageCarousel'>
+						{{if isset( $urls[ $id ] )}}
+							<a href="{$urls[ $id ]}">
+						{{endif}}
+							<img src="{$image}" {{if $maxHeight}}style="max-height: {$maxHeight}px; max-width: none"{{endif}} alt=''>
+							{{if isset( $captions[ $id ] )}}
+								<span class="ipsWidget_imageCarousel__caption">{$captions[ $id ]}</span>
+							{{endif}}
+						{{if isset( $urls[ $id ] )}}
+							</a>
+						{{endif}}
+					</div>
+				</li>
+			{{endforeach}}
+		</ul>
+	</div>
+	<span class='ipsCarousel_shadow ipsCarousel_shadowLeft'></span>
+    <span class='ipsCarousel_shadow ipsCarousel_shadowRight'></span>
+	<a href='#' class='ipsCarousel_nav ipsHide' data-action='prev'><i class='fa fa-chevron-left'></i></a>
+	<a href='#' class='ipsCarousel_nav ipsHide' data-action='next'><i class='fa fa-chevron-right'></i></a>
+</div>
+
+{{endif}}

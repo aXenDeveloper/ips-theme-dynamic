@@ -1,0 +1,42 @@
+<ips:template parameters="$members, $count, $today, $orientation='vertical'" />
+<h3 class='ipsType_reset ipsWidget_title'>{lang="block_todaysBirthdays"}</h3>
+<div class='ipsWidget_inner {{if $orientation !== 'vertical'}}ipsPad{{else}}ipsPad_half{{endif}}'>
+	{{if $orientation == 'vertical'}}
+		{{if !empty($members) }}
+			<ol class='ipsDataList ipsDataList_reducedSpacing'>
+				{{foreach $members as $member}}
+					<li class='ipsDataItem'>
+						<div class='ipsDataItem_main ipsPhotoPanel ipsPhotoPanel_tiny ipsClearfix'>
+							{template="userPhoto" app="core" group="global" params="$member, 'tiny'"}
+							<div>
+								{$member->link()|raw}
+								{{if $member->bday_year}}<br><span class='ipsType_light'>{lang="member_age" pluralize="$member->age()"}</span>{{endif}}
+							</div>
+						</div>
+					</li>
+				{{endforeach}}
+			</ol>
+		{{else}}
+			<div class='ipsType_light ipsPad_half ipsType_center'>{lang="no_members_birthday_today"}</div>
+		{{endif}}
+	{{else}}
+		{{if !empty($members) }}
+			<ol class='ipsList_inline ipsList_noSpacing'>
+				{{foreach $members as $idx => $member}}
+					<li>
+						{$member->link()|raw} {{if $member->bday_year}} <span class='ipsType_light'>{lang="member_age" pluralize="$member->age()"}</span>{{endif}}{{if $idx != \count( $members ) - 1}},{{endif}}
+					</li>
+				{{endforeach}}
+			</ol>
+		{{else}}
+			<div class='ipsType_light ipsPad_half ipsType_center'>{lang="no_members_birthday_today"}</div>
+		{{endif}}
+	{{endif}}
+</div>
+{{if $count > \count($members)}}
+	<div class='ipsWidget_inner ipsPad_half ipsWidget_bottomBar'>
+		<div class='ipsType_center ipsAreaBackground_light ipsPad_half'>
+			<a data-ipsDialog data-ipsDialog-title='{lang="birthdays_today" pluralize="$count"}' data-ipsDialog-size="narrow" href='{url="app=calendar&module=calendar&controller=view&view=day&y={$today->year}&m={$today->mon}&d={$today->mday}&show=birthdays" seoTemplate="calendar_day"}'>{lang="birthdays_view_all"}</a>
+		</div>
+	</div>
+{{endif}}

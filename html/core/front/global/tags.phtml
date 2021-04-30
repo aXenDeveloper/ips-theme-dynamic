@@ -1,0 +1,50 @@
+<ips:template parameters="$tags, $showCondensed=FALSE, $hideResponsive=FALSE, $tagEditUrl=NULL" />
+{{$id = mt_rand();}}
+{{if \count( $tags ) OR $tagEditUrl}}
+	{{if $showCondensed}}
+		<ul class='ipsTags ipsTags_inline ipsList_inline {{if $hideResponsive}}ipsResponsive_hidePhone{{endif}} ipsGap:1 ipsGap_row:0'>
+			{{if \count( $tags )}}
+				{{foreach $tags as $idx => $tag}}
+					{{if $idx < 2}}
+						{template="tag" group="global" app="core" params="$tag, $tagEditUrl"}
+					{{endif}}
+				{{endforeach}}
+			{{endif}}
+			{{if \count( $tags ) > 2}}
+				<li class='ipsType_small'>
+					<span class='ipsType_light ipsCursor_pointer' data-ipsMenu id='elTags_{$id}'>{lang="and_x_more" pluralize="\count( $tags ) - 2"} <i class='fa fa-caret-down ipsJS_show'></i></span>
+					<div class='ipsHide ipsMenu ipsMenu_normal ipsPad_half cTagPopup' id='elTags_{$id}_menu'>
+						<p class='ipsType_medium ipsType_reset ipsType_light'>{lang="tagged_with"}</p>
+						<ul class='ipsTags ipsList_inline ipsGap:1'>
+							{{foreach $tags as $tag}}
+								{template="tag" group="global" app="core" params="$tag, NULL"}
+							{{endforeach}}
+						</ul>
+					</div>
+				</li>
+			{{endif}}
+		</ul>
+	{{else}}
+		<ul class='ipsTags ipsList_inline {{if $hideResponsive}}ipsResponsive_hidePhone{{endif}}' {{if $tagEditUrl}}data-controller='core.front.core.tagEditor' data-tagEditID='{$id}' {{if \IPS\Settings::i()->tags_min}}data-minTags='{setting="tags_min"}'{{endif}} {{if \IPS\Settings::i()->tags_max}}data-maxTags='{setting="tags_max"}'{{endif}}{{endif}}>
+			{{if \count( $tags )}}
+				{{foreach $tags as $tag}}
+					{template="tag" group="global" app="core" params="$tag, $tagEditUrl"}
+				{{endforeach}}
+			{{endif}}
+			{{if $tagEditUrl}}
+				<li class='ipsTags_edit'>
+					<a href="{$tagEditUrl->setQueryString( 'do', 'editTags' )}" title="{lang="edit_tags"}" data-ipsMenu data-ipsMenu-closeOnClick='false' id='elTagEditor_{$id}' class='ipsButton ipsButton_veryVerySmall ipsButton_light'><i class='fa fa-plus'></i>{{if !\count( $tags )}} {lang="add_tags"}{{endif}}</a>
+				</li>
+			{{endif}}
+		</ul>
+		{{if $tagEditUrl}}
+			<div id='elTagEditor_{$id}_menu' class='ipsMenu ipsMenu_wide ipsHide'>
+				<div data-controller='core.front.core.tagEditorForm'>
+					<div class='ipsPad'>
+						<span><i class='icon-spinner2 ipsLoading_tinyIcon'></i>  &nbsp;{lang="loading"}</span>
+					</div>
+				</div>
+			</div>
+		{{endif}}
+	{{endif}}
+{{endif}}

@@ -1,0 +1,27 @@
+<ips:template parameters="" />
+{template="announcementTop" app="core" group="global" params=""}
+
+{{if \IPS\Member::loggedIn()->isAdmin()}}
+<div data-controller="core.global.core.notificationList" class="cNotificationList">
+	{{foreach \IPS\core\AdminNotification::notifications( NULL, array( \IPS\core\AdminNotification::SEVERITY_CRITICAL ) ) as $notification}}
+		{{$style = $notification->style();}}
+		<div class="ipsAreaBackground_light ipsPhotoPanel ipsPhotoPanel_small ipsPhotoPanel_notPhone cAcpNotificationBanner cAcpNotificationBanner_{$style} ipsClearfix">
+			<div class="ipsPos_right">
+				<span class="ipsType_small">{lang="acp_notification_frontend_explain"}</span>
+				{{$dismissible = $notification->dismissible();}}
+				{{if $dismissible !== $notification::DISMISSIBLE_NO}}
+					&nbsp;
+					<a href="{url="app=core&module=system&controller=ajax&do=dismissAcpNotification&id={$notification->id}" csrf="true"}" class="cAcpNotificationBanner_close" title="{lang="acp_notification_dismiss_{$dismissible}"}" data-ipsTooltip data-action="dismiss">
+						<i class="fa fa-times"></i>
+					</a>
+				{{endif}}
+			</div>
+			<i class='fa fa-{{if $style == $notification::STYLE_INFORMATION OR $style == $notification::STYLE_EXPIRE}}info-circle{{else}}warning{{endif}} cAcpNotificationBanner_mainIcon ipsPos_left ipsResponsive_hidePhone'></i>
+			<div>
+				<h2 class='ipsType_sectionHead'>{$notification->title()|raw}</h2>
+				<div class='ipsType_richText ipsType_normal'>{$notification->body()|raw}</div>
+			</div>
+		</div>
+	{{endforeach}}
+</div>
+{{endif}}

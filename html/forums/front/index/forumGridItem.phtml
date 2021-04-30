@@ -1,0 +1,163 @@
+<ips:template parameters="$forum" />
+{{if $forum->can('view')}}
+{{$lastPost = $forum->lastPost();}}
+{{$club = $forum->club();}}
+	<div class="ipsBox ipsBox--child cForumGrid
+		{{if \IPS\forums\Topic::containerUnread( $forum ) && !$forum->redirect_on}}cForumGrid--unread ipsDataItem_unread{{endif}} {{if !\IPS\forums\Topic::containerUnread( $forum ) && !$forum->redirect_on}}cForumGrid--read{{endif}} {{if $forum->redirect_on}}cForumGrid--redirect{{elseif $forum->forums_bitoptions['bw_enable_answers']}}cForumGrid--answers{{elseif $forum->password}}cForumGrid--password{{else}}cForumGrid--forum{{endif}}" data-forumID="{$forum->_id}">
+
+		<!-- Hero -->
+		<div class='cForumGrid__hero'>
+
+			<!-- Clickable area -->
+			<a {{if $forum->password && !$forum->loggedInMemberHasPasswordAccess()}}href="{$forum->url()->setQueryString( 'passForm', '1' )}" data-ipsDialog data-ipsDialog-size='narrow' data-ipsDialog-title='{lang="forum_requires_password" sprintf="$forum->_title"}'{{else}}href="{$forum->url()}"{{endif}} class='cForumGrid__hero-link' aria-hidden='true'>
+				{{if $club and ! $forum->card_image}}
+					{{$coverPhoto = $club->coverPhoto( FALSE );}}
+					{{$cfObject = $coverPhoto->object;}}
+					{{if $coverPhoto->file}}
+					<span class='cForumGrid__hero-image' role='img' style="background-image:url('{$coverPhoto->file->url}')" aria-label='{$forum->_title}'></span>
+					{{elseif ! empty( $cfObject::$coverPhotoDefault )}}
+						<span class='cForumGrid__hero-image' role='img' style="background-color: {$coverPhoto->object->coverPhotoBackgroundColor()};background-image:url('{resource="pattern.png" app="core" location="global"}')" aria-label='{$forum->_title}'></span>
+					{{endif}}
+				{{else}}
+				<span class='cForumGrid__hero-image' role='img' {{if $forum->card_image}}style="background-image:url('{file="$forum->card_image" extension="forums_Cards"}')"{{endif}} aria-label='{$forum->_title}'></span>
+				{{endif}}
+				<span class='cForumGrid__hero-image-overlay'></span>	
+			</a>
+
+			<!-- Forum info -->
+			<div class='cForumGrid__forumInfo ipsFlex ipsFlex-ai:center'>
+				<!-- Forum icon -->
+				<span class='cForumGrid__icon-wrap ipsFlex-flex:00'>
+					{{if !$forum->redirect_on AND \IPS\forums\Topic::containerUnread( $forum ) AND \IPS\Member::loggedIn()->member_id}}
+						<a href="{$forum->url()->setQueryString( 'do', 'markRead' )->csrf()}" data-action='markAsRead' title='{lang="mark_forum_read"}' data-ipsTooltip>
+					{{endif}}
+						{{if $club}}
+							<img src="{{if $club->profile_photo}}{file="$club->profile_photo" extension="core_Clubs"}{{else}}{resource="default_club.png" app="core" location="global"}{{endif}}" alt='' class='cForumGrid__icon-image'>
+						{{elseif $forum->icon}}
+							<img src="{file="$forum->icon" extension="forums_Icons"}" alt='' class='cForumGrid__icon-image cForumGrid__icon--custom'>
+						{{else}}
+							{{if $forum->redirect_on}}
+								<span class='cForumGrid__icon cForumGrid__icon--redirect' {template="formattedInlineStyle" params="$forum" app="core" group="global" location="front"}>
+									<i class='fa fa-arrow-right'></i>
+								</span>
+							{{elseif $forum->forums_bitoptions['bw_enable_answers']}}
+								<span class='cForumGrid__icon cForumGrid__icon--answers' {template="formattedInlineStyle" params="$forum" app="core" group="global" location="front"}>
+									<i class='fa fa-question'></i>
+								</span>
+							{{elseif $forum->password}}
+								<span class='cForumGrid__icon cForumGrid__icon--password' {template="formattedInlineStyle" params="$forum" app="core" group="global" location="front"}>
+									{{if $forum->loggedInMemberHasPasswordAccess()}}
+										<i class='fa fa-unlock'></i>
+									{{else}}
+										<i class='fa fa-lock'></i>
+									{{endif}}
+								</span>
+							{{else}}
+								<span class='cForumGrid__icon cForumGrid__icon--normal' {template="formattedInlineStyle" params="$forum" app="core" group="global" location="front"}>
+									<i class="fa fa-comments"></i>
+								</span>
+							{{endif}}
+						{{endif}}
+					{{if !$forum->redirect_on AND \IPS\forums\Topic::containerUnread( $forum ) AND \IPS\Member::loggedIn()->member_id}}
+						</a>
+					{{endif}}
+				</span>
+
+				<!-- Title and post count -->
+				<div class='ipsFlex-flex:11'>
+					<h3 class='cForumGrid__title ipsType_reset ipsTruncate ipsTruncate_line'>
+						{{if $forum->password && !$forum->loggedInMemberHasPasswordAccess()}}
+							<a href="{$forum->url()->setQueryString( 'passForm', '1' )}" data-ipsDialog data-ipsDialog-size='narrow' data-ipsDialog-title='{lang="forum_requires_password" sprintf="$forum->_title"}'>{$forum->_title}</a>
+						{{else}}
+							<a href="{$forum->url()}">{{if $club}}{lang="club_node" sprintf="$club->name, $forum->_title"}{{else}}{$forum->_title}{{endif}}</a>
+						{{endif}}
+					</h3>
+					{{if !$forum->redirect_on}}
+						<ul class='cForumGrid__title-stats ipsType_reset ipsType_light'>
+							{{$count = \IPS\forums\Topic::contentCount( $forum, TRUE );}}
+							{{if $count > 0}}<li>{lang="posts_number" pluralize="$count" format="short"}</li>{{endif}}
+							{{if $forum->followerCount}}
+								<li>
+									<a href='{url="app=core&module=system&controller=notifications&do=followers&follow_app=forums&follow_area=forum&follow_id={$forum->_id}"}' title='{lang="followers_tooltip"}' class='ipsType_blendLinks ipsType_noUnderline' data-ipsTooltip data-ipsDialog data-ipsDialog-size='narrow' data-ipsDialog-title='{lang="who_follows_this"}'>{lang="forum_follower_count" pluralize="$forum->followerCount"}</a>
+								</li>
+							{{endif}}
+						</ul>
+					{{endif}}
+				</div>
+			</div>
+		</div>
+
+		
+		<div class='cForumGrid__description ipsFlex-flex:11'>
+			{{if $forum->description OR $forum->hasChildren() OR (\IPS\forums\Topic::modPermission( 'unhide', NULL, $forum ) AND ( $forum->queued_topics OR $forum->queued_posts ))}}
+				<!-- Description and subforums -->
+				<div class='ipsPadding'>
+
+					{{if $forum->description}}
+						{template="richText" group="global" app="core" location="global" params="$forum->description, array('ipsType_medium')"}
+					{{endif}}
+					{{if \IPS\forums\Topic::modPermission( 'unhide', NULL, $forum ) AND ( $forum->queued_topics OR $forum->queued_posts )}}
+						<strong class='ipsType_warning ipsType_medium'>
+							<i class='fa fa-warning'></i>
+							{{if $forum->queued_topics}}
+								<a href='{$forum->url()->setQueryString( array( 'advanced_search_submitted' => 1, 'topic_type' => 'queued_topics' ) )->csrf()}' data-ipsTooltip title='{lang="queued_topics_badge" pluralize="$forum->queued_topics"}' class='ipsType_blendLinks'>{$forum->queued_topics}</a>
+							{{else}}
+								<span class='ipsType_light'>0</span>
+							{{endif}}
+							/
+							{{if $forum->queued_posts}}
+								<a href='{$forum->url()->setQueryString( array( 'advanced_search_submitted' => 1, 'topic_type' => 'queued_posts' ) )->csrf()}' data-ipsTooltip title='{lang="queued_posts_badge" pluralize="$forum->queued_posts"}' class='ipsType_blendLinks'>{$forum->queued_posts}</a>
+							{{else}}
+								<span class='ipsType_light'>0</span>
+							{{endif}}
+						</strong>					
+					{{endif}}
+
+					{{if $forum->hasChildren()}}
+						<h4 class='ipsType_minorHeading ipsSpacer_top'>{lang="subforums"}</h4>
+						<ul class="ipsList_inline">
+							{{foreach $forum->children() as $subforum}}
+							<li class="{{if \IPS\forums\Topic::containerUnread( $subforum )}}ipsDataItem_unread{{endif}}">
+								<a href="{$subforum->url()}">
+									{{if \IPS\forums\Topic::containerUnread( $subforum )}}
+										<span class='ipsItemStatus ipsItemStatus_tiny {{if !\IPS\forums\Topic::containerUnread( $subforum ) && !$subforum->redirect_on}}ipsItemStatus_read{{endif}}'>
+											<i class="fa fa-circle"></i>
+										</span>
+									{{endif}}
+									{$subforum->_title}
+								</a>
+							</li>
+							{{endforeach}}
+						</ul>
+					{{endif}}
+
+				</div>
+			{{endif}}
+		</div>
+
+
+		<!-- Last post information -->
+		<div class='cForumGrid__last ipsBorder_top ipsPadding_vertical:half ipsPadding_horizontal'>
+
+			{{if !$forum->redirect_on}}
+				{{if $lastPost}}
+					<div class='ipsPhotoPanel ipsPhotoPanel_tiny'>
+						{template="userPhoto" app="core" group="global" params="$lastPost['author'], 'tiny'"}
+						<div>
+							<ul class='ipsList_reset'>
+								<li class='ipsDataItem_lastPoster__title'><a href="{$lastPost['topic_url']->setQueryString( 'do', 'getNewComment' )}" class='ipsType_break' title='{$lastPost['topic_title']}'>{$lastPost['topic_title']}</a></li>
+								<li class='ipsType_light ipsTruncate ipsTruncate_line'>{lang="byline_nodate" htmlsprintf="$lastPost['author']->link()"}, <a href='{$lastPost['topic_url']->setQueryString( 'do', 'getLastComment' )}' title='{lang="get_last_post"}' class='ipsType_blendLinks'>{datetime="$lastPost['date']"}</a></li>
+							</ul>
+						</div>
+					</div>
+				{{else}}
+					<p class='ipsType_light ipsType_reset ipsTruncate ipsTruncate_line'>{{if $forum->password}}{lang="no_forum_posts_password"}{{else}}{lang="no_forum_posts"}{{endif}}</p>
+				{{endif}}
+			{{else}}
+				<p class='ipsType_light ipsType_reset ipsTruncate ipsTruncate_line'>
+					{lang="redirect_hits" pluralize="$forum->redirect_hits"}
+				</p>
+			{{endif}}
+		</div>
+	</div>
+{{endif}}

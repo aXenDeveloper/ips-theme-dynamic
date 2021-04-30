@@ -1,0 +1,28 @@
+<ips:template parameters="$title, $member, $form, $choice" />
+{{if $choice}}
+<div class='ipsBox_alt'>
+	<p class='ipsType_reset ipsType_center ipsType_huge'>
+		<i class='fa fa-envelope'></i>
+	</p>
+
+	<h1 class='ipsType_veryLarge ipsType_center'>{lang="follow_guest_unfollow_title"}</h1>
+
+	<div class='ipsType_large ipsType_center ipsType_richText'>
+		{{if $choice == 'single'}}
+			{lang="follow_guest_unfollowed_thing" sprintf="$title"}
+		{{elseif $choice == 'all'}}
+			{lang="follow_guest_unfollowed_all"}
+		{{endif}}
+	</div>
+	<br>
+	<p class='ipsType_center'>
+		<a href='{url="/"}' class='ipsButton ipsButton_normal ipsButton_small'>{lang="go_community_home"}</a>
+	</p>
+</div>
+{{else}}
+<div class='ipsPadding'>
+	<h2 class='ipsType_sectionHead'>{lang="follow_guest_unfollow_title"}</h2>
+	<p class='ipsType_light'>{lang="follow_guest_followed_by" sprintf="$member->name, $member->name"}</p>
+	{$form|raw}
+</div>
+{{endif}}

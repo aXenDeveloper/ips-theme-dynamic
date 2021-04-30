@@ -1,0 +1,69 @@
+<ips:template parameters="$categories" />
+{template="pageHeader" group="global" params="\IPS\Member::loggedIn()->language()->addToStack('notification_options')"}
+<div class="ipsBox ipsSpacer_both">
+	<h2 class="ipsType_sectionTitle ipsType_reset">{lang="what_notifications_you_receive"}</h2>
+	<ul class="ipsDataList ipsDataList_clickableRows" >
+		{{foreach $categories as $k => $enabled}}
+			{template="notificationSettingsIndexRow" group="system" params="$k, $enabled"}
+		{{endforeach}}
+	</ul>
+</div>
+<div class="ipsBox ipsSpacer_both ipsSpacer_double">
+	<h2 class="ipsType_sectionTitle ipsType_reset">{lang="where_you_receive_notifications"}</h2>
+	<div class="ipsGrid ipsGrid_collapsePhone">
+		<div class="ipsGrid_span{{if settings.mobile_app_id and member.members_bitoptions['mobile_notifications']}}4{{else}}6{{endif}} ipsPad">
+			<div class="cNotificationMethodIcon">
+				<img src="{resource="notification_settings/notification_bell.svg"}">
+			</div>
+			<div class="cNotificationMethodDetails">
+				<p class="ipsType_reset ipsType_large">{lang="member_notifications_inline"}</p>
+				<p class="ipsType_light">{lang="member_notifications_inline_desc"}</p>
+				<ul class="ipsField_fieldList ipsJS_show">
+					<li>
+						<span class="ipsCustomInput">
+							<input type="checkbox" id="elNotificationSounds" {{if !member.members_bitoptions['disable_notification_sounds']}}checked{{endif}} data-callback="{url="app=core&module=system&controller=notifications&do=sounds" csrf="true"}">
+							<span></span>
+						</span>
+						<div class="ipsField_fieldList_content">
+							<label for="elNotificationSounds" id="elNotificationSounds_label">{lang="notification_prefs_sound"}</label>
+						</div>
+					</li>
+					<li class="ipsHide" data-role="browserNotifyInfo">
+						<span class="ipsCustomInput">
+							<input type="checkbox" id="elBrowserNotifications">
+							<span></span>
+						</span>
+						<div class="ipsField_fieldList_content">
+							<label for="elBrowserNotifications" id="elBrowserNotifications_label">{lang="notifications_browser"}</label>
+							<div class='ipsFieldRow_desc ipsHide' data-role="browserNotifyDisabled">
+								{lang="notifications_browser_disabled"}
+							</div>
+						</div>
+					</li>
+				</ul>
+			</div>
+		</div>
+		{{if settings.mobile_app_id and member.members_bitoptions['mobile_notifications']}}
+			<div class="ipsGrid_span4 ipsPad">
+				<div class="cNotificationMethodIcon">
+					<img src="{resource="notification_settings/push.svg"}">
+				</div>
+				<div class="cNotificationMethodDetails">
+					<p class="ipsType_reset ipsType_large">{lang="member_notifications_push"}</p>
+					<p class="ipsType_light">{lang="member_notifications_push_desc"}</p>
+					<a href="{url="app=core&module=system&controller=notifications&do=disable&type=push" csrf="true"}" data-confirm>{lang="member_notifications_push_stop"}</a>
+				</div>
+			</div>
+		{{endif}}
+		<div class="ipsGrid_span{{if settings.mobile_app_id and member.members_bitoptions['mobile_notifications']}}4{{else}}6{{endif}} ipsPad">
+			<div class="cNotificationMethodIcon">
+				<img src="{resource="notification_settings/email.svg"}">
+			</div>
+			<div class="cNotificationMethodDetails">
+				<p class="ipsType_reset ipsType_large">{lang="member_notifications_email"}</p>
+				<p class="ipsType_light">{lang="member_notifications_email_desc" sprintf="\IPS\Member::loggedIn()->email"}</p>
+				<a href="{url="app=core&module=system&controller=notifications&do=disable&type=email" csrf="true"}" data-confirm>{lang="member_notifications_email_stop"}</a>
+			</div>
+		</div>
+	</div>
+</div>

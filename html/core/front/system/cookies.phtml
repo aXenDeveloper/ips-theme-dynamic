@@ -1,0 +1,34 @@
+<ips:template parameters="" />
+{{$prefix = \IPS\COOKIE_PREFIX;}}
+{template="pageHeader" if="!\IPS\Request::i()->isAjax()" group="global" params="\IPS\Member::loggedIn()->language()->addToStack('cookies_about')"}
+<div class='ipsBox_alt'>
+	<div class='ipsType_normal ipsType_richText ipsPad'>
+		{lang="cookies_about_header"}
+	</div>
+	<h3 class="ipsType_large">{lang="cookies_standard"}</h3>
+	<div class='ipsType_normal ipsType_richText ipsPad'>
+		<strong class="ipsType_medium">{$prefix}IPSSessionFront</strong>
+		<div>{lang="cookie_session_front"}</div>
+		<br>
+		<strong class="ipsType_medium">{$prefix}member_id</strong>
+		<div>{lang="cookie_member_id"}</div>
+		<br>
+        <strong class="ipsType_medium">{$prefix}loggedIn</strong>
+        <div>{lang="cookie_loggedIn"}</div>
+        <br>
+		<strong class="ipsType_medium">{$prefix}login_key</strong>
+		<div>{lang="cookie_login_key"}</div>
+        <br>
+        <strong class="ipsType_medium">{$prefix}device_key</strong>
+        <div>{lang="cookie_device_key"}</div>
+	</div>
+	<h3 class="ipsType_large">{lang="cookies_third_party"}</h3>
+	<div class='ipsType_normal ipsType_richText ipsPad'>
+		{lang="cookies_third_party_desc"}	
+	</div>
+
+	<h3 class="ipsType_large">{lang="cookies_change_header"}</h3>
+	<div class='ipsType_normal ipsType_richText ipsPad'>
+		{lang="cookies_change_text"}	
+	</div>
+</div>

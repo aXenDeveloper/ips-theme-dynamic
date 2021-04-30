@@ -1,0 +1,104 @@
+/* PHONES */
+@media screen and (max-width: 767px) {
+
+	.ipsTable.ipsTable_responsive,
+	.ipsTable.ipsTable_responsive tbody,
+	.ipsTable.ipsTable_responsive tr:not( .ipsHide ),
+	.ipsTable.ipsTable_responsive td {
+		display: block;
+		width: auto !important;
+	}
+
+	.ipsTable.ipsTable_responsive thead {
+		display: none;
+	}
+
+	.ipsTable.ipsTable_responsive tr {
+		padding: 10px;
+		line-height: 1.6;
+	}
+
+	.ipsTable.ipsTable_responsive tbody tr td {
+		padding: 0;
+		border: 0;
+	}
+
+	.ipsTable.ipsTable_responsive td.ipsTable_icon {
+		float: left;
+		padding: 0;
+		width: 45px;
+	}
+	html[dir="rtl"] .ipsTable.ipsTable_responsive td.ipsTable_icon {
+		float: right;
+	}
+
+	html[dir="ltr"] .ipsTable.ipsTable_responsive td.ipsTable_icon ~ td {
+		margin-left: 55px;
+	}
+	html[dir="rtl"] .ipsTable.ipsTable_responsive td.ipsTable_icon ~ td {
+		margin-right: 55px;
+	}
+
+	.ipsTable.ipsTable_responsive td.ipsTable_primary {
+		font-size: 16px;
+		font-weight: bold;
+	}
+
+	.ipsTable.ipsTable_responsive td.ipsTable_controls {
+		margin-top: 5px;
+	}
+
+	.ipsTable.ipsTable_responsive td[data-title]:before {
+		content: attr(data-title) ':\00A0';
+		font-weight: bold;
+	}
+
+	/* Matrices */
+	html[dir="ltr"] .ipsTable.ipsTable_responsive.ipsMatrix td {
+		text-align: left;
+	}
+	html[dir="rtl"] .ipsTable.ipsTable_responsive.ipsMatrix td {
+		text-align: right;
+	}
+
+	.ipsTable.ipsTable_responsive.ipsMatrix .ipsMatrix_rowTitle {
+		background: rgb( var(--theme-area_background_light) ) !important;
+		padding: 10px;
+		text-align: left;
+		margin: -10px -10px 10px -10px;
+		max-width: none;
+	}
+	html[dir="rtl"] .ipsTable.ipsTable_responsive.ipsMatrix .ipsMatrix_rowTitle {
+		text-align: right;
+	}
+
+	.ipsTable.ipsTable_responsive.ipsMatrix td input:not( [type="checkbox"] ):not( [type="radio"] ),
+	.ipsTable.ipsTable_responsive.ipsMatrix td select,
+	.ipsTable.ipsTable_responsive.ipsMatrix td textarea {
+		width: 100%;
+		margin-bottom: 5px;
+	}
+
+	.ipsTable.ipsTable_responsive.ipsMatrix td .ipsToggle {
+		margin-bottom: 5px;
+	}
+
+	.ipsTable.ipsTable_responsive.ipsMatrix .ipsMatrix_subHeader {
+		background: rgb( var(--theme-area_background_dark) );
+		color: #fff;
+		font-weight: normal;
+		padding: 10px;
+		margin-top: 5px;
+		font-size: 16px;
+		display: block;
+		margin: -10px -10px -10px -10px;
+	}
+
+	.ipsTable.ipsTable_responsive.ipsMatrix td[data-title]:before {
+		text-align: left;
+		display: block;
+	}
+	html[dir="rtl"] .ipsTable.ipsTable_responsive.ipsMatrix td[data-title]:before {
+		text-align: right;
+	}
+}

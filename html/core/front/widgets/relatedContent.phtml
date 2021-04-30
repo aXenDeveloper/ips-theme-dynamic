@@ -1,0 +1,22 @@
+<ips:template parameters="$similar" />
+<h3 class='ipsType_reset ipsWidget_title'>{lang="block_relatedContent"}</h3>
+<div class='ipsPad_half ipsWidget_inner'>
+	<ul class='ipsDataList ipsDataList_reducedSpacing'>
+	{{foreach $similar as $item}}
+		<li class='ipsDataItem'>
+			<div class='ipsDataItem_icon'>
+				{template="userPhoto" app="core" group="global" params="$item->author(), 'tiny'"}
+			</div>
+			<div class='ipsDataItem_main'>
+				<div class='ipsType_break ipsContained'><a href="{$item->url( "getPrefComment" )}" title='{lang="view_this" sprintf="$item->mapped('title')"}' class='ipsTruncate ipsTruncate_line'>{$item->mapped('title')}</a></div>
+				<span class='ipsType_light ipsType_medium'>{lang="byline_nodate" htmlsprintf="$item->author()->link()"}</span><br>
+				{{if $content = $item->truncated()}}
+					<div class='ipsType_richText ipsType_normal' data-ipsTruncate data-ipsTruncate-type="remove" data-ipsTruncate-size="2 lines">
+						{$content|raw}
+					</div>
+				{{endif}}
+			</div>
+		</li>
+	{{endforeach}}
+	</ul>
+</div>

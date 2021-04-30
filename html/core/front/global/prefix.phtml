@@ -1,0 +1,4 @@
+<ips:template parameters="$encoded, $text" />
+{{if $text}}
+	<a href="{url="app=core&module=search&controller=search&tags={$encoded}" seoTemplate="tags"}" title="{lang="find_tagged_content" sprintf="$text"}" class='ipsTag_prefix' rel="tag"><span>{$text}</span></a>
+{{endif}}

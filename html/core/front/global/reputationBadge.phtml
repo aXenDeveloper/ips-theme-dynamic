@@ -1,0 +1,14 @@
+<ips:template parameters="$author" />
+{{if settings.reputation_enabled and settings.reputation_show_profile and $author->member_id}}
+	{{if member.group['gbw_view_reps']}}
+		<a href='{url="app=core&module=members&controller=profile&id={$author->member_id}&do=reputation" seoTemplate="profile_reputation" seoTitle="$author->members_seo_name"}' title="{lang="reputation_badge_tooltip"}" data-ipsTooltip class='ipsRepBadge {{if $author->pp_reputation_points > 0}}ipsRepBadge_positive{{elseif $author->pp_reputation_points < 0}}ipsRepBadge_negative{{else}}ipsRepBadge_neutral{{endif}}'>
+	{{else}}
+		<span title="{lang="reputation_badge_tooltip"}" data-ipsTooltip class='ipsRepBadge {{if $author->pp_reputation_points > 0}}ipsRepBadge_positive{{elseif $author->pp_reputation_points < 0}}ipsRepBadge_negative{{else}}ipsRepBadge_neutral{{endif}}'>
+	{{endif}}
+			<i class='fa {{if $author->pp_reputation_points > 0}}fa-plus-circle{{elseif $author->pp_reputation_points < 0}}fa-minus-circle{{else}}fa-circle{{endif}}'></i> {number="abs( $author->pp_reputation_points )"}
+	{{if member.group['gbw_view_reps']}}
+		</a>
+	{{else}}
+		</span>
+	{{endif}}
+{{endif}}

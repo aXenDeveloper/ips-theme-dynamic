@@ -1,0 +1,31 @@
+<ips:template parameters="$locations, $truncateLinks=TRUE" />
+{{if \count( $locations )}}
+	<ul class="ipsList_reset">
+		{{foreach $locations as $location}}
+			<li>
+				{{if $location instanceof \IPS\Content or $location instanceof \IPS\Node\Model}}
+					<a href="{{if \IPS\Dispatcher::i()->controllerLocation == 'admin'}}{{if method_exists( $location, 'acpUrl' )}}{$location->acpUrl()}{{else}}{$location->url()}{{endif}}{{else}}{$location->url()}{{endif}}" target="_blank" rel="noreferrer" class="ipsType_blendLinks">
+						{{if isset( $location::$icon )}}<i class="fa fa-{$location::$icon}" {{if isset( $location::$title )}}title="{lang="$location::$title"}" data-ipsTooltip{{endif}}></i> {{endif}}
+						{{if $location instanceof \IPS\Content\Item}}
+							{$location->mapped('title')}
+						{{elseif $location instanceof \IPS\Node\Model}}
+							{$location->_title}
+						{{else}}
+							{$location->item()->mapped('title')}
+						{{endif}}
+					</a>
+				{{elseif $location instanceof \IPS\Http\Url}}
+					<a href="{{if \IPS\Dispatcher::i()->controllerLocation == 'admin'}}{$location}{{else}}{$location}{{endif}}" class="ipsType_blendLinks" target="_blank" rel="noreferrer"{{if $truncateLinks}} title="{$location}"{{endif}}>
+						{{if $truncateLinks}}
+							{truncate="$location" length="60"}
+						{{else}}
+							{$location}
+						{{endif}}
+					</a>
+				{{endif}}
+			</li>
+		{{endforeach}}
+	</ul>
+{{else}}
+	<p class="">{lang="attach_locations_empty"}</p>
+{{endif}}

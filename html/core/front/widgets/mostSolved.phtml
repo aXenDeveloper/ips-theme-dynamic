@@ -1,0 +1,25 @@
+<ips:template parameters="$topSolvedThisWeek, $limit, $orientation='vertical'" />
+<h3 class='ipsType_reset ipsWidget_title'>{lang="block_mostSolved"}</h3>
+<div class='ipsTabs ipsTabs_small ipsTabs_stretch ipsClearfix' id='elMostSolved' data-ipsTabBar data-ipsTabBar-updateURL='false' data-ipsTabBar-contentArea='#elMostSolved_content'>
+	<a href='#elMostSolved' data-action='expandTabs'><i class='fa fa-caret-down'></i></a>
+	<ul role="tablist" class='ipsList_reset'>
+		<li>
+			<a href='#ipsTabs_elMostSolved_el_MostSolvedWeek_panel' id='el_MostSolvedWeek' class='ipsTabs_item ipsTabs_activeItem' role="tab" aria-selected='true'>{lang="week"}</a>
+		</li>
+		<li>
+			<a href='{url="app=core&module=system&controller=ajax&do=mostSolved&time=month&limit={$limit}&orientation={$orientation}"}' id='el_MostSolvedMonth' class='ipsTabs_item' role="tab" aria-selected='false'>{lang="month"}</a>
+		</li>		
+		<li>
+			<a href='{url="app=core&module=system&controller=ajax&do=mostSolved&time=year&limit={$limit}&orientation={$orientation}"}' id='el_MostSolvedYear' class='ipsTabs_item' role="tab" aria-selected='false'>{lang="year"}</a>
+		</li>
+		<li>
+			<a href='{url="app=core&module=system&controller=ajax&do=mostSolved&time=all&limit={$limit}&orientation={$orientation}"}' id='el_MostSolvedAll' class='ipsTabs_item' role="tab" aria-selected='false'>{lang="alltime"}</a>
+		</li>
+	</ul>
+</div>
+
+<section id='elMostSolved_content' class='ipsWidget_inner ipsPad_half'>
+	<div id="ipsTabs_elMostSolved_el_MostSolvedWeek_panel" class='ipsTabs_panel'>
+		{template="mostSolvedRows" group="widgets" app="core" params="$topSolvedThisWeek, 'week', $orientation"}
+	</div>
+</section>

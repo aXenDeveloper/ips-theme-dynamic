@@ -1,0 +1,19 @@
+<ips:template parameters="$url, $message" />
+<!DOCTYPE html>
+<html lang="{expression="\IPS\Member::loggedIn()->language()->bcp47()"}" dir="{{if member.language()->isrtl}}rtl{{else}}ltr{{endif}}">
+	<head>
+		<title>{lang="redirecting"}</title>
+		<meta http-equiv="refresh" content="2; url={$url}">
+		<meta name="robots" content="noindex,nofollow">
+		{template="includeMeta" app="core" group="global" location="global" params=""}
+		{template="includeCSS" app="core" group="global" location="global" params=""}
+	</head>
+	<body>
+		<p class="ipsMessage ipsMessage_info ipsRedirectMessage">
+			<strong>{lang="$message"}</strong><br>
+			<br>
+			{lang="redirecting_wait"}
+		</p>
+		{template="includeJS" app="core" group="global" location="global" params=""}
+	</body>
+</html>

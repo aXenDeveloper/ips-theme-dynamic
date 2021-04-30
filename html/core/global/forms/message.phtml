@@ -1,0 +1,10 @@
+<ips:template parameters="$lang, $id=NULL, $css='', $parse=FALSE" />
+<li {{if $id !== NULL}} id="{$id}"{{endif}}>
+	<div class="ipsPad ipsType_richText {$css}">
+		{{if $parse}}
+			{lang="$lang"}
+		{{else}}
+			{$lang|raw}
+		{{endif}}
+	</div>
+</li>

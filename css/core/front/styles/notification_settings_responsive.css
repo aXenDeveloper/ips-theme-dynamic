@@ -1,0 +1,6 @@
+@media screen and (max-width: 979px) {
+	.cNotificationSettings_expand {
+		line-height: inherit;
+		margin-right: 7px;
+	}	
+}

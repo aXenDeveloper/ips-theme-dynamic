@@ -1,0 +1,9 @@
+<ips:template parameters="$title, $form" />
+<div id='elPromoteDialog' class='{{if !\IPS\Request::i()->isAjax()}}ipsBox_alt{{endif}}'>
+	{{if $title && !\IPS\Request::i()->isAjax()}}
+	<h1 class="ipsType_pageTitle">{$title}</h1>
+	{{endif}}
+	<div>
+		{$form|raw}
+	</div>
+</div>

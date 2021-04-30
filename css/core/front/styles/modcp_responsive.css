@@ -1,0 +1,22 @@
+/* PHONES */
+@media screen and (max-width: 767px) {
+	
+	html[dir="ltr"] #elModCPContent {
+		padding-left: 0;
+	}
+	html[dir="rtl"] #elModCPContent {
+		padding-right: 0;
+	}
+
+	html[dir="ltr"] #elReportSidebar {
+		margin-left: 0;
+	}
+	html[dir="rtl"] #elReportSidebar {
+		margin-right: 0;
+	}
+
+	.cModCPAnnouncementRow .ipsDataItem_modCheck {
+		position: static;
+		padding-top: 10px !important;
+	}
+}

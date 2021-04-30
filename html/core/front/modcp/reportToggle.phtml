@@ -1,0 +1,32 @@
+<ips:template parameters="$report, $ref='list', $showIcon=TRUE" />
+{{if $showIcon}}
+<a href='#elReportItem{$report->id}_menu' id='elReportItem{$report->id}' data-action="changeStatus" class='ipsType_blendLinks' data-ipsMenu data-ipsMenu-closeOnClick>
+	<span class="cReportIcon ipsType_large"><i class='{{if $report->status == 1}}fa fa-flag{{elseif $report->status == 2}}fa fa-exclamation-triangle{{else}}fa fa-check-circle{{endif}}' data-role="ipsMenu_selectedIcon"></i></span> &nbsp;<i class='fa fa-caret-down'></i>
+</a>
+{{endif}}
+<ul class='ipsMenu ipsMenu_auto ipsMenu_withStem ipsHide' id='elReportItem{$report->id}_menu'>
+	<li class='ipsMenu_title'>{lang="mark_as"}</li>
+	<li class='ipsMenu_item' data-ipsMenuValue='3'>
+		<a href='{url="app=core&module=modcp&tab=reports&id={$report->id}&action=view&setStatus=3&ref={$ref}" csrf="true" seoTemplate="modcp_report"}' data-action='ipsMenu_ping'>
+			<i class='fa fa-check-circle' data-role="ipsMenu_selectedIcon"></i> &nbsp;<span data-role="ipsMenu_selectedText">{lang="report_status_3"}</span>
+		</a>
+	</li>
+	<li class='ipsMenu_item' data-ipsMenuValue='2'>
+		<a href='{url="app=core&module=modcp&tab=reports&id={$report->id}&action=view&setStatus=2&ref={$ref}" csrf="true" seoTemplate="modcp_report"}' data-action='ipsMenu_ping'>
+			<i class='fa fa-exclamation-triangle' data-role="ipsMenu_selectedIcon"></i> &nbsp;<span data-role="ipsMenu_selectedText">{lang="report_status_2"}</span>
+		</a>
+	</li>
+	<li class='ipsMenu_item' data-ipsMenuValue='1'>
+		<a href='{url="app=core&module=modcp&tab=reports&id={$report->id}&action=view&setStatus=1&ref={$ref}" csrf="true" seoTemplate="modcp_report"}' data-action='ipsMenu_ping'>
+			<i class='fa fa-flag' data-role="ipsMenu_selectedIcon"></i> &nbsp;<span data-role="ipsMenu_selectedText">{lang="report_status_1"}</span>
+		</a>
+	</li>
+	{{if !$showIcon and $report->canDelete( \IPS\Member::loggedIn() )}}
+		<li class='ipsMenu_sep'></li>
+		<li class='ipsMenu_item'>
+			<a href='{$report->url()->csrf()->setQueryString('_action', 'delete')}' data-action='ipsMenu_ping'>
+				<i class='fa fa-times'></i> &nbsp;{lang="delete"}
+			</a>
+		</li>
+	{{endif}}
+</ul>

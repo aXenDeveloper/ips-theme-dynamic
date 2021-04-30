@@ -1,0 +1,5 @@
+<ips:template parameters="$elements, $key, $type, $checked=FALSE" />
+{{if \in_array( $type, array_keys( $elements['']['stream_classes']->options['toggles'] ) )}}
+	<div class='ipsMenu ipsMenu_wide ipsPad ipsHide' data-role="streamContainer" data-contentKey="{$key}" data-className="{$type}" id='elMenu_{$key}_menu'>
+	</div>
+{{endif}}

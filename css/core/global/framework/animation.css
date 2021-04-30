@@ -1,0 +1,175 @@
+/* Animation: classes used by javascript to add predefined animations to elements */
+/* ======================================================== */
+.ipsAnim {
+	animation-duration: 0.5s;
+	animation-fill-mode: both;
+	animation-timing-function: ease-out;
+	/* By setting an invisible 3d transform, we can cause */
+	/* browsers to render the animation with the GPU instead */
+	transform: translate3d(0,0,0);
+}
+
+.ipsAnim.ipsAnim_fast {
+	animation-duration: 0.25s;
+}
+
+.ipsAnim.ipsAnim_slow {
+	animation-duration: 0.8s;
+}
+
+.ipsAnim.ipsAnim_verySlow {
+	animation-duration: 1.2s;
+}
+
+/* ======================================================== */
+/* FADE IN/OUT */
+@keyframes fadeIn {			0% { opacity: 0; }	100% { opacity: 1; } }
+@keyframes fadeOut {		0% { opacity: 1; }	100% { opacity: 0; } }
+
+@keyframes fadeInDown {
+	0% { opacity: 0; transform: translateY(-20px); }
+	100% { opacity: 1; transform: translateY(0); }
+}
+@keyframes fadeOutDown {
+	0% { opacity: 1; transform: translateY(0); }
+	100% { opacity: 0; transform: translateY(20px); }
+}
+
+.ipsAnim_fade.ipsAnim_in {
+	opacity: 1;
+	animation-name: fadeIn;
+}
+.ipsAnim_fade.ipsAnim_out {
+	opacity: 1;
+	animation-name: fadeOut;
+}
+.ipsAnim_fade.ipsAnim_in.ipsAnim_down {
+	animation-name: fadeInDown;
+}
+.ipsAnim_fade.ipsAnim_out.ipsAnim_down {
+	animation-name: fadeOutDown;
+}
+
+/* ======================================================== */
+/* BLIND DOWN */
+@keyframes blindDown {
+	0% { height: 0; }
+	100% { height: auto; }
+}
+
+.ipsAnim_blind.ipsAnim_down {
+	height: auto;
+	animation-name: blindDown;
+}
+
+/* ======================================================== */
+/* BLIND Up */
+@keyframes blindUp {
+	0% { height: auto; }
+	100% { height: 0; }
+}
+
+.ipsAnim_blind.ipsAnim_up {
+	height: 0;
+	animation-name: blindUp;
+}
+
+/* ======================================================== */
+/* SLIDE */
+@keyframes slideFromRight {
+	0% { right: -100%; }
+	100% { right: 0; }
+}
+
+.ipsAnim_slide.ipsAnim_left {
+	right: 0;
+	animation-name: slideFromRight;
+}
+
+/* ======================================================== */
+/* ZOOM */
+@keyframes zoomIn {
+	0% { transform: scale(0); }
+	100% { transform: scale(1); }
+}
+
+.ipsAnim_zoom.ipsAnim_in {
+	animation-name: zoomIn;
+}
+
+@keyframes zoomOut {
+	0% { transform: scale(1); }
+	100% { 
+		transform: scale(0);
+		opacity: 0;
+	}
+}
+
+.ipsAnim_zoom.ipsAnim_out {
+	animation-name: zoomOut;
+	opacity: 1;
+}
+
+/* ======================================================== */
+/* WOBBLE */
+@keyframes wobble {
+	0% { transform: translateX(0%); }
+	15% { transform: translateX(-5%) rotate(-4deg); }
+	30% { transform: translateX(5%) rotate(2deg); }
+	45% { transform: translateX(-4%) rotate(-2deg); }
+	60% { transform: translateX(4%) rotate(1deg); }
+	75% { transform: translateX(-3%) rotate(-1deg); }
+	100% { transform: translateX(0%);}
+}
+
+.ipsAnim_wobble {
+	animation-name: wobble;
+}
+
+/* ======================================================== */
+/* JIGGLE */
+@keyframes jiggle {
+	0% { transform: rotate(-3deg); }
+	50% { transform: rotate(3deg); }
+}
+
+.ipsAnim_jiggle {
+	animation: jiggle 0.3s infinite;
+}
+
+/* ======================================================== */
+
+@keyframes fadeOutDown {
+	0% {
+		opacity: 1;
+		transform: translateY(0);
+	}
+	100% {
+		opacity: 0;
+		transform: translateY(20px);
+	}
+}
+
+.ipsAnim_fadeOutDown {
+	animation-name: fadeOutDown;
+}
+
+/* ======================================================== */
+
+@keyframes pulseOnce {
+	0% { transform: scale(1); }
+	50% { transform: scale(1.15); }
+	100% { transform: scale(1); }
+}
+
+.ipsAnim_pulseOnce {
+	animation-name: pulseOnce;
+}
+
+/* ======================================================== */
+
+@keyframes dummy_anim {
+	0% { background-color: rgba( var(--theme-area_background), 0.6 ); }
+	50% { background-color: rgba( var(--theme-area_background), 0.9 ); }
+	99% { background-color: rgba( var(--theme-area_background), 0.6 ); }
+}

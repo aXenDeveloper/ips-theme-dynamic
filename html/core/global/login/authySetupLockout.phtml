@@ -1,0 +1,11 @@
+<ips:template parameters="$showingMultipleForms, $lockEndTime=NULL" />
+<div id="elAuthy">
+	<div class='ipsPad'>
+		{{if !$showingMultipleForms}}
+			<h1 class='ipsType_center ipsType_pageTitle ipsSpacer_bottom ipsSpacer_half'>{lang="mfa_popup_setup_title"}</h1>
+		{{endif}}
+	</div>
+	<div class="ipsPad ipsType_normal ipsType_richText ipsType_center">
+		{lang="authy_setup_lockout" sprintf="$lockEndTime"}
+	</div>
+</div>

@@ -1,0 +1,14 @@
+<ips:template parameters="$files, $pagination, $url" />
+{{if empty($files)}}
+	<div class='ipsPad ipsAreaBackground_light'>
+		{lang="no_results"}
+	</div>
+{{else}}
+	<div class="ipsGrid ipsAttachment_fileList">
+		{{foreach $files as $url => $file}}
+			{template="uploadFile" group="forms" location="global" params="preg_replace( '/^' . preg_quote( \IPS\Settings::i()->base_url . 'applications/core/interface/file/attachment.php?id=', '/' ) . '/i', '', $url ), $file, NULL, TRUE, TRUE, $url"}
+		{{endforeach}}
+	</div>
+	<br>
+	{$pagination|raw}
+{{endif}}

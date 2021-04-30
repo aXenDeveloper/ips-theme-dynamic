@@ -1,0 +1,11 @@
+<ips:template parameters="$output, $pageHeader, $calendar=NULL" />
+
+{{if $calendar and $club = $calendar->club()}}
+	{{if settings.clubs and settings.clubs_header == 'full'}}
+		{template="header" app="core" group="clubs" params="$club, $calendar"}
+	{{endif}}
+{{endif}}
+
+{template="pageHeader" group="global" app="core" params="$pageHeader"}
+
+{$output|raw}

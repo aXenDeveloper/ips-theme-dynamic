@@ -1,0 +1,86 @@
+<ips:template parameters="$actions, $member, $min" />
+<div class="ipsAreaBackground ipsPad">
+	<h3 class='ipsType_sectionHead'>{lang="assigned_point_levels"}</h3>
+	<p class='ipsType_medium'>{lang="warn_points_blurb"}</p>
+	<ol class='ipsDataList ipsDataList_reducedSpacing'>
+		{{if $min}}
+			<li class="ipsDataItem">
+				<div class='ipsDataItem_generic ipsDataItem_size1 ipsPos_top'>
+					<span class="ipsPoints"><i class='fa fa-angle-left'></i> {$min}</span>
+				</div>
+				<div class='ipsDataItem_main'>
+					<p class="ipsType_light ipsType_reset">{lang="no_punishment"}</p>
+				</div>
+			</li>
+		{{endif}}
+		{{foreach $actions as $action}}
+			<li class="ipsDataItem">
+				<div class='ipsDataItem_generic ipsDataItem_size1 ipsPos_top'>
+					<span class="ipsPoints">{$action['wa_points']}</span>
+				</div>
+				<div class='ipsDataItem_main'>
+					{{if $action['wa_mq'] or $action['wa_rpa'] or $action['wa_suspend']}}
+						<ul class='ipsList_reset ipsType_medium'>
+							{{if $action['wa_mq']}}
+								<li>
+									<strong>{lang="warn_mq"}</strong>
+									<br>
+									<span class="ipsType_light">
+										<i class='fa fa-clock-o'></i>
+										{{if $action['wa_mq'] != -1}}
+											{{if $action['wa_mq_unit'] == 'h'}}
+												{lang="f_hours" pluralize="$action['wa_mq']"}
+											{{else}}
+												{lang="f_days" pluralize="$action['wa_mq']"}
+											{{endif}}
+										{{else}}
+											{lang="indefinitely"}
+										{{endif}}
+									</span>
+								</li>
+							{{endif}}
+							{{if $action['wa_rpa']}}
+								<li>
+									<strong>{lang="warn_rpa"}</strong>
+									<br>
+									<span class="ipsType_light">
+										<i class='fa fa-clock-o'></i>
+										{{if $action['wa_rpa'] != -1}}
+											{{if $action['wa_rpa_unit'] == 'h'}}
+												{lang="f_hours" pluralize="$action['wa_rpa']"}
+											{{else}}
+												{lang="f_days" pluralize="$action['wa_rpa']"}
+											{{endif}}
+										{{else}}
+											{lang="indefinitely"}
+										{{endif}}
+									</span>
+								</li>
+							{{endif}}
+							{{if $action['wa_suspend']}}
+								<li>
+									<strong>{lang="warn_suspend"}</strong>
+									<br>
+									<span class="ipsType_light">
+										<i class='fa fa-clock-o'></i> 
+										{{if $action['wa_suspend'] != -1}}
+											{{if $action['wa_suspend_unit'] == 'h'}}
+												{lang="f_hours" pluralize="$action['wa_suspend']"}
+											{{else}}
+												{lang="f_days" pluralize="$action['wa_suspend']"}
+											{{endif}}
+										{{else}}
+											{lang="indefinitely"}
+										{{endif}}
+									</span>
+								</li>
+							{{endif}}
+						</ul>
+					{{else}}
+						<p class='ipsType_light ipsType_reset'>{lang="no_punishment"}</p>
+					{{endif}}
+				</div>
+			</li>
+		{{endforeach}}
+	</ol>
+</div>

@@ -1,0 +1,124 @@
+<ips:template parameters="$event, $attendees, $tabId='', $address=NULL" />
+
+{{if $address || $event->map( 250, 150 )}}
+	<div class='ipsBox ipsResponsive_pull ipsPadding ipsSpacer_bottom'>
+		{{if $event->map( 250, 150 )}}
+			<div class='ipsType_center ipsSpacer_bottom ipsSpacer_half'>
+				{$event->map( 250, 150 )|raw}
+			</div>
+		{{endif}}
+		{{if $event->venue}}
+			<div class='ipsSpacer_bottom'>
+				<h3 class='ipsType_minorHeading'>
+					<strong>{lang="event_venue_name"}</strong>
+				</h3>
+				{lang="calendar_venue_{$event->venue()->id}" escape="true"}
+			</div>
+		{{endif}}
+		{{if $address}}
+			<h3 class='ipsType_minorHeading'>
+				<strong>{lang="event_address"}</strong>
+			</h3>
+			{$address|raw}
+		{{endif}}
+	</div>
+{{endif}}
+
+{{if $event->rsvp }}
+	<div class='ipsBox ipsResponsive_pull'>
+		{template="rsvpControls" group="view" params="$event, $attendees"}
+		<h3 class='ipsType_reset ipsType_sectionHead ipsHide'>{lang="event_rsvp_attendees"}</h3>
+		<div class='ipsTabs ipsTabs_small ipsTabs_stretch ipsClearfix' id='elAttendees{$tabId}' data-ipsTabBar data-ipsTabBar-contentArea='#elAttendees{$tabId}_content'>
+			<a href='#elAttendees{$tabId}' data-action='expandTabs'><i class='fa fa-caret-down'></i></a>
+			<ul role="tablist">
+				<li>
+					<a href='#ipsTabs_elAttendees{$tabId}_elGoing_panel' id='elGoing' class='ipsTabs_item ipsTabs_activeItem ipsType_center' role="tab" aria-selected='true'>{{if $event->hasPassed()}}{lang="rsvp_attendees_past"}{{else}}{lang="rsvp_attendees"}{{endif}} {{if \count($attendees[1])}}({expression="\count($attendees[1])"}){{endif}}</a>
+				</li>
+				{{if $event->rsvp_limit == -1}}
+					<li>
+						<a href='#ipsTabs_elAttendees{$tabId}_elMaybe_panel' id='elMaybe' class='ipsTabs_item ipsType_center' role="tab" aria-selected='false'>{lang="rsvp_maybe_attendees"} {{if \count($attendees[2])}}({expression="\count($attendees[2])"}){{endif}}</a>
+					</li>	
+				{{endif}}	
+				<li>
+					<a href='#ipsTabs_elAttendees{$tabId}_elNotGoing_panel' id='elNotGoing' class='ipsTabs_item ipsType_center' role="tab" aria-selected='false'>{lang="rsvp_notgoing_attendees"} {{if \count($attendees[0])}}({expression="\count($attendees[0])"}){{endif}}</a>
+				</li>
+			</ul>
+		</div>
+		<div id='elAttendees{$tabId}_content' class='ipsTabs_panels'>
+			<div id="ipsTabs_elAttendees{$tabId}_elGoing_panel" class='ipsTabs_panel ipsAreaBackground_reset ipsPadding'>
+				{{if \count($attendees[1]) }}
+					<ul class='ipsGrid ipsList_reset'>
+						{{foreach $attendees[1] as $attendee}}
+							<li class='ipsGrid_span3'>
+								{{if \IPS\Member::loggedIn()->canAccessModule( \IPS\Application\Module::get( 'core', 'members' ) ) }}
+	 							<a href='{$attendee->url()}' title="{$attendee->name}" data-ipsTooltip>
+		 						{{endif}}
+	 								<img src='{$attendee->photo}' class='ipsUserPhoto ipsUserPhoto_mini' alt=''>
+	 								<span class='ipsHide'>{$attendee->name}</span>
+	 							{{if \IPS\Member::loggedIn()->canAccessModule( \IPS\Application\Module::get( 'core', 'members' ) ) }}
+	 							</a>
+	 							{{endif}}
+	 						</li>
+						{{endforeach}}
+					</ul>
+				{{else}}
+					<p class='ipsType_light ipsPad ipsType_center'>
+						{{if $event->hasPassed()}}{lang="no_rsvps_past"}{{else}}{lang="no_rsvps_yet"}{{endif}}
+					</p>
+				{{endif}}
+			</div>
+			{{if $event->rsvp_limit == -1}}
+				<div id="ipsTabs_elAttendees{$tabId}_elMaybe_panel" class='ipsTabs_panel ipsAreaBackground_reset ipsPad'>
+					{{if \count($attendees[2]) }}
+						<ul class='ipsGrid ipsList_reset'>
+							{{foreach $attendees[2] as $attendee}}
+								<li class='ipsGrid_span3'>
+									{{if \IPS\Member::loggedIn()->canAccessModule( \IPS\Application\Module::get( 'core', 'members' ) ) }}
+		 							<a href='{$attendee->url()}' title="{$attendee->name}" data-ipsTooltip>
+			 						{{endif}}
+		 								<img src='{$attendee->photo}' class='ipsUserPhoto ipsUserPhoto_mini' alt=''>
+		 								<span class='ipsHide'>{$attendee->name}</span>
+		 							{{if \IPS\Member::loggedIn()->canAccessModule( \IPS\Application\Module::get( 'core', 'members' ) ) }}
+		 							</a>
+		 							{{endif}}
+		 						</li>
+							{{endforeach}}
+						</ul>
+					{{else}}
+						<p class='ipsType_light ipsPad ipsType_center'>
+							{{if $event->hasPassed()}}{lang="no_maybe_rsvps_past"}{{else}}{lang="no_maybe_rsvps_yet"}{{endif}}
+						</p>
+					{{endif}}
+				</div>
+			{{endif}}
+			<div id="ipsTabs_elAttendees{$tabId}_elNotGoing_panel" class='ipsTabs_panel ipsAreaBackground_reset ipsPad'>
+				{{if \count($attendees[0]) }}
+					<ul class='ipsGrid ipsList_reset'>
+						{{foreach $attendees[0] as $attendee}}
+							<li class='ipsGrid_span3'>
+								{{if \IPS\Member::loggedIn()->canAccessModule( \IPS\Application\Module::get( 'core', 'members' ) ) }}
+	 							<a href='{$attendee->url()}' title="{$attendee->name}" data-ipsTooltip>
+		 						{{endif}}
+	 								<img src='{$attendee->photo}' class='ipsUserPhoto ipsUserPhoto_mini' alt=''>
+	 								<span class='ipsHide'>{$attendee->name}</span>
+	 							{{if \IPS\Member::loggedIn()->canAccessModule( \IPS\Application\Module::get( 'core', 'members' ) ) }}
+	 							</a>
+	 							{{endif}}
+	 						</li>
+						{{endforeach}}
+					</ul>
+				{{else}}
+					<p class='ipsType_light ipsPad ipsType_center'>
+						{{if $event->hasPassed()}}{lang="no_decline_rsvps_past"}{{else}}{lang="no_decline_rsvps_yet"}{{endif}}
+					</p>
+				{{endif}}
+			</div>
+
+			{{if \count($attendees[0]) OR \count($attendees[1]) OR \count($attendees[2]) }}
+				<div class='ipsPad ipsType_center'>
+					<a href='{$event->url('downloadRsvp')->csrf()}' class='ipsButton ipsButton_verySmall ipsButton_link ipsButton_fullWidth' rel="noindex nofollow" ><i class='fa fa-arrow-circle-o-down'></i> {lang="rsvp_download"}</a>
+				</div>
+			{{endif}}
+		</div>
+	</div>
+{{endif}}

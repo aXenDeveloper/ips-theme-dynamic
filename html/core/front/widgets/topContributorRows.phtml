@@ -1,0 +1,69 @@
+<ips:template parameters="$results, $timeframe, $orientation='vertical'" />
+{{if \count( $results )}}
+	{{if $orientation == 'vertical'}}
+		<ol class='ipsDataList ipsDataList_reducedSpacing cTopContributors'>
+			{{$idx = 1;}}
+			{{foreach $results as $memberId => $rep}}
+				{{$member = \IPS\Member::load( $memberId );}}
+				<li class='ipsDataItem'>
+					<div class='ipsDataItem_icon ipsPos_middle ipsType_center ipsType_large ipsType_light'><strong>{expression="$idx++"}</strong></div>
+					<div class='ipsDataItem_main ipsPhotoPanel ipsPhotoPanel_tiny'>
+						{template="userPhoto" app="core" group="global" params="$member, 'tiny'"}
+						<div>
+							{$member->link()|raw}
+							<br>
+							{{if member.group['gbw_view_reps']}}
+								<a href='{url="app=core&module=members&controller=profile&id={$member->member_id}&do=reputation" seoTemplate="profile_reputation" seoTitle="$member->members_seo_name"}' title="{lang="reputation_badge_tooltip_period"}" data-ipsTooltip class='ipsRepBadge {{if $rep > 0}}ipsRepBadge_positive{{elseif $rep < 0}}ipsRepBadge_negative{{else}}ipsRepBadge_neutral{{endif}}'><i class='fa {{if $rep > 0}}fa-plus-circle{{elseif $rep < 0}}fa-minus-circle{{else}}fa-circle-o{{endif}}'></i> {expression="\IPS\Member::loggedIn()->language()->formatNumber( $rep )"}</a>
+							{{else}}
+								<span title="{lang="reputation_badge_tooltip_period"}" data-ipsTooltip class='ipsRepBadge {{if $rep > 0}}ipsRepBadge_positive{{elseif $rep < 0}}ipsRepBadge_negative{{else}}ipsRepBadge_neutral{{endif}}'><i class='fa {{if $rep > 0}}fa-plus-circle{{elseif $rep < 0}}fa-minus-circle{{else}}fa-circle-o{{endif}}'></i> {expression="\IPS\Member::loggedIn()->language()->formatNumber( $rep )"}</span>
+							{{endif}}
+						</div>
+					</div>
+				</li>
+			{{endforeach}}
+		</ol>
+		{{if settings.reputation_leaderboard_on and member.canAccessModule( \IPS\Application\Module::get( 'core', 'discover' ) )}}
+			<div class="ipsMargin_top:half">
+				{{$_timeframe = $timeframe == 'all' ? 'time=oldest' : ( $timeframe == 'year' ? ( 'custom_date_start=' . ( time() - 31536000 ) ) : ( 'time=' . $timeframe ) );}}
+				<a href="{url="app=core&module=discover&controller=popular&tab=leaderboard&{$_timeframe}" seoTemplate="leaderboard_leaderboard"}" class='ipsButton ipsButton_small ipsButton_light ipsButton_fullWidth'>{lang="leaderboard_show_more"}</a>
+			</div>
+		{{endif}}
+	{{else}}
+		<div class="ipsGrid ipsGrid_collapsePhone">
+			{{$count = 0;}}
+			{{foreach $results as $memberId => $rep}}
+				{{if $count == 4}}
+					{{break;}}
+				{{else}}
+					{{$count++;}}
+				{{endif}}
+				{{$member = \IPS\Member::load( $memberId );}}
+				<div class='ipsGrid_span3'>
+					<div class='ipsPad_half ipsPhotoPanel ipsPhotoPanel_tiny'>
+						{template="userPhoto" app="core" group="global" params="$member, 'tiny'"}
+						<div>
+							<p class='ipsType_reset ipsTruncate ipsTruncate_line'>
+								{$member->link()|raw}
+							</p>
+							{{if member.group['gbw_view_reps']}}
+								<a href='{url="app=core&module=members&controller=profile&id={$member->member_id}&do=reputation" seoTemplate="profile_reputation" seoTitle="$member->members_seo_name"}' title="{lang="reputation_badge_tooltip_period"}" data-ipsTooltip class='ipsRepBadge {{if $rep > 0}}ipsRepBadge_positive{{elseif $rep < 0}}ipsRepBadge_negative{{else}}ipsRepBadge_neutral{{endif}}'><i class='fa {{if $rep > 0}}fa-plus-circle{{elseif $rep < 0}}fa-minus-circle{{else}}fa-circle-o{{endif}}'></i> {expression="\IPS\Member::loggedIn()->language()->formatNumber( $rep )"}</a>
+							{{else}}
+								<span title="{lang="reputation_badge_tooltip_period"}" data-ipsTooltip class='ipsRepBadge {{if $rep > 0}}ipsRepBadge_positive{{elseif $rep < 0}}ipsRepBadge_negative{{else}}ipsRepBadge_neutral{{endif}}'><i class='fa {{if $rep > 0}}fa-plus-circle{{elseif $rep < 0}}fa-minus-circle{{else}}fa-circle-o{{endif}}'></i> {expression="\IPS\Member::loggedIn()->language()->formatNumber( $rep )"}</span>
+							{{endif}}
+						</div>
+					</div>
+				</div>
+			{{endforeach}}
+		</div>
+		{{if settings.reputation_leaderboard_on and member.canAccessModule( \IPS\Application\Module::get( 'core', 'discover' ) )}}
+			<div>
+				{{$_timeframe = $timeframe == 'all' ? 'time=oldest' : ( $timeframe == 'year' ? ( 'custom_date_start=' . ( time() - 31536000 ) ) : ( 'time=' . $timeframe ) );}}
+				<a href="{url="app=core&module=discover&controller=popular&tab=leaderboard&{$_timeframe}" seoTemplate="leaderboard_leaderboard"}" class='ipsButton ipsButton_small ipsButton_light ipsButton_fullWidth'>{lang="leaderboard_show_more"}</a>
+			</div>
+		{{endif}}
+	{{endif}}
+{{else}}
+	<div class='ipsPad'>
+		<p class='ipsType_reset'>{lang="top_contributors_empty__{$timeframe}"}</p>
+	</div>
+{{endif}}

@@ -1,0 +1,14 @@
+<ips:template parameters="$title, $blurb='', $rawBlurb=FALSE" />
+
+<div class='ipsPageHeader sm:ipsPadding:half ipsClearfix ipsMargin_bottom sm:ipsMargin_bottom:half'>
+	<h1 class='ipsType_pageTitle'>{$title}</h1>
+	{{if $blurb}}
+		<div class='ipsPageHeader_info ipsType_light'>
+			{{if !$rawBlurb}}
+				{$blurb}
+			{{else}}
+				{$blurb|raw}
+			{{endif}}
+		</div>
+	{{endif}}
+</div>

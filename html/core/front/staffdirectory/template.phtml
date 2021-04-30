@@ -1,0 +1,27 @@
+<ips:template parameters="$groups, $userIsStaff=FALSE" />
+
+<div class="ipsPageHeader ipsClearfix ipsMargin_bottom ipsFlex ipsFlex-ai:center ipsFlex-jc:between sm:ipsFlex-fd:column sm:ipsFlex-ai:stretch">
+	<h1 class='ipsType_pageTitle ipsFlex-flex:11 ipsType_break'>
+		{lang="staff_directory"}
+	</h1>
+	{{if $userIsStaff}}
+		<ul class='ipsToolList ipsToolList_horizontal ipsClearfix sm:ipsMargin_top'>
+			<li class='ipsToolList_primaryAction'>
+				<a href="{url="app=core&module=staffdirectory&controller=directory&do=form" seoTemplate="staffdirectory"}" class='ipsButton ipsButton_fullWidth ipsButton_small ipsButton_important' data-ipsDialog data-ipsDialog-title='{lang="leader_edit_mine"}'><i class='fa fa-pencil'></i> &nbsp;{lang="leader_edit_mine"}</a>
+			</li>
+		</ul>
+	{{endif}}
+</div>
+
+{{foreach $groups as $group}}
+	{{$members = $group->members();}}
+	{{if \count( $members )}}
+		<section class='ipsBox cStaffDirectory'>
+			<h2 class='ipsType_sectionTitle ipsType_reset'>{$group->_title}</h2>
+			<div class='ipsPad_half'>
+				{template="$group->template" app="core" group="staffdirectory" location="front" params="$members"}
+			</div>
+		</section>
+		<br>
+	{{endif}}
+{{endforeach}}

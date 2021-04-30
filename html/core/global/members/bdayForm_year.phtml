@@ -1,0 +1,9 @@
+<ips:template parameters="$name, $value, $error='', $required=FALSE" />
+<select name="bday[year]">
+    {{if !$required }}
+	<option value='0'>{lang="not_telling"}</option>
+    {{endif}}
+	{{foreach array_reverse( range( date('Y') - 150, date('Y') ) ) as $year}}
+		<option value='{$year}' {{if $value['year'] == $year }}selected{{endif}}>{$year}</option>
+	{{endforeach}}
+</select>

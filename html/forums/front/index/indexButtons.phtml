@@ -1,0 +1,17 @@
+<ips:template parameters="$showViewButtons=TRUE, $showFilterButton=FALSE" />
+
+{{if $showFilterButton}}
+	<li class='ipsToolList_primaryAction ipsResponsive_hideDesktop ipsResponsive_block'>
+		<a class="ipsButton ipsButton_medium ipsButton_link ipsButton_fullWidth" href="#" data-ipsDialog data-ipsDialog-title='{lang="forums_simple_dialog_title"}' data-ipsDialog-content='#elFluidFormFilters'>
+			<span data-role='fluidForumMobileDesc'>{lang="forums_simple_filter_by"}</span> <i class='fa fa-angle-down'></i></a>
+	</li>
+{{endif}}
+{{if \IPS\forums\Forum::canOnAny('add')}}
+<li class='ipsToolList_primaryAction ipsResponsive_hideTablet'>
+	<a class="ipsButton ipsButton_medium ipsButton_important ipsButton_fullWidth" href="{url="app=forums&module=forums&controller=forums&do=add"}" data-ipsDialog data-ipsDialog-size='narrow' data-ipsDialog-title='{lang="select_forum"}'>{lang="start_new_topic"}</a>
+</li>
+{{endif}}
+
+{{if $showViewButtons}}
+	{template="viewChange" group="global" app="forums" params=""}
+{{endif}}

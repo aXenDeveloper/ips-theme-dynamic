@@ -1,0 +1,16 @@
+<ips:template parameters="$content, $lang, $date, $url" />
+
+<div class='ipsRichEmbed_header ipsAreaBackground_light ipsClearfix'>
+	<a href='{{if $url}}{$url}{{else}}{$content->url( "getPrefComment" )}{{endif}}' class='ipsRichEmbed_openItem'><i class='fa fa-external-link-square'></i></a>
+	<div class='ipsPhotoPanel ipsPhotoPanel_tiny ipsType_blendLinks'>
+		{template="userPhoto" app="core" group="global" params="$content->author(), 'tiny', $content->warningRef()"}
+		<div>
+			<p class='ipsRichEmbed_title ipsType_reset ipsTruncate ipsTruncate_line'>
+				<a href='{{if $url}}{$url}{{else}}{$content->url( "getPrefComment" )}{{endif}}'>{$lang}</a>
+			</p>
+			<p class='ipsRichEmbed_author ipsType_reset ipsType_light ipsTruncate ipsTruncate_line'>
+				<a href='{{if $url}}{$url}{{else}}{$content->url( "getPrefComment" )}{{endif}}'>{datetime="$date"}</a>
+			</p>
+		</div>
+	</div>
+</div>

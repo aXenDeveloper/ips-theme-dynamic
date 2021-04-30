@@ -1,0 +1,182 @@
+.cStreamFilter {
+	padding: var(--sp-4) var(--sp-3);
+	position: relative;
+}
+
+	.cStreamFilter > li {
+		float: left;
+		width: 14.284%;
+		position: relative;
+	}
+		.cStreamFilter > li > a {
+			display: block;
+			border-right: 1px solid rgba( var(--theme-text_color), 0.2 );
+			padding: 0 var(--sp-2);
+		}
+		
+			.cStreamFilter > li > a.cStreamFilter_active {
+				background: rgb( var(--theme-area_background_dark) );
+				color: #fff;
+				margin: calc( var(--sp-2) * -1 ) 0;
+				padding: calc( var(--sp-2) );
+				border-radius: var(--radius-1);
+			}
+			
+				.cStreamFilter > li > a.cStreamFilter_active h3 {
+					color: inherit;
+				}
+		
+		.cStreamFilter > li:last-child > a {
+			border: 0;
+		}
+		
+		.cStreamFilter > li > a:after {
+			content: '\f107';
+			font-family: 'FontAwesome';
+			font-size: 15px;
+			position: absolute;
+			top: 2px;
+		}
+		html[dir="ltr"] .cStreamFilter > li > a:after {
+			right: 10px;
+		}
+		html[dir="rtl"] .cStreamFilter > li > a:after {
+			left: 10px;
+		}
+		
+	.cStreamFilter h3 {
+		font-size: {fontsize="medium"};
+		color: rgb( var(--theme-text_color) );
+	}
+
+		html[dir="ltr"] .cStreamFilter h3 {
+			padding-right: 12px;
+		}
+		html[dir="rtl"] .cStreamFilter h3 {
+			padding-left: 12px;
+		}
+	
+	.cStreamFilter p {
+		
+	}
+	
+		.cStreamFilter p em {
+			opacity: 0.3;
+		}
+
+.cStreamFilter a {
+	color: rgb( var(--theme-text_color) );
+}
+
+.cStreamFilter_toggleShown {
+	margin-top: 7px;
+}
+.ipsApp #elStreamUpdateMsg {
+	line-height: 24px;
+}
+
+/* FILTER FORM STYLES */
+.cStreamForm_loading {
+	height: 500px;
+}
+	.cStreamForm_loading .ipsAreaBackground_reset {
+		height: 100%;
+	}
+	.cStreamForm_loading .ipsLoading {
+		position: absolute;
+		height: 450px;
+		width: 100%;
+	}
+.cStreamForm_list > li {
+	margin-bottom: 0;
+	position: relative;
+}
+
+.cStreamForm_list li a.ipsSideMenu_item {
+	padding-top: 5px;
+	padding-bottom: 5px;
+}
+
+html[dir="ltr"] .cStreamForm_list li a.ipsSideMenu_item.cStream_withOptions {
+	margin-right: 45px;
+}
+html[dir="rtl"] .cStreamForm_list li a.ipsSideMenu_item.cStream_withOptions {
+	margin-left: 45px;
+}
+
+.cStreamForm_list li a.ipsSideMenu_item.ipsSideMenu_itemActive + .cStreamForm_menu,
+.cStreamForm_list li a.ipsSideMenu_item:not( .ipsSideMenu_itemActive ):hover + .cStreamForm_menu {
+	display: block;
+	background: rgba( var(--theme-text_color), 0.2 );
+}
+
+.cStreamForm_list li a.ipsSideMenu_item.ipsSideMenu_itemActive + .cStreamForm_menu{
+	color: #fff;
+	background: {hextorgb="#fff" opacity="0.1"};
+}
+
+.cStreamForm_list li a.ipsSideMenu_item.ipsSideMenu_itemActive + .cStreamForm_menu.cStreamForm_menuActive {
+	background: rgb( var(--theme-area_background) );
+}
+
+.cStreamForm_list li:hover a.ipsSideMenu_item:not( .ipsSideMenu_itemActive ) + .cStreamForm_menu {
+	opacity: 0.3;
+	pointer-events: none;
+}
+
+.cStreamForm_menu {
+	padding: 5px 10px;
+	cursor: pointer;
+	position: absolute;
+	top: 0;
+	display: none;
+}
+
+html[dir="ltr"] .cStreamForm_menu {
+	right: 0;
+}
+html[dir="rtl"] .cStreamForm_menu {
+	left: 0;
+}
+
+#elStreamContentTypes_menu {
+	padding-bottom: 0;
+}
+
+.cStreamForm_dates, .cStreamForm_authors {
+	padding-left: 26px;
+}
+
+	.ipsApp .cStreamForm_dates input[type="date"] {
+		max-width: 100%;
+		width: 100%;
+	}
+
+.cStreamForm_list[data-filterType='type'] .ipsSideMenu_item .cStreamForm_menu + a {
+	margin-right: 45px;
+}
+
+.cStreamForm_nodes {
+	display: block;
+}
+
+html[dir="ltr"] .cStreamForm_nodes {
+	padding: 5px 0 5px 12px;
+    margin: -2px 45px 0 12px;
+    border-left: 2px solid rgb( var(--theme-area_background_dark) );
+}
+html[dir="rtl"] .cStreamForm_nodes {
+	padding: 5px 12px 5px 0;
+    margin: -2px 12px 0 45px;
+    border-right: 2px solid rgb( var(--theme-area_background_dark) );
+}
+
+	.cStreamForm_nodes .ipsFieldRow {
+		width: 100%;
+	}
+	
+	.ipsApp .cStreamForm_nodes .ipsFieldRow_label {
+		margin: 0;
+		padding: 0;
+		font-size: {fontsize="small"};
+	}

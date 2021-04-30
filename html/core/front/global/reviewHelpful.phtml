@@ -1,0 +1,8 @@
+<ips:template parameters="$helpful, $total" />
+
+<span class='ipsResponsive_hidePhone ipsResponsive_inline'>
+	{lang="x_members_found_helpful" sprintf="$helpful, \IPS\Member::loggedIn()->language()->pluralize( \IPS\Member::loggedIn()->language()->get( 'x_members' ), array( $total ) )"}
+</span>
+<span class='ipsResponsive_showPhone ipsResponsive_inline'>
+	<i class='fa fa-smile-o'></i> {$helpful} / {lang="x_members_found_helpful_phone" pluralize="$total"}
+</span>

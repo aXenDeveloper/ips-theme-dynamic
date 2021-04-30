@@ -1,0 +1,197 @@
+/* Ensure border-radius is followed */
+.cTopicOverview{
+	overflow: hidden;
+}
+
+.cTopicOverview__header {
+	flex: 0 0 auto;
+}
+
+.cTopicOverview__stats {
+	max-height: 90px;
+	max-width: 100%;
+	list-style: none;
+}
+
+.cTopicOverview__toggle {
+	min-width: 80px;
+	transition: 0.1s all ease-in-out;
+}
+
+	.cTopicOverview__toggle .fa {
+		transition: 0.2s all ease-in-out;
+	}
+
+		.cTopicOverview--expanded .cTopicOverview__toggle .fa {
+			transform: rotate(180deg);
+		}
+
+	.cTopicOverview__toggle:hover {
+		background: rgb( var(--theme-area_background_light) );
+		color: inherit;
+	}
+
+	.cTopicOverview__toggle--inline {
+		display: none;
+	}
+
+	.cTopicOverview__toggle--afterStats {
+		max-height: 90px;
+	}
+
+.cTopicOverview--inline .cTopicOverview__statItem{
+	padding-right: var(--sp-7);
+}
+
+	html[dir='ltr'] .cTopicOverview--inline .cTopicOverview__statItem:last-child,
+	html[dir='rtl'] .cTopicOverview--inline .cTopicOverview__statItem:first-child{
+		padding-right: 0;
+	}
+
+.cTopicOverview__statItem > span {
+	display: block;
+}
+
+.cTopicOverview__statValue {
+	font-weight: bold;
+	font-size: {fontsize="large"};
+}
+
+.cTopicOverview__sectionTitle {
+	font-size: 12px;
+}
+
+.cTopicOverview__dataList {
+	margin-left: -4px;
+	margin-right: -4px;
+	list-style: none;
+}
+
+.cTopicOverview__dataItem {
+	{{if theme.rounded_photos}}
+		border-radius: 500px;
+	{{else}}
+		border-radius: 2px;
+	{{endif}}
+	font-size: {fontsize="small"};
+	min-width: 110px;
+	flex-basis: 100px;
+}
+
+	.cTopicOverview--inline .cTopicOverview__dataItem {
+		min-height: 34px;
+	}
+
+	.cTopicOverview--sidebar .cTopicOverview__dataItem--split {
+		width: 50%;
+	}
+
+	.cTopicOverview--inline .cTopicOverview__dataItem--split {
+		width: 25%;
+	}
+
+	a.cTopicOverview__dataItem.ipsType_blendLinks:hover {
+		color: rgb( var(--theme-link_color) );
+	}
+
+	.cTopicOverview__preview .cTopicOverview__dataItem {
+		min-width: 0;
+		flex-basis: auto;
+	}
+
+	.cTopicOverview--inline .cTopicOverview__dataItem {
+		max-width: 200px;
+	}
+
+.cTopicOverview__dataItemInner {
+	text-overflow: ellipsis;
+	overflow: hidden;
+	line-height: 1.2;
+}
+
+.cTopicOverview__dataItemInner > strong {
+	display: inline-block;
+	margin-bottom: 2px;
+}
+
+.cTopicOverview__preview {
+	position: relative;
+	overflow: hidden;
+	min-height: 90px;
+}
+
+	.cTopicOverview__preview:after {
+		content: '';
+		pointer-events: none;
+		display: block;
+		position: absolute;
+		right: 0;
+		top: 0;
+		bottom: 0;
+		background-image: linear-gradient(to right, rgba( var(--theme-area_background_reset), 0 ) 0%, rgba( var(--theme-area_background_reset), 1 ) 100%);
+		width: 250px;
+	}
+	
+	.cTopicOverview__preview .ipsUserPhoto_tiny {
+		width: 28px;
+		height: 28px;
+	}
+
+.cTopicOverview__previewInner {
+	position: absolute;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	top: 0;
+}
+
+.cTopicOverview__imageGrid {
+	height: 100%;
+	margin: -1px -1px 0 -1px;
+	list-style:none;
+}
+
+.cTopicOverview__image {
+	position: relative;
+	max-width: 150px;
+	padding: 1px;
+}
+
+	.cTopicOverview--sidebar .cTopicOverview__image {
+		width: 50%;
+	}
+	.cTopicOverview--inline .cTopicOverview__image {
+		width: 25%;
+	}
+
+	.cTopicOverview__image .ipsThumb {
+		border: none !important;
+	}
+
+	.cTopicOverview__image > a {
+		display: block;
+		height: 0;
+		padding-top: 100%;
+	}
+	
+@media screen and (max-width: 1150px) {
+	.cTopicOverview {
+		flex-direction: column;
+	}
+
+	.cTopicOverview__preview,
+	.cTopicOverview__toggle--afterStats {
+		display: none;
+	}
+
+	.cTopicOverview__toggle--inline {
+		display: flex;
+	}
+}
+
+@media screen and (max-width: 767px) {
+	.cTopicOverview--inline .cTopicOverview__image {
+		width: 50%;
+		max-width: 50%;
+	}
+}

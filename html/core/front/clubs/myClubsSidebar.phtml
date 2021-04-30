@@ -1,0 +1,74 @@
+<ips:template parameters="$clubs, $myClubsActivity=NULL, $myClubsInvites=NULL" />
+
+{{if member.member_id and member.group['g_create_clubs']}}
+	<a class="ipsButton ipsButton_medium ipsButton_important ipsButton_fullWidth ipsMargin_bottom" href="{url="app=core&module=clubs&controller=directory&do=create" seoTemplate="clubs_list"}" data-ipsDialog data-ipsDialog-title="{lang="create_club"}">{lang="create_club"}</a>
+{{endif}}
+
+{{if \count( $myClubsInvites )}}
+<div id='elMyClubsInvites' class="ipsWidget ipsWidget_vertical ipsBox">
+	<h2 class="ipsType_reset ipsWidget_title">{lang="my_clubs_invites"}</h2>
+	<section class="ipsWidget_inner ipsPad_half">
+		<ul class='ipsDataList ipsDataList_reducedSpacing'>
+			{{foreach $myClubsInvites as $club}}
+			<li class='ipsDataItem ipsClearfix'>
+				<div class="ipsButton_split ipsPos_right ipsSpacer_top ipsSpacer_half">
+					{{if $club->status !== $club::STATUS_REQUESTED}}
+					<a class="ipsButton ipsButton_small ipsButton_narrow ipsButton_positive" data-ipstooltip title='{lang="club_join"}' href="{$club->url()->setQueryString('do', 'join')->csrf()}" {{if $club->isPaid() and $club->status !== $club::STATUS_INVITED_BYPASSING_PAYMENT}}data-confirm data-confirmIcon="info" data-confirmMessage="{lang="club_membership_item"}" data-confirmSubmessage="{$club->memberFeeMessage()}"{{endif}}>
+						<i class="fa fa-check"></i>
+					</a>
+					{{endif}}
+					<a class="ipsButton ipsButton_small ipsButton_narrow ipsButton_negative" data-ipstooltip title='{{if $club->status !== $club::STATUS_REQUESTED}}{lang="club_decline_invite"}{{else}}{lang="club_cancel_request"}{{endif}}' href="{$club->url()->setQueryString('do', 'leave')->csrf()}" data-confirm>
+						<i class="fa fa-remove"></i>
+					</a>
+				</div>
+				<div class='ipsDataItem_icon'>
+					{template="clubIcon" group="clubs" app="core" params="$club, 'tiny', 'ipsPos_left'"}
+				</div>
+				<div class='ipsDataItem_main'>
+					<h3 class='ipsType_sectionHead ipsType_large ipsContained_container'>
+						<span class='ipsContained ipsType_break'><a href='{$club->url()}'>{$club->name}</a></span>
+					</h3>
+					<p class='ipsType_reset ipsType_medium ipsType_light'>
+						{lang="club_{$club->type}"}
+						{{if $club->type !== $club::TYPE_PUBLIC}}
+						&nbsp;&middot;&nbsp;
+						{lang="club_members_count" pluralize="$club->members"}
+						{{endif}}
+					</p>
+				</div>
+			</li>
+			{{endforeach}}
+		</ul>
+	</section>
+</div>
+{{endif}}
+
+<div id='elMyClubs' class="ipsWidget ipsWidget_vertical ipsBox">
+	<h2 class="ipsType_reset ipsWidget_title">{lang="my_clubs"}</h2>
+	{{if \count( $clubs )}}
+		{template="clubs" group="widgets" params="$clubs"}
+	{{else}}
+		<section class="ipsWidget_inner ipsPad_half">
+			<p class='ipsType_light ipsType_center ipsPad_half'>
+				{lang="my_clubs_empty"}
+			</p>
+		</section>
+	{{endif}}
+</div>
+
+<div id='elMyClubsActivity' class="ipsWidget ipsWidget_vertical ipsBox">
+	<h2 class="ipsType_reset ipsWidget_title">{lang="clubs_recent_activity"}</h2>
+	{{if !\count( $myClubsActivity )}}
+		<p class='ipsType_light ipsType_center ipsPad'>
+			{lang="clubs_no_recent_activity"}
+		</p>
+	{{else}}
+		<ol class="ipsStream ipsList_reset ipsPad">
+			{{foreach $myClubsActivity as $result}}
+				{{if $result !== NULL}}
+					{$result->html()|raw}
+				{{endif}}
+			{{endforeach}}
+		</ol>
+	{{endif}}
+</div>

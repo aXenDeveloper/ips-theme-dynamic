@@ -1,0 +1,13 @@
+<ips:template parameters="$warning" />
+
+<div class='ipsPad'>
+	<p class='ipsType_large'>
+		{lang="warning_revoke_blurb"}
+	</p>
+</div>
+<div class='ipsAreaBackground_light ipsType_right ipsPad'>
+	<ul class='ipsList_inline'>
+		<li><a href='{$warning->url('delete')->setQueryString('undo', 1)->csrf()}' class='ipsButton ipsButton_primary ipsButton_small'>{lang="warning_revoke_undo"}</a></li>
+		<li><a href='{$warning->url('delete')->setQueryString('undo', 0)->csrf()}' class='ipsButton ipsButton_primary ipsButton_small'>{lang="delete"}</a></li>
+	</ul>
+</div>

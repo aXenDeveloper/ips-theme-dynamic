@@ -1,0 +1,196 @@
+/* Pagination control */
+/* ======================================================== */
+.ipsPagination {
+	padding: 0;
+	margin: 0;
+	display: inline-flex;
+	line-height: 26px;
+	font-weight: 600;
+	font-size: {fontsize="x_small"};
+	-webkit-font-smoothing: antialiased;
+	color: rgb( var(--theme-text_dark) );
+}
+
+	[dir="ltr"] .ipsPagination:not(.ipsPagination_mini) > li{
+		margin-right: 2px;
+	}
+
+	[dir="rtl"] .ipsPagination:not(.ipsPagination_mini) > li{
+		margin-left: 2px;
+	}
+
+	.ipsPagination > li, .ipsPagination a {
+		display: block;
+		text-decoration: none;
+	}
+
+	.ipsPagination:not( .ipsPagination_mini ) a{
+		color: inherit;
+		position: relative;
+	}
+
+		.ipsPagination a::before{
+			content: '';
+			position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+			border-radius: inherit;
+			opacity: 0;
+			background: currentColor;
+		}
+
+			.ipsPagination a:hover::before{
+				opacity: .06;
+			}
+
+	.ipsPagination:not( .ipsPagination_mini ) a {
+		padding: 0 10px;
+		border-radius: var(--radius-1);
+		text-align: center;
+	}
+
+	.ipsPagination_prev,
+	.ipsPagination_next{
+		text-transform: uppercase;
+	}
+
+		.ipsPagination .ipsPagination_page.ipsPagination_active a {
+			background: rgb( var(--theme-pagination_active) );
+			color: #fff;
+		}
+
+	.ipsPagination:hover a {
+		opacity: 1;
+	}
+
+	.ipsPagination .ipsPagination_pageJump {
+		color: rgb( var(--theme-text_light) );
+		font-weight: normal;
+		margin: 0 15px;
+	}
+
+		.ipsPagination .ipsPagination_pageJump a{
+			display: inline-block;
+			vertical-align: top;
+		}
+
+	.ipsPagination li:not( .ipsPagination_pageJump ):not( .ipsPagination_mini ) .fa {
+		font-size: 14px;
+		position: relative;
+		top: 1px;
+	}
+
+	.ipsPagination > li.ipsPagination_inactive {
+		display: none;
+	}
+
+/* ======================================================== */
+/* Mini pagination control, used inline in tables */
+.ipsPagination.ipsPagination_mini {
+	line-height: 20px;
+	opacity: 0.2;
+	transition: all 0.3s linear;
+}
+html[dir="ltr"] .ipsPagination.ipsPagination_mini,
+html[dir="ltr"] .ipsPagination.ipsPagination_mini > * {
+	margin: 0 0 0 5px;
+}
+html[dir="rtl"] .ipsPagination.ipsPagination_mini,
+html[dir="rtl"] .ipsPagination.ipsPagination_mini > * {
+	margin: 0 5px 0 0;
+}
+	
+	.ipsPagination.ipsPagination_mini:hover,
+	.ipsDataItem:hover .ipsPagination_mini {
+		opacity: 1;
+	}
+
+	.ipsPagination.ipsPagination_mini a {
+		padding: 0 8px;
+		border-radius: var(--radius-1);
+		position: relative;
+	}
+
+		.ipsPagination.ipsPagination_mini a::before{
+			opacity: .15;
+		}
+
+/* ======================================================== */
+/* PAGER CONTROL */
+/* Used to indicate the user can go backwards or forwards to other pages */
+.ipsPager{
+	display: flex;
+	align-items: center;
+	color: rgb( var(--theme-text_color) );
+}
+
+	.ipsPager_prev,
+	.ipsPager_next{
+		flex: 1 1 25%;
+	}
+
+	.ipsPager_center{
+		flex: 1 1 50%;
+		text-align: center;
+	}
+
+	.ipsPager_next a,
+	.ipsPager_prev a{
+		color: inherit;
+	}
+
+		.ipsPager_next a:hover,
+		.ipsPager_prev a:hover{
+			color: rgb( var(--theme-text_dark) );
+		}
+
+	[dir='ltr'] .ipsPager_next{
+		text-align: right;
+	}
+
+	[dir='rtl'] .ipsPager_next {
+		text-align: left;
+	}
+
+.ipsPager_next a,
+.ipsPager_prev a {
+	display: inline-block;
+	position: relative;
+	padding: 15px 1.8em;
+	width: 100%;
+	max-width: 350px;
+}
+
+	.ipsPager_next a:after,
+	.ipsPager_prev a:after {
+		content: '\f105';
+		font-family: 'FontAwesome';
+		font-size: 2em;
+		position: absolute;
+		line-height: 1;
+		top: 50%;
+		transform: translateY(-50%);
+		transition: all 0.2s linear;
+	}
+
+	html[dir="ltr"] .ipsPager_next a:after,
+	html[dir="rtl"] .ipsPager_prev a:after {
+		right: 0;
+	}
+
+	html[dir="ltr"] .ipsPager_prev a:after,
+	html[dir="rtl"] .ipsPager_next a:after {
+		content: '\f104';
+		left: 0;
+	}
+
+.ipsPager_type {
+	font-size: {fontsize="small"};
+}
+
+.ipsPager_title,
+.ipsPager_type {
+	display: block;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	max-width: 100%;
+	white-space: nowrap;
+}

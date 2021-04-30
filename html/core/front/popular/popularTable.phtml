@@ -1,0 +1,19 @@
+<ips:template parameters="$table, $headers, $rows, $quickSearch" />
+<div data-baseurl="{$table->baseUrl}" data-resort='{$table->resortKey}' data-tableID='pastLeaders' data-controller="core.global.core.genericTable">
+	<div class="ipsClear ipsClearfix">
+		{{if $table->pages > 1}}
+			<div data-role="tablePagination">
+				{template="pagination" group="global" app="core" location="global" params="$table->baseUrl, $table->pages, $table->page, $table->limit"}
+			</div>
+			<br>
+		{{endif}}
+		<ol class='ipsList_reset ipsPad cPastLeaders' data-role="tableRows">
+			{template="$table->rowsTemplate[1]" params="$table, $headers, $rows" object="$table->rowsTemplate[0]"}
+		</ol>
+		{{if $table->pages > 1}}
+			<div data-role="tablePagination">
+				{template="pagination" group="global" app="core" location="global" params="$table->baseUrl, $table->pages, $table->page, $table->limit"}
+			</div>
+		{{endif}}
+	</div>
+</div>

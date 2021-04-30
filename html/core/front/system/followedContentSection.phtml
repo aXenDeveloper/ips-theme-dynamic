@@ -1,0 +1,5 @@
+<ips:template parameters="$types, $currentAppModule, $currentType, $table" />
+<div class='ipsBox cFollowedContent'>
+	<h2 class='ipsType_sectionTitle ipsType_reset'>{{if is_subclass_of( $types[ $currentAppModule ][ $currentType ], 'IPS\Content\Item' )}}{lang="stuff_i_follow" sprintf="\IPS\Member::loggedIn()->language()->addToStack( $types[ $currentAppModule ][ $currentType ]::$title . '_pl' )"}{{elseif $types[ $currentAppModule ][ $currentType ] == "\IPS\Member"}}{lang="members_i_follow"}{{else}}{lang="stuff_i_follow" sprintf="\IPS\Member::loggedIn()->language()->addToStack( $types[ $currentAppModule ][ $currentType ]::$nodeTitle )"}{{endif}}</h2>
+	{$table|raw}
+</div>

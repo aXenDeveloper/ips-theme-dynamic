@@ -1,0 +1,97 @@
+<ips:template parameters="$vseCss, $customCss, $settings, $form, $values, $colorValues" />
+<!DOCTYPE html>
+<html lang="{expression="\IPS\Member::loggedIn()->language()->bcp47()"}" dir="{{if member.language()->isrtl}}rtl{{else}}ltr{{endif}}">
+	<head>
+		<title>{lang="easy_mode_editor_title"}</title>
+		{template="includeCSS" app="core" group="global" location="global" params=""}
+		{template="includeJS" app="core" group="global" location="global" params=""}
+		<script type="text/javascript">
+			var ipsResumeVse = {
+				form:    	{expression="json_encode($form)" raw="true"},
+				settings:   {expression="json_encode($settings)" raw="true"},
+				colors:   {expression="json_encode($colorValues)" raw="true"}
+			};
+		</script>
+	</head>
+	<body class='ipsApp ipsApp_vse' data-controller='core.front.vse.main'>
+		<div id='vseMainWrapper'>
+			<iframe src='{setting="base_url"}' id='vseMainFrame' class='ipsScrollbar'></iframe>
+		</div>
+		<div id='vseToolbox' class='ipsToolbox'>
+			<div class='ipsTabs ipsTabs_stretch ipsClearfix' id='vseSection' data-ipsTabBar data-ipsTabBar-contentArea='#vseToolbox_tabs'>
+				<ul role='tablist' class='ipsList_reset'>
+					<li>
+						<a href='#' role='tab' aria-selected="true" id='vseCustomizeTab' class='ipsTabs_item ipsTabs_activeItem ipsType_center'>
+							{lang="vse_customize"}
+						</a>
+					</li>
+					<li>
+						<a href='#' role='tab' aria-selected="false" id='vseSettingsTab' class='ipsTabs_item ipsType_center'>
+							{lang="vse_settings"}
+						</a>
+					</li>
+					<li>
+						<a href='#' role='tab' aria-selected="false" id='vseBuildTab' class='ipsTabs_item ipsType_center'>
+							{lang="vse_build"}
+						</a>
+					</li>
+				</ul>
+			</div>
+			<section id='vseToolbox_tabs'>
+				<div id='ipsTabs_vseSection_vseCustomizeTab_panel' class='ipsTabs_panel'>
+					<div class='ipsPad'>
+						<div class='ipsGrid'>
+							<a href='#' class='ipsButton ipsButton_small ipsButton_primary ipsButton_narrow ipsGrid_span5' title='{lang="vse_colorize"}' id='vseColorize'><i class='fa fa-tint'></i> &nbsp;{lang="vse_colorize"}</a>
+							<a href='#' class='ipsButton ipsButton_small ipsButton_primary ipsButton_narrow ipsGrid_span5' title='{lang="vse_select_elem"}' id='vseStartXRay'><i class='fa fa-magic ipsType_normal'></i> &nbsp;{lang="vse_select_elem"}</a>
+							<a href='#' class='ipsButton ipsButton_small ipsButton_primary ipsButton_narrow ipsGrid_span2' title='{lang="vse_custom_css"}' data-ipsTooltip id='vseAddCustomCSS'><i class='fa fa-code ipsType_normal'></i></a>
+						</div>
+					</div>
+
+
+					<div id='vseClassWrap'>
+						<div id='vseClassList' class='ipsScrollbar'>
+							<ul class='ipsList_reset'></ul>
+						</div>
+
+						<div id='vseClassEditor' class='ipsPad'>
+							<div class='vseNavBack'>
+								<a href='#' data-action='back'>{lang="vse_back"}</a>
+								<h2 data-role='classTitle' class='ipsType_reset ipsType_sectionHead'></h2>
+							</div>
+							<div data-role='panels'></div>
+						</div>
+					</div>
+
+					<div id='vseColorizerPanel' class='ipsPad ipsHide'>
+						<div class='vseNavBack'>
+							<a href='#' data-action='colorizerBack'>{lang="vse_back"}</a>
+							<h2 class='ipsType_reset ipsType_sectionHead'>{lang="vse_colorizer"}</h2>
+						</div>
+						<div data-role="colorizer" data-controller='core.front.vse.colorizer'></div>
+					</div>
+				</div>
+				<div id='ipsTabs_vseSection_vseSettingsTab_panel' class='ipsTabs_panel'>
+					<div class='ipsPad ipsScrollbar' id='vseSettingsWrap'>
+						{$form|raw}
+					</div>
+				</div>
+				<div id='ipsTabs_vseSection_vseBuildTab_panel' class='ipsTabs_panel'>
+					<div class='ipsPad'>
+						<p class='ipsType_light ipsType_center'>{lang="vse_ready_to_build"}</p>
+
+						<a href='#' class='ipsButton ipsButton_important ipsButton_large ipsButton_fullWidth' data-action='buildSkin'>{lang="vse_build_this_skin"}</a>
+						<br><br>
+
+						<a href='{setting="base_url"}' class='ipsButton ipsButton_primary ipsButton_fullWidth' data-action='cancelSkin'>{lang="vse_close_editor"}</a>
+					</div>
+				</div>
+			</section>
+		</div>
+		<div id='vseCustomCSS' class='ipsToolbox'>
+			<h3 class='ipsToolbox_sectionTitle ipsType_reset'>{lang="vse_custom_css_title"}</h3>
+			<div class='ipsPad'>
+				<textarea id='vseCustomCSS_editor'>{$customCss}</textarea>
+			</div>
+		</div>
+	</body>
+</html>

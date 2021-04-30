@@ -1,0 +1,13 @@
+<ips:template parameters="$collection, $input, $category, $page, $database, $record" />
+<div class="ipsJS_show ipsType_light" data-controller='cms.front.records.form' data-ipsTitleField="content_field_{$database->field_title}">
+	{{if $collection['record_static_furl']->error}}
+	<p class='ipsType_warning'><i class='fa fa-exclamation-circle'></i> {lang="$collection['record_static_furl']->error"}</p>
+	{{endif}}
+	<input type="checkbox" class="ipsHide" id="elInput_record_static_furl_set" name="record_static_furl_set_checkbox" {{if $collection['record_static_furl_set']->value}}checked="checked"{{endif}} value="1">
+	<input type="hidden" name="record_static_furl_set" value="{{if $collection['record_static_furl_set']->value}}1{{else}}0{{endif}}">
+	<i class='fa fa-globe'></i> <strong>{lang="url"}:</strong> <span data-ipsSlugUrl>{url="app=cms&module=pages&controller=page&path=$page->full_path" seoTemplate="content_page_path" seoTitle="$page->full_path"}</span><span data-ipsSlugCategory>{$category->full_path}</span><span data-ipsSlugSlug></span><span data-ipsSlugManual class="ipsHide">
+		/ <input type="text" class='ipsField_short ipsField_tinyText' name="record_static_furl" value="{$collection['record_static_furl']->value}">
+	</span><span data-ipsSlugExt>{{if $record !== NULL}}-r{$record->_id}{{else}}-r#{{endif}}</span>
+	<button data-ipsChange class="ipsButton ipsButton_veryVerySmall ipsButton_link">{lang="change"}</button>
+	<button data-ipsCancel class="ipsHide ipsButton ipsButton_veryVerySmall ipsButton_light">{lang="cancel"}</button>
+</div>

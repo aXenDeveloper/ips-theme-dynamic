@@ -1,0 +1,49 @@
+<ips:template parameters="$users" />
+{{$count=0;}}
+{{foreach $users as $user}}
+	{{if $count%2 == 0}}
+		<div class='ipsGrid ipsGrid_collapsePhone ipsSpacer_bottom cStaffDirectory_half'>
+	{{endif}}
+			<div class='ipsGrid_span6 ipsPhotoPanel ipsPhotoPanel_small ipsAreaBackground_light ipsPad'>
+				{template="userPhoto" app="core" group="global" params="$user->member(), 'small'"}
+				<div>
+					<h3 class='ipsType_sectionHead'>
+						{{if \IPS\Member::loggedIn()->language()->checkKeyExists( "core_staff_directory_name_" . $user->id ) }}
+							{{if member.canAccessModule( \IPS\Application\Module::get( 'core', 'members' ) )}}
+								<a href='{$user->member()->url()}'>{lang="core_staff_directory_name_{$user->id}" escape="true"}</a>
+							{{else}}
+								{lang="core_staff_directory_name_{$user->id}" escape="true"}
+							{{endif}}
+						{{else}}
+							{$user->member()->link()|raw}
+						{{endif}}
+					</h3>
+					<p class='ipsType_light ipsType_normal ipsType_reset'>
+						{{if \IPS\Member::loggedIn()->language()->checkKeyExists( "core_staff_directory_title_" . $user->id ) }}
+							{lang="core_staff_directory_title_{$user->id}" escape="true"}
+						{{else}}
+							{{if $user->member()->member_title}}
+								{$user->member()->member_title}
+							{{elseif $user->member()->rank['title']}}
+								{$user->member()->rank['title']}
+							{{endif}}
+						{{endif}}
+					</p>
+					{{if \IPS\Member::loggedIn()->language()->checkKeyExists( "core_staff_directory_bio_" . $user->id )}}
+						<br>
+						<div class='ipsType_richText ipsType_normal' data-ipsTruncate data-ipsTruncate-size="4 lines" data-ipsTruncate-type="hide">{lang="core_staff_directory_bio_{$user->id}"}</div>
+					{{endif}}			
+					{{if !member.members_disable_pm AND !$user->member()->members_disable_pm AND \IPS\Member::loggedIn()->member_id AND \IPS\Member::loggedIn()->canAccessModule( \IPS\Application\Module::get( 'core', 'messaging' ) )}}
+						<br>
+						<a href='{url="app=core&module=messaging&controller=messenger&do=compose&to={$user->member()->member_id}" seoTemplate="messenger_compose"}' data-ipsDialog data-ipsDialog-title='{lang="compose_new"}' data-ipsDialog-forceReload data-ipsDialog-remoteSubmit data-ipsDialog-flashMessage="{lang="message_sent"}"><i class='fa fa-envelope'></i> {lang="message_send"}</a>
+					{{endif}}
+				</div>
+			</div>
+	{{$count++;}}
+	{{if $count%2 == 0}}
+		</div>
+	{{endif}}
+{{endforeach}}
+{{if $count%2 != 0}}
+	</div>
+{{endif}}

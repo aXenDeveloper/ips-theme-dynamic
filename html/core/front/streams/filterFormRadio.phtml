@@ -1,0 +1,6 @@
+<ips:template parameters="$k, $v, $name, $value, $required, $options, $disabled=FALSE, $hasOptions=FALSE" />
+
+<a href='#' class='ipsSideMenu_item {{if $hasOptions}}cStream_withOptions{{endif}} {{if (string) $value == (string) $k or ( isset( $userSuppliedInput ) and !\in_array( $value, array_keys( $options ) ) and $k == $userSuppliedInput )}}ipsSideMenu_itemActive{{endif}}' data-ipsMenuValue='{$k}'>
+	<input type="radio" name="{$name}" value="{$k}" {{if (string) $value == (string) $k or ( isset( $userSuppliedInput ) and !\in_array( $value, array_keys( $options ) ) and $k == $userSuppliedInput )}}checked{{endif}} {{if $disabled === TRUE or ( \is_array( $disabled ) and \in_array( $k, $disabled ) )}}disabled{{endif}} id="elRadio_{$name}_{$k}">
+	<label for='elRadio_{$name}_{$k}' id='elField_{$name}_label'>{lang="$v"}</label>
+</a>

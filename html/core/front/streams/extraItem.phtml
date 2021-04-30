@@ -1,0 +1,15 @@
+<ips:template parameters="$time, $image, $html, $view = 'expanded'" />
+<li class='ipsStreamItem ipsStreamItem_{$view} ipsStreamItem_actionBlock' data-role="activityItem" data-timestamp='{$time->getTimestamp()}'>
+	<div class='ipsStreamItem_container'>
+		<div class='ipsStreamItem_action ipsType_blendLinks ipsType_light ipsType_break ipsFlex ipsFlex-ai:center'>
+			{{if isset( $image )}}
+				<div class='ipsFlex-flex:00 ipsMargin_right:half'>
+					{$image|raw}
+				</div>
+			{{endif}}
+			<div class='ipsFlex-flex:11'>
+				<span class='ipsMargin_right'>{$html|raw}</span> <span class='ipsType_light'>{datetime="$time"}</span>
+			</div>
+		</div>
+	</div>
+</li>

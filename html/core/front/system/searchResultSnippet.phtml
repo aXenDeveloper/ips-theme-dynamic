@@ -1,0 +1,8 @@
+<ips:template parameters="$indexData" />
+{{if trim( $indexData['index_content'] ) !== ''}}
+	<div class='ipsType_richText ipsContained ipsType_medium'>
+		<div {{if !( \IPS\Dispatcher::i()->application->directory == 'core' and \IPS\Dispatcher::i()->module and \IPS\Dispatcher::i()->module->key == 'search' )}}data-ipsTruncate data-ipsTruncate-type='remove' data-ipsTruncate-size='3 lines' data-ipsTruncate-watch='false'{{else}}data-searchable data-findTerm{{endif}}>
+			{expression="\IPS\Content\Search\Result::preDisplay( $indexData['index_content'] )" raw="true"}
+		</div>
+	</div>
+{{endif}}

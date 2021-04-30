@@ -1,0 +1,7 @@
+<ips:template parameters="$content, $title='', $classes=NULL" />
+{{if $title}}
+	{template="pageHeader" app="core" group="global" location="front" params="$title"}
+{{endif}}
+<div class='{{if $classes}}{$classes}{{endif}}'>
+	{$content|raw}
+</div>

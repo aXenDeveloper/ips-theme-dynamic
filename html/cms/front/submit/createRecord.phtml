@@ -1,0 +1,5 @@
+<ips:template parameters="$form, $category, $title" />
+
+{template="pageHeader" if="!\IPS\Request::i()->isAjax()" group="global" app="core" params="\IPS\Member::loggedIn()->language()->addToStack( $title )"}
+<hr class='ipsHr'>
+{$form|raw}

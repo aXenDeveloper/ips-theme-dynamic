@@ -1,0 +1,195 @@
+<ips:template parameters="$id, $action, $elements, $hiddenValues, $actionButtons, $uploadField, $class='', $attributes=array(), $sidebar, $form=NULL" />
+<div data-controller='core.front.streams.form'>
+	<form accept-charset='utf-8' class="ipsForm ipsForm_vertical" action="{$action}" method="post" {{if $uploadField}}enctype="multipart/form-data"{{endif}} {{foreach $attributes as $k => $v}}{$k}="{$v}"{{endforeach}} data-ipsForm id='elFilterForm'>
+		<input type="hidden" name="{$id}_submitted" value="1">
+		{{foreach $hiddenValues as $k => $v}}
+			<input type="hidden" name="{$k}" value="{$v}">
+		{{endforeach}}
+		{{if $uploadField}}
+			<input type="hidden" name="MAX_FILE_SIZE" value="{$uploadField}">
+			<input type="hidden" name="plupload" value="{expression="md5( mt_rand() )"}">
+		{{endif}}
+		<div class='' id='elStreamFilterForm'>
+			<ul class='cStreamFilter ipsClearfix ipsList_reset ipsJS_show' data-role="filterBar">
+				<li data-filter='stream_include_comments'>
+					<a href='#elStreamShowMe_menu' id='elStreamShowMe' data-ipsMenu data-ipsMenu-stopLinks data-ipsMenu-activeClass='cStreamFilter_active' data-ipsMenu-selectable='radio' data-ipsMenu-appendTo='#elStreamFilterForm'>
+						<h3 class='ipsType_reset ipsTruncate ipsTruncate_line'>{lang="stream_include_comments"}</h3>
+						<p class='cStreamFilter_blurb ipsType_reset ipsTruncate ipsTruncate_line' data-role='filterOverview'></p>
+					</a>
+				</li>
+				<li data-filter='stream_classes'>
+					<a href='#elStreamContentTypes_menu' id='elStreamContentTypes' data-ipsMenu data-ipsMenu-activeClass='cStreamFilter_active' data-ipsMenu-selectable='radio' data-ipsMenu-appendTo='#elStreamFilterForm' data-ipsMenu-closeOnClick='false'>
+						<h3 class='ipsType_reset ipsTruncate ipsTruncate_line'>{lang="stream_classes_type"}</h3>
+						<p class='cStreamFilter_blurb ipsType_reset ipsTruncate ipsTruncate_line' data-role='filterOverview'></p>
+					</a>
+				</li>
+				{{if \IPS\Member::loggedIn()->member_id}}
+					{{if isset( $elements['']['stream_read'] )}}
+					<li data-filter='stream_read'>
+						<a href='#elStreamReadStatus_menu' id='elStreamReadStatus' data-ipsMenu data-ipsMenu-activeClass='cStreamFilter_active' data-ipsMenu-selectable='radio' data-ipsMenu-appendTo='#elStreamFilterForm'>
+							<h3 class='ipsType_reset ipsTruncate ipsTruncate_line'>{lang="stream_read"}</h3>
+							<p class='cStreamFilter_blurb ipsType_reset ipsTruncate ipsTruncate_line' data-role='filterOverview'></p>
+						</a>
+					</li>
+					{{endif}}
+					{{if isset( $elements['']['stream_ownership'] )}}
+					<li data-filter='stream_ownership'>
+						<a href='#elStreamOwnership_menu' id='elStreamOwnership' data-ipsMenu data-ipsMenu-activeClass='cStreamFilter_active' data-ipsMenu-selectable='radio' data-ipsMenu-appendTo='#elStreamFilterForm' data-ipsMenu-closeOnClick='false'>
+							<h3 class='ipsType_reset ipsTruncate ipsTruncate_line'>{lang="stream_ownership"}</h3>
+							<p class='cStreamFilter_blurb ipsType_reset ipsTruncate ipsTruncate_line' data-role='filterOverview'></p>
+						</a>
+					</li>
+					{{endif}}
+					{{if isset( $elements['']['stream_follow'] )}}
+					<li data-filter='stream_follow'>
+						<a href='#elStreamFollowStatus_menu' id='elStreamFollowStatus' data-ipsMenu data-ipsMenu-activeClass='cStreamFilter_active' data-ipsMenu-selectable='checkbox' data-ipsMenu-appendTo='#elStreamFilterForm' data-ipsMenu-closeOnClick='false'>
+							<h3 class='ipsType_reset ipsTruncate ipsTruncate_line'>{lang="stream_follow"}</h3>
+							<p class='cStreamFilter_blurb ipsType_reset ipsTruncate ipsTruncate_line' data-role='filterOverview'></p>
+						</a>
+					</li>
+					{{endif}}
+				{{endif}}
+				{{if isset( $elements['']['stream_date_type'] )}}
+				<li data-filter='stream_date_type'>
+					<a href='#elStreamTimePeriod_menu' id='elStreamTimePeriod' data-ipsMenu data-ipsMenu-activeClass='cStreamFilter_active' data-ipsMenu-selectable='radio' data-ipsMenu-appendTo='#elStreamFilterForm' data-ipsMenu-closeOnClick='false'>
+						<h3 class='ipsType_reset ipsTruncate ipsTruncate_line'>{lang="stream_date_type"}</h3>
+						<p class='cStreamFilter_blurb ipsType_reset ipsTruncate ipsTruncate_line' data-role='filterOverview'></p>
+					</a>
+				</li>
+				{{endif}}
+				<li data-filter='stream_sort'>
+					<a href='#elStreamSortEdit_menu' id='elStreamSortEdit' data-ipsMenu data-ipsMenu-activeClass='cStreamFilter_active' data-ipsMenu-selectable='radio' data-ipsMenu-appendTo='#elStreamFilterForm'>
+						<h3 class='ipsType_reset ipsTruncate ipsTruncate_line'>{lang="stream_sorting"}</h3>
+						<p class='cStreamFilter_blurb ipsType_reset ipsTruncate ipsTruncate_line' data-role='filterOverview'></p>
+					</a>
+				</li>
+			</ul>
+			{{if \IPS\Member::loggedIn()->member_id }}
+				<ul data-role="saveButtonContainer" class='ipsList_inline ipsHide ipsType_right ipsType_small ipsPad_half ipsAreaBackground_light'>
+					<li><strong>{lang="stream_save_changes"}</strong></li>
+					<li><a href='#' class='ipsButton ipsButton_link ipsButton_verySmall' data-action='dismissSave'>{lang="stream_save_dismiss"}</a></li>
+					<li>
+						<button type='button' class='ipsButton ipsButton_link ipsButton_verySmall'  data-ipsMenu data-ipsMenu-closeOnClick='false' data-ipsMenu-appendTo='#elFilterForm' data-action='saveNewStream' id='elSaveNewStream'>{lang="stream_button_save_as_new"}</button>
+					</li>
+					{{if isset( $hiddenValues['__stream_owner'] ) and $hiddenValues['__stream_owner'] === \IPS\Member::loggedIn()->member_id}}
+						<li>
+							<button type='button' class='ipsButton ipsButton_primary ipsButton_verySmall' data-action='saveStream' id='elSaveStream'>{lang="stream_button_save"}</button>
+						</li>
+					{{endif}}
+				</ul>
+			{{endif}}
+
+			<a href='#' class='ipsResponsive_showPhone ipsResponsive_block ipsJS_show ipsButton ipsButton_link ipsButton_fullWidth' data-action="toggleFilters"></a>
+
+			<ul class='ipsMenu ipsMenu_selectable ipsMenu_auto ipsHide' id='elStreamSortEdit_menu'>
+				<li class='ipsMenu_item {{if $elements['']['stream_sort']->value == 'newest'}}ipsMenu_itemChecked{{endif}}'>
+					<a href='#'>
+						<input type="radio" name="stream_sort" value="newest" {{if (string) $elements['']['stream_sort']->value == 'newest'}}checked{{endif}} id="elRadio_stream_sort_newest">
+						{lang="stream_sort_newest"}
+					</a>
+				</li>
+				<li class='ipsMenu_item {{if $elements['']['stream_sort']->value == 'oldest'}}ipsMenu_itemChecked{{endif}}'>
+					<a href='#'>
+						<input type="radio" name="stream_sort" value="oldest" {{if (string) $elements['']['stream_sort']->value == 'oldest'}}checked{{endif}} id="elRadio_stream_sort_oldest">
+						{lang="stream_sort_oldest"}
+					</a>
+				</li>
+			</ul>
+
+			<!-- Show me menu -->
+			<ul class='ipsMenu ipsMenu_selectable ipsMenu_auto ipsHide' data-role="streamMenuFilter" id='elStreamShowMe_menu'>
+				{{foreach $elements['']['stream_include_comments']->options['options'] as $k => $v}}
+					<li class='ipsMenu_item {{if $elements['']['stream_include_comments']->value == $k}}ipsMenu_itemChecked{{endif}}' data-ipsMenuValue="{$k}">
+						<a href='#'>
+							<input type="radio" name="stream_include_comments" value="{$k}" {{if (string) $elements['']['stream_include_comments']->value == $k}}checked{{endif}} id="stream_ownership_{$k}">
+							{lang="$v"}
+						</a>
+					</li>
+				{{endforeach}}
+				{{if isset( $elements['']['stream_tags'] )}}
+				<!-- Tags menu -->
+				<li><hr class='ipsHr'></li>
+				<li class='ipsPad ipsPadding_top:half'>
+					<input type="hidden" name="stream_tags_type" value="custom">
+					<h3 class='ipsType_reset ipsTruncate ipsTruncate_line ipsPadding_bottom'>{lang="stream_tagged_with"}</h3>
+					<div class='ipsFieldRow_fullWidth'>
+						{$elements['']['stream_tags']->html()|raw}
+						<p class='ipsType_reset ipsType_small ipsType_light'>{lang="tags_desc"}</p>
+					</div>
+				</li>
+				{{endif}}
+			</ul>
+
+			<!-- Content types menu -->
+			<div class='ipsMenu ipsMenu_selectable ipsMenu_wide ipsPad ipsHide' data-role="streamMenuFilter" id='elStreamContentTypes_menu'>
+				{template="filterFormShowMe" group="streams" params="$id, $action, $elements, $hiddenValues, $actionButtons, $uploadField, $class, $attributes, $sidebar, $form, FALSE"}
+			</div>
+
+			{{if \IPS\Member::loggedIn()->member_id}}
+				<!-- Read Status menu -->
+				<ul class='ipsMenu ipsMenu_selectable ipsMenu_auto ipsHide' data-role="streamMenuFilter" id='elStreamReadStatus_menu'>
+					{{foreach $elements['']['stream_read']->options['options'] as $k => $v}}
+						<li class='ipsMenu_item {{if $elements['']['stream_read']->value == $k}}ipsMenu_itemChecked{{endif}}' data-ipsMenuValue="{$k}">
+							<a href='#'>
+								<input type="radio" name="stream_read" value="{$k}" {{if (string) $elements['']['stream_read']->value == $k}}checked{{endif}} id="elRadio_stream_read_{$k}">
+								{lang="$v"}
+								{{if $k == 'unread'}}
+									<p class="ipsType_reset ipsType_small ipsType_light">
+										{lang="stream_read_unread_desc"}
+									</p>
+								{{endif}}
+							</a>
+						</li>
+					{{endforeach}}
+				</ul>
+				<!-- Ownership menu -->
+				<ul class='ipsMenu ipsMenu_selectable ipsMenu_auto ipsHide' data-role="streamMenuFilter" id='elStreamOwnership_menu'>
+					{{foreach $elements['']['stream_ownership']->options['options'] as $k => $v}}
+						<li class='ipsMenu_item {{if $elements['']['stream_ownership']->value == $k}}ipsMenu_itemChecked{{endif}}' data-ipsMenuValue="{$k}">
+							<a href='#'>
+								<input type="radio" name="stream_ownership" value="{$k}" {{if (string) $elements['']['stream_ownership']->value == $k}}checked{{endif}} id="stream_ownership_{$k}">
+								{lang="$v"}
+							</a>
+						</li>
+					{{endforeach}}
+					{template="filterFormOwnership" group="streams" params="$id, $action, $elements, $hiddenValues, $actionButtons, $uploadField, $class, $attributes, $sidebar, $form, FALSE"}
+				</ul>
+				<!-- Follow status menu -->
+				<ul class='ipsMenu ipsMenu_selectable ipsMenu_auto ipsHide' data-role="streamMenuFilter" id='elStreamFollowStatus_menu'>
+					<input type='hidden' name='stream_follow' value='{$elements['']['stream_follow']->value}'>
+
+					{{foreach $elements['']['stream_followed_types']->options['options'] as $type => $lang}}
+						<li class='ipsMenu_item {{if $elements['']['stream_followed_types']->value !== 0 && \in_array( $type, $elements['']['stream_followed_types']->value ) !== FALSE && (string) $elements['']['stream_follow']->value !== 'all'}}ipsMenu_itemChecked{{endif}}' data-ipsMenuValue='{$type}'>
+							<a href='#'>
+								<input type='checkbox' name='stream_followed_types[{$type}]' value='1' {{if $elements['']['stream_followed_types']->value !== 0 && \in_array( $type, $elements['']['stream_followed_types']->value ) !== FALSE && (string) $elements['']['stream_follow']->value !== 'all'}}checked{{endif}}>
+								{lang="$lang"}
+							</a>
+						</li>
+					{{endforeach}}
+				</ul>
+			{{endif}}
+			<!-- Time Period menu -->
+			<ul class='ipsMenu ipsMenu_selectable ipsMenu_auto ipsHide' data-role="streamMenuFilter" id='elStreamTimePeriod_menu'>
+				{{foreach $elements['']['stream_date_type']->options['options'] as $k => $v}}
+					<li class='ipsMenu_item {{if $elements['']['stream_date_type']->value == $k}}ipsMenu_itemChecked{{endif}}' data-ipsMenuValue="{$k}">
+						<a href='#'>
+							<input type="radio" name="stream_date_type" value="{$k}" {{if (string) $elements['']['stream_date_type']->value == $k}}checked{{endif}} id="stream_date_type_{$k}">
+							{lang="$v"}
+						</a>
+					</li>
+				{{endforeach}}
+				{template="filterFormTimePeriod" group="streams" params="$id, $action, $elements, $hiddenValues, $actionButtons, $uploadField, $class, $attributes, $sidebar, $form, FALSE"}
+			</ul>
+		</div>
+		<div id='elSaveNewStream_menu' class='ipsMenu ipsMenu_wide ipsHide ipsPad'>
+			<ul class='ipsForm ipsForm_horizontal'>
+				<li class='ipsFieldRow'>
+					<input type='text' name='stream_title' value='{{if isset( $elements['']['stream_title'] )}}{$elements['']['stream_title']->value}{{endif}}' placeholder='{lang="stream_title"}' class='ipsField_fullWidth ipsField_primary'>
+				</li>
+				<li class='ipsFieldRow'>
+					<button type='submit' data-action='newStream' class='ipsButton ipsButton_primary ipsButton_medium ipsButton_fullWidth'>{lang="stream_new_stream"}</button>
+				</li>
+			</ul>
+		</div>
+	</form>
+</div>

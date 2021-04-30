@@ -1,0 +1,77 @@
+<ips:template parameters="$field, $details" />
+<li class='ipsFieldRow ipsClearfix {{if $field->error}}ipsFieldRow_error{{endif}}' {{if $field->htmlId}}id="{$field->htmlId}"{{endif}}>
+	{{if \IPS\Dispatcher::i()->controllerLocation === 'admin' or $details['showTitle']}}
+		<label class='ipsFieldRow_label ipsSpacer_bottom'>
+			{lang="$details['title']"}
+		</label>
+	{{endif}}
+	<div class='ipsFieldRow_content'>
+		{{if $details['description']}}
+			<div class='ipsType_normal ipsSpacer_bottom ipsSpacer_half'>{lang="$details['description']"}</div>
+		{{endif}}
+		<ul class="ipsField_fieldList">
+			{{if isset( $details['extra'] )}}
+				{{foreach $details['extra'] as $k => $option}}
+					<li class="ipsSpacer_bottom">
+						<span class='ipsCustomInput'>
+							<input type="checkbox" name="{$field->name}[{$k}]" value="1" {{if $option['value']}}checked{{endif}} id="elCheckbox_{$field->name}_{$k}">
+							<span></span>
+						</span>
+						<div class='ipsField_fieldList_content'>
+							<label for='elCheckbox_{$field->name}_{$k}' id='elField_{$field->name}_label'>{lang="$option['title']"}</label>
+							{{if isset( $option['description'] )}}
+								<br>
+								<span class='ipsFieldRow_desc'>{lang="$option['description']"}</span>
+							{{endif}}
+						</div>
+					</li>
+				{{endforeach}}
+			{{endif}}
+			{{foreach $details['options'] as $k => $option}}
+				{{if $k === 'inline' and isset( $details['options']['push'] )}}
+					<li class="ipsSpacer_bottom">
+						<ul class="ipsField_fieldList " role="radiogroup">
+							<li>
+								<span class='ipsCustomInput'>
+									<input type="radio" name="{$field->name}[{$k}]" value="push" {{if $details['options']['push']['value']}}checked{{endif}} id="elCheckbox_{$field->name}_{$k}_push" {{if !$option['editable']}}disabled{{endif}}>
+									<span></span>
+								</span>
+								<div class='ipsField_fieldList_content ipsType_break'>
+									<label for="elCheckbox_{$field->name}_{$k}_push">{lang="notifications_list_and_app"}</label>
+								</div>
+							</li>
+							<li>
+								<span class='ipsCustomInput'>
+									<input type="radio" name="{$field->name}[{$k}]" value="inline" {{if $details['options']['inline']['value'] and !$details['options']['push']['value']}}checked{{endif}} id="elCheckbox_{$field->name}_{$k}_inline" {{if !$option['editable']}}disabled{{endif}}>
+									<span></span>
+								</span>
+								<div class='ipsField_fieldList_content ipsType_break'>
+									<label for="elCheckbox_{$field->name}_{$k}_inline">{lang="notifications_list_only"}</label>
+								</div>
+							</li>
+							<li>
+								<span class='ipsCustomInput'>
+									<input type="radio" name="{$field->name}[{$k}]" value="" {{if !$details['options']['inline']['value'] and !$details['options']['push']['value']}}checked{{endif}} id="elCheckbox_{$field->name}_{$k}_off" {{if !$option['editable']}}disabled{{endif}}>
+									<span></span>
+								</span>
+								<div class='ipsField_fieldList_content ipsType_break'>
+									<label for="elCheckbox_{$field->name}_{$k}_off">{lang="notifications_no_list"}</label>
+								</div>
+							</li>
+						</ul>
+					</li>
+				{{elseif $k !== 'push' or !isset( $details['options']['inline'] )}}
+					<li class="ipsSpacer_bottom">
+						<span class='ipsCustomInput'>
+							<input type="checkbox" name="{$field->name}[{$k}]" value="1" {{if $option['value']}}checked{{endif}} id="elCheckbox_{$field->name}_{$k}" {{if !$option['editable']}}disabled{{endif}}>
+							<span></span>
+						</span>
+						<div class='ipsField_fieldList_content'>
+							<label for='elCheckbox_{$field->name}_{$k}' id='elField_{$field->name}_label'>{lang="$option['title']"}</label>
+						</div>
+					</li>
+				{{endif}}
+			{{endforeach}}
+		</ul>
+	</div>
+</li>

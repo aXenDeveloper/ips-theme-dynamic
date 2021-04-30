@@ -1,0 +1,4 @@
+<ips:template parameters="$table, $headers, $forums" />
+{{foreach $forums as $forum}}
+	{template="forumRow" group="index" app="forums" params="$forum, FALSE, $table"}
+{{endforeach}}

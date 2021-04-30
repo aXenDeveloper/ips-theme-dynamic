@@ -1,0 +1,121 @@
+<ips:template parameters="$club, $activity, $fieldValues" />
+
+{{if \IPS\Settings::i()->clubs_header != 'sidebar'}}
+	{template="header" group="clubs" app="core" params="$club"}
+{{endif}}
+
+<div class='ipsColumns ipsColumns_collapsePhone'>
+	<section class='ipsColumn ipsColumn_fluid'>
+	
+		{{if settings.clubs_require_approval and !$club->approved}}
+			<div class='ipsBox ipsPad ipsSpacer_bottom ipsModerated'>
+				<div class='ipsFlex ipsFlex-ai:center ipsGap sm:ipsFlex-fd:column'>
+		    		<div class='ipsFlex-flex:11'>
+						<div class='ipsFlex ipsFlex-ai:center ipsGap cClubStatus'>
+							<i class='fa fa-eye-slash ipsPos_left ipsType_large ipsFlex-flex:00'></i>
+							<div class='ipsFlex-flex:11'>
+								<h3 class='ipsType_reset ipsType_large'>{lang="club_unapproved"}</h3>
+								<p class='ipsType_reset ipsType_medium'>
+									{{if member.modPermission('can_access_all_clubs')}}
+										{lang="club_unapproved_desc_mod"}
+									{{else}}
+										{lang="club_unapproved_desc_public"}
+									{{endif}}
+								</p>
+							</div>
+						</div>
+					</div>
+					{{if member.modPermission('can_access_all_clubs')}}
+						<div class='ipsFlex-flex:00'>
+							<div class='ipsFlex ipsFlex-ai:center ipsGap'>
+								<div class='ipsFlex-flex:00'>
+									<a class="ipsButton ipsButton_medium ipsButton_fullWidth ipsButton_positive" href="{$club->url()->setQueryString( array( 'do' => 'approve', 'approved' => 1 ) )->csrf()}" data-confirm>
+										{lang="approve"}
+									</a>
+								</div>
+								<div class='ipsFlex-flex:00'>
+									<a class="ipsButton ipsButton_medium ipsButton_fullWidth ipsButton_negative" href="{$club->url()->setQueryString( array( 'do' => 'approve', 'approved' => 0 ) )->csrf()}" data-confirm>
+										{lang="delete"}
+									</a>
+								</div>
+							</div>
+						</div>
+					{{endif}}
+				</div>
+			</div>
+		{{endif}}
+
+		{{$memberStatus = $club->memberStatus( \IPS\Member::loggedIn(), 2 );}}
+		{template="nonMemberClubStatus" group="clubs" app="core" params="$club, $memberStatus"}
+
+		{{if $club->canRead() || $club->about || ( $club->location() && settings.clubs_locations && ( !\IPS\GeoLocation::enabled() ) ) || \IPS\Member\Club\CustomField::roots()}}
+			<div class='ipsBox ipsResponsive_pull ipsPadding ipsSpacer_bottom'>
+				{{if $club->canRead()}}
+					<div class='ipsClearfix {{if $club->about OR ($club->location() && settings.clubs_locations && ( !\IPS\GeoLocation::enabled() ))}}ipsPadding_bottom ipsBorder_bottom ipsMargin_bottom{{endif}}'>
+						<div class='ipsPos_right ipsResponsive_noFloat'>
+							{template="follow" app="core" group="global" params="'core','club', $club->id, $club->followersCount()"}
+						</div>
+					</div>
+				{{endif}}
+
+				{{if $club->about}}
+					<div>
+						<h3 class='ipsType_sectionHead'>{lang="club_about_this_club"}</h3>
+						<div class='ipsType_richText ipsType_normal'>
+							{$club->about}
+						</div>
+					</div>
+				{{endif}}
+				{{if $club->location() && settings.clubs_locations && ( !\IPS\GeoLocation::enabled() )}}
+					<div class='{{if $club->about}}ipsSpacer_top{{endif}}'>
+						<h3 class='ipsType_sectionHead'>{lang="club_location"}</h3>
+						<div class='ipsType_richText ipsType_normal'>
+							{$club->location()}
+						</div>
+					</div>
+				{{endif}}
+				{{$printedHr = FALSE;}}
+				{{if \IPS\Member\Club\CustomField::roots()}}
+					{{foreach \IPS\Member\Club\CustomField::roots() as $field}}
+						{{if isset( $fieldValues[ "field_" . $field->id ] )}}
+							{{if !$printedHr}}
+								<hr class='ipsHr'>
+								{{$printedHr = TRUE;}}
+							{{endif}}
+							<div class='ipsSpacer_bottom'>
+								<h3 class='ipsType_sectionHead'>{$field->_title}</h3>
+								<div class='ipsType_richText ipsType_normal'>
+									{$field->displayValue( $fieldValues[ "field_" . $field->id ] )|raw}
+								</div>
+							</div>
+						{{endif}}
+					{{endforeach}}
+				{{endif}}
+			</div>
+		{{endif}}
+
+		{{if $club->isLeader() and $club->type === $club::TYPE_CLOSED and $pendingMembers = $club->members( array( $club::STATUS_REQUESTED ), NULL, NULL, 3 ) and \count( $pendingMembers )}}
+			<div class='ipsBox ipsSpacer_bottom'>
+				<h2 class='ipsType_sectionTitle ipsType_reset'><i class='fa fa-lock' data-ipsTooltip title="{lang="club_requested_users_desc"}"></i> {lang="club_requested_users"}</h2>
+				<div data-controller='core.front.clubs.requests'>
+					{template="membersRows" group="clubs" params="$club, $pendingMembers"}
+				</div>
+			</div>
+			<hr class='ipsHr'>
+		{{endif}}
+
+		{{if $club->canRead()}}
+			<div class='ipsBox_alt ipsResponsive_pull'>
+				<ol class="ipsStream ipsStream_withTimeline ipsList_reset ipsSpacer_top">
+					<li class='ipsStreamItem_time'>{lang="club_whats_new"}</li>
+					{{foreach $activity as $result}}
+						{{if $result !== NULL}}
+							{$result->html()|raw}
+						{{endif}}
+					{{endforeach}}
+					<li class='ipsStreamItem_terminator'>&nbsp;</li>
+				</ol>
+			</div>
+		{{endif}}
+	</section>
+</div>

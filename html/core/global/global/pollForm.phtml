@@ -1,0 +1,53 @@
+<ips:template parameters="$url, $poll, $id, $action, $elements, $hiddenValues, $actionButtons, $uploadField, $class='', $attributes=array(), $sidebar, $form=NULL" />
+<form accept-charset='utf-8' class="ipsForm {$class}" action="{$url->stripQueryString( array( 'fetchPoll', 'viewResults' ) )}" method="post" {{if $uploadField}}enctype="multipart/form-data"{{endif}} {{foreach $attributes as $k => $v}}{$k}="{$v}"{{endforeach}} data-ipsForm>
+	<input type="hidden" name="{$id}_submitted" value="1">
+	{{foreach $hiddenValues as $k => $v}}
+		<input type="hidden" name="{$k}" value="{$v}">
+	{{endforeach}}		
+	{{foreach $elements as $collection}}
+		<ol class='ipsList_reset cPollList cPollList_questions'>
+			{{$i = 0;}}
+			{{foreach $collection as $idx => $input}}
+				{{$i++;}}
+				<li class='ipsFieldRow ipsFieldRow_noLabel'>
+					<h3 class='ipsType_sectionHead'><span class='ipsType_break ipsContained'>{$i}. {$input->label}</span></h3>
+					<div class='ipsType_break ipsContained'>
+					{{if !$input->options['multiple']}}
+						{template="radio" app="core" location="global" group="forms" params="$input->name, $input->value, $input->required, $input->options['options'], $input->options['disabled'], '', $input->options['disabled']"}
+					{{else}}
+						{template="checkboxset" app="core" location="global" group="forms" params="$input->name, $input->value, $input->required, $input->options['options'], $input->options['disabled'], $input->options['toggles'], isset( $input->options['descriptions'] ) ? $input->options['descriptions'] : NULL, $input->options['userSuppliedInput']"}
+					{{endif}}
+					</div>
+					{{if $input->error}}
+						<br>
+						<span class="ipsType_warning">{lang="$input->error"}</span>
+					{{endif}}
+				</li>
+			{{endforeach}}
+		</ol>
+	{{endforeach}}
+	<hr class='ipsHr'>
+	{{if $poll->poll_view_voters}}
+		<p class="ipsType_reset ipsType_medium ipsType_unbold ipsMargin_vertical:half">
+			{lang="poll_is_public"}
+		</p>
+	{{endif}}
+	<ul class="ipsToolList ipsToolList_horizontal ipsList_reset ipsClearfix cPollButtons ipsMargin_top ipsMargin_bottom:none">
+		<li class='ipsPos_left ipsResponsive_noFloat ipsToolList_primaryAction'>
+			<button type="submit" class="ipsButton ipsButton_small ipsButton_light ipsButton_fullWidth" tabindex="2" accesskey="s" role="button">{lang="save_vote"}</button>
+		</li>
+		<li class='ipsPos_left ipsResponsive_noFloat'><a class='ipsButton ipsButton_link ipsButton_small ipsButton_fullWidth' title='{lang="show_results_title"}' href="{$url->setQueryString( array( '_poll' => 'results', 'nullVote' => 1 ) )->csrf()}" {{if !settings.allow_result_view}}data-viewResults-confirm="{lang="warn_allow_result_view"}"{{endif}} data-action='viewResults'>{lang="show_results"}</a></li>
+        {{if $poll->canClose()}}
+			{{if ! $poll->poll_closed}}
+				<li class='ipsPos_right ipsResponsive_noFloat'><a class='ipsButton ipsButton_link ipsButton_small ipsButton_fullWidth' href='{$url->setQueryString( array( 'do' => 'pollStatus', 'value' => 0 ) )->csrf()}'><i class="fa fa-lock"></i> {lang="poll_close"}</a></li>
+			{{else}}
+				<li class='ipsPos_right ipsResponsive_noFloat'><a class='ipsButton ipsButton_link ipsButton_small ipsButton_fullWidth' href='{$url->setQueryString( array( 'do' => 'pollStatus', 'value' => 1 ) )->csrf()}'><i class="fa fa-unlock"></i> {lang="poll_open"}</a></li>
+			{{endif}}
+		{{endif}}
+		{{if ( $poll->poll_close_date instanceof \IPS\DateTime ) and !$poll->poll_closed}}
+			<li class='ipsPos_right ipsResponsive_noFloat cPollCloseDate'><span class='ipsType_light ipsType_medium'>{lang="poll_auto_closes_on" sprintf="$poll->poll_close_date->localeDate(), $poll->poll_close_date->localeTime( FALSE )"}</span></li>
+		{{elseif ( $poll->poll_close_date instanceof \IPS\DateTime ) and $poll->poll_closed}}
+			<li class='ipsPos_right ipsResponsive_noFloat cPollCloseDate'><span class='ipsType_light ipsType_medium'>{lang="poll_auto_closed_on" sprintf="$poll->poll_close_date->localeDate(), $poll->poll_close_date->localeTime( FALSE )"}</span></li>
+		{{endif}}
+	</ul>
+</form>

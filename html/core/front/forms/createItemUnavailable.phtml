@@ -1,0 +1,12 @@
+<ips:template parameters="$lang, $warnings" />
+
+{lang="$lang"} 
+
+{{if \count( $warnings) }}
+	{{foreach $warnings as $idx => $warning}}
+		{{if $idx === 0}}
+			<br><br>
+			<a href="{$warning->url()}" data-ipsDialog data-ipsDialog-size='narrow' class='ipsButton ipsButton_verySmall ipsButton_light'>{lang="view_warning_details"}</a>
+		{{endif}}
+	{{endforeach}}
+{{endif}}

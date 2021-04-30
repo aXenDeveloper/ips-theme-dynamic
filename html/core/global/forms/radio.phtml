@@ -1,0 +1,39 @@
+<ips:template parameters="$name, $value, $required, $options, $disabled=FALSE, $toggles=array(), $descriptions=array(), $warnings=array(), $userSuppliedInput='', $unlimited=NULL, $unlimitedLang=NULL, $htmlId=NULL" />
+{{if $unlimited !== NULL}}
+	<ul class="ipsField_fieldList" role="radiogroup">
+		<li>
+			<span class='ipsCustomInput'>
+				<input type="checkbox" name="{$name}" value="{$unlimited}" id='elRadio_{$name}_{unlimited}_{$htmlId}' data-control="toggle" data-togglesOff="elRadio_{$name}" {{if $value === $unlimited}}checked{{endif}}>
+				<span></span>
+			</span>
+			<div class='ipsField_fieldList_content'>
+				<label for='elRadio_{$name}_{unlimited}_{$htmlId}'>
+					{lang="$unlimitedLang"}
+				</label>
+			</div>
+		</li>
+	</ul>
+{{endif}}
+<input type="hidden" name="radio_{$name}__empty" value='1'>
+<ul class="ipsField_fieldList" role="radiogroup" id="elRadio_{$name}_{$htmlId}">
+{{foreach $options as $k => $v}}
+	<li>
+		<span class='ipsCustomInput'>
+			<input type="radio" name="{$name}" value="{$k}" {{if (string) $value == (string) $k or ( isset( $userSuppliedInput ) and !\in_array( $value, array_keys( $options ) ) and $k == $userSuppliedInput )}}checked{{endif}} {{if $disabled === TRUE or ( \is_array( $disabled ) and \in_array( $k, $disabled ) )}}disabled{{endif}} {{if isset( $toggles[ $k ] ) and !empty( $toggles[ $k ] )}}data-control="toggle" data-toggles="{expression="implode( ',', $toggles[ $k ] )"}"{{endif}} id="elRadio_{$name}_{$k}_{$htmlId}">
+			<span></span>
+		</span>
+		<div class='ipsField_fieldList_content ipsType_break'>
+			<label for='elRadio_{$name}_{$k}_{$htmlId}' id='elField_{$name}_label'>{$v|raw}</label>
+			{{if !empty( $userSuppliedInput ) AND $userSuppliedInput == $k}}
+				<input type='text' name='{$userSuppliedInput}_{$name}' value="{{if !\in_array( $value, array_keys( $options ) )}}{$value}{{endif}}" id='{$userSuppliedInput}_{expression="preg_replace('/[^a-zA-Z0-9\-_]/', '_', $name)"}_{$htmlId}'>
+			{{endif}}
+			{{if isset( $descriptions[ $k ] )}}
+				{$descriptions[ $k ]|raw}
+			{{endif}}
+			{{if isset( $warnings[ $k ] )}}
+				{$warnings[ $k ]|raw}
+			{{endif}}
+		</div>
+	</li>
+{{endforeach}}
+</ul>

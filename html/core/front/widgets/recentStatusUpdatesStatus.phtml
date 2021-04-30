@@ -1,0 +1,19 @@
+<ips:template parameters="$status" />
+<li class='ipsDataItem {{if $status->hidden()}} ipsModerated{{endif}}' data-statusID='{$status->id}'>
+	<div class='ipsDataItem_icon ipsPos_top'>
+		{template="userPhoto" group="global" app="core" params="$status->author(), 'tiny'"}
+	</div>
+	<div class='ipsDataItem_main ipsType_medium ipsType_break'>
+		<p class='ipsType_medium ipsType_reset'>
+			{{if $status->member_id != $status->author()->member_id}}
+				<strong class='ipsType_light'>{$status->author()->link()|raw}</strong> &nbsp;&raquo;&nbsp; <strong>{expression="\IPS\Member::load( $status->member_id )->link()" raw="true"}</strong>
+			{{else}}
+				<strong>{$status->author()->link()|raw}</strong>
+			{{endif}}
+		</p> 
+		<div class='ipsType_richText ipsContained' data-ipsTruncate data-ipsTruncate-type='remove' data-ipsTruncate-size='3 lines' data-ipsTruncate-watch='false'>
+			{$status->truncated()|raw}
+		</div>
+		<span class='ipsType_light ipsType_small ipsType_blendLinks'><a href='{$status->url()}'>{datetime="$status->date"}</a>{{if $status->replies or $status->canComment()}} &middot; <a href="{$status->url()}">{lang="status_num_replies" pluralize="$status->replies"}</a>{{endif}}</span>
+	</div>
+</li>

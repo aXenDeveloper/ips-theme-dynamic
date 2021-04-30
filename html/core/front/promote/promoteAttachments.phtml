@@ -1,0 +1,147 @@
+<ips:template parameters="$name, $value, $minimize, $maxFileSize, $maxFiles, $maxChunkSize, $totalMaxSize, $allowedFileTypes, $pluploadKey, $multiple=FALSE, $editor=FALSE, $forceNoscript=FALSE, $template='core.attachments.fileItem', $existing=array(), $default=NULL, $supportsDelete = TRUE, $maxImageDims = NULL" />
+<input name="{$name}" type="hidden" value="{$pluploadKey}">
+{{if $forceNoscript}}
+	<input name="{$name}_noscript[]" type="file" {{if $multiple}}multiple{{endif}}>
+	<span class="ipsType_light ipsType_small">
+		{{if $allowedFileTypes !== NULL}}
+			<strong>{lang="form_upload_accepted"}</strong>
+			{expression="implode( ', ', $allowedFileTypes )"}
+		{{endif}}
+		{{if $multiple and $totalMaxSize}}
+			{{if $allowedFileTypes !== NULL}}
+				&middot;
+			{{endif}}
+			<strong>{lang="form_upload_total_max"}</strong>
+			{filesize="$totalMaxSize * 1048576"}
+		{{endif}}
+		{{if !$multiple or !$totalMaxSize or $maxChunkSize < $totalMaxSize}}
+			{{if $allowedFileTypes !== NULL or ( $multiple and $totalMaxSize )}}
+				&middot;
+			{{endif}}
+			<strong>{lang="form_upload_max"}</strong>
+			{$maxChunkSize}MB
+		{{endif}}
+		{{if $maxFiles}}
+			<br>{lang="form_upload_max_files" pluralize="$maxFiles"}
+		{{endif}}
+	</span>
+{{else}}
+	<noscript>
+		<input name="{$name}_noscript[]" type="file" {{if $multiple}}multiple{{endif}}>
+		<span class="ipsType_light ipsType_small">
+			{{if $allowedFileTypes !== NULL}}
+				<strong>{lang="form_upload_accepted"}</strong>
+				{expression="implode( ', ', $allowedFileTypes )"}
+			{{endif}}
+			{{if $multiple and $totalMaxSize}}
+				{{if $allowedFileTypes !== NULL}}
+					&middot;
+				{{endif}}
+				<strong>{lang="form_upload_total_max"}</strong>
+				{filesize="$totalMaxSize * 1048576"}
+			{{endif}}
+			{{if !$multiple or !$totalMaxSize or $maxChunkSize < $totalMaxSize}}
+				{{if $allowedFileTypes !== NULL or ( $multiple and $totalMaxSize )}}
+					&middot;
+				{{endif}}
+				<strong>{lang="form_upload_max"}</strong>
+				{$maxChunkSize}MB
+			{{endif}}
+			{{if $maxFiles}}
+				<br>{lang="form_upload_max_files" pluralize="$maxFiles"}
+			{{endif}}
+		</span>
+	</noscript>
+	{{if $value}}
+		{{foreach $value as $id => $file}}
+			<input type="hidden" name="{$name}_existing[{$id}]" value="{$file->tempId}">
+		{{endforeach}}
+	{{endif}}
+	<div id="{$name}_drop_{expression="md5( mt_rand() )"}"
+		 data-ipsUploader
+		 {{if $maxFileSize}}data-ipsUploader-maxFileSize="{expression="number_format( $maxFileSize, 3, '.', '' )"}"{{endif}}
+		 {{if $maxFiles}}data-ipsUploader-maxFiles="{$maxFiles}"{{endif}}
+		 data-ipsUploader-maxChunkSize="{expression="number_format( $maxChunkSize, 3, '.', '' )"}"
+		 {{if $allowedFileTypes}}data-ipsUploader-allowedFileTypes='{expression="json_encode( $allowedFileTypes )"}'{{endif}}
+		 data-ipsUploader-name="{$name}"
+		 data-ipsUploader-key="{$pluploadKey}"
+		 {{if $multiple}}data-ipsUploader-multiple {{if $totalMaxSize}}data-ipsUploader-maxTotalSize="{expression="number_format( $totalMaxSize, 3, '.', '' )"}"{{endif}}{{endif}}
+		 {{if $minimize}}data-ipsUploader-minimized{{endif}}
+		 {{if $editor}}data-ipsUploader-insertable{{endif}}
+		 data-ipsUploader-template='{$template}'
+		 data-ipsUploader-existingFiles='{expression="json_encode( $existing )"}'
+		 {{if isset( $default )}}data-ipsUploader-default='{$default}'{{endif}}
+		 {{if $maxImageDims}}data-ipsUploader-maxImageDims="{$maxImageDims}"{{endif}}
+	>
+		<div class="ipsAttachment_dropZone {{if $minimize}}ipsAttachment_dropZoneSmall{{endif}} ipsClearfix">
+			{{if $minimize}}
+				<a href="#" data-action='uploadFile' class="ipsButton ipsButton_small ipsButton_primary ipsPos_left" id="{$name}_browse_{expression="md5( mt_rand() )"}">{{if $multiple}}{lang="form_upload_choose"}{{else}}{lang="form_upload_choose_one"}{{endif}}</a>
+				<div class='ipsAttachment_dropZoneSmall_info'>
+					<span class="ipsAttachment_supportDrag">{{if $multiple}}{lang="form_upload_dad_mini"}{{else}}{lang="form_upload_dad_mini_one"}{{endif}}<br></span>
+					<span class="ipsType_light ipsType_small">
+						{{if $allowedFileTypes !== NULL}}
+							<strong>{lang="form_upload_accepted"}</strong>
+							{expression="implode( ', ', $allowedFileTypes )"}
+						{{endif}}
+						{{if $multiple and $totalMaxSize}}
+							{{if $allowedFileTypes !== NULL}}
+								&middot;
+							{{endif}}
+							<strong>{lang="form_upload_total_max"}</strong>
+							{filesize="$totalMaxSize * 1048576"}
+						{{endif}}
+						{{if $maxFileSize and ( !$multiple or !$totalMaxSize or $maxFileSize < $totalMaxSize )}}
+							{{if $allowedFileTypes !== NULL or ( $multiple and $totalMaxSize )}}
+								&middot;
+							{{endif}}
+							<strong>{lang="form_upload_max"}</strong>
+							{expression="round($maxFileSize,2)"}MB
+						{{endif}}
+						{{if $maxFiles}}
+							<br>{lang="form_upload_max_files" pluralize="$maxFiles"}
+						{{endif}}
+					</span>
+				</div>
+			{{else}}
+				<i class="fa fa-cloud-upload"></i>
+				<span class="ipsAttachment_supportDrag">{{if $multiple}}{lang="form_upload_dad"}{{else}}{lang="form_upload_dad_one"}{{endif}}<br></span>
+				<a href="#" data-action='uploadFile' class="ipsButton ipsButton_verySmall ipsButton_primary" id="{$name}_browse_{expression="md5( mt_rand() )"}">{{if $multiple}}{lang="form_upload_choose"}{{else}}{lang="form_upload_choose_one"}{{endif}}</a>
+				<br>
+				<span class="ipsType_light ipsType_small">
+					{{if $allowedFileTypes !== NULL}}
+						<strong>{lang="form_upload_accepted"}</strong>
+						{expression="implode( ', ', $allowedFileTypes )"}
+					{{endif}}
+					{{if $multiple and $totalMaxSize}}
+						{{if $allowedFileTypes !== NULL}}
+							&middot;
+						{{endif}}
+						<strong>{lang="form_upload_total_max"}</strong>
+						{filesize="$totalMaxSize * 1048576"}
+					{{endif}}
+					{{if $maxFileSize and ( !$multiple or !$totalMaxSize or $maxFileSize < $totalMaxSize )}}
+						{{if $allowedFileTypes !== NULL or ( $multiple and $totalMaxSize )}}
+							&middot;
+						{{endif}}
+						<strong>{lang="form_upload_max"}</strong>
+						{expression="round($maxFileSize,2)"}MB
+					{{endif}}
+					{{if $maxFiles}}
+						<br>{lang="form_upload_max_files" pluralize="$maxFiles"}
+					{{endif}}
+				</span>
+			{{endif}}
+		</div>
+	
+		<div class="ipsAttachment_fileList ipsScrollbar">
+			<div data-role='fileList' class='ipsGrid' data-ipsGrid data-ipsGrid-minItemSize='100' data-ipsGrid-maxItemSize='200' data-ipsGrid-equalHeights='row'></div>
+			<noscript>
+				{{if $value}}
+					{{foreach $value as $id => $file}}
+						{template="uploadFile" group="forms" location="global" app="core" params="$id, $file, $name, $editor, ( $template === 'core.attachments.imageItem' )"}
+					{{endforeach}}
+				{{endif}}
+			</noscript>
+		</div>
+	</div>
+{{endif}}

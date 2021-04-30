@@ -1,0 +1,10 @@
+<ips:template parameters="$name, $value" />
+
+<ul class='ipsList_inline cColorChoices'>
+	{{foreach array('none', 'information', 'general', 'warning', 'error', 'success' ) as $type}}
+		<li data-ipsTooltip title='{lang="message_type_{$type}"}'>
+			<input type='radio' name='{$name}' value='{$type}' {{if $value === $type}}checked{{endif}}>
+			<span class='cColorChoice_chooser ipsMessage ipsMessage_{$type}'></span>
+		</li>
+	{{endforeach}}
+</ul>

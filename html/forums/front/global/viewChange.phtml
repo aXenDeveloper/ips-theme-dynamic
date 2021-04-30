@@ -1,0 +1,30 @@
+<ips:template parameters="$hideMobile=FALSE" />
+{{if settings.forums_default_view_choose and member.member_id}}
+{{$chooseable = json_decode( \IPS\Settings::i()->forums_default_view_choose, true );}}
+{{$chosen = \IPS\forums\Forum::getMemberView();}}
+<li>
+	<ul class='ipsButton_split'>
+		{{if $chooseable == '*' OR \in_array( 'table', $chooseable )}}
+			<li>
+				<a href="{url="app=forums&module=forums&controller=index&do=setMethod&method=table" seoTemplate="forums" csrf="true"}" class='ipsButton {{if $chosen == 'table'}}ipsButton_primary{{else}}ipsButton_veryLight{{endif}} ipsButton_narrow ipsButton_medium' data-ipsTooltip data-ipsTooltip-safe title="{lang="forums_default_view_table" escape="true"}" rel="nofollow">
+					<i class='fa fa-align-justify'></i>
+				</a>
+			</li>
+		{{endif}}
+		{{if $chooseable == '*' OR \in_array( 'grid', $chooseable )}}
+			<li>
+				<a href="{url="app=forums&module=forums&controller=index&do=setMethod&method=grid" seoTemplate="forums" csrf="true"}" class='ipsButton {{if $chosen == 'grid'}}ipsButton_primary{{else}}ipsButton_veryLight{{endif}} ipsButton_narrow ipsButton_medium' data-ipsTooltip data-ipsTooltip-safe title="{lang="forums_default_view_grid" escape="true"}" rel="nofollow">
+					<i class='fa fa-th-large'></i>
+				</a>
+			</li>
+		{{endif}}
+		{{if $chooseable == '*' OR \in_array( 'fluid', $chooseable )}}
+			<li>
+				<a href="{url="app=forums&module=forums&controller=index&do=setMethod&method=fluid" seoTemplate="forums" csrf="true"}" class='ipsButton {{if $chosen == 'fluid'}}ipsButton_primary{{else}}ipsButton_veryLight{{endif}} ipsButton_narrow ipsButton_medium' data-ipsTooltip data-ipsTooltip-safe title="{lang="forums_default_view_fluid" escape="true"}" rel="nofollow">
+					<i class='fa fa-th-list'></i>
+				</a>
+			</li>
+		{{endif}}
+	</ul>
+</li>
+{{endif}}

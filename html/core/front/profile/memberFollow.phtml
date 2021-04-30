@@ -1,0 +1,9 @@
+<ips:template parameters="$app, $area, $id, $count, $search=FALSE" />
+
+<div data-followApp='{$app}' data-followArea='{$area}' data-followID='{$id}' {{if $search}}data-buttonType='search'{{endif}} data-controller='core.front.core.followButton'>
+	{{if $search}}
+		{template="memberSearchFollowButton" group="profile" app="core" params="$app, $area, $id, $count"}
+	{{else}}
+		{template="memberFollowButton" group="profile" app="core" params="$app, $area, $id, $count"}
+	{{endif}}
+</div>

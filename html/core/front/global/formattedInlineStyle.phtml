@@ -1,0 +1,7 @@
+<ips:template parameters="$item" />
+{{if \is_array($item)}}
+{{if $item['feature_color']}}style="background-color: {$item['feature_color']}; color: {$item['text_color']};"{{endif}}
+{{else}}
+{{$column = $item::$featureColumnName;}}
+{{if $item->$column}}style="background-color: {$item->$column}; color: {$item->_featureTextColor};"{{endif}}
+{{endif}}

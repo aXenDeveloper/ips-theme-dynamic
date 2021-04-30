@@ -1,0 +1,32 @@
+<ips:template parameters="$table, $headers, $rows" />
+{{if !empty($rows) }}
+	{{foreach $rows as $row}}
+		<li class='ipsGrid_span4 ipsPhotoPanel ipsPhotoPanel_small ipsClearfix cOnlineUser {{if $row['login_type'] == \IPS\Session\Front::LOGIN_TYPE_ANONYMOUS}}ipsFaded{{endif}}'>
+			{$row['photo']|raw}
+			<div>
+				<div class='ipsContained'>
+					<h3 class='ipsType_reset ipsType_normal'>
+						{{if $row['login_type'] == \IPS\Session\Front::LOGIN_TYPE_ANONYMOUS}}
+							<span class="ipsBadge ipsBadge_icon ipsBadge_small ipsBadge_style6" title='{lang="signed_in_anoymously"}' data-ipsTooltip><i class='fa fa-eye'></i></span>
+						{{endif}}
+						{$row['member_name']|raw}
+					</h3>
+					<p class='ipsType_reset ipsTruncate ipsTruncate_line ipsType_break'>{$row['location_lang']|raw}</p>
+					<p class='ipsType_reset ipsTruncate ipsTruncate_line ipsType_light'>
+						{$row['running_time']}
+						{{if \IPS\Member::loggedIn()->modPermission( 'can_use_ip_tools' )}}
+							&nbsp;&middot;&nbsp;
+							{{if \IPS\Member::loggedIn()->modPermission('can_use_ip_tools') and \IPS\Member::loggedIn()->canAccessModule( \IPS\Application\Module::get( 'core', 'modcp' ) )}}
+								<a href="{url="app=core&module=modcp&controller=modcp&tab=ip_tools&ip={$row['ip_address']}" seoTemplate="modcp_ip_tools"}">{$row['ip_address']}</a>
+							{{else}}
+								{$row['ip_address']}
+							{{endif}}
+						{{endif}}
+					</p>
+				</div>
+			</div>
+		</li>
+	{{endforeach}}
+{{else}}
+	<li>{lang="online_users_no_results"}</li>
+{{endif}}

@@ -1,0 +1,270 @@
+/* DESKTOP */
+@media screen and (max-width: 1200px) { 
+	
+	/* Hides the photo and makes the column narrower */
+	.ipsDataItem_lastPoster {
+		min-width: 160px;
+	}
+
+	.ipsDataItem_lastPoster li:first-child {
+		display: none;
+	}
+
+		html[dir="ltr"] .ipsDataItem_lastPoster.ipsDataItem_withPhoto li {
+			margin: 0;
+		}
+		html[dir="rtl"] .ipsDataItem_lastPoster.ipsDataItem_withPhoto li {
+			margin: 0;
+		}
+}
+
+/* BOTH */
+@media screen and (max-width: 979px) {
+	
+	/* Reset data list styles */
+	.ipsDataList.ipsDataList_reducedSpacing,
+	.ipsDataList,
+	.ipsDataList .ipsDataItem_icon,
+	.ipsDataList.ipsDataList_reducedSpacing .ipsDataItem_icon,
+	.ipsDataList .ipsDataItem_main,
+	.ipsDataList.ipsDataList_reducedSpacing .ipsDataItem_main,
+	.ipsDataList .ipsDataItem_stats,
+	.ipsDataList.ipsDataList_reducedSpacing .ipsDataItem_stats,
+	.ipsDataList .ipsDataItem_lastPoster,
+	.ipsDataList.ipsDataList_reducedSpacing .ipsDataItem_lastPoster,
+	.ipsDataList .ipsDataItem_generic,
+	.ipsDataList.ipsDataList_reducedSpacing .ipsDataItem_generic,
+	.ipsDataList .ipsDataitem_modCheck,
+	.ipsDataList.ipsDataList_reducedSpacing .ipsDataItem_modCheck {
+		display: block;
+		padding: 0;
+		width: auto;
+	}
+
+	/* Main item */
+	.ipsDataItem {
+		padding: var(--sp-4) var(--sp-3);
+	}
+
+		.ipsDataList.ipsDataList_reducedSpacing .ipsDataItem {
+			padding: var(--sp-3);
+		}
+
+	/* Icon */
+	.ipsDataItem_icon {
+		width: auto;
+		padding-top: 0;
+	}
+	html[dir="ltr"] .ipsDataItem_icon {
+		float: left;
+		padding-left: 0;
+	}
+	html[dir="rtl"] .ipsDataItem_icon {
+		float: right;
+		padding-right: 0;
+	}
+
+		.ipsDataList_large .ipsDataItem_icon {
+			min-width: 40px;
+			padding-top: 0;
+		}
+
+			html[dir="ltr"] .ipsDataList_large .ipsDataItem_icon {
+				padding-right: 0;
+			}
+			html[dir="rtl"] .ipsDataList_large .ipsDataItem_icon {
+				padding-left: 0;
+			}
+
+		.ipsDataItem_icon br {
+			display: none;
+		}
+
+		html[dir="ltr"] .ipsDataItem_icon:not( .ipsResponsive_hidePhone ):not( .ipsResponsive_hideTablet ) + .ipsDataItem_main,
+		html[dir="ltr"] .ipsDataItem_icon:not( .ipsResponsive_hidePhone ):not( .ipsResponsive_hideTablet ) + .ipsDataItem_main + .ipsDataItem_stats {
+			margin-left: var(--sp-8);
+		}
+		html[dir="rtl"] .ipsDataItem_icon:not( .ipsResponsive_hidePhone ):not( .ipsResponsive_hideTablet ) + .ipsDataItem_main,
+		html[dir="rtl"] .ipsDataItem_icon:not( .ipsResponsive_hidePhone ):not( .ipsResponsive_hideTablet ) + .ipsDataItem_main + .ipsDataItem_stats {
+			margin-right: var(--sp-8);
+		}
+
+		html[dir="ltr"] .ipsDataItem.ipsDataItem_responsivePhoto .ipsDataItem_main {
+			margin-right: 50px;
+		}
+		html[dir="rtl"] .ipsDataItem.ipsDataItem_responsivePhoto .ipsDataItem_main {
+			margin-left: 50px;
+		}
+
+		.ipsDataItem_icon .ipsItemStatus.ipsItemStatus_large {
+			width: 30px;
+			height: 30px;
+			font-size: 13px;
+		}
+
+	/* Stats */
+	.ipsDataItem_stats {
+		display: block;
+		min-width: 0;
+		text-align: left;
+		margin-top: 1px;
+		color: rgb( var(--theme-text_light) );
+	}
+	html[dir="rtl"] .ipsDataItem_stats {
+		text-align: right;
+	}
+
+		.ipsDataItem_stats li, .ipsDataItem_stats dt, .ipsDataItem_stats dd {
+			display: inline;
+		}
+
+		html[dir="ltr"] .ipsDataItem_stats li {
+			margin-right: 10px;
+		}
+		html[dir="rtl"] .ipsDataItem_stats li {
+			margin-left: 10px;
+		}
+
+		.ipsDataItem_statsLarge .ipsDataItem_stats_number {
+			font-size: inherit;
+		}
+
+	html[dir="ltr"] .ipsDataItem_unread .ipsDataItem_main {
+		border-left: 0;
+	}
+	html[dir="rtl"] .ipsDataItem_unread .ipsDataItem_main {
+		border-right: 0;
+	}
+
+	/* Last poster */
+	.ipsDataItem_lastPoster {
+		display: none;
+		min-width: 0;
+		max-width: 100%;
+	}
+
+		.ipsDataItem_lastPoster.ipsDataItem_withPhoto {
+			display: block !important;
+			position: absolute;
+			top: 18px !important;
+		    padding: 0;
+		}
+
+		html[dir="ltr"] .ipsDataItem_lastPoster.ipsDataItem_withPhoto {
+			right: var(--sp-4) !important;
+			text-align: right;
+		}
+		html[dir="rtl"] .ipsDataItem_lastPoster.ipsDataItem_withPhoto {
+			left: var(--sp-4) !important;
+			text-align: left;
+		}
+
+			html[dir] .ipsDataItem_lastPoster.ipsDataItem_withPhoto .ipsUserPhoto {
+				margin: 0;
+				width: 34px;
+				height: 34px;
+				float: none;
+				display: block;
+				margin: 0 auto;
+			}
+
+			.ipsDataItem_lastPoster.ipsDataItem_withPhoto li {
+				display: none;
+				margin: 0;
+			}
+
+			.ipsDataItem_lastPoster.ipsDataItem_withPhoto li:first-child,
+			.ipsDataItem_lastPoster.ipsDataItem_withPhoto li:last-child {
+				display: block;
+			}
+
+			.ipsDataItem_lastPoster.ipsDataItem_withPhoto li:last-child{
+				font-size: 0;
+			}
+
+			.ipsDataItem_lastPoster.ipsDataItem_withPhoto li:last-child time:after {
+				content: attr(data-short);
+				font-size: 11px;
+				text-align: center;
+				white-space: nowrap;
+				display: block;
+				padding-top: 4px;
+			}
+
+	/* Mod check */
+	.ipsDataItem_modCheck {
+		position: absolute;
+		top: var(--sp-8);
+		padding: 0;
+	}
+	html[dir="ltr"] .ipsDataItem_modCheck {
+		left: 10px;
+	}
+	html[dir="rtl"] .ipsDataItem_modCheck {
+		right: 10px;
+	}
+
+		/* Mod checkbox in Announcements */
+		.cModCPAnnouncementRow .ipsDataItem_modCheck {
+			position: static;
+		}
+
+	html[dir="ltr"] .ipsApp .ipsDataItem_icon + .ipsDataItem_main {
+		padding-left: 0;
+	}
+	html[dir="rtl"] .ipsApp .ipsDataItem_icon + .ipsDataItem_main {
+		padding-right: 0;
+	}
+
+	html[dir="ltr"] .ipsApp .ipsDataItem_withModCheck .ipsDataItem_main {
+		padding-left: 25px;
+	}
+	html[dir="rtl"] .ipsApp .ipsDataItem_withModCheck .ipsDataItem_main {
+		padding-right: 25px;
+	}
+
+	.ipsDataItem_modCheck .ipsCustomInput,
+	.ipsDataItem:hover .ipsDataItem_modCheck .ipsCustomInput {
+		opacity: 1;
+	}
+}
+
+/* PHONES */
+@media screen and (max-width: 767px) {
+
+	.ipsDataItem_subList li {
+		width: 100%;
+	}
+
+	.ipsDataItem_subList li:after {
+		content: '';
+	}
+
+	.ipsDataItem.ipsDataItem_loading {
+		padding: 3px 15px;
+	}
+
+	html[dir="ltr"] .ipsDataItem_loading > div > span:first-child {
+		right: 0;
+	}
+	html[dir="rtl"] .ipsDataItem_loading > div > span:first-child {
+		left: 0;
+	}
+
+	html[dir="ltr"] .ipsDataItem_loading > div > span:last-child {
+		left: 25px;
+		right: 60px;
+	}
+	html[dir="rtl"] .ipsDataItem_loading > div > span:last-child {
+		right: 25px;
+		left: 60px;
+	}
+	.ipsDataItem_loading > div > span:last-child:before {
+		width: 180px;
+	}
+
+	html[dir] .ipsDataItem_loading > div > span:first-child:before,
+	html[dir] .ipsDataItem_loading > div > span:first-child:after {
+		display: none;
+	}
+}

@@ -1,0 +1,16 @@
+<ips:template parameters="$form, $forum, $title" />
+
+{{if $club = $forum->club()}}
+	{{if settings.clubs and settings.clubs_header == 'full'}}
+		{template="header" app="core" group="clubs" params="$club, $forum"}
+	{{endif}}
+	<div id='elClubContainer'>
+{{endif}}
+
+{template="pageHeader" if="!\IPS\Request::i()->isAjax()" group="global" app="core" params="\IPS\Member::loggedIn()->language()->addToStack( $title )"}
+
+{$form|raw}
+
+{{if $club = $forum->club()}}
+	</div>
+{{endif}}

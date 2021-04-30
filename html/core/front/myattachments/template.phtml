@@ -1,0 +1,22 @@
+<ips:template parameters="$table, $used, $count" />
+<div class='ipsPageHeader'>
+	<h1 class="ipsType_pageTitle">{lang="my_attachments"}</h1>
+</div>
+{{if member.group['g_attach_max'] > 0}}
+	{{$percentage = round( ( $used / ( \IPS\Member::loggedIn()->group['g_attach_max'] * 1024 ) ) * 100 );}}
+	<div class='ipsBox ipsPadding ipsMargin_top'>
+		<h2 class='ipsType_minorHeading'>{lang="my_attachment_quota"}</h2>
+		<div class='ipsProgressBar ipsProgressBar_fullWidth ipsClear {{if $percentage >= 90}}ipsProgressBar_warning{{endif}}' >
+			<div class='ipsProgressBar_progress' style="width: {$percentage}%">
+				<span data-role="percentage">{$percentage}</span>%
+			</div>
+		</div>
+		<p class='ipsType_reset ipsType_center ipsMargin_top'>
+			{lang="my_attachments_blurb" sprintf="\IPS\Output\Plugin\Filesize::humanReadableFilesize( $used ), \IPS\Output\Plugin\Filesize::humanReadableFilesize( \IPS\Member::loggedIn()->group['g_attach_max'] * 1024 )"}
+		</p>
+	</div>
+{{endif}}
+<div class='ipsBox ipsMargin_top'>
+	<h2 class='ipsType_sectionTitle ipsType_medium ipsType_reset'>{lang="my_attachments_count" pluralize="$count"}</h2>
+	{$table|raw}
+</div>

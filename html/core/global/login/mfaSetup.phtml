@@ -1,0 +1,46 @@
+<ips:template parameters="$acceptableHandlers, $member, $url" />
+<div id='elTwoFactorAuthentication' class='ipsModal' data-controller='core.global.core.2fa'>
+	<div>
+		<form action="{$url}" method="post" accept-charset='utf-8' data-ipsForm class="ipsForm ipsForm_fullWidth">
+			<input type="hidden" name="mfa_setup" value="1">
+			<input type="hidden" name="csrfKey" value="{expression="\IPS\Session::i()->csrfKey"}">
+			{{if \count( $acceptableHandlers ) > 1}}
+				<div class='ipsAreaBackground ipsType_center'>
+					<div class='ipsPad'>
+						<h1 class='ipsType_center ipsType_pageTitle'>{lang="mfa_popup_setup_title"}</h1>
+						<p class='ipsSpacer_top ipsSpacer_half ipsPos_center ipsType_medium ipsType_richText c2FA_info'>
+							{lang="mfa_setup_multiple"}
+						</p>
+					</div>
+					<div class='ipsTabs ipsTabs_small ipsTabs_stretch ipsClearfix ipsJS_show' id='tabs_2fa' data-ipsTabBar data-ipsTabBar-contentArea='#ipsTabs_content_2fa'>
+						<a href='#tabs_2fa' data-action='expandTabs'><i class='fa fa-caret-down'></i></a>
+						<ul role='tablist'>
+							{{$checked = NULL;}}
+							{{foreach $acceptableHandlers as $key => $handler}}
+								<li>
+									<a href='#ipsTabs_tabs_2fa_2fa_tab_{$key}_panel' id='2fa_tab_{$key}' class="ipsTabs_item {{if !$checked}}ipsTabs_activeItem{{$checked = $key;}}{{endif}}" role="tab">
+										<input class='ipsJS_hide' type="radio" name="mfa_method" value="{$key}" id="el2FARadio_{$key}" {{if $checked == $key}}checked{{endif}}>
+										{lang="mfa_{$key}_title"}
+									</a>
+								</li>
+							{{endforeach}}						
+						</ul>
+					</div>
+				</div>
+			{{endif}}
+			<div id='ipsTabs_content_2fa' class='ipsTabs_panels'>
+				{{foreach $acceptableHandlers as $key => $handler}}
+					<div id='ipsTabs_tabs_2fa_2fa_tab_{$key}_panel' class="ipsTabs_panel" aria-labelledby="2fa_tab_{$key}" aria-hidden="false">
+						{$handler->configurationScreen( $member, ( \count( $acceptableHandlers ) > 1 ), $url )|raw}
+					</div>
+				{{endforeach}}
+			</div>
+
+			{{if settings.mfa_required_groups != '*' and !$member->inGroup( explode( ',', settings.mfa_required_groups ) )}}
+				<div class="ipsAreaBackground ipsType_center cOtherMethod ipsPad">
+					<a href='{$url->setQueryString( '_mfa', 'optout' )->csrf()}' class='ipsButton ipsButton_link ipsButton_fullWidth ipsButton_medium' data-confirm {{if member.language()->checkKeyExists('security_questions_opt_out_warning_value')}}data-confirmSubMessage="{lang="security_questions_opt_out_warning_value"}"{{endif}}>{lang="mfa_opt_out"}</a>
+				</div>
+			{{endif}}
+		</form>
+	</div>
+</div>

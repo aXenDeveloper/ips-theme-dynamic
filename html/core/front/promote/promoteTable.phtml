@@ -1,0 +1,32 @@
+<ips:template parameters="$table, $headers, $rows, $quickSearch" />
+<div class='ipsPageHeader ipsClearfix ipsSpacer_bottom'>
+	<h1 class='ipsType_pageTitle'>{lang="promote_manage_link"}</h1>
+</div>
+
+<div class='ipsBox ipsPadding' data-controller='core.front.system.promoteList'>
+	{{if $table->pages > 1}}
+	<div class="ipsButtonBar ipsPad_half ipsClearfix ipsClear">
+		<div data-role="tablePagination">
+			{template="pagination" group="global" app="core" location="global" params="$table->baseUrl, $table->pages, $table->page, $table->limit, TRUE, $table->getPaginationKey()"}
+		</div>
+	</div>
+	{{endif}}
+
+	{{if \count( $rows )}}
+		<ol class='ipsDataList ipsClear cPromoteModCP {{foreach $table->classes as $class}}{$class} {{endforeach}}' id='elTable_{$table->uniqueId}' data-role="tableRows">
+			{template="$table->rowsTemplate[1]" params="$table, $headers, $rows" object="$table->rowsTemplate[0]"}
+		</ol>
+	{{else}}
+		<div class='ipsType_center'>
+			<p class='ipsType_large'>{lang="promote_table_none"}</p>
+		</div>
+	{{endif}}
+
+	{{if $table->pages > 1}}
+		<div class="ipsButtonBar ipsPad_half ipsClearfix ipsClear">
+			<div data-role="tablePagination">
+				{template="pagination" group="global" app="core" location="global" params="$table->baseUrl, $table->pages, $table->page, $table->limit, TRUE, $table->getPaginationKey()"}
+			</div>
+		</div>
+	{{endif}}
+</div>

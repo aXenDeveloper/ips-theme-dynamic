@@ -1,0 +1,6 @@
+<ips:template parameters="$label, $element, $required=FALSE, $error=NULL, $prefix=NULL, $suffix=NULL, $id=NULL, $object=NULL, $form=NULL" />
+{{if \IPS\Dispatcher::i()->controllerLocation == 'admin' AND !( $object instanceof \IPS\Helpers\Form\Address ) AND !( $object instanceof \IPS\Helpers\Form\Upload ) AND !( $object instanceof \IPS\Helpers\Form\Node )}}<br>{{endif}}
+{{if \IPS\Dispatcher::i()->controllerLocation == 'front' AND ( !( $object instanceof \IPS\Helpers\Form\Checkbox ) OR $object instanceof \IPS\Helpers\Form\YesNo )}}<br>{{endif}}
+<span class='ipsFieldRow_desc'>
+	%s
+</span>

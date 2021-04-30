@@ -1,0 +1,90 @@
+<ips:template parameters="$club, $members, $pagination, $sortBy, $filter, $clubStaff" />
+
+{{if \IPS\Settings::i()->clubs_header != 'sidebar'}}
+	{template="header" group="clubs" app="core" params="$club"}
+{{endif}}
+
+{{$memberStatus = $club->memberStatus( \IPS\Member::loggedIn(), 2 );}}
+{template="nonMemberClubStatus" group="clubs" app="core" params="$club, $memberStatus"}
+
+{{if $club->canInvite()}}
+	<ul class="ipsToolList ipsToolList_horizontal ipsClearfix ipsSpacer_both">
+		<li class="ipsToolList_primaryAction">
+			<a class="ipsButton ipsButton_medium ipsButton_important ipsButton_fullWidth" href="{$club->url()->setQueryString( 'do', 'invite' )}" data-ipsDialog data-ipsDialog-title="{lang="club_invite_members"}">{lang="club_invite_members"}</a>
+		</li>
+	</ul>
+{{endif}}
+
+<div class='ipsBox ipsSpacer_bottom'>
+	<h2 class='ipsType_sectionTitle ipsType_reset'>{lang="club_leaders"}</h2>
+	{template="membersRows" group="clubs" params="$club, $clubStaff"}
+</div>
+
+
+<div class='ipsBox'>
+	<h2 class='ipsType_sectionTitle ipsType_reset'>{lang="club_all_members"}</h2>
+	<div data-baseurl='{$club->url()->setQueryString('do', 'members')}' data-controller='core.global.core.table'>
+		<div class="ipsButtonBar ipsPad_half ipsClearfix ipsClear">
+			<ul class="ipsButtonRow ipsPos_right ipsClearfix">
+				<li>
+					<a href="#elSortByMenu_menu" id="elSortByMenu" data-role="sortButton" data-ipsMenu data-ipsMenu-activeClass="ipsButtonRow_active" data-ipsMenu-selectable="radio">{lang="sort_by"} <i class="fa fa-caret-down"></i></a>
+					<ul class="ipsMenu ipsMenu_auto ipsMenu_withStem ipsMenu_selectable ipsHide" id="elSortByMenu_menu">
+						<li class="ipsMenu_item {{if $sortBy == 'joined'}}ipsMenu_itemChecked{{endif}}" data-ipsMenuValue="joined"><a href="{$club->url()->setQueryString( array( 'do' => 'members', 'filter' => $filter, 'sortby' => 'joined' ) )->setPage( 'page', 1 )}">{lang="newest"}</a></li>
+						<li class="ipsMenu_item {{if $sortBy == 'name'}}ipsMenu_itemChecked{{endif}}" data-ipsMenuValue="name"><a href="{$club->url()->setQueryString( array( 'do' => 'members', 'filter' => $filter, 'sortby' => 'name' ) )->setPage( 'page', 1 )}">{lang="username"}</a></li>
+					</ul>
+				</li>
+				<li>
+					<a href="#elFilterByMenu_menu" data-role="tableFilterMenu" id="elFilterByMenu" data-ipsMenu data-ipsMenu-activeClass="ipsButtonRow_active" data-ipsMenu-selectable="radio">{lang="filter_by"} <i class="fa fa-caret-down"></i></a>
+					<ul class='ipsMenu ipsMenu_auto ipsMenu_withStem ipsMenu_selectable ipsHide' id='elFilterByMenu_menu'>
+						<li data-action="tableFilter" data-ipsMenuValue='' class='ipsMenu_item {{if !$filter}}ipsMenu_itemChecked{{endif}}'>
+							<a href='{$club->url()->setQueryString( array( 'do' => 'members', 'filter' => NULL, 'sortby' => $sortBy ) )->setPage( 'page', 1 )}' class='{{if !$filter}}ipsButtonRow_active{{endif}}'>
+								{{if $club->isPaid() and $club->renewal_price}}
+									{lang="club_active_members"}
+								{{else}}
+									{lang="club_members"}
+								{{endif}}
+							</a>
+						</li>
+						{{if $club->isLeader() and $club->isPaid() and $club->renewal_price}}
+							<li data-action="tableFilter" data-ipsMenuValue='expired' class='ipsMenu_item {{if $filter == 'expired'}}ipsMenu_itemChecked{{endif}}'>
+								<a href='{$club->url()->setQueryString( array( 'do' => 'members', 'filter' => 'expired', 'sortby' => $sortBy ) )->setPage( 'page', 1 )}' class='{{if !$filter}}ipsButtonRow_active{{endif}}'>{lang="club_expired_members"}</a>
+							</li>
+						{{endif}}
+						<li data-action="tableFilter" data-ipsMenuValue='leader' class='ipsMenu_item {{if $filter == 'leader'}}ipsMenu_itemChecked{{endif}}'>
+							<a href='{$club->url()->setQueryString( array( 'do' => 'members', 'filter' => 'leader', 'sortby' => $sortBy ) )->setPage( 'page', 1 )}' class='{{if !$filter}}ipsButtonRow_active{{endif}}'>{lang="club_leaders_and_moderators"}</a>
+						</li>
+						{{if $club->isLeader()}}
+							{{if $club->type === $club::TYPE_CLOSED}}
+								<li data-action="tableFilter" data-ipsMenuValue='requested' class='ipsMenu_item {{if $filter == 'requested'}}ipsMenu_itemChecked{{endif}}'>
+									<a href='{$club->url()->setQueryString( array( 'do' => 'members', 'filter' => 'requested', 'sortby' => $sortBy ) )->setPage( 'page', 1 )}' class='{{if !$filter}}ipsButtonRow_active{{endif}}'>{lang="club_requests"}</a>
+								</li>
+								{{if $club->isPaid()}}
+									<li data-action="tableFilter" data-ipsMenuValue='payment_pending' class='ipsMenu_item {{if $filter == 'payment_pending'}}ipsMenu_itemChecked{{endif}}'>
+										<a href='{$club->url()->setQueryString( array( 'do' => 'members', 'filter' => 'payment_pending', 'sortby' => $sortBy ) )->setPage( 'page', 1 )}' class='{{if !$filter}}ipsButtonRow_active{{endif}}'>{lang="club_payment_pending"}</a>
+									</li>
+								{{endif}}
+							{{endif}}
+							<li data-action="tableFilter" data-ipsMenuValue='invited' class='ipsMenu_item {{if $filter == 'invited'}}ipsMenu_itemChecked{{endif}}'>
+								<a href='{$club->url()->setQueryString( array( 'do' => 'members', 'filter' => 'invited', 'sortby' => $sortBy ) )->setPage( 'page', 1 )}' class='{{if !$filter}}ipsButtonRow_active{{endif}}'>{lang="club_invitations"}</a>
+							</li>
+							<li data-action="tableFilter" data-ipsMenuValue='banned' class='ipsMenu_item {{if $filter == 'banned'}}ipsMenu_itemChecked{{endif}}'>
+								<a href='{$club->url()->setQueryString( array( 'do' => 'members', 'filter' => 'banned', 'sortby' => $sortBy ) )->setPage( 'page', 1 )}' class='{{if !$filter}}ipsButtonRow_active{{endif}}'>{lang="club_banned"}</a>
+							</li>
+						{{endif}}
+					</ul>
+				</li>
+			</ul>
+			<div data-role="tablePagination">
+				{$pagination|raw}
+			</div>
+		</div>
+		<div data-role='tableRows' {{if $club->isLeader()}}data-controller='core.front.clubs.requests'{{endif}}>
+			{template="membersRows" group="clubs" params="$club, $members"}
+		</div>
+		{{if trim( $pagination )}}
+			<div class="ipsButtonBar ipsPad_half ipsClearfix ipsClear" data-role="tablePagination">
+				{$pagination|raw}
+			</div>
+		{{endif}}
+	</div>
+</div>

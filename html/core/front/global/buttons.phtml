@@ -1,0 +1,32 @@
+<ips:template parameters="$buttons" />
+<ul class='ipsToolList ipsToolList_horizontal ipsClearfix'>
+	{{foreach $buttons as $button}}
+		<li class='{{if isset( $button['hidden'] ) and $button['hidden']}}ipsJS_hide{{endif}}' {{if isset( $button['id'] )}}id="{$button['id']}"{{endif}}>
+			<a
+				{{if isset( $button['link'] )}}href='{$button['link']}'{{endif}}
+				title='{lang="$button['title']"}'
+				class='ipsButton ipsButton_alternate ipsButton_small ipsButton_fullWidth {{if isset( $button['class'] )}}{$button['class']}{{endif}}'
+				role="button"
+				{{if isset( $button['id'] )}}id="{$button['id']}_button"{{endif}}
+				{{if isset( $button['target'] )}}target="{$button['target']}"{{if $button['target'] == '_blank'}} rel="noopener"{{endif}}{{endif}}
+				{{if isset( $button['data'] )}}
+					{{foreach $button['data'] as $k => $v}}
+						data-{$k}="{$v}"
+					{{endforeach}}
+				{{endif}}
+				{{if isset( $button['hotkey'] )}}
+					data-keyAction='{$button['hotkey']}'
+				{{endif}}
+			>
+				{{if $button['icon']}}
+					<i class='fa fa-{$button['icon']}'></i>&nbsp;
+				{{endif}}
+				{lang="$button['title']"}
+
+				{{if isset($button['dropdown'])}}
+					&nbsp;<i class='fa fa-caret-down'></i>
+				{{endif}}
+			</a>
+		</li>
+	{{endforeach}}
+</ul>

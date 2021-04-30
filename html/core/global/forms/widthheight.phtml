@@ -1,0 +1,18 @@
+<ips:template parameters="$name, $width, $height, $unlimited, $unlimitedLang, $image=NULL, $resizableDiv=TRUE" />
+<div class="ipsWidthHeight_container">
+	{{if $image !== NULL}}
+		<img class="ipsJS_show ipsWidthHeight" data-control="dimensions" src="{$image->url}" style="width:{$width}px; height:{$height}px">
+	{{elseif $image === NULL AND $resizableDiv === TRUE}}
+		<div class="ipsJS_show ipsWidthHeight" data-control="dimensions" style="width:{$width}px; height:{$height}px"></div>
+	{{endif}}
+	<div class="ipsWidthHeight_controls">
+		<input type="number" name="{$name}[0]" class="ipsField_short ipsWidthHeight_width" value="{$width}" aria-label='{lang="width"}'> &times; <input type="number" name="{$name}[1]" class="ipsField_short ipsWidthHeight_height" value="{$height}" aria-label='{lang="height"}'> {lang="px"}
+		{{if $unlimited !== NULL}}
+			&nbsp; {lang="or"} &nbsp;
+			<span class='ipsCustomInput'>
+				<input type="checkbox" role='checkbox' class="ipsWidthHeight_unlimited" data-control="dimensionsUnlimited" name="{$name}[unlimited]" id='{$name}_unlimited' {{if $unlimited == array( $width, $height )}}checked aria-checked='true'{{endif}} aria-labelledby='{$name}_unlimited_label'>
+				<span></span>
+			</span> <label for='{$name}_unlimited' id='{$name}_unlimited_label' class='ipsField_unlimited'>{lang="$unlimitedLang"}</label>
+		{{endif}}
+	</div>
+</div>

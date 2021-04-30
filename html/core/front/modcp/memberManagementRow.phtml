@@ -1,0 +1,32 @@
+<ips:template parameters="$table, $headers, $rows" />
+{{foreach $rows as $row}}
+	<li class='ipsDataItem ipsGrid_span6 ipsFaded_withHover ipsClearfix' id='elUserRow_{expression="md5( $row['name'] )"}'>
+		<p class="ipsType_reset ipsDataItem_icon">
+			{$row['photo']|raw}
+		</p>		
+		<div class='ipsDataItem_main'>
+			<h4 class='ipsDataItem_title'><strong>{$row['name']|raw}</strong></h4>			
+			<ul class='ipsList_inline ipsType_noBreak ipsList_reset'>
+				{{foreach $row['_buttons'] as $button}}
+					{{if $button['title'] == 'modcp_view_warnings'}}
+						<li><a href='{$button['link']}' title='{lang="$button['title']"}'>{lang="$button['title']"}</a></li>
+					{{endif}}
+				{{endforeach}}
+				<li class="ipsFaded">
+					<a href="#elUserMod{$row['member_id']}_menu" id="elUserMod{$row['member_id']}" class="ipsType_large ipsPos_middle ipsType_blendLinks" data-ipsMenu>
+						<i class="fa fa-cog"></i> <i class="fa fa-caret-down"></i>
+					</a>
+				</li>
+			</ul>
+			<ul class='ipsMenu ipsHide' id='elUserMod{$row['member_id']}_menu'>
+				{{foreach $row['_buttons'] as $button}}
+					<li class='ipsMenu_item'>
+						<a href='{$button['link']}' title='{lang="$button['title']"}'>
+							{lang="$button['title']"}
+						</a>
+					</li>
+				{{endforeach}}
+			</ul>
+		</div>
+	</li>
+{{endforeach}}

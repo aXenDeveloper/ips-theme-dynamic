@@ -1,0 +1,26 @@
+<ips:template parameters="" />
+
+<div class="ipsPageHeader ipsClearfix">
+	<header class='ipsSpacer_bottom'>
+		<h1 class="ipsType_pageTitle">{lang="club_node_forums"}</h1>
+	</header>
+</div>
+
+<div class='ipsList_reset cForumList ipsBox ipsSpacer_bottom' data-controller='forums.front.forum.forumList' data-baseURL=''>
+	<h2 class='ipsType_sectionTitle ipsType_reset'>{lang="subforums_header_category"}</h2>
+	{{if \IPS\forums\Forum::getMemberView() === 'grid'}}
+		<div class='ipsAreaBackground ipsPad' data-role="forums">
+			<div class='ipsGrid ipsGrid_collapsePhone' data-ipsGrid data-ipsGrid-minItemSize='300' data-ipsGrid-maxItemSize='400' data-ipsGrid-equalHeights='row'>
+				{{foreach \IPS\forums\Forum::clubNodes() as $childforum}}
+					{template="forumGridItem" group="index" app="forums" params="$childforum"}
+				{{endforeach}}
+			</div>
+		</div>
+	{{else}}
+		<ol class="ipsDataList ipsDataList_zebra ipsDataList_large ipsAreaBackground_reset">
+			{{foreach \IPS\forums\Forum::clubNodes() as $childforum}}
+				{template="forumRow" group="index" app="forums" params="$childforum, TRUE"}
+			{{endforeach}}
+		</ol>
+	{{endif}}				
+</div>

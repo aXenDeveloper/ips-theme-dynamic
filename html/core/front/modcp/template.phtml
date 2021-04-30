@@ -1,0 +1,54 @@
+<ips:template parameters="$content, $tabs, $activeTab, $contentTypes, $approvalCount" />
+
+<div class='ipsResponsive_pull'>
+	<div class='cModCP_header ipsPageHeader ipsBox ipsPadding ipsClearfix ipsMargin:none ipsFlex ipsFlex-ai:center ipsFlex-jc:between'>
+		<h1 class='ipsType_pageTitle ipsFlex-flex:11 ipsType_break'><i class='fa fa-lock'></i> {lang="modcp"}</h1>
+		{{if \IPS\Member::loggedIn()->modPermission('can_view_reports')}}
+			<div class='ipsPos_right ipsResponsive_hidePhone'>
+				<ul class='ipsList_inline'>
+					<li {{if !$approvalCount}}class='ipsType_light'{{endif}}><span id='elModCPApprovalCount' class='ipsBadge {{if !$approvalCount}}ipsBadge_style6{{else}} ipsBadge_style1{{endif}} ipsBadge_medium'>{$approvalCount}</span> {lang="modcp_approval"}</li>
+					{{$reportCount = \IPS\Member::loggedIn()->reportCount( TRUE );}}
+					<li {{if !$reportCount}}class='ipsType_light'{{endif}}><span class='ipsBadge {{if !$reportCount}}ipsBadge_style6{{else}} ipsBadge_style1{{endif}} ipsBadge_medium'>{$reportCount}</span> {lang="active_reports"}</li>
+				</ul>
+			</div>
+		{{endif}}
+	</div>
+	<br>
+
+	<section class='ipsBox_alt'>
+		<div class='ipsColumns ipsColumns_collapsePhone'>
+			<div class='ipsColumn ipsColumn_wide'>
+				<div class='ipsSideMenu ipsBox ipsPad' id='modcp_menu' data-ipsSideMenu>
+					<h3 class='ipsSideMenu_mainTitle ipsAreaBackground_light ipsType_medium'>
+						<a href='#modcp_menu' class='ipsPad_double' data-action='openSideMenu'><i class='fa fa-bars'></i> &nbsp;{lang="modcp_sections"}&nbsp;<i class='fa fa-caret-down'></i></a>
+					</h3>
+					<h4 class='ipsSideMenu_title'>{lang="modcp_tools"}</h4>
+					<ul class='ipsSideMenu_list'>
+					{{foreach $tabs as $key => $tab}}
+						{{if $key !== 'hidden'}}
+							<li class='ipsSideMenu_item {{if $activeTab == $key}}ipsSideMenu_itemActive{{endif}}'><a href='{url="app=core&module=modcp&controller=modcp&tab=$key" seoTemplate="modcp_{$key}"}'>{lang="modcp_{$key}"}</a></li>
+						{{endif}}
+					{{endforeach}}
+					</ul>
+					<h4 class='ipsSideMenu_title'>{lang="modcp_hidden"}</h4>
+					<ul class='ipsSideMenu_list'>
+						<li class="ipsSideMenu_item {{if $activeTab === 'hidden' and !request.type}}ipsSideMenu_itemActive{{endif}}"><a href="{url="app=core&module=modcp&controller=modcp&tab=hidden" seoTemplate="modcp_content"}">{lang="search_everything"}</a></li>
+					</ul>
+					{{foreach $contentTypes as $app => $type }}
+						<h5 class='ipsSideMenu_subTitle'>{lang="module__{$app}"}</h5>
+						<ul class='ipsSideMenu_list'>
+							{{foreach $type as $key => $class}}
+								<li class="ipsSideMenu_item {{if $activeTab === 'hidden' and request.type == $key}}ipsSideMenu_itemActive{{endif}}"><a href="{url="app=core&module=modcp&controller=modcp&tab=hidden&type={$key}" seoTemplate="modcp_content"}">{lang="{$class::$title}_pl"}</a></li>	
+							{{endforeach}}
+						</ul>
+					{{endforeach}}				
+				</div>
+			</div>
+			<div class='ipsColumn ipsColumn_fluid' id='elModCPContent'>
+				<div class='ipsBox_alt'>
+					{$content|raw}
+				</div>
+			</div>
+		</div>
+	</section>
+</div>

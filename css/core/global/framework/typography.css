@@ -1,0 +1,414 @@
+/* HEADINGS */
+
+.ipsType_pageTitle,
+.ipsType_sectionTitle,
+.ipsType_secondaryTitle,
+.ipsType_sectionHead,
+.ipsType_minorHeading {
+	{{if theme.headline_font != 'default'}}
+		font-family: "{theme="headline_font"}", "Helvetica Neue", Helvetica, Arial, sans-serif;
+	{{endif}}
+}
+
+/* ======================================================== */
+/* Page title: the large text shown at the top of pages */
+.ipsType_pageTitle {
+	font-size: {fontsize="2x_large"};
+	font-weight: bold;
+	line-height: 1.2;
+	letter-spacing: -.02em;
+	margin: 0;
+	color: rgb( var(--theme-text_dark) );
+}
+
+	.ipsType_pageTitle > .fa {
+		font-size: {fontsize="large"};
+	}
+
+	.ipsType_pageTitle a:not( .ipsBadge ):not( .ipsButton ) {
+		color: inherit;
+	}
+
+/* ======================================================== */
+/* Section title: formerly known as main title, the bar separating sections */
+.ipsType_sectionTitle {
+	font-size: {fontsize="base"};
+	line-height: 1;
+	font-weight: bold;
+	padding: var(--sp-4) var(--sp-5);
+	margin: 0;
+	background: rgb( var(--theme-section_title) );
+	color: rgb( var(--theme-section_title_font) );
+	border-top-left-radius: inherit;
+	border-top-right-radius: inherit;
+	border-bottom: 1px solid rgba( var(--theme-text_light), 0.15 );
+}
+	
+	a.ipsType_sectionTitle, .ipsType_sectionTitle a {
+		color: rgb( var(--theme-section_title_font) );
+	}
+
+	.ipsType_sectionTitle .ipsButton {
+		position: relative;
+		top: -5px;
+	}
+
+		.ipsType_sectionTitle .ipsButton.ipsButton_veryVerySmall {
+			top: -2px;
+		}
+
+	.ipsType_sectionTitle > .ipsType_light {
+		opacity: 0.6;
+	}
+
+/* ======================================================== */
+/* Secondary title: a secondary version of above, for sub-sections */
+.ipsType_secondaryTitle {
+	font-size: {fontsize="small"};
+	font-weight: 400;
+	padding: 10px 15px 10px 15px;
+	margin-top: 0;
+	border-radius: 3px 3px 0 0;
+	background: rgb( var(--theme-secondary_title) );
+	color: rgb( var(--theme-secondary_title_font) );
+}
+
+	a.ipsType_secondaryTitle, .ipsType_secondaryTitle a {
+		color: rgb( var(--theme-secondary_title_font) );
+	}
+
+/* ======================================================== */
+/* Section heading: a text-based heading for smaller sections */
+.ipsType_sectionHead {
+	font-size: {fontsize="large"};
+	color: rgb( var(--theme-text_dark) );
+	line-height: {fontsize="2x_large"};
+	font-weight: bold;
+	display: inline-block;
+	margin: 0;
+}
+
+/* ======================================================== */
+/* Minor heading: used in miscellanious situations */
+.ipsType_minorHeading {
+	color: rgb( var(--theme-text_light) );
+	text-transform: uppercase;
+	font-size: {fontsize="x_small"};
+	margin: 0;
+}
+
+/* ======================================================== */
+/* ALIGNMENT */
+.ipsType_center {
+	text-align: center; 
+}
+
+.ipsType_left {
+	text-align: left; 
+}
+html[dir="rtl"] .ipsType_left {
+	text-align: right; 
+}
+
+.ipsType_right { 
+	text-align: right; 
+}
+html[dir="rtl"] .ipsType_right {
+	text-align: left; 
+}
+.ipsType_justify {
+	text-align: justify;
+}
+
+/* ======================================================== */
+/* MISC */
+.ipsType_bold {
+	font-weight: bold;
+}
+
+.ipsType_unbold {
+	font-weight: normal;
+}
+
+.ipsType_monospace {
+	font-family: monospace;
+}
+
+.ipsType_noBreak { 
+	white-space: nowrap !important; 
+}
+
+.ipsType_noUnderline {
+	text-decoration: none !important;
+}
+
+.ipsType_withHr {
+	display: flex;
+	align-items: center;
+}
+
+	.ipsType_withHr:after {
+		content: '';
+		border-top: 1px solid rgba( var(--theme-text_dark), 0.1 );
+		height: 0;
+		flex-grow: 1;
+	}
+
+	html[dir="ltr"] .ipsType_withHr:after {
+		margin-left: 10px;
+	}
+	html[dir="rtl"] .ipsType_withHr:after {
+		margin-right: 10px;
+	}
+
+.ipsType_resetLh {
+	line-height: 1;
+}
+
+/* This class sometimes contains truncated text. A max-width is necessary for the text to truncate */
+.ipsContained_container{
+	max-width: 100%;
+}
+
+/* 09/20/16 - Chrome on Windows breaks non-english characters in a word. I traced it back
+to the combination of word-break and word-wrap properties. After extensive testing, all modern
+browsers appear to work with just word-wrap: break-word, so I have removed the word-break property.
+See: r12524 & r12586 & r12382 */
+.ipsType_break {
+	word-wrap: break-word;
+	word-break: break-word;
+}
+
+.ipsType_richText {
+	word-wrap: break-word;
+	overflow-wrap: break-word;
+	line-height: 1.6;
+}
+
+/* Prevent long content such as code blocks from stretching the layout */
+.ipsType_richText.ipsContained,
+[data-role="editorComposer"]{
+	display: table;
+	table-layout: fixed;
+	width: 100%;
+}
+
+/* 02/10/16 - Fixes an issue with Android 4, where links would not break. See r12945 */
+@media screen and (max-width: 767px) {
+	_:-webkit-full-screen, :root .ipsType_break { 
+		word-break: break-word;
+	}
+	_:-webkit-full-screen, :root .ipsType_richText {
+		word-break: break-word;
+	}
+}
+	
+	.ipsType_normal.ipsType_richText {
+		line-height: 1.6;
+	}
+
+		{{if (int) settings.editor_paragraph_padding === 0}}
+			.ipsType_richText p:not( [class] ) {
+				margin-top: 0;
+				margin-bottom: 0;
+			}
+		{{endif}}
+
+	.ipsType_richText a,
+	.ipsApp [data-ipsEditor] .cke_wysiwyg_div a {
+		text-decoration: underline;
+	}
+
+		.ipsType_richText .ipsForm a {
+			text-decoration: none;
+		}
+	
+	/* In some places (like in Pages) we use <ul>s for structural things which aren't really lists, which
+		causes the bullet points to be one level "deeper" than thewy really are. This fixes that */
+	.ipsType_richText > ul:not([class]) { list-style-type: disc; }
+	.ipsType_richText > ul:not([class]) ul { list-style-type: circle; }
+	.ipsType_richText > ul:not([class]) ul ul { list-style-type: square; }
+
+/* Makes links go the color of surrounding text */
+a.ipsType_blendLinks, .ipsType_blendLinks a { 
+	color: inherit; 
+}
+
+/* Add brand color to links */
+.ipsType_brandedLinks a,
+a.ipsType_brandedLink{
+	color: rgb( var(--theme-brand_primary) );
+}
+
+.ipsType_reset {
+	margin: 0;
+}
+
+/* I LIKE SHOUTING */
+.ipsType_uppercase {
+	text-transform: uppercase;
+}
+
+.ipsType_noLinkStyling, .ipsType_noLinkStyling:hover {
+	text-decoration: none !important;
+	color: rgb( var(--theme-text_color) );
+}
+
+/* Highlighted words (e.g. search results) */
+mark {
+    background: rgba( var(--theme-featured), 0.1 );
+    padding: 0 5px;
+    color: rgb( var(--theme-featured) ) !important;
+    font-weight: inherit;
+    display: inline-block;
+    border-radius: var(--radius-1);
+}
+
+/* ======================================================== */
+/* SIZING */
+.ipsType_small {
+	font-size: {fontsize="x_small"};
+}
+
+	.ipsType_small:not( .ipsType_richText ){
+		line-height: 1.45;
+	}
+
+.ipsType_medium {
+	font-size: {fontsize="small"};
+}
+	
+	.ipsType_medium:not( .ipsType_richText ) {
+		line-height: 1.53;
+	}
+
+.ipsType_normal {
+	font-size: {fontsize="medium"};
+}
+	
+	.ipsType_normal:not( .ipsType_richText ){
+		line-height: 1.5;
+	}
+
+.ipsType_large {
+	font-size: {fontsize="base"};
+}
+
+	.ipsType_large:not( .ipsType_richText ){
+		line-height: 1.25;
+	}
+
+.ipsType_veryLarge {
+	font-size: {fontsize="36"};
+	line-height: 1.18;
+	font-weight: bold;
+	letter-spacing: -0.9px;
+	color: rgb( var(--theme-text_dark) );
+}
+
+.ipsType_huge {
+	font-size: {fontsize="64"};
+	line-height: 1.11;
+	font-weight: 300;
+	color: rgb( var(--theme-text_dark) );
+}
+
+/* ======================================================== */
+/* COLORS */
+.ipsType_light {
+	color: rgb( var(--theme-text_light) );
+}
+
+.ipsType_dark {
+	color: rgb( var(--theme-text_dark) );
+}
+
+.ipsType_warning, .ipsType_negative {
+	color: var(--negative-dark);
+}
+
+.ipsType_spammer {
+	color: var(--negative-dark);
+}
+
+.ipsType_issue {
+	color: #d69625;
+}
+
+.ipsType_success, .ipsType_positive {
+	color: var(--positive-dark);
+}
+
+.ipsType_neutral {
+	color: rgb( var(--theme-text_light) );
+}
+
+.ipsType_code {
+	background: rgb( var(--theme-area_background_light) );
+	padding: 5px;
+	border: 1px solid rgb( var(--theme-area_background) );
+	border-radius: var(--radius-1);
+	color: #d72f42;
+}
+
+/* ======================================================== */
+/* RICH TEXT */
+.ipsType_richText > p:first-child {
+	margin-top: 0;
+}
+
+.ipsType_richText > p:last-child {
+	margin-bottom: 0;
+}
+
+.ipsType_richText img {
+	max-width: 100%;
+}
+
+/* ======================================================== */
+/* TRUNCATED TEXT */
+.ipsTruncate {
+	overflow: hidden;
+}
+
+	.ipsTruncate.ipsTruncate_line {
+		white-space: nowrap;
+		text-overflow: ellipsis;
+		display: block;
+		width: 100%;
+	}
+
+	a.ipsTruncate.ipsTruncate_line,
+	span.ipsTruncate.ipsTruncate_line {
+		display: inline-block;
+		vertical-align: middle;
+	}
+
+	/* Use the clamp method for these situations since they're stretchy table-cells */
+	.ipsWidget .ipsDataItem_main .ipsTruncate_line{
+		display: -webkit-box;
+		-webkit-line-clamp: 1;
+		-webkit-box-orient: vertical;
+		white-space: normal;
+	}
+
+.ipsTruncate + .ipsTruncate_more {
+	display: block;
+	text-decoration: none !important;
+	cursor: pointer;
+	padding: 12px;
+	text-align: center;
+	margin-bottom: -15px;
+	font-size: {fontsize="small"};
+}
+
+	.ipsTruncate > .ipsTruncate_more span {
+		z-index: 40;
+	}
+
+.ipsType_pageTitle [data-role="editableTitle"]:hover,
+.ipsType_pageTitle[data-role="editableTitle"]:hover,
+.ipsType_editable:hover {
+	background: rgb( var(--theme-selected) );
+	color: rgb( var(--theme-text_dark) );
+}

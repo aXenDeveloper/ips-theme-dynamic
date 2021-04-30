@@ -1,0 +1,7 @@
+<ips:template parameters="$class, $container=NULL" />
+<i class='fa fa-{$class::$icon}'></i> 
+{{if $container === NULL}}
+	{lang="$class::$title"}
+{{else}}
+	{lang="icon_blurb_in_containers" sprintf="\IPS\Member::loggedIn()->language()->addToStack( $class::$title ), $container->_title"}
+{{endif}}

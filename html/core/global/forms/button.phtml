@@ -1,0 +1,6 @@
+<ips:template parameters="$lang, $type, $href=NULL, $class='', $attributes=array()" />
+{{if $type === 'link'}}
+	<a href="{$href}" class='{{if ! $class or ! mb_stristr( $class, 'ipsButton' )}}ipsButton ipsButton_link{{endif}} {{if $class}}{$class}{{endif}}' {{if $attributes}}{{foreach $attributes as $key => $value}}{$key}="{$value}"{{endforeach}}{{endif}} role="button">{lang="$lang"}</a>
+{{else}}
+	<button type="{$type}" {{if $class}}class="{$class}"{{endif}} {{if $attributes}}{{foreach $attributes as $key => $value}}{$key}="{$value}" {{endforeach}}{{endif}} role="button">{lang="$lang"}</button>
+{{endif}}

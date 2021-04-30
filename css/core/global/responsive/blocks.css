@@ -1,0 +1,13 @@
+/* PHONES */
+@media screen and (max-width: 767px) {
+	.ipsWidget .ipsTabs_small:target [role="tablist"], 
+	.ipsWidget .ipsTabs_small.ipsTabs_showMenu [role="tablist"] {
+		top: 0;
+		left: 0;
+		right: 0;
+	}
+
+	.ipsWidget .ipsTabs_small .ipsTabs_activeItem {
+		border-bottom: 0;
+	}
+}

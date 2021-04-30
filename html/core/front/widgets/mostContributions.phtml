@@ -1,0 +1,27 @@
+<ips:template parameters="$contributions, $area, $title, $orientation='vertical'" />
+<h3 class='ipsType_reset ipsWidget_title'>{$title}</h3>
+<div class='ipsWidget_inner {{if $orientation !== 'vertical'}}ipsPad{{else}}ipsPad_half{{endif}}'>
+	{{if $orientation == 'vertical'}}
+			<ol class='ipsDataList ipsDataList_reducedSpacing'>
+				{{foreach $contributions['members'] as $member}}
+					<li class='ipsDataItem'>
+						<div class='ipsDataItem_main ipsPhotoPanel ipsPhotoPanel_tiny ipsClearfix'>
+							{template="userPhoto" app="core" group="global" params="$member, 'tiny'"}
+							<div>
+								{$member->link()|raw}
+								<br><span class='ipsType_light'>{{if $area}}{$contributions['counts'][$member->member_id]}{{else}}{$member->member_posts}{{endif}}</span>
+							</div>
+						</div>
+					</li>
+				{{endforeach}}
+			</ol>
+	{{else}}
+			<ol class='ipsList_inline ipsList_noSpacing'>
+				{{foreach $contributions['members'] as $idx => $member}}
+					<li>
+						{$member->link()|raw} <span class='ipsType_light'>{{if $area}} ({$contributions['counts'][$member->member_id]}){{else}} ({$member->member_posts}){{endif}}</span>{{if $idx != \count( $contributions['members'] ) - 1}},{{endif}}
+					</li>
+				{{endforeach}}
+			</ol>
+	{{endif}}
+</div>

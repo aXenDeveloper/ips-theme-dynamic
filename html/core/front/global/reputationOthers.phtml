@@ -1,0 +1,6 @@
+<ips:template parameters="$contentURL, $lang, $names" />
+{{if \IPS\Content\Reaction::isLikeMode()}}
+<a href='{$contentURL}' data-ipsDialog data-ipsDialog-destructOnClose data-ipsDialog-size='medium' data-ipsDialog-title='{lang="like_log_title"}' title='{lang="see_who_liked"}' data-ipsTooltip data-ipsTooltip-label='{$names|doubleencode}' data-ipsTooltip-json data-ipsTooltip-safe>{$lang}</a>
+{{else}}
+<a href='{$contentURL}' data-ipsDialog data-ipsDialog-destructOnClose data-ipsDialog-size='medium' data-ipsDialog-title='{lang="see_who_reacted"}' title='{lang="see_who_reacted"}' data-ipsTooltip data-ipsTooltip-label='{$names|doubleencode}' data-ipsTooltip-json data-ipsTooltip-safe>{$lang}</a>
+{{endif}}

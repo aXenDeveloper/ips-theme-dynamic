@@ -1,0 +1,35 @@
+<ips:template parameters="$k, $enabled" />
+<div class="ipsPos_right cNotificationSettings_expand ipsType_center">
+	&nbsp;
+	<i class="fa fa-caret-down"></i>
+</div>
+<div class="ipsDataItem_main">
+	<h3 class="ipsDataItem_title ipsType_reset">
+		{lang="notifications__$k"}
+	</h3>
+</div>
+<div class="ipsDataItem_generic ipsDataItem_size6 ipsType_light">
+	{{foreach $enabled as $k => $v}}
+		{{if $v['icon'] !== 'envelope-o' and $v['icon'] !== 'bell-o' and $v['icon'] !== 'mobile'}}
+			<div {{if isset( $v['description'] )}}title="{lang="$v['description']"}" data-ipsTooltip{{endif}}>
+				<i class="fa fa-{$v['icon']}"></i> {$v['title']}
+			</div>
+		{{endif}}
+	{{endforeach}}
+</div>
+<div class="ipsDataItem_generic ipsDataItem_size6 ipsType_light">
+	{{foreach $enabled as $k => $v}}
+		{{if $v['icon'] === 'bell-o' or $v['icon'] === 'mobile'}}
+			<div>
+				<i class="fa fa-{$v['icon']}"></i> {$v['title']}
+			</div>
+		{{endif}}
+	{{endforeach}}
+</div>
+<div class="ipsDataItem_generic ipsDataItem_size3 ipsType_light">
+	{{foreach $enabled as $k => $v}}
+		{{if $v['icon'] === 'envelope-o'}}
+			<i class="fa fa-{$v['icon']}"></i> {$v['title']}
+		{{endif}}
+	{{endforeach}}
+</div>

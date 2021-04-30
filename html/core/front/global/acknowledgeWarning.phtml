@@ -1,0 +1,18 @@
+<ips:template parameters="$warnings=array()" />
+{{foreach $warnings as $idx => $warning}}
+	{{if $idx === 0}}
+		<div class='ipsMessage ipsMessage_error'>
+			<h4 class='ipsMessage_title'>{lang="you_have_been_warned" sprintf="\IPS\Member::load( $warning->moderator )->name"}</h4>
+			{{if \IPS\Member::loggedIn()->isBanned()}}
+				{{if $warning->note_member}}
+					<p class='ipsType_reset ipsType_medium'>{$warning->note_member|raw}</p>
+				{{endif}}
+			{{else}}
+				<p class='ipsType_reset ipsType_medium'>{lang="must_acknowledge_msg"}</p>
+				<br>
+				<a href='{url="app=core&module=system&controller=warnings&do=view&id={$warning->member}&w={$warning->id}" seoTemplate="warn_view" seoTitle="\IPS\Member::loggedIn()->members_seo_name" ref="(string) \IPS\Request::i()->url()"}' class='ipsButton ipsButton_verySmall ipsButton_veryLight' data-ipsDialog data-ipsDialog-size='narrow'>{lang="view_warning_details"}</a>
+			{{endif}}
+		</div>
+		<br>
+	{{endif}}
+{{endforeach}}

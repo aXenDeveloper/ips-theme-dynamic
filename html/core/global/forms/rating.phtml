@@ -1,0 +1,7 @@
+<ips:template parameters="$name, $value, $required, $max=5, $display=NULL, $userRated=NULL" />
+<input type='hidden' name='{$name}' value="0">
+<div data-ipsRating data-ipsRating-changeRate='true' data-ipsRating-size='veryLarge' {{if $display}}data-ipsRating-value="{expression="number_format( $display, 1 )"}"{{endif}} {{if $userRated}}data-ipsRating-userRated="{expression="$userRated"}"{{endif}}>
+	{{foreach range( 1, $max ) as $i}}
+		<input type='radio' name='{$name}' id='{$name}_{$i}' value='{$i}' {{if $i == floor( $value )}}checked{{endif}}> <label for='{$name}_{$i}'>{$i}</label>
+	{{endforeach}}
+</div>

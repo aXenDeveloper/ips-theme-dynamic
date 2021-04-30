@@ -1,0 +1,28 @@
+<ips:template parameters="$stepNames, $activeStep, $output, $baseUrl, $showSteps" />
+<div data-ipsWizard class='ipsWizard'>
+	{{if $showSteps}}
+		<ul class="ipsStepBar ipsClearFix" data-role="wizardStepbar">
+			{{$doneSteps = TRUE;}}
+			{{foreach $stepNames as $step => $name}}
+				{{if $activeStep == $name}}{{$doneSteps = FALSE;}}{{endif}}
+				<li class='ipsStep {{if $activeStep == $name}}ipsStep_active{{endif}}'>
+					{{if $doneSteps}}
+						<a href="{$baseUrl->setQueryString( '_step', $name )}" data-action="wizardLink">
+					{{else}}
+						<span>
+					{{endif}}
+						<strong class='ipsStep_title'>{lang="step_number" sprintf="$step + 1"}</strong>
+						<span class='ipsStep_desc'>{lang="$name"}</span>
+					{{if $doneSteps}}
+						</a>
+					{{else}}
+						</span>
+					{{endif}}
+				</li>
+			{{endforeach}}
+		</ul>
+	{{endif}}
+	<div data-role="wizardContent">
+		{$output|raw}
+	</div>
+</div>

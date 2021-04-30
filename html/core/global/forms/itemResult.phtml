@@ -1,0 +1,12 @@
+<ips:template parameters="$item" />
+{{$idField = $item::$databaseColumnId;}}
+<div data-itemid="{$item->$idField}" data-role='contentItemRow'>
+	<strong>{$item->mapped('title')}</strong>
+	{{if $item->container()}}
+		<em>{lang="item_selector_added_to_container" sprintf="$item->container()->_title"}</em>
+	{{endif}}
+	{{if isset( $item::$databaseColumnMap['date'] )}}
+		<span class='ipsType_light'>{lang="item_selector_added_on" htmlsprintf="\IPS\DateTime::ts($item->mapped('date'))->html()"}</span>
+	{{endif}}	
+</div>
+

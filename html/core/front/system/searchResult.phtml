@@ -1,0 +1,243 @@
+<ips:template parameters="$indexData, $articles, $authorData, $itemData, $unread, $objectUrl, $itemUrl, $containerUrl, $containerTitle, $repCount, $showRepUrl, $snippet, $iPostedIn, $view, $canIgnoreComments=FALSE, $reactions=array()" />
+
+<li class='ipsStreamItem ipsStreamItem_contentBlock ipsStreamItem_{$view} ipsAreaBackground_reset ipsPad {{if isset( $indexData['index_class']::$searchResultClassName )}}{$indexData['index_class']::$searchResultClassName}{{endif}} {{if $indexData['index_hidden']}}ipsModerated{{endif}}' data-role='activityItem' data-timestamp='{$indexData['index_date_created']}'>
+	<div class='ipsStreamItem_container ipsClearfix'>
+		{{if \in_array( 'IPS\Content\Comment', class_parents( $indexData['index_class'] ) )}}
+			{{$itemClass = $indexData['index_class']::$itemClass;}}
+			<div class='ipsStreamItem_header ipsPhotoPanel ipsPhotoPanel_mini'>
+				{{if $indexData['index_title']}}
+					<span class='ipsStreamItem_contentType' data-ipsTooltip title='{lang="$itemClass::$title"}'><i class='fa fa-{$itemClass::$icon}'></i></span>
+				{{else}}				
+					<span class='ipsStreamItem_contentType' data-ipsTooltip title='{lang="$indexData['index_class']::$title"}'><i class='fa fa-{$indexData['index_class']::$icon}'></i></span>
+				{{endif}}
+				{template="userPhotoFromData" group="global" app="core" params="$authorData['member_id'], $authorData['name'], $authorData['members_seo_name'], \IPS\Member::photoUrl( $authorData ), ( $view !== 'condensed' ) ? 'mini' : 'tiny'"}
+				<div class='{{if $unread}}ipsStreamItem_unread{{endif}}'>
+					{{if $view == 'condensed' && $snippet}}
+						<div class='ipsPhotoPanel ipsPhotoPanel_small'>
+							{$snippet|raw}
+							<div>
+					{{endif}}
+					<h2 class='ipsType_reset ipsStreamItem_title ipsContained_container {{if !$indexData['index_title'] or $view == 'condensed'}}ipsStreamItem_titleSmall{{endif}}'>
+						{{if $unread}}
+							<span>
+								<a href='{$objectUrl->stripQueryString( array( 'comment' => 'comment', 'review' => 'review' ) )->setQueryString( 'do', 'getNewComment' )}' data-linkType="star" {{if $iPostedIn}}data-iPostedIn{{endif}} title='{lang="first_unread_post"}' data-ipsTooltip>
+									<span class='ipsItemStatus {{if $iPostedIn}}ipsItemStatus_posted{{endif}}'><i class="fa fa-{{if $iPostedIn}}star{{else}}circle{{endif}}"></i></span>
+								</a>
+							</span>
+						{{elseif $iPostedIn}}
+							<span><span class='ipsItemStatus ipsItemStatus_read ipsItemStatus_posted'><i class="fa fa-star"></i></span></span>
+						{{endif}}
+						{{if isset( $indexData['index_prefix'] )}}
+								<span>{template="prefix" group="global" app="core" params="rawurlencode($indexData['index_prefix']), $indexData['index_prefix']"}</span>
+						{{endif}}
+						<span class='ipsType_break ipsContained'>
+							<a href='{$objectUrl}' data-linkType="link" data-searchable>{{if ! empty( $itemData['extra']['solved'] ) }}<span class="ipsBadge ipsBadge_icon ipsBadge_small ipsBadge_positive" data-ipsTooltip title='{lang="this_is_solved"}'><i class='fa fa-check'></i></span>{{endif}} {$itemData[ $itemClass::$databasePrefix . $itemClass::$databaseColumnMap['title'] ]}</a>
+						</span>
+						{{if $indexData['index_hidden']}}
+								{{if $indexData['index_hidden'] === -1}}
+								<span><span class="ipsBadge ipsBadge_icon ipsBadge_small ipsBadge_warning" data-ipsTooltip title='{lang="hidden"}'><i class='fa fa-eye-slash'></i></span></span>
+								{{elseif $indexData['index_hidden'] === 1}}
+								<span><span class="ipsBadge ipsBadge_icon ipsBadge_small ipsBadge_warning" data-ipsTooltip title='{lang="pending_approval"}'><i class='fa fa-warning'></i></span></span>
+								{{endif}}
+						{{endif}}
+					</h2>
+					{{if $view != 'condensed'}}
+						<p class='ipsType_reset ipsStreamItem_status ipsType_blendLinks'>
+							{expression="$itemClass::searchResultSummaryLanguage( $authorData, $articles, $indexData, $itemData )"} <a href='{$containerUrl}'>{$containerTitle|raw}</a>
+						</p>
+					{{else}}
+						<ul class='ipsList_inline ipsStreamItem_stats ipsType_light ipsType_blendLinks'>
+							<li>
+								<a href='{{if $indexData['index_title']}}{$objectUrl}{{else}}{{if \in_array( 'IPS\Content\Review', class_parents( $indexData['index_class'] ) )}}{$objectUrl->setQueryString( array( 'do' => 'findReview', 'review' => $indexData['index_object_id'] ) )}{{else}}{$objectUrl->setQueryString( array( 'do' => 'findComment', 'comment' => $indexData['index_object_id'] ) )}{{endif}}{{endif}}' class='ipsType_blendLinks'><i class='fa fa-clock-o'></i> {datetime="$indexData['index_date_created']"}</a>
+							</li>
+							{{if isset( $itemClass::$databaseColumnMap['num_comments'] ) and isset( $itemData[ $itemClass::$databasePrefix . $itemClass::$databaseColumnMap['num_comments'] ] ) and $itemData[ $itemClass::$databasePrefix . $itemClass::$databaseColumnMap['num_comments'] ] > ( $itemClass::$firstCommentRequired ? 1 : 0 )}}
+								<li>
+									<a href='{{if $indexData['index_title']}}{$objectUrl}{{else}}{{if \in_array( 'IPS\Content\Review', class_parents( $indexData['index_class'] ) )}}{$objectUrl->setQueryString( array( 'do' => 'findReview', 'review' => $indexData['index_object_id'] ) )}{{else}}{$objectUrl->setQueryString( array( 'do' => 'findComment', 'comment' => $indexData['index_object_id'] ) )}{{endif}}{{endif}}' class='ipsType_blendLinks'>
+										{{if $itemClass::$firstCommentRequired}}
+											<i class='fa fa-comment'></i> {expression="$itemData[ $itemClass::$databasePrefix . $itemClass::$databaseColumnMap['num_comments'] ]-1"}
+										{{else}}
+											<i class='fa fa-comment'></i> {expression="$itemData[ $itemClass::$databasePrefix . $itemClass::$databaseColumnMap['num_comments'] ]"}
+										{{endif}}
+									</a>
+								</li>
+							{{endif}}
+							{{if isset( $itemClass::$databaseColumnMap['num_reviews'] ) and isset( $itemData[ $itemClass::$databasePrefix . $itemClass::$databaseColumnMap['num_reviews'] ] ) and $itemData[ $itemClass::$databasePrefix . $itemClass::$databaseColumnMap['num_reviews'] ]}}
+								<li>
+									<a href='{$itemUrl}#reviews' class='ipsType_blendLinks'><i class='fa fa-star-half-o'></i> {$itemData[ $itemClass::$databasePrefix . $itemClass::$databaseColumnMap['num_reviews'] ]}</a>
+								</li>
+							{{endif}}
+						</ul>
+
+						<p class='ipsStreamItem_status ipsType_reset ipsType_blendLinks'>
+							{expression="$itemClass::searchResultSummaryLanguage( $authorData, $articles, $indexData, $itemData )"} <a href='{$containerUrl}'>{$containerTitle|raw}</a>
+						</p>
+					{{endif}}
+					{{if isset( $indexData['index_tags'] ) and $view == 'condensed'}}
+						<span>{template="tags" group="global" app="core" params="explode( ',', $indexData['index_tags'] ), true, true"}</span>
+					{{endif}}
+						
+					{{if $view == 'condensed' && $snippet}}
+							</div>
+						</div>
+					{{endif}}
+				</div>
+			</div>
+			{{if $view !== 'condensed'}}
+				<div class='ipsStreamItem_snippet ipsType_break'>
+					{{if $canIgnoreComments and isset( $itemData['author'] ) and \IPS\Member::loggedIn()->member_id and isset( $authorData['member_id'] ) and isset ( $authorData['member_group_id'] ) and \IPS\Member::loggedIn()->isIgnoring( $authorData, 'topics' )}}
+					<div class='ipsComment_ignored ipsType_light' id='elIgnoreComment_{$indexData['index_object_id']}' data-ignoreCommentID='elComment_{$indexData['index_object_id']}' data-ignoreUserID='{$authorData['member_id']}'>
+						{lang="ignoring_content" sprintf="$authorData['name']"} <a href='#elIgnoreComment_{$indexData['index_object_id']}_menu' data-ipsMenu data-ipsMenu-menuID='elIgnoreComment_{$indexData['index_object_id']}_menu' data-ipsMenu-appendTo='#elIgnoreComment_{$indexData['index_object_id']}' data-action="ignoreOptions" title='{lang="see_post_ignore_options"}' class='ipsType_blendLinks'>{lang="options"} <i class='fa fa-caret-down'></i></a>
+						<ul class='ipsMenu ipsHide' id='elIgnoreComment_{$indexData['index_object_id']}_menu'>
+							<li class='ipsMenu_item ipsJS_show' data-ipsMenuValue='showPost'><a href='#'>{lang="show_this_post"}</a></li>
+							<li class='ipsMenu_sep ipsJS_show'><hr></li>
+							<li class='ipsMenu_item' data-ipsMenuValue='stopIgnoring'><a href='{url="app=core&module=system&controller=ignore&do=remove&id={$authorData['member_id']}" seoTemplate="ignore"}'>{lang="stop_ignoring_posts_by" sprintf="$authorData['name']"}</a></li>
+							<li class='ipsMenu_item'><a href='{url="app=core&module=system&controller=ignore" seoTemplate="ignore"}'>{lang="change_ignore_preferences"}</a></li>
+						</ul>
+					</div>
+					<div id='elComment_{$indexData['index_object_id']}' class="ipsHide">
+						{$snippet|raw}
+					</div>
+					{{else}}
+					 	{$snippet|raw}
+					{{endif}}
+				</div>
+				<ul class='ipsList_inline ipsStreamItem_meta ipsGap:1'>
+					<li class='ipsType_light ipsType_medium'>
+						<a href='{{if $indexData['index_title']}}{$objectUrl}{{else}}{{if \in_array( 'IPS\Content\Review', class_parents( $indexData['index_class'] ) )}}{$objectUrl->setQueryString( array( 'do' => 'findReview', 'review' => $indexData['index_object_id'] ) )}{{else}}{$objectUrl->setQueryString( array( 'do' => 'findComment', 'comment' => $indexData['index_object_id'] ) )}{{endif}}{{endif}}' class='ipsType_blendLinks'><i class='fa fa-clock-o'></i> {datetime="$indexData['index_date_created']"}</a>
+					</li>
+					{{if isset( $itemClass::$databaseColumnMap['num_comments'] ) and isset( $itemData[ $itemClass::$databasePrefix . $itemClass::$databaseColumnMap['num_comments'] ] ) and $itemData[ $itemClass::$databasePrefix . $itemClass::$databaseColumnMap['num_comments'] ] > ( $itemClass::$firstCommentRequired ? 1 : 0 )}}
+						<li class='ipsType_light ipsType_medium'>
+							<a href='{{if $indexData['index_title']}}{$objectUrl}{{else}}{{if \in_array( 'IPS\Content\Review', class_parents( $indexData['index_class'] ) )}}{$objectUrl->setQueryString( array( 'do' => 'findReview', 'review' => $indexData['index_object_id'] ) )}{{else}}{$objectUrl->setQueryString( array( 'do' => 'findComment', 'comment' => $indexData['index_object_id'] ) )}{{endif}}{{endif}}' class='ipsType_blendLinks'>
+								{{if $itemClass::$firstCommentRequired}}
+									<i class='fa fa-comment'></i> {lang="num_replies" pluralize="$itemData[ $itemClass::$databasePrefix . $itemClass::$databaseColumnMap['num_comments'] ] - 1"}
+								{{else}}
+									<i class='fa fa-comment'></i> {lang="num_comments" pluralize="$itemData[ $itemClass::$databasePrefix . $itemClass::$databaseColumnMap['num_comments'] ]"}
+								{{endif}}
+							</a>
+						</li>
+					{{endif}}
+					{{if \IPS\IPS::classUsesTrait( $indexData['index_class'], 'IPS\Content\Reactable' ) and settings.reputation_enabled and \count( $reactions )}}
+						{{if \in_array( 'IPS\Content\Review', class_parents( $indexData['index_class'] ) )}}
+							<li>{template="searchReaction" group="search" app="core" params="$reactions, $itemUrl->setQueryString('do', 'showReactionsReview')->setQueryString('review', $indexData['index_object_id']), $repCount"}</li>
+						{{else}}
+							<li>{template="searchReaction" group="search" app="core" params="$reactions, $itemUrl->setQueryString('do', 'showReactionsComment')->setQueryString('comment', $indexData['index_object_id']), $repCount"}</li>
+						{{endif}}
+					{{endif}}
+					{{if isset( $indexData['index_tags'] )}}
+						<li>{template="tags" group="global" app="core" params="explode( ',', $indexData['index_tags'] ), true"}</li>
+					{{endif}}
+				</ul>
+			{{endif}}
+		{{else}}
+			{{$itemClass = $indexData['index_class'];}}
+
+			<div class='ipsStreamItem_header {{if isset( $itemClass::$databaseColumnMap['author'] )}}ipsPhotoPanel ipsPhotoPanel_mini{{endif}}'>
+				<span class='ipsStreamItem_contentType {{if !isset( $itemClass::$databaseColumnMap['author'] )}}ipsResponsive_hidePhone{{endif}}' data-ipsTooltip title='{lang="$indexData['index_class']::$title" ucfirst="true"}'><i class='fa fa-{$indexData['index_class']::$icon}'></i></span>
+				{{if isset( $itemClass::$databaseColumnMap['author'] )}}
+					{template="userPhotoFromData" group="global" app="core" params="$authorData['member_id'], $authorData['name'], $authorData['members_seo_name'], \IPS\Member::photoUrl( $authorData ), ( $view !== 'condensed' ) ? 'mini' : 'tiny'"}
+				{{endif}}
+				<div class='{{if $unread}}ipsStreamItem_unread{{endif}}'>
+					{{if $view == 'condensed' && $snippet}}
+						<div class='ipsPhotoPanel ipsPhotoPanel_small'>
+							{$snippet|raw}
+							<div>
+					{{endif}}
+					<h2 class='ipsType_reset ipsContained_container ipsStreamItem_title ipsType_break {{if $view == 'condensed'}}ipsStreamItem_titleSmall{{endif}}'>
+						{{if $unread}}
+							<span><a href='{$objectUrl->setQueryString( 'do', 'getNewComment' )}' title='{lang="first_unread_post"}' data-linkType="star" {{if $iPostedIn}}data-iPostedIn{{endif}} data-ipsTooltip>
+								<span class='ipsItemStatus {{if $iPostedIn}}ipsItemStatus_posted{{endif}}'><i class="fa fa-{{if $iPostedIn}}star{{else}}circle{{endif}}"></i></span>
+							</a></span>
+						{{elseif $iPostedIn}}
+							<span class='ipsItemStatus ipsItemStatus_read ipsItemStatus_posted'><i class="fa fa-star"></i></span>
+						{{endif}}
+						{{if isset( $indexData['index_prefix'] )}}
+							<span>{template="prefix" group="global" app="core" params="rawurlencode($indexData['index_prefix']), $indexData['index_prefix']"}</span>
+						{{endif}}
+						<span class='ipsContained ipsType_break'><a href='{$itemUrl}' data-linkType="link" data-searchable>{{if ! empty( $itemData['extra']['solved'] ) }}<span class="ipsBadge ipsBadge_icon ipsBadge_small ipsBadge_positive" data-ipsTooltip title='{lang="this_is_solved"}'><i class='fa fa-check'></i></span>{{endif}} {$indexData['index_title']}</a>
+                        {{if $indexData['index_hidden']}}
+							<span><span class="ipsBadge ipsBadge_icon ipsBadge_warning ipsBadge_medium " data-ipsTooltip title='{lang="hidden"}'><i class='fa fa-eye-slash'></i></span></span>
+						{{endif}}
+                        </span>
+
+						{{if isset( $indexData['index_tags'] ) and $view == 'condensed'}}
+							{template="tags" group="global" app="core" params="explode( ',', $indexData['index_tags'] ), true, true"}
+						{{endif}}
+					</h2>
+					{{if $view != 'condensed'}}
+						{{if $containerTitle}}
+							<p class='ipsType_reset ipsStreamItem_status ipsType_blendLinks'>
+								{expression="$itemClass::searchResultSummaryLanguage( $authorData, $articles, $indexData, $itemData )"} <a href='{$containerUrl}'>{$containerTitle|raw}</a>
+							</p>
+						{{endif}}
+					{{else}}
+						<ul class='ipsList_inline ipsStreamItem_stats ipsType_light ipsType_blendLinks'>
+							<li>
+								<a href='{$objectUrl}' class='ipsType_blendLinks'><i class='fa fa-clock-o'></i> {datetime="$indexData['index_date_created']"}</a>
+							</li>
+							{{if isset( $indexData['index_class']::$databaseColumnMap['num_comments'] ) and isset( $itemData[ $indexData['index_class']::$databasePrefix . $indexData['index_class']::$databaseColumnMap['num_comments'] ] ) and $itemData[ $indexData['index_class']::$databasePrefix . $indexData['index_class']::$databaseColumnMap['num_comments'] ] > ( $indexData['index_class']::$firstCommentRequired ? 1 : 0 )}}
+								<li>
+									<a href='{{if $indexData['index_title']}}{$objectUrl}{{else}}{{if \in_array( 'IPS\Content\Review', class_parents( $indexData['index_class'] ) )}}{$objectUrl->setQueryString( array( 'do' => 'findReview', 'review' => $indexData['index_object_id'] ) )}{{else}}{$objectUrl->setQueryString( array( 'do' => 'findComment', 'comment' => $indexData['index_object_id'] ) )}{{endif}}{{endif}}' class='ipsType_blendLinks'>
+										{{if $indexData['index_class']::$firstCommentRequired}}
+											<i class='fa fa-comment'></i> {expression="$itemData[ $indexData['index_class']::$databasePrefix . $indexData['index_class']::$databaseColumnMap['num_comments'] ] - 1"}
+										{{else}}
+											<i class='fa fa-comment'></i> {expression="$itemData[ $indexData['index_class']::$databasePrefix . $indexData['index_class']::$databaseColumnMap['num_comments'] ]"}
+										{{endif}}
+									</a>
+								</li>
+							{{endif}}
+							{{if isset( $indexData['index_class']::$databaseColumnMap['num_reviews'] ) and isset( $itemData[ $indexData['index_class']::$databasePrefix . $indexData['index_class']::$databaseColumnMap['num_reviews'] ] ) and $itemData[ $indexData['index_class']::$databasePrefix . $indexData['index_class']::$databaseColumnMap['num_reviews'] ]}}
+								<li>
+									<a href='{$itemUrl}#reviews' class='ipsType_blendLinks'><i class='fa fa-star-half-o'></i> {expression="$itemData[ $indexData['index_class']::$databasePrefix . $indexData['index_class']::$databaseColumnMap['num_reviews'] ]"}</a>
+								</li>
+							{{endif}}
+						</ul>
+						{{if $containerTitle}}
+							<p class='ipsStreamItem_status ipsType_reset ipsType_blendLinks'>
+								{expression="$itemClass::searchResultSummaryLanguage( $authorData, $articles, $indexData, $itemData )"} <a href='{$containerUrl}'>{$containerTitle|raw}</a>
+							</p>
+						{{endif}}
+					{{endif}}
+					
+					{{if $view == 'condensed' && $snippet}}
+							</div>
+						</div>
+					{{endif}}
+				</div>
+			</div>
+			{{if $view !== 'condensed'}}
+				<div class='ipsStreamItem_snippet ipsType_break'>
+					{$snippet|raw}
+				</div>
+				<ul class='ipsList_inline ipsStreamItem_meta ipsGap:1'>
+					{{if isset( $indexData['index_class']::$databaseColumnMap['date'] )}}
+						<li class='ipsType_light ipsType_medium'>
+							<a href='{$objectUrl}' class='ipsType_blendLinks'><i class='fa fa-clock-o'></i> {datetime="$indexData['index_date_created']"}</a>
+						</li>
+					{{endif}}
+					{{if isset( $indexData['index_class']::$databaseColumnMap['num_comments'] ) and isset( $itemData[ $indexData['index_class']::$databasePrefix . $indexData['index_class']::$databaseColumnMap['num_comments'] ] ) and $itemData[ $indexData['index_class']::$databasePrefix . $indexData['index_class']::$databaseColumnMap['num_comments'] ] > ( $indexData['index_class']::$firstCommentRequired ? 1 : 0 )}}
+						<li class='ipsType_light ipsType_medium'>
+							<a href='{{if $indexData['index_title']}}{$objectUrl}{{else}}{{if \in_array( 'IPS\Content\Review', class_parents( $indexData['index_class'] ) )}}{$objectUrl->setQueryString( array( 'do' => 'findReview', 'review' => $indexData['index_object_id'] ) )}{{else}}{$objectUrl->setQueryString( array( 'do' => 'findComment', 'comment' => $indexData['index_object_id'] ) )}{{endif}}{{endif}}' class='ipsType_blendLinks'>
+								{{if $indexData['index_class']::$firstCommentRequired}}
+									<i class='fa fa-comment'></i> {lang="num_replies" pluralize="$itemData[ $indexData['index_class']::$databasePrefix . $indexData['index_class']::$databaseColumnMap['num_comments'] ] - 1"}
+								{{else}}
+									<i class='fa fa-comment'></i> {lang="num_comments" pluralize="$itemData[ $indexData['index_class']::$databasePrefix . $indexData['index_class']::$databaseColumnMap['num_comments'] ]"}
+								{{endif}}
+							</a>
+						</li>
+					{{endif}}
+					{{if isset( $indexData['index_class']::$databaseColumnMap['num_reviews'] ) and isset( $itemData[ $indexData['index_class']::$databasePrefix . $indexData['index_class']::$databaseColumnMap['num_reviews'] ] ) and $itemData[ $indexData['index_class']::$databasePrefix . $indexData['index_class']::$databaseColumnMap['num_reviews'] ]}}
+						<li class='ipsType_light ipsType_medium'>
+							<a href='{$itemUrl}#reviews' class='ipsType_blendLinks'><i class='fa fa-star-half-o'></i> {lang="num_reviews" pluralize="$itemData[ $indexData['index_class']::$databasePrefix . $indexData['index_class']::$databaseColumnMap['num_reviews'] ]"}</a>
+						</li>
+					{{endif}}
+					{{if \IPS\IPS::classUsesTrait( $indexData['index_class'], 'IPS\Content\Reactable' ) and settings.reputation_enabled and \count( $reactions )}}
+						<li>{template="searchReaction" group="search" app="core" params="$reactions, $itemUrl->setQueryString('do', 'showReactions'), $repCount"}</li>
+					{{endif}}
+					{{if isset( $indexData['index_tags'] )}}
+						<li>{template="tags" group="global" app="core" params="explode( ',', $indexData['index_tags'] ), true"}</li>
+					{{endif}}
+				</ul>
+			{{endif}}
+		{{endif}}
+	</div>
+</li>

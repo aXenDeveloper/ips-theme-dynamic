@@ -1,0 +1,33 @@
+<ips:template parameters="$content, $commentsEnabled=TRUE" />
+
+{{$reactionItem = $content;}}
+{{if $content::$firstCommentRequired}}
+	{{$reactionItem = $content->firstComment();}}
+{{endif}}
+
+{{if ( $content instanceof \IPS\Content\Ratings and $content->averageRating() ) || ( isset( $content::$reviewClass ) AND $content->averageReviewRating() ) || $content::$commentClass || ( settings.reputation_enabled and \IPS\IPS::classUsesTrait( $reactionItem, 'IPS\Content\Reactable' ) and \count( $reactionItem->reactions() ) )}}
+	<ul class='ipsList_inline ipsRichEmbed_stats ipsType_normal ipsType_blendLinks ipsSpacer_top ipsSpacer_half'>
+		{{if settings.reputation_enabled and \IPS\IPS::classUsesTrait( $reactionItem, 'IPS\Content\Reactable' ) and \count( $reactionItem->reactions() )}}
+			<li>
+				{template="reactionOverview" app="core" group="global" params="$reactionItem, TRUE, 'small'"}
+			</li>
+		{{endif}}
+		{{if $content instanceof \IPS\Content\Ratings and $rating = $content->averageRating()}}
+			<li>{template="rating" app="core" params="'large', $rating, 5" group="global"}</li>
+		{{elseif isset( $content::$reviewClass ) AND $rating = $content->averageReviewRating()}}
+			<li>{template="rating" app="core" params="'large', $rating, \IPS\Settings::i()->reviews_rating_out_of" group="global"}<span class='ipsType_light'>{{if $content->mapped('num_reviews')}}({lang="from_num_reviews" pluralize="$content->mapped('num_reviews')"}){{else}}{lang="no_reviews_yet"}{{endif}}</span></li>
+		{{endif}}
+		{{if $content::$commentClass AND $commentsEnabled}}
+			<li>
+				<a href='{$content->url( "getPrefComment" )->setQueryString('tab', 'comments')}'>
+					<i class='fa fa-comment'></i> 
+					{{if $content::$firstCommentRequired}}
+						{lang="num_replies" pluralize="$content->mapped('num_comments') - 1"}
+					{{else}}
+						{lang="num_comments" pluralize="$content->mapped('num_comments')"}
+					{{endif}}
+				</a>
+			</li>
+		{{endif}}
+	</ul>
+{{endif}}

@@ -1,0 +1,9 @@
+<ips:template parameters="$k, $enabled" />
+<li class="ipsDataItem ipsLoading_tiny md:ipsPadding:none">
+	<a href="{url="app=core&module=system&controller=notifications&do=options&type={$k}" seoTemplate="notifications_options"}" class="ipsType_blendLinks md:ipsPadding" data-action="showNotificationSettings">
+		{template="notificationSettingsIndexRowDetails" group="system" params="$k, $enabled"}
+	</a>
+	<div data-role="notificationSettingsWindow" class="ipsHide ipsDataItem_main">
+		
+	</div>
+</li>

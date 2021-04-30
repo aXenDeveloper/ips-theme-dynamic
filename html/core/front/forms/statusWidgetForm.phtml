@@ -1,0 +1,25 @@
+<ips:template parameters="$id, $action, $elements, $hiddenValues, $actionButtons, $uploadField, $class=''" />
+<form accept-charset='utf-8' method="post" action="{$action}" id='elStatusSubmit' {{if $uploadField}}enctype="multipart/form-data"{{endif}}>
+	<input type="hidden" name="{$id}_submitted" value="1">
+	{{foreach $hiddenValues as $k => $v}}
+		<input type="hidden" name="{$k}" value="{$v}">
+	{{endforeach}}
+	{{if $uploadField}}
+		<input type="hidden" name="MAX_FILE_SIZE" value="{$uploadField}">
+		<input type="hidden" name="plupload" value="{expression="md5( mt_rand() )"}">
+	{{endif}}
+	{{foreach $elements as $collection}}
+		{{foreach $collection as $input}}
+			{{if $input instanceof \IPS\Helpers\Form\Editor}}
+				{$input->html()|raw}
+				{{if $input->error}}
+					<br>
+					<span class="ipsType_warning">{lang="$input->error"}</span>
+				{{endif}}
+			{{endif}}
+		{{endforeach}}
+	{{endforeach}}
+	<div class='ipsSpacer_top ipsSpacer_half'>
+		<button type='submit' class='ipsButton ipsButton_primary ipsButton_medium ipsButton_fullWidth'>{lang="status_new"}</button>
+	</div>
+</form>	

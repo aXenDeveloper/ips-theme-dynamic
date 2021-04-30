@@ -1,0 +1,27 @@
+<ips:template parameters="$name, $value, $googleApiKey, $minimize=FALSE, $requireFullAddress=TRUE" />
+<ul class="ipsField_fieldList" data-ipsAddressForm {{if $googleApiKey}}data-ipsAddressForm-googlePlaces data-ipsAddressForm-googleApiKey="{$googleApiKey}"{{endif}} data-ipsAddressForm-requireFullAddress="{{if $requireFullAddress}}true{{else}}false{{endif}}" {{if $minimize}}data-ipsAddressForm-minimize{{endif}}{{if $value->country AND !$value->city AND !$value->region AND !$value->postalCode}} data-ipsAddressForm-country="{$value->country}"{{endif}}>
+	<li>
+		<select name="{$name}[country]" data-role="countrySelect" data-sort>
+			<option value='' {{if !$value->country OR (!$value->city AND !$value->region AND !$value->postalCode)}}selected{{endif}}>{lang="country"}</option>
+			{{foreach \IPS\GeoLocation::$countries as $k}}
+				<option value="{$k}" {{if $k == $value->country AND ( ( $value->city AND ( $value->postalCode OR $value->region ) ) OR !$minimize )}}selected{{endif}}>
+					{lang="country-{$k}"}
+				</option>
+			{{endforeach}}
+		</select>
+	</li>
+	{{foreach $value->addressLines as $i => $line}}
+		<li>
+			<input type="text" name="{$name}[address][]" placeholder="{lang="address_line"}" value="{$line}" data-role="addressLine">
+		</li>
+	{{endforeach}}
+	<li>
+		<input type="text" name="{$name}[city]" placeholder="{lang="city"}" value="{$value->city}" data-role="city" autocomplete="address-level2">
+	</li>
+	<li>
+		<input type="text" name="{$name}[region]" placeholder="{lang="region"}" value="{$value->region}" data-role="regionText" autocomplete="address-level1">
+	</li>
+	<li>
+		<input type="text" name="{$name}[postalCode]" placeholder="{lang="zip"}" value="{$value->postalCode}" data-role="postalCode" autocomplete="postal-code">
+	</li>
+</ul>

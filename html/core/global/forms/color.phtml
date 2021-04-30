@@ -1,0 +1,2 @@
+<ips:template parameters="$name, $value, $required, $disabled=FALSE, $swatches=NULL, $rgba=FALSE" />
+<input type="text" name="{$name}" value="{$value}" {{if $swatches}}data-swatches="true"{{endif}} {{if $rgba}}data-rgba="true"{{endif}} {{if $required === TRUE}}aria-required='true'{{endif}} {{if $disabled}}disabled aria-disabled='true'{{endif}} data-control="color" class="">

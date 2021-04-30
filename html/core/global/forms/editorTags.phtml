@@ -1,0 +1,35 @@
+<ips:template parameters="$tags=array(), $tagLinks=array()" />
+
+{{foreach $tags as $tagKey => $tagValue}}
+	{{if \is_array( $tagValue )}}
+		<li>
+			<ul class='ipsList_reset'>
+				<li>
+					<h4 class='ipsAreaBackground ipsPad_half ipsType_reset'>
+						{{if isset( $tagLinks[$tagKey] )}}
+							<ul class='ipsPos_right ipsButton_split'>
+								<li  class='ipsButton ipsButton_tiny ipsButton_light'><a href='{$tagLinks[$tagKey]['link']}' target='_blank' {{if isset( $tagLinks[$tagKey]['data'] )}}{{foreach $tagLinks[$tagKey]['data'] AS $dataKey => $dataValue}}data-{$dataKey}='{$dataValue}'{{endforeach}}{{endif}} {{if isset( $tagLinks[$tagKey]['title'] )}}title='{$tagLinks[$tagKey]['title']}' data-ipsTooltip{{endif}}'><i class='fa fa-{$tagLinks[$tagKey]['icon']}'></i></a></li>
+							</ul>
+						{{endif}}
+						{lang="$tagKey"}
+					</h4>
+				</li>
+				<li>
+					<ul class='ipsList_reset' data-role='tagList_{$tagKey}'>
+					{{foreach $tagValue as $key => $value}}
+						<li class='ipsPad_half'>
+							<label data-tagKey="{$key}">{$key}</label>
+							<div class='ipsType_light ipsType_small'>{$value}</div>
+						</li>
+					{{endforeach}}
+					</ul>
+				</li>
+			</ul>
+		</li>
+	{{else}}
+		<li class='ipsPad_half'>
+			<label data-tagKey="{$tagKey}">{$tagKey} {{if isset( $tagLinks[$tagKey] )}}<a href='{$tagLinks[$tagKey]['link']}' target='_blank' {{if isset( $tagLinks[$tagKey]['data'] )}}{{foreach $tagLinks[$tagKey]['data'] AS $dataKey => $dataValue}}data-{$dataKey}='{$dataValue}'{{endforeach}}{{endif}} {{if isset( $tagLinks[$tagKey]['title'] )}}title='{$tagLinks[$tagKey]['title']}' data-ipsTooltip{{endif}}'><i class='fa fa-{$tagLinks[$tagKey]['icon']}'></i></a>{{endif}}</label>
+			<div class='ipsType_light ipsType_small'>{$tagValue}</div>
+		</li>
+	{{endif}}
+{{endforeach}}

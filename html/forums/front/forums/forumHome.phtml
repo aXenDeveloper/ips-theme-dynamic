@@ -1,0 +1,68 @@
+<ips:template parameters="$forum, $featuredTopic, $popularQuestions, $newQuestions" />
+<br>
+{{if $featuredTopic}}
+	<div class="ipsPad">
+		<h2 class="ipsType_sectionHead">{lang="featured_question"}</h2>
+		<br><br>
+		<div class="ipsPhotoPanel ipsPhotoPanel_small ipsClearfix">
+			<img src='{expression="$featuredTopic->author()->photo"}' class="ipsUserPhoto ipsUserPhoto_small ipsPos_left">
+			<div>
+				<h3 class="ipsType_reset ipsType_large">
+					<a href="{$featuredTopic->url()}">{$featuredTopic->title}</a>
+				</h3>
+				<p class="ipsType_reset ipsType_normal ipsType_light">{lang="ask_byline" htmlsprintf="$featuredTopic->author()->link(), \IPS\DateTime::ts( $featuredTopic->start_date )->html()"}</p>
+				<br>
+				<div class="ipsType_normal" data-ipsTruncate data-ipsTruncate-type="remove" data-ipsTruncate-size="5 lines">
+					{$featuredTopic->truncated()}
+				</div>
+			</div>
+		</div>
+	</div>
+	<hr class="ipsHr">
+{{endif}}
+<div class="ipsGrid ipsGrid_collapsePhone">
+	<div class="ipsGrid_span6 ipsPad">
+		<h2 class="ipsType_sectionHead">{lang="most_popular_questions"}</h2>
+		<p class="ipsType_reset ipsType_light">{lang="from_the_past_30_days"}</p>
+		<ol class="ipsDataList ipsDataList_reducedSpacing" id="elTopicList">
+			{{foreach $popularQuestions as $question}}
+				<li class="ipsDataItem {{if $question->unread()}}ipsDataItem_unread{{endif}}">
+					<div class='ipsDataItem_generic ipsDataItem_size1'>
+						<img src="{$question->author()->photo}" class='ipsUserPhoto ipsUserPhoto_mini'>
+					</div>
+					<div class="ipsDataItem_main">
+						<h4 class="ipsDataItem_title">{{if $question->unread()}} <i class="fa fa-circle cTopicIcon"></i> {{endif}}<a href="{$question->url()}">{$question->title}</a></h4>
+						<ul class="ipsDataItem_meta ipsList_inline ipsType_light">
+							{{if $question->bestAnswer()}}
+								<li>
+									{lang="best_answer_by" htmlsprintf="$question->bestAnswer()->author()->link(), \IPS\DateTime::ts( $question->bestAnswer()->post_date )->html()"}
+								</li>
+							{{endif}}
+						</ul>
+					</div>
+				</li>
+			{{endforeach}}
+		</ol>
+	</div>
+	<div class="ipsGrid_span6 ipsPad">
+		<h2 class="ipsType_sectionHead">{lang="new_questions"}</h2>
+		<p class="ipsType_reset ipsType_light">{lang="awaiting_an_answer"}</p>
+		<ol class="ipsDataList ipsDataList_reducedSpacing" id="elTopicList">
+			{{foreach $newQuestions as $question}}
+				<li class="ipsDataItem {{if $question->unread()}}ipsDataItem_unread{{endif}}">
+					<div class='ipsDataItem_generic ipsDataItem_size1'>
+						<img src="{$question->author()->photo}" class='ipsUserPhoto ipsUserPhoto_mini'>
+					</div>
+					<div class="ipsDataItem_main">
+						<h4 class="ipsDataItem_title">{{if $question->unread()}} <i class="fa fa-circle cTopicIcon"></i> {{endif}}<a href="{$question->url()}">{$question->title}</a></h4>
+						<ul class="ipsDataItem_meta ipsList_inline ipsType_light">
+							<li>
+								{lang="ask_byline" htmlsprintf="$question->author()->link(), \IPS\DateTime::ts( $question->start_date )->html()"}
+							</li>
+						</ul>
+					</div>
+				</li>
+			{{endforeach}}
+		</ol>
+	</div>
+</div>

@@ -1,0 +1,34 @@
+<ips:template parameters="$item, $type='comment'" />
+<input type="hidden" name="csrfKey" value="{expression="\IPS\Session::i()->csrfKey"}" />
+{{$method = $type . 'MultimodActions';}}
+{{if $actions = $item->$method() and \count( $actions )}}
+	<div class="ipsClearfix">
+		<div class="ipsAreaBackground ipsPad ipsClearfix ipsJS_hide" data-role="pageActionOptions">
+			<div class="ipsPos_right">
+				<select name="modaction" data-role="moderationAction">
+					{{if \in_array( 'approve', $actions )}}
+						<option value='approve' data-icon='check-circle'>{lang="approve"}</option>
+					{{endif}}
+					{{if \in_array( 'split_merge', $actions )}}
+						<option value='split' data-icon='expand'>{lang="split"}</option>
+						<option value='merge' data-icon='level-up'>{lang="merge"}</option>
+					{{endif}}
+					{{if \in_array( 'hide', $actions ) or \in_array( 'unhide', $actions )}}
+						<optgroup label="{lang="hide"}" data-icon='eye' data-action='hide'>
+							{{if \in_array( 'hide', $actions )}}
+								<option value='hide'>{lang="hide"}</option>
+							{{endif}}
+							{{if \in_array( 'unhide', $actions )}}
+								<option value='unhide'>{lang="unhide"}</option>
+							{{endif}}
+						</optgroup>
+					{{endif}}
+					{{if \in_array( 'delete', $actions )}}
+						<option value='delete' data-icon='trash'>{lang="delete"}</option>
+					{{endif}}
+				</select>
+				<button type="submit" class="ipsButton ipsButton_alternate ipsButton_verySmall">{lang="submit"}</button>
+			</div>
+		</div>
+	</div>
+{{endif}}

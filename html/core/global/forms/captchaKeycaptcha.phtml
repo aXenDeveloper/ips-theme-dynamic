@@ -1,0 +1,12 @@
+<ips:template parameters="$userId, $uniq, $sign, $sign2" />
+<input type='hidden' id='capcode' name='keycaptcha'>
+<script type="text/javascript">
+	// required
+	var s_s_c_user_id = '{$userId}';
+	var s_s_c_session_id = '{$uniq}';
+	var s_s_c_captcha_field_id = 'capcode';
+	var s_s_c_submit_button_id ='sbutton-#-r';
+	var s_s_c_web_server_sign = '{$sign}';
+	var s_s_c_web_server_sign2 = '{$sign2}';
+</script>
+<div data-ipsCaptcha data-ipsCaptcha-service='keycaptcha' id='div_for_keycaptcha'></div>

@@ -1,0 +1,20 @@
+<ips:template parameters="$item, $url" />
+<div data-embedInfo-maxSize='{{if settings.max_internalembed_width}}{setting="max_internalembed_width"}{{else}}100%{{endif}}' class='ipsRichEmbed'>
+	{template="embedHeader" group="embed" app="core" params="$item, $item->mapped('title'), $item->mapped('date'), $url"}
+	{{if $contentImage = $item->contentImages()}}
+		{{$attachType = key( $contentImage[0] );}}
+		{{$firstPhoto = \IPS\File::get( $attachType, $contentImage[0][ $attachType ] );}}
+		<div class='ipsRichEmbed_masthead ipsRichEmbed_mastheadBg ipsType_center'>
+			<a href='{$url}' style='background-image: url( "{expression="str_replace( array( '(', ')' ), array( '\(', '\)' ), $firstPhoto->url )"}" )'>
+				<img src='{$firstPhoto->url}' class='ipsHide' alt=''>
+			</a>
+		</div>
+	{{endif}}
+	<div class='ipsPadding'>
+		<div class='ipsType_richText ipsType_medium' data-truncate='3'>
+			{$item->truncated(TRUE)|raw}
+		</div>
+
+		{template="embedItemStats" group="embed" app="core" params="$item"}
+	</div>
+</div>

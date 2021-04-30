@@ -1,0 +1,48 @@
+<ips:template parameters="$reviews, $orientation='vertical'" />
+<h3 class='ipsType_reset ipsWidget_title'>{lang="block_recentReviews"}</h3>
+<div class='ipsWidget_inner'>
+	{{if $orientation == 'vertical'}}
+		<div class='ipsPad_half'>
+			{{if !empty( $reviews ) }}
+				<ul class='ipsDataList ipsDataList_reducedSpacing'>
+					{{foreach $reviews as $review}}
+						<li class='ipsDataItem'>
+							<div class='ipsDataItem_icon'>
+								{template="userPhoto" app="core" group="global" params="$review->author(), 'tiny'"}
+							</div>
+							<div class='ipsDataItem_main ipsType_break ipsContained'>
+								<a href="{$review->item()->url( "getPrefComment" )}" title='{lang="view_this_event" sprintf="$review->item()->title"}' class='ipsTruncate ipsTruncate_line'>{$review->item()->title}</a><br>
+								<span class='ipsType_light ipsType_medium'>{lang="byline_nodate" htmlsprintf="$review->author()->link()"}</span><br>
+								{template="rating" group="global" location="front" app="core" params="'small', $review->rating, \IPS\Settings::i()->reviews_rating_out_of"} &nbsp;&nbsp;
+								<span class='ipsType_small ipsType_reset'><time datetime="{$review->mapped('date')}">{datetime="$review->mapped('date')" norelative="true"}</time></span>
+							</div>
+						</li>
+					{{endforeach}}
+				</ul>
+			{{else}}
+				<div class='ipsType_light ipsPad_half ipsType_center'>{lang="no_recent_reviews"}</div>
+			{{endif}}
+		</div>
+	{{else}}
+		{{if !empty( $reviews ) }}
+			<ul class='ipsDataList ipsDataList_reducedSpacing'>
+				{{foreach $reviews as $review}}
+					<li class='ipsDataItem'>
+						<div class='ipsDataItem_icon'>
+							{template="userPhoto" app="core" group="global" params="$review->author(), 'tiny'"}
+						</div>
+						<div class='ipsDataItem_main ipsType_break ipsContained'>
+							<a href="{$review->item()->url( "getPrefComment" )}" title='{lang="view_this_event" sprintf="$review->item()->title"}' class='ipsTruncate ipsTruncate_line'>{$review->item()->title}</a><br>
+							<span class='ipsType_light ipsType_medium'>{lang="byline_nodate" htmlsprintf="$review->author()->link()"}</span>, <span class='ipsType_small ipsType_reset ipsType_light'><time datetime="{$review->mapped('date')}">{datetime="$review->mapped('date')" norelative="true"}</time></span><br>
+							<div class='ipsType_medium ipsType_richText' data-ipsTruncate data-ipsTruncate-type='remove' data-ipsTruncate-size='2 lines' data-ipsTruncate-watch='false'>
+								{template="rating" group="global" location="front" app="core" params="'small', $review->rating, \IPS\Settings::i()->reviews_rating_out_of"} &nbsp;&nbsp; {$review->truncated()|raw}
+							</div>
+						</div>
+					</li>
+				{{endforeach}}
+			</ul>
+		{{else}}
+			<div class='ipsType_light ipsPad_half ipsType_center'>{lang="no_recent_reviews"}</div>
+		{{endif}}
+	{{endif}}
+</div>

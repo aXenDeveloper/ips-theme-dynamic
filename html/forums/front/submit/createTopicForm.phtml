@@ -1,0 +1,94 @@
+<ips:template parameters="$forum, $hasModOptions, $topic, $id, $action, $elements, $hiddenValues, $actionButtons, $uploadField, $class='', $attributes=array(), $sidebar=NULL, $form=NULL, $errorTabs=array()" />
+{{$modOptions = array( 'topic_create_state', 'create_topic_locked', 'create_topic_pinned', 'create_topic_hidden', 'create_topic_featured', 'topic_open_time', 'topic_close_time');}}
+
+<form accept-charset='utf-8' class="ipsForm {$class}" action="{$action}" method="post" {{if $uploadField}}enctype="multipart/form-data"{{endif}} data-ipsForm data-ipsFormSubmit>
+	<input type="hidden" name="{$id}_submitted" value="1">
+	{{foreach $hiddenValues as $k => $v}}
+		<input type="hidden" name="{$k}" value="{$v}">
+	{{endforeach}}
+	{{if $uploadField}}
+		<input type="hidden" name="MAX_FILE_SIZE" value="{$uploadField}">
+		<input type="hidden" name="plupload" value="{expression="md5( mt_rand() )"}">
+	{{endif}}
+	
+	{{if $form->error}}
+		<p class="ipsMessage ipsMessage_error">{$form->error}</p>
+	{{endif}}
+
+	<div class='ipsBox ipsResponsive_pull'>
+		<h2 class='ipsType_sectionTitle ipsType_reset ipsHide'>{lang="topic_details"}</h2>
+		{{if \count( $elements ) > 1}}
+			{{if !empty( $errorTabs )}}
+				<p class="ipsMessage ipsMessage_error ipsJS_show">{lang="tab_error"}</p>
+			{{endif}}
+			<div class='ipsTabs ipsClearfix ipsJS_show' id='tabs_{$id}' data-ipsTabBar data-ipsTabBar-contentArea='#ipsTabs_content_{$id}'>
+				<a href='#tabs_{$id}' data-action='expandTabs'><i class='fa fa-caret-down'></i></a>
+				<ul role='tablist'>
+					{{foreach $elements as $name => $content}}
+						<li>
+							<a href='#ipsTabs_tabs_{$id}_{$id}_tab_{$name}_panel' id='{$id}_tab_{$name}' class="ipsTabs_item {{if \in_array( $name, $errorTabs )}}ipsTabs_error{{endif}}" role="tab" aria-selected="{{if $name == 'mainTab'}}true{{else}}false{{endif}}">
+								{{if \in_array( $name, $errorTabs )}}<i class="fa fa-exclamation-circle"></i> {{endif}}{lang="$name"}
+							</a>
+						</li>
+					{{endforeach}}
+				</ul>
+			</div>
+			<div id='ipsTabs_content_{$id}' class='ipsTabs_panels'>
+				{{foreach $elements as $name => $contents}}
+					<div id='ipsTabs_tabs_{$id}_{$id}_tab_{$name}_panel' class="ipsTabs_panel ipsPadding" aria-labelledby="{$id}_tab_{$name}" aria-hidden="false">
+
+						{{if $hasModOptions && $name == 'topic_mainTab'}}
+							<div class='ipsColumns ipsColumns_collapsePhone'>
+								<div class='ipsColumn ipsColumn_fluid'>
+						{{endif}}
+							<ul class='ipsForm ipsForm_vertical'>
+								{{foreach $contents as $inputName => $input}}
+									{{if !\in_array( $inputName, $modOptions )}}
+										{$input|raw}
+									{{endif}}
+								{{endforeach}}
+							</ul>
+						{{if $hasModOptions && $name == 'topic_mainTab'}}
+								</div>
+								<div class='ipsColumn ipsColumn_wide'>
+									{template="createTopicModOptions" group="submit" app="forums" params="$elements, $modOptions"}
+								</div>
+							</div>
+						{{endif}}
+					</div>
+				{{endforeach}}
+			</div>		
+		{{else}}
+			<div class='ipsPadding'>
+				{{if $hasModOptions}}
+					<div class='ipsColumns ipsColumns_collapsePhone'>
+						<div class='ipsColumn ipsColumn_fluid'>
+				{{endif}}
+					<ul class='ipsForm ipsForm_vertical'>
+						{{foreach $elements as $collection}}
+							{{foreach $collection as $inputName => $input}}
+								{{if !\in_array( $inputName, $modOptions )}}
+									{$input|raw}
+								{{endif}}
+							{{endforeach}}
+						{{endforeach}}
+					</ul>
+				{{if $hasModOptions}}
+						</div>
+						<div class='ipsColumn ipsColumn_wide'>
+							{template="createTopicModOptions" group="submit" app="forums" params="$elements, $modOptions"}
+						</div>
+					</div>
+				{{endif}}
+			</div>
+		{{endif}}
+
+		<div class='ipsAreaBackground_reset ipsPadding ipsType_center ipsBorder_top ipsRadius:bl ipsRadius:br'>
+			{{if $topic}}
+			<button type='submit' class='ipsButton ipsButton_large ipsButton_primary' tabindex="1" accesskey="s" role="button">{{if $forum->forums_bitoptions['bw_enable_answers']}}{lang="submit_question_edit"}{{else}}{lang="submit_topic_edit"}{{endif}}</button>
+			{{else}}
+			<button type='submit' class='ipsButton ipsButton_large ipsButton_primary' tabindex="1" accesskey="s" role="button">{{if $forum->forums_bitoptions['bw_enable_answers']}}{lang="submit_question"}{{else}}{lang="submit_topic"}{{endif}}</button>
+			{{endif}}
+		</div>
+	</div>	
+</form>

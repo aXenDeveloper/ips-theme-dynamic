@@ -1,0 +1,8 @@
+<ips:template parameters="$event, $reminder=NULL, $buttonClass=''" />
+{{if member.member_id}}
+	{{if $reminder}}
+		<a class="ipsButton ipsButton_primary ipsButton_verySmall {$buttonClass}" data-role="reminderButton" data-reminder="true" href="{url="app=calendar&module=calendar&controller=event&id={$event->id}&do=setReminder" csrf="true"}" title="{lang="event_edit_reminder"}" data-ipsTooltip class="ipsType_blendLinks ipsType_noUnderline" data-ipsHover data-ipsHover-cache='false' data-ipsHover-onClick><i class='fa fa-bell'></i> {lang="event_edit_reminder"} <i class='fa fa-caret-down'></i></a>
+	{{else}}
+		<a class="ipsButton ipsButton_light ipsButton_verySmall {$buttonClass}" data-role="reminderButton" data-reminder="false" href="{url="app=calendar&module=calendar&controller=event&id={$event->id}&do=setReminder" csrf="true"}" title="{lang="event_set_reminder_tip"}" data-ipsTooltip class="ipsType_blendLinks ipsType_noUnderline" data-ipsHover data-ipsHover-cache='false' data-ipsHover-onClick>{lang="event_set_reminder"}</a>
+	{{endif}}
+{{endif}}

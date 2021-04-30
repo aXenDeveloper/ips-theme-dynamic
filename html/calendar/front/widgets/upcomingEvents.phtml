@@ -1,0 +1,85 @@
+<ips:template parameters="$events, $today, $orientation='vertical'" />
+<h3 class='ipsType_reset ipsWidget_title'>{lang="block_upcomingEvents"}</h3>
+<div class='ipsWidget_inner'>
+
+{{if $orientation == 'vertical'}}
+	<div class='ipsPad_half'>
+{{endif}}
+
+	{{if !empty( $events ) }}
+		<ul class='ipsDataList ipsDataList_reducedSpacing'>
+
+		{{foreach $events as $event}}
+			<li class='ipsDataItem ipsClearfix'>
+				<div class='ipsDataItem_icon cCalendar_date_overlay'>
+					{{if $event->nextOccurrence( $today, 'startDate' )}}
+						<time datetime='{$event->nextOccurrence( $today, 'startDate' )->mysqlDatetime()}' class='ipsCalendarDate'>
+							<span class='ipsCalendarDate_month' data-controller="core.global.core.datetime" data-time="{$event->nextOccurrence( $today, 'startDate' )->format('c')}" data-format="%b">{$event->nextOccurrence( $today, 'startDate' )->monthNameShort}</span>
+							<span class='ipsCalendarDate_date' data-controller="core.global.core.datetime" data-time="{$event->nextOccurrence( $today, 'startDate' )->format('c')}" data-format="%d">{$event->nextOccurrence( $today, 'startDate' )->mday}</span>
+						</time>
+					{{else}}
+						<time datetime='{$event->lastOccurrence( 'startDate' )->mysqlDatetime()}' class='ipsCalendarDate'>
+							<span class='ipsCalendarDate_month' data-controller="core.global.core.datetime" data-time="{$event->lastOccurrence( 'startDate' )->format('c')}" data-format="%b">{$event->lastOccurrence( 'startDate' )->monthNameShort}</span>
+							<span class='ipsCalendarDate_date' data-controller="core.global.core.datetime" data-time="{$event->lastOccurrence( 'startDate' )->format('c')}" data-format="%d">{$event->lastOccurrence( 'startDate' )->mday}</span>
+						</time>
+					{{endif}}
+				</div>
+				<div class='ipsDataItem_main cWidgetComments'>
+					{{if $event->container()->allow_comments && $orientation == 'vertical'}}
+						<div class="ipsCommentCount ipsPos_right {{if $event->comments === 0}}ipsFaded{{endif}}" data-ipsTooltip title='{lang="num_replies" pluralize="$event->comments"}'>{expression="$event->comments"}</div>
+					{{endif}}
+					<div class='ipsType_break ipsContained'>
+						<a href="{$event->url( "getPrefComment" )}" title='{lang="view_this_event" sprintf="$event->title"}'>{$event->title}</a>
+					</div>
+					<strong class='ipsType_small'>
+						{{if $event->nextOccurrence( $today, 'startDate' )}}
+							<span data-controller="core.global.core.datetime" data-time="{$event->nextOccurrence( $today, 'startDate' )->format('c')}" data-format="{expression="\IPS\calendar\Date::calendarDateFormat()"}{{if !$event->all_day}} {expression="\IPS\calendar\Date::localeTimeFormat( FALSE )"} {{endif}}">{$event->nextOccurrence( $today, 'startDate' )->calendarDate()}{{if !$event->all_day}} {$event->nextOccurrence( $today, 'startDate' )->localeTime( FALSE )} {{endif}}</span>
+							{{if $event->nextOccurrence( $event->nextOccurrence( $today, 'startDate' ) ?: $today, 'endDate' ) }}
+								{{$sameDay = (bool) ( $event->nextOccurrence( $event->nextOccurrence( $today, 'startDate' ) ?: $today, 'endDate' ) and ( $event->nextOccurrence( $today, 'startDate' ) and $event->nextOccurrence( $today, 'startDate' )->calendarDate() == $event->nextOccurrence( $event->nextOccurrence( $today, 'startDate' ) ?: $today, 'endDate' )->calendarDate() ) );}}
+								{{if $orientation == 'vertical'}}<br>{{endif}}
+								<span class='ipsType_light ipsType_unbold'>{lang="until"}</span>{{if $orientation == 'vertical' and !$sameDay}}<br>{{endif}}
+								{{if !$sameDay}}
+									<span data-controller="core.global.core.datetime" data-time="{$event->nextOccurrence( $event->nextOccurrence( $today, 'startDate' ) ?: $today, 'endDate' )->format('c')}" data-format="{expression="\IPS\calendar\Date::calendarDateFormat()"}{{if !$event->all_day}} {expression="\IPS\calendar\Date::localeTimeFormat( FALSE )"}{{endif}}">
+										{$event->nextOccurrence( $event->nextOccurrence( $today, 'startDate' ) ?: $today, 'endDate' )->calendarDate()}
+										{{if !$event->all_day}} {$event->nextOccurrence( $event->nextOccurrence( $today, 'startDate' ) ?: $today, 'endDate' )->localeTime( FALSE )}{{endif}}
+									</span>
+								{{else}}
+									{{if !$event->all_day}}
+										<span data-controller="core.global.core.datetime" data-time="{$event->nextOccurrence( $event->nextOccurrence( $today, 'startDate' ) ?: $today, 'endDate' )->format('c')}" data-format="{expression="\IPS\calendar\Date::localeTimeFormat( FALSE )"}">
+											{$event->nextOccurrence( $event->nextOccurrence( $today, 'startDate' ) ?: $today, 'endDate' )->localeTime( FALSE )}
+										</span>
+									{{endif}}
+								{{endif}}
+							{{endif}}
+						{{else}}
+							<span data-controller="core.global.core.datetime" data-time="{$event->lastOccurrence( 'startDate' )->format('c')}" data-format="{expression="\IPS\calendar\Date::calendarDateFormat()"}{{if !$event->all_day}} {expression="\IPS\calendar\Date::localeTimeFormat( FALSE )"} {{endif}}">{$event->lastOccurrence( 'startDate' )->calendarDate()}{{if !$event->all_day}} {$event->lastOccurrence( 'startDate' )->localeTime( FALSE )} </span>{{endif}}
+							{{if $event->lastOccurrence( 'endDate' ) }}
+								{{if $orientation == 'vertical'}}<br>{{endif}}
+								<span class='ipsType_light ipsType_unbold'>{lang="until"}</span>{{if $orientation == 'vertical'}}<br>{{endif}}
+								<span data-controller="core.global.core.datetime" data-time="{$event->lastOccurrence( 'endDate' )->format('c')}" data-format="{expression="\IPS\calendar\Date::calendarDateFormat()"}{{if !$event->all_day}} {expression="\IPS\calendar\Date::localeTimeFormat( FALSE )"}{{endif}}">{$event->lastOccurrence( 'endDate' )->calendarDate()}{{if !$event->all_day}} {$event->lastOccurrence( 'endDate' )->localeTime( FALSE )}{{endif}}</span>
+							{{endif}}
+						{{endif}}
+					</strong>
+					<br>
+					{{if $event->container()->allow_comments && $orientation == 'horizontal'}}
+						<span class="{{if $event->comments === 0}}ipsFaded{{endif}}" data-ipsTooltip title='{lang="num_replies" pluralize="$event->comments"}'><i class='fa fa-comment'></i> {expression="$event->comments"}</span>&nbsp;&nbsp;
+					{{endif}}
+					{{if $orientation == 'horizontal'}}
+						<div class='ipsType_medium ipsType_richText' data-ipsTruncate data-ipsTruncate-type='remove' data-ipsTruncate-size='2 lines' data-ipsTruncate-watch='false'>
+							{$event->truncated()|raw}
+						</div>
+					{{endif}}
+				</div>
+			</li>
+		{{endforeach}}
+
+		</ul>
+	{{else}}
+		<div class='ipsType_light ipsPad_half ipsType_center'>{lang="no_upcoming_events"}</div>
+	{{endif}}
+
+{{if $orientation == 'vertical'}}
+	</div>
+{{endif}}
+
+</div>

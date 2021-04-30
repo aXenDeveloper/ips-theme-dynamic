@@ -1,0 +1,9 @@
+<ips:template parameters="$guidelines" />
+{{if !\IPS\Request::i()->isAjax()}}
+	<div class='ipsPageHeader sm:ipsPadding:half ipsClearfix ipsMargin_bottom sm:ipsMargin_bottom:half ipsType_center'>
+		<h1 class='ipsType_veryLarge'>{lang="guidelines"}</h1>
+	</div>
+{{endif}}
+<div class='ipsType_normal ipsType_richText ipsPadding ipsBox ipsResponsive_pull'>
+	{template="richText" group="global" app="core" location="global" params="\IPS\Member::loggedIn()->language()->addToStack('guidelines_value'), array('ipsType_normal')"}
+</div>

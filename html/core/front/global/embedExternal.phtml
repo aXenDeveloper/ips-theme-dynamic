@@ -1,0 +1,26 @@
+<ips:template parameters="$output, $js" />
+<!DOCTYPE html>
+<html lang="{expression="\IPS\Member::loggedIn()->language()->bcp47()"}" dir="{{if member.language()->isrtl}}rtl{{else}}ltr{{endif}}">
+	<head>
+		<script type='text/javascript'>
+			var ipsDebug = {{if ( \IPS\IN_DEV and \IPS\DEV_DEBUG_JS ) or \IPS\DEBUG_JS}}true{{else}}false{{endif}};
+		</script>
+		
+		{template="includeCSS" app="core" group="global" location="global" params=""}
+
+		{{if \is_array( $js )}}
+			{{foreach $js as $jsInclude}}
+				{{$filename = \IPS\Http\Url::external( $jsInclude[0] );}}
+				<script type='text/javascript' src='{$filename}'></script>
+			{{endforeach}}
+		{{endif}}
+	</head>
+	<body class='unloaded {{if isset( \IPS\Request::i()->cookie['hasJS'] )}}ipsJS_has{{else}}ipsJS_none{{endif}}' data-role='externalEmbed'>
+		<div id='ipsEmbed'>
+			{$output|raw}
+		</div>
+		<div id='ipsEmbedLoading'>
+			<span></span>
+		</div>
+	</body>
+</html>

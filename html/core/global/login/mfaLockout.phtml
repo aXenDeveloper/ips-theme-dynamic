@@ -1,0 +1,23 @@
+<ips:template parameters="$lockEndTime=NULL" />
+<div id='elTwoFactorAuthentication' class='ipsModal' data-controller='core.global.core.2fa'>
+	<div>
+		{{if settings.mfa_lockout_behaviour == 'lock'}}
+			<div class="ipsPad ipsType_normal ipsType_richText ipsType_center">
+				{lang="mfa_locked_out_end_time" sprintf="$lockEndTime"}
+			</div>
+		{{else}}
+			<div class="ipsPad ipsType_normal ipsType_richText ipsType_center">
+				{lang="mfa_locked_out"}
+			</div>			
+			{{if settings.mfa_lockout_behaviour == 'email'}}
+				<div class="ipsAreaBackground ipsPad">
+					<a href="{url="app=core&module=system&controller=settings&do=mfarecovery" base="front" seoTemplate="mfarecovery"}" class="ipsButton ipsButton_primary ipsButton_fullWidth ipsButton_medium">{lang="mfa_recovery_email"}</a>
+				</div>
+			{{elseif settings.mfa_lockout_behaviour == 'contact'}}
+				<div class="ipsAreaBackground ipsPad">
+					<a href="{url="app=core&module=contact&controller=contact" base="front" seoTemplate="contact"}" class="ipsButton ipsButton_primary ipsButton_fullWidth ipsButton_medium">{lang="mfa_recovery_contact"}</a>
+				</div>
+			{{endif}}
+		{{endif}}
+	</div>
+</div>

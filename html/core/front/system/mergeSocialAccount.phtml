@@ -1,0 +1,8 @@
+<ips:template parameters="$handler, $existingAccount, $login, $error" />
+<div class="ipsSpacer_both">
+	<h1 class='ipsType_veryLarge ipsType_center'>{lang='link_your_accounts'}</h1>
+	<p class='ipsType_large ipsType_center ipsType_light'>{lang="link_your_accounts_blurb" sprintf="$handler->_title"}</p>
+</div>
+<div class='ipsBox ipsPadding'>
+	{template="reauthenticate" group="system" params="$login, $error"}
+</div>

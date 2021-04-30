@@ -1,0 +1,8 @@
+<ips:template parameters="$table, $headers, $rows" />
+<div data-role='commentFeed' class='{{if \IPS\Request::i()->do == 'content'}}cStatusUpdates ipsPad{{endif}}'>
+	<ol class='ipsType_normal ipsList_reset'>
+		{{foreach $rows as $status}}
+			{template="statusContainer" app="core" group="statuses" params="$status"}
+		{{endforeach}}
+	</ol>
+</div>

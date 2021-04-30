@@ -1,0 +1,20 @@
+/* ----- */
+
+.ipsWidget.ipsWidget_horizontal[data-blockid^="app_cms"]:not([data-blockid^="app_cms_RecordFeed"]) {
+	padding: 0px !important;
+	background: transparent;
+	border: none;
+	box-shadow: none;
+}
+
+#elCmsPageWrap .cWidgetContainer_managing ul {
+	margin-top: 10px;
+}
+
+a.ipsPages_csv:after {
+	content: ', ';
+}
+
+a.ipsPages_csv:last-child:after {
+	content: '';
+}

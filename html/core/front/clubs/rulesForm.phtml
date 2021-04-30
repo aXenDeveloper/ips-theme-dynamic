@@ -1,0 +1,42 @@
+<ips:template parameters="$club, $id, $action, $elements, $hiddenValues, $actionButtons, $uploadField, $class=''" />
+<form accept-charset='utf-8' method="post" action="{$action}" id='elStatusSubmit' {{if $uploadField}}enctype="multipart/form-data"{{endif}}>
+	{{if \IPS\Settings::i()->clubs_header != 'sidebar'}}
+		{template="header" group="clubs" app="core" params="$club"}
+	{{endif}}
+	<div class="ipsPad ipsBox">
+		<input type="hidden" name="{$id}_submitted" value="1">
+		{{foreach $hiddenValues as $k => $v}}
+			<input type="hidden" name="{$k}" value="{$v}">
+		{{endforeach}}
+		{{if $uploadField}}
+			<input type="hidden" name="MAX_FILE_SIZE" value="{$uploadField}">
+			<input type="hidden" name="plupload" value="{expression="md5( mt_rand() )"}">
+		{{endif}}
+		
+		<h1 class='ipsType_pageTitle'>{lang="club_rules"}</h1>
+		<br>
+		
+		<div class="ipsMessage ipsMessage_info">{lang="clubs_rules_accept_msg"}</div>
+		
+		<div class='ipsType_normal ipsType_richText ipsContained'>
+			{$club->rules|raw}
+		</div>
+		
+		{{foreach $elements as $collection}}
+			{{foreach $collection as $input}}
+				{{if $input instanceof \IPS\Helpers\Form\Editor}}
+					{$input->html()|raw}
+					{{if $input->error}}
+						<br>
+						<span class="ipsType_warning">{lang="$input->error"}</span>
+					{{endif}}
+				{{endif}}
+			{{endforeach}}
+		{{endforeach}}
+		<ul class="ipsPad ipsToolList ipsToolList_horizontal ipsList_reset ipsClearfix ipsAreaBackground ipsSpacer_top">
+			{{foreach $actionButtons as $button}}
+				<li>{$button|raw}</li>
+			{{endforeach}}
+		</ul>
+	</div>
+</form>	

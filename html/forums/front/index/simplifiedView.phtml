@@ -1,0 +1,20 @@
+<ips:template parameters="$table" />
+<div class="ipsPageHeader ipsClearfix ipsMargin_bottom sm:ipsMargin_bottom:none cForumHeader ipsHeaderButtons">
+	{{if \IPS\forums\Forum::canOnAny( 'add' )}}
+		<ul class='ipsToolList ipsToolList_horizontal ipsClearfix ipsPos_right sm:ipsMargin_bottom:none'>
+			<li class='ipsToolList_primaryAction ipsResponsive_hidePhone'>
+				<a class="ipsButton ipsButton_medium ipsButton_important" href="{url="app=forums&module=forums&controller=forums&do=add" seoTemplate="topic_non_forum_add_button"}" data-ipsDialog data-ipsDialog-size='narrow' data-ipsDialog-title='{lang="select_forum"}'>{lang="start_new_topic"}</a>
+			</li>
+			{template="viewChange" group="global" app="forums" params=""}
+		</ul>
+	{{endif}}
+	<h1 class="ipsType_pageTitle">
+		{lang="topics"}
+	</h1>
+</div>
+
+<ul class="ipsToolList ipsToolList_horizontal ipsResponsive_hideDesktop ipsResponsive_block ipsClearfix">
+	{template="indexButtons" group="index" app="forums" params="FALSE, TRUE"}
+</ul>
+
+{$table|raw}

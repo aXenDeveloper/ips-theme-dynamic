@@ -1,0 +1,22 @@
+<ips:template parameters="$position='left'" />
+{{$adsForceSidebar = ( \IPS\Settings::i()->ads_force_sidebar AND \IPS\core\Advertisement::loadByLocation( 'ad_sidebar' ) );}}
+{{if (isset( \IPS\Output::i()->sidebar['enabled'] ) and \IPS\Output::i()->sidebar['enabled'] ) && ( ( isset( \IPS\Output::i()->sidebar['contextual'] ) && trim( \IPS\Output::i()->sidebar['contextual'] ) !== '' ) || ( isset( \IPS\Output::i()->sidebar['widgets']['sidebar'] ) && \count( \IPS\Output::i()->sidebar['widgets']['sidebar'] ) ) || ( \IPS\Dispatcher::i()->application instanceof \IPS\Application AND \IPS\Dispatcher::i()->application->canManageWidgets() ) || $adsForceSidebar )}}
+	<div id='ipsLayout_sidebar' class='ipsLayout_sidebar{$position} {{if !( isset( \IPS\Output::i()->sidebar['contextual'] ) && trim( \IPS\Output::i()->sidebar['contextual'] ) !== '' ) && ( !isset( \IPS\Output::i()->sidebar['widgets']['sidebar'] ) || !\count( \IPS\Output::i()->sidebar['widgets']['sidebar'] ) ) && \IPS\Dispatcher::i()->application->canManageWidgets() && !$adsForceSidebar}}ipsLayout_sidebarUnused{{endif}}' data-controller='core.front.widgets.sidebar'>
+		{{if $announcements = \IPS\core\Announcements\Announcement::loadAllByLocation( 'sidebar' ) AND ( ( isset( \IPS\Output::i()->sidebar['contextual'] ) && trim( \IPS\Output::i()->sidebar['contextual'] ) !== '' ) OR ( isset( \IPS\Output::i()->sidebar['widgets']['sidebar'] ) && \count( \IPS\Output::i()->sidebar['widgets']['sidebar'] ) ) )}}
+			{template="announcementSidebar" group="global" app="core" params="$announcements"}
+		{{endif}}
+		{{if isset( \IPS\Output::i()->sidebar['contextual'] ) && trim( \IPS\Output::i()->sidebar['contextual'] ) !== ''}}
+			<aside id="elContextualTools" class='ipsClearfix' {{if isset( \IPS\Output::i()->sidebar['sticky'] )}}data-ipsSticky{{endif}}>
+				{expression="\IPS\Output::i()->sidebar['contextual']" raw="true"}
+			</aside>
+			<hr class='ipsHr ipsSpacer_both'>
+		{{endif}}
+		{{if $adsForceSidebar OR ( \IPS\core\Advertisement::loadByLocation( 'ad_sidebar' ) AND ( ( isset( \IPS\Output::i()->sidebar['contextual'] ) && trim( \IPS\Output::i()->sidebar['contextual'] ) !== '' ) OR ( isset( \IPS\Output::i()->sidebar['widgets']['sidebar'] ) && \count( \IPS\Output::i()->sidebar['widgets']['sidebar'] ) ) ) )}}
+			<div data-role='sidebarAd'>
+				{advertisement="ad_sidebar"}
+			</div>
+			<br><br>
+		{{endif}}
+		{template="widgetContainer" group="global" app="core" params="'sidebar', 'vertical'"}
+	</div>
+{{endif}}

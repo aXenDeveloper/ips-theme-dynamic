@@ -1,0 +1,40 @@
+<ips:template parameters="$members, $title, $display='csv', $orientation='vertical'" />
+<h3 class='ipsType_reset ipsWidget_title'>
+	{$title}
+</h3>
+{{if $display === 'csv'}}
+<div class='ipsWidget_inner ipsPad'>
+	{{if \count( $members )}}
+		<ul class='ipsList_inline ipsList_csv ipsList_noSpacing'>
+			{{foreach $members as $row}}
+				<li>{template="userLinkFromData" group="global" app="core" params="$row->member_id, $row->name, $row->members_seo_name, $row->member_group_id"}</li>
+			{{endforeach}}
+		</ul>
+	{{else}}
+		<p class='ipsType_reset ipsType_medium ipsType_light'>{lang="widget_members_no_results"}</p>
+	{{endif}}
+</div>
+{{else}}
+<div class='ipsWidget_inner {{if $orientation == 'vertical'}}ipsPad{{else}}ipsPad_half{{endif}}'>
+	{{if \count( $members ) }}
+		<ul class='ipsList_reset'>
+			{{foreach $members as $member}}
+				<li class='ipsPhotoPanel ipsPhotoPanel_tiny cAnnouncement'>
+					{template="userPhoto" group="global" app="core" params="$member, 'tiny'"}
+					<div>
+						<h4 class='ipsType_large ipsType_reset'>{$member->link()|raw} <a href='{url="app=core&module=members&controller=profile&id={$member->member_id}&do=reputation" seoTemplate="profile_reputation" seoTitle="$member->members_seo_name"}'  class='ipsPos_right ipsRepBadge {{if $member->pp_reputation_points > 0}}ipsRepBadge_positive{{elseif $member->pp_reputation_points < 0}}ipsRepBadge_negative{{else}}ipsRepBadge_neutral{{endif}}'><i class='fa {{if $member->pp_reputation_points > 0}}fa-plus-circle{{elseif $member->pp_reputation_points < 0}}fa-minus-circle{{else}}fa-circle-o{{endif}}'></i> {number="$member->pp_reputation_points"}</a></h4>
+						{$member->groupName|raw}
+						<br>
+						<span class='ipsType_light ipsType_small'>{lang="widget_member_joined_date" htmlsprintf="$member->joined->html()"}</span>
+						{{if $member->last_activity}}
+							<br><span class='ipsType_light ipsType_small'>{lang="widget_member_last_active_date" htmlsprintf="\IPS\DateTime::ts( $member->last_activity )->html()"}</span>
+						{{endif}}
+					</div>
+				</li>
+			{{endforeach}}
+		</ul>
+	{{else}}
+		<p class='ipsType_reset'>{lang="widget_members_no_results"}</p>
+	{{endif}}
+</div>
+{{endif}}

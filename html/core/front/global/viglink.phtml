@@ -1,0 +1,16 @@
+<ips:template parameters="" />
+<!--VIGLINK-->
+{{if \IPS\Settings::i()->viglink_groups =='all' or \IPS\Member::loggedIn()->inGroup( explode( ',', \IPS\Settings::i()->viglink_groups ) )}}
+	<script type="text/javascript">
+	  var vglnk = { key: '{setting="viglink_api_key"}'{{if \IPS\Settings::i()->viglink_subid}},
+	                sub_id: '{setting="viglink_subid"}'
+	                {{endif}}
+	              };
+	
+	  (function(d, t) {
+	    var s = d.createElement(t); s.type = 'text/javascript'; s.async = true;
+	    s.src = '//cdn.viglink.com/api/vglnk.js';
+	    var r = d.getElementsByTagName(t)[0]; r.parentNode.insertBefore(s, r);
+	  }(document, 'script'));
+	</script>
+{{endif}}

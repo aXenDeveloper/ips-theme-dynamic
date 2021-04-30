@@ -1,0 +1,111 @@
+<ips:template parameters="$method, $done, $error, $setup, $availableMethods, $onetouch=NULL, $url" />
+<div id="elAuthy" {{if $onetouch}}data-controller="core.global.core.authyOneTouch"{{endif}}>
+	<div class="ipsPad ipsType_normal ipsType_center">
+		{{if $setup}}
+			{{if $method == 'authy'}}
+				{lang="authy_authy_setup"}
+			{{elseif $method == 'phone'}}
+				{lang="authy_call_auth_done"}
+			{{else}}
+				{lang="authy_sms_auth_done"}
+			{{endif}}
+		{{else}}
+			{{if $method == 'authy'}}
+				{{if $onetouch}}
+					{lang="authy_onetouch_auth"}
+				{{else}}
+					{lang="authy_authy_auth"}
+				{{endif}}
+			{{elseif $method == 'phone'}}
+				{{if $done}}
+					{lang="authy_call_auth_done"}
+				{{else}}
+					{lang="authy_call_auth"}
+				{{endif}}
+			{{elseif $method == 'choose'}}
+				{lang="authy_choose_auth"}
+			{{else}}
+				{lang="authy_sms_auth"}
+			{{endif}}
+		{{endif}}
+		{{if $method == 'authy'}}
+			<div class='ipsType_center'>
+				{{if $onetouch}}
+					<input type="hidden" name="onetouch" value="{$onetouch}" data-role="onetouchCode">
+					<div class="ipsRedirect ipsPad ipsJS_show">
+						<div class="ipsLoading ipsRedirect_loading"></div>
+						<span>{lang="authy_onetouch_waiting"}</span>
+					</div>
+				{{endif}}
+				{{if $setup}}
+					{{$langCode = mb_substr( \IPS\Member::loggedIn()->language()->bcp47(), 0, 2 );}}
+					<a href="{url="authy_ios" ips="true"}" target="_blank" rel="noopener"><img src="{resource="appstores/ios/{$langCode}.svg" app="core" location="global"}" class="ipsSpacer_both"></a>
+					<a href="{url="authy_android" ips="true"}" target="_blank" rel="noopener"><img src="{resource="appstores/android/{$langCode}.png" app="core" location="global"}" style="height: 60px"></a>
+				{{endif}}
+				{{if \count( $availableMethods ) > 1}}
+					{{if $setup}}
+						<p class='ipsType_reset'>
+							{lang="authy_setup_alternative"}
+						</p>
+					{{endif}}
+					<ul class="ipsList_inline {{if !$setup}}ipsSpacer_top{{endif}}">
+						{{if \in_array( 'sms', $availableMethods )}}
+							<li><a href="{$url->csrf()->setQueryString( 'authy_method', 'sms' )}">{lang="authy_alt_sms"}</a></li>
+						{{endif}}
+						{{if \in_array( 'phone', $availableMethods )}}
+							<li><a href="{$url->csrf()->setQueryString( 'authy_method', 'phone' )}">{lang="authy_alt_phone"}</a></li>
+						{{endif}}
+					</ul>
+				{{endif}}
+			</div>
+		{{endif}}
+	</div>
+	{{if $done}}
+		<ul class="ipsList_reset ipsPad ipsClearfix ipsAreaBackground">
+			{{if !$onetouch}}
+				<li class="ipsFieldRow ipsClearfix ">
+					<div class="ipsFieldRow_content cAuthy_container">
+						{{if $method == 'authy'}}
+							<img src="{resource="login/authy.png" location="global"}" class="cAuthy_icon">
+						{{endif}}
+						<input type="text" name="authy_auth_code" value="" class="{{if request.authy_auth_code}}ipsField_error{{endif}} {{if $method == 'authy'}}cAuthy_field{{endif}}" autocomplete="one-time-code" >
+						{{if request.authy_auth_code or ( $method == 'authy' and request.authy_method )}}
+							<p class="ipsType_warning">{lang="$error"}</p>
+						{{endif}}
+					</div>
+				</li>
+			{{endif}}
+			<li>
+				<button type='submit' class='ipsButton ipsButton_primary ipsButton_fullWidth ipsButton_medium ipsSpacer_bottom {{if $onetouch}}ipsJS_hide{{endif}}'>
+					{{if $onetouch}}
+						<i class='fa fa-check'></i> &nbsp;{lang="authy_submit_onetouch"}
+					{{else}}
+						<i class='fa fa-lock'></i> &nbsp;{lang="authy_submit_code"}
+					{{endif}}
+				</button>
+			</li>
+			{{if $setup}}
+				<li>
+					<a href="{$url->csrf()->setQueryString( '_new', '1' )}" class='ipsButton ipsButton_link ipsButton_medium ipsButton_fullWidth'>{lang="authy_change_number"}</a>
+				</li>
+			{{endif}}
+		</ul>
+	{{else}}
+		<div class="ipsPad ipsAreaBackground ipsGrid">
+			{{if \in_array( 'phone', $availableMethods )}}
+				<div class="ipsGrid_span{{if \in_array( 'sms', $availableMethods )}}6{{else}}12{{endif}}">
+					<a href="{$url->csrf()->setQueryString( 'authy_method', 'phone' )}" class='ipsButton ipsButton_primary ipsButton_fullWidth ipsButton_medium'>
+						<i class='fa fa-phone'></i>&nbsp; {lang="authy_submit_call"}
+					</a>
+				</div>
+			{{endif}}
+			{{if \in_array( 'sms', $availableMethods )}}
+				<div class="ipsGrid_span{{if \in_array( 'phone', $availableMethods )}}6{{else}}12{{endif}}">
+					<a href="{$url->csrf()->setQueryString( 'authy_method', 'sms' )}" value="sms" class='ipsButton ipsButton_primary ipsButton_fullWidth ipsButton_medium'>
+						<i class='fa fa-commenting'></i>&nbsp; {lang="authy_submit_sms"}
+					</a>
+				</div>
+			{{endif}}
+		</div>
+	{{endif}}
+</div>

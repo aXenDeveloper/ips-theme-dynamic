@@ -1,0 +1,45 @@
+<ips:template parameters="$url, $geolocation, $map, $hostName, $counts" />
+
+<h2 class='ipsType_sectionTitle ipsType_reset'>{lang="ip_address_info"}</h2>
+<div class='ipsPad ipsAreaBackground_light cIPInfo'>
+	{{if $geolocation or $hostName}}
+		<div class='ipsColumns ipsColumns_noSpacing ipsColumns_collapsePhone'>
+			<div class='ipsColumn ipsColumn_wide ipsAreaBackground_light'>
+				<div class='ipsPad cIPInfo_map'>
+					{{if $hostName}}
+						<p>{lang="ip_geolocation_hostname" sprintf="$hostName"}</p>
+					{{endif}}
+					{{if $geolocation}}
+						{{if $map}}
+							{$map|raw}
+							<br>
+						{{endif}}
+						<p>{$geolocation|raw}</p>
+						<p class="ipsType_light ipsType_small"><i class="fa fa-info-circle"></i> {lang="ip_geolocation_info"}</p>
+					{{endif}}
+				</div>
+			</div>
+			<div class='ipsColumn ipsColumn_fluid'>
+	{{endif}}
+	<div class="ipsGrid ipsGrid_collapsePhone ipsAreaBackground_reset">
+		{{foreach $counts as $key => $value}}
+			{{if $value}}
+				<div class='ipsGrid_span4 ipsPad ipsType_center'>
+					<a href="{$url->setQueryString( 'area', $key )}" class="ipsType_blendLinks">
+						<span class='ipsType_veryLarge cIPInfo_value'>{$value}</span><br>
+						<p class='ipsType_reset ipsTruncate ipsTruncate_line ipsType_minorHeading'>{lang="ipAddresses__{$key}"}</p>
+					</a>
+				</div>
+			{{else}}
+				<div class='ipsGrid_span4 ipsPad ipsType_center ipsType_light ipsFaded'>
+					<span class='ipsType_veryLarge cIPInfo_value'>{$value}</span><br>
+					<p class='ipsType_reset ipsTruncate ipsTruncate_line ipsType_minorHeading'>{lang="ipAddresses__{$key}"}</p>
+				</div>
+			{{endif}}
+		{{endforeach}}
+	</div>
+	{{if $geolocation}}
+			</div>
+		</div>
+	{{endif}}
+</div>

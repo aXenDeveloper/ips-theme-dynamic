@@ -1,0 +1,13 @@
+<ips:template parameters="$comment" />
+
+<!-- Moderator warning -->
+<div class="ipsType_reset ipsPad ipsAreaBackground_light ipsClearfix ipsPhotoPanel ipsPhotoPanel_mini">
+	{template="userPhoto" group="global" app="core" params="\IPS\Member::load( $comment->warning->moderator ), 'mini'"}
+	<div>
+		<strong class='ipsType_warning ipsType_normal'>{lang="member_given_post_warning" sprintf="\IPS\Member::load( $comment->warning->moderator )->name, \IPS\Member::load( $comment->warning->member )->name"}</strong>
+		<br>
+		<span class='ipsType_light'>
+			<strong>{lang="warn_reason_message"}</strong> {lang="core_warn_reason_{$comment->warning->reason}"} &middot; <strong>{lang="warn_points_message"}</strong> {$comment->warning->points} &middot; <a href="{url="app=core&module=system&controller=warnings&do=view&id={$comment->warning->member}&w={$comment->warning->id}" seoTemplate="warn_view" seoTitle="$comment->author()->members_seo_name"}" title='{lang="view_warning_details_title"}' data-ipsDialog data-ipsDialog-size='narrow'>{lang="view_warning_details"}</a>
+		</span>
+	</div>
+</div>

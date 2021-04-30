@@ -1,0 +1,81 @@
+<ips:template parameters="$report,$comment,$ref" />
+<div class='ipsBox ipsBox--child' data-role="authorPanel">
+	{{if $report->author}}
+		<div class="ipsFlex ipsFlex-ai:center ipsPadding:half ipsAreaBackground_light">
+			{template="userPhoto" app="core" group="global" params="\IPS\Member::load( $report->author ), 'tiny'"}	
+			<div class='ipsPad_half'>
+				<a href="#user{$report->author}_menu" id="user{$report->author}" class="ipsType_sectionHead" data-ipsMenu>{member="name" id="$report->author"} &nbsp;<i class="fa fa-caret-down"></i></a>
+				<br>
+				{{if \IPS\Member::load( $report->author )->mod_posts}}
+					<p class="ipsBadge ipsBadge_warning" data-ipsTooltip title="{{if \IPS\Member::load( $report->author )->mod_posts == -1}}{lang="moderation_modq_perm"}{{else}}{lang="moderation_modq_temp" sprintf="\IPS\DateTime::ts( \IPS\Member::load( $report->author )->mod_posts )"}{{endif}}">
+						{lang="moderation_modq"}
+					</p>
+				{{endif}}
+				{{if \IPS\Member::load( $report->author )->restrict_post}}
+					<p class="ipsBadge ipsBadge_warning" data-ipsTooltip title="{{if \IPS\Member::load( $report->author )->restrict_post == -1}}{lang="moderation_nopost_perm"}{{else}}{lang="moderation_nopost_temp" sprintf="\IPS\DateTime::ts( \IPS\Member::load( $report->author )->restrict_post )"}{{endif}}">
+						{lang="moderation_nopost"}
+					</p>
+				{{endif}}
+				{{if \IPS\Member::load( $report->author )->temp_ban}}
+					<p class="ipsBadge ipsBadge_warning" data-ipsTooltip title="{{if \IPS\Member::load( $report->author )->temp_ban == -1}}{lang="moderation_banned_perm"}{{else}}{lang="moderation_banned_temp" sprintf="\IPS\DateTime::ts( \IPS\Member::load( $report->author )->temp_ban )"}{{endif}}">
+						{lang="moderation_banned"}
+					</p>
+				{{endif}}
+			</div>
+		</div>
+		<ul class='ipsMenu ipsMenu_auto ipsMenu_withStem ipsHide' id='user{$report->author}_menu'>
+			{{if member.canWarn( \IPS\Member::load( $report->author ) )}}
+				<li class='ipsMenu_item'><a href='{url="app=core&module=system&controller=warnings&do=warn&id={$report->author}&ref={$ref}" seoTemplate="warn_add" seoTitle="\IPS\Member::load( $report->author )->members_seo_name"}' data-ipsDialog data-ipsDialog-title="{lang="warn_member" sprintf="\IPS\Member::load( $report->author )->name"}" data-ipsDialog-remoteSubmit data-ipsDialog-flashMessage="{lang="warning_issued"}" data-role="warnUserDialog">{lang="warn_user"}</a></li>
+			{{endif}}
+			{{if $report->author != \IPS\Member::loggedIn()->member_id}}
+				{{if \IPS\Member::load( $report->author )->members_bitoptions['bw_is_spammer']}}
+					<li class='ipsMenu_item' data-ipsMenuValue='spamUnFlagButton'><a href='{url="app=core&module=system&controller=moderation&do=flagAsSpammer&id={$report->author}&s=0" seoTemplate="flag_as_spammer" seoTitle="\IPS\Member::load( $report->author )->members_seo_name" csrf="true"}'>{lang="spam_unflag"}</a></li>
+				{{else}}
+					<li class='ipsMenu_item' data-ipsMenuValue='spamFlagButton'><a href='{url="app=core&module=system&controller=moderation&do=flagAsSpammer&id={$report->author}&s=1" seoTemplate="flag_as_spammer" seoTitle="\IPS\Member::load( $report->author )->members_seo_name" csrf="true"}'>{lang="spam_flag"}</a></li>
+				{{endif}}
+			{{endif}}
+			<li class="ipsMenu_item"><a href='{url="app=core&module=messaging&controller=messenger&do=compose&to={$report->author}" seoTemplate="messenger_compose"}' data-ipsDialog data-ipsDialog-title='{lang="compose_new"}' data-ipsDialog-remoteSubmit data-ipsDialog-flashMessage="{lang="message_sent"}">{lang="message_send"}</a></li>
+		</ul>
+		{{if \IPS\Member::loggedIn()->modPermission('mod_see_warn')}}
+			<div class='ipsPadding'>
+				<strong>{lang="previous_warnings"}</strong>
+				{{if \count(\IPS\Member::load( $report->author )->warnings( 1 ))}}
+					<ol class='ipsDataList'>
+						{{foreach \IPS\Member::load( $report->author )->warnings( 2 ) as $warning}}
+							<li class="ipsDataItem">
+								<div class='ipsDataItem_generic ipsDataItem_size1 ipsType_center'>
+									<a href="{url="app=core&module=system&controller=warnings&do=view&id={$report->author}&w={$warning->id}" seoTemplate="warn_view" seoTitle="\IPS\Member::load( $report->author )->members_seo_name"}" data-ipsHover class="ipsType_blendLinks">
+										<span class="ipsPoints">{$warning->points}</span>
+									</a>
+								</div>
+								<div class='ipsDataItem_main'>
+									<a href="{url="app=core&module=system&controller=warnings&do=view&id={$report->author}&w={$warning->id}" seoTemplate="warn_view" seoTitle="\IPS\Member::load( $report->author )->members_seo_name"}" data-ipsHover class="ipsType_blendLinks">
+										<h4 class="ipsDataItem_title">{lang="core_warn_reason_{$warning->reason}"}</h4>
+										<p class='ipsDataItem_meta ipsType_light'>
+											{lang="byline" sprintf="\IPS\Member::load( $warning->moderator )->name"}{datetime="$warning->date"}
+										</p>
+									</a>
+								</div>
+							</li>
+						{{endforeach}}
+					</ol>
+					<br>
+					<div class='ipsType_center'>
+						<a href='{url="app=core&module=system&controller=warnings&id={$report->author}" seoTemplate="warn_list" seoTitle="\IPS\Member::load( $report->author )->members_seo_name"}' class=''><i class='fa fa-bars'></i> &nbsp;&nbsp;{lang="see_all_c"}</a>
+					</div>
+				{{else}}
+					<p class='ipsType_reset ipsType_light ipsType_medium'>
+						{lang="no_previous_warnings"}
+					</p>
+				{{endif}}
+			</div>
+		{{endif}}
+	{{else}}
+		<div class="ipsFlex ipsFlex-ai:center ipsPad ipsPad_half">
+			{template="userPhoto" app="core" group="global" params="\IPS\Member::load( 0 ), 'tiny'"}	
+			<div class='ipsPad_half'>
+				<span class="ipsType_sectionHead" data-ipsMenu>{member="name" id="0"}</span>
+			</div>
+		</div>
+	{{endif}}
+</div>

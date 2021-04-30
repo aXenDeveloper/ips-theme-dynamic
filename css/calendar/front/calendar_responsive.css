@@ -1,0 +1,186 @@
+/* BOTH */
+@media screen and (max-width: 979px) {
+	/* Submit screen */
+	.cCalendarSubmit_field {
+		width: 100%;
+	}
+
+		.cCalendarSubmit_field input {
+			max-width: 100% !important;
+			width: 100% !important;
+		}
+
+	/* Calendar views */
+	.cCalendar th span,
+	.ipsButton.cCalendar_miniAddEvent {
+		display: none;
+	}
+
+	/* Day view */
+	.cCalendarDay .cCalendarDay_hour > h2 {
+		text-align: left;
+		padding: 10px;
+		font-size: {fontsize="x_large"};
+		line-height: 1;
+	}
+}
+
+/* TABLETS */
+@media screen and (min-width: 768px) and (max-width: 979px) {
+	.cCalendar th:after {
+		content: attr(data-short);
+	}
+}
+
+/* PHONES */
+@media screen and (max-width: 767px) {
+
+	/* Submit screen */
+	#elDateGrid_arrow {
+		padding-top: 0;
+	}
+	
+		#elDateGrid_arrow .fa {
+			font-size: 80px;
+			line-height: 70px;
+		}
+
+			#elDateGrid_arrow .fa:before {
+				content: '\f107';
+			}
+
+	/* Calendar header */
+	#elCalendarsHeader .ipsType_pageTitle {
+		display: block;
+	}
+
+	.cCalendarNav .ipsType_pageTitle {
+		font-size: {fontsize="x_large"};
+	}
+
+	/* Calendar views */
+	.cCalendar td {
+		height: 40px;
+		border: 0;
+		padding: 0px;
+		border-bottom: 1px solid rgba( var(--theme-text_color), 0.2 );
+	}
+
+	.cCalendar td > div {
+		padding-bottom: 0;
+		min-height: 0;
+	}
+	
+	.cCalendar td.cCalendar_today {
+		background: transparent;
+	}
+
+	.cCalendar th:after {
+		content: attr(data-veryShort);
+	}
+
+	.cCalendar_birthdays {
+		display: none;
+	}
+	
+	.cCalendar .cEvents {
+		display: none;
+	}
+
+	.cCalendar .cCalendar_dayNumber {
+		display: block;
+		text-align: center;
+		margin: 1px auto;
+		height: 40px;
+		width: 100%;
+		padding:4px;
+		line-height: 2;
+		font-size: {fontsize="x_small"};
+		border-radius: 15px;
+	}
+
+	.cCalendar .cCalendar_hasEvents .cCalendar_dayNumber {
+		border: 2px solid rgba( var(--theme-text_color), 0.2 );
+		background: rgba( var(--theme-text_color), 0.07 );
+	}
+
+		.cCalendar .cCalendar_hasEvents.cCalendar_today .cCalendar_dayNumber {
+			background: rgba(205, 56, 22, 0.19);
+		}
+
+		.cCalendar td.cCalendar_today .cCalendar_dayNumber {
+			background: rgb( var(--theme-area_background_reset) );
+			border: 2px solid currentColor;
+			color: #cd3816;
+		}
+
+	/* WEEK VIEW */
+	.cCalendarWeek_day {
+		margin-bottom: 0 !important;
+	}
+
+	/* EVENT VIEW */
+	#elEventHeader {
+		text-align: center;
+	}
+
+	#elEventHeader .ipsUserPhoto {
+		display: none;
+	}
+
+	#elEventHeader_details {
+		text-align: center;
+	}
+
+	html[dir="ltr"] #elEventHeader_details .ipsPhotoPanel > div {
+		margin-left: 0;
+	}
+	html[dir="rtl"] #elEventHeader_details .ipsPhotoPanel > div {
+		margin-right: 0;
+	}
+
+	#elEventHeader_details time, #elEventHeader_details p.cEvent_to {
+		float: none;
+		display: inline-block;
+		min-width: 100%;
+	}
+
+	#elEventHeader_details time .cEvent_dayNum {
+		font-size: inherit;
+		font-weight: normal;
+		float: none;
+		line-height: inherit;
+		letter-spacing: 0;
+	}
+	html[dir="ltr"] #elEventHeader_details time .cEvent_dayNum {
+		margin-right: 0;
+	}
+	html[dir="rtl"] #elEventHeader_details time .cEvent_dayNum {
+		margin-left: 0;
+	}
+
+	#elEventHeader_details time .cEvent_dayNum,
+	#elEventHeader_details time .cEvent_day,
+	#elEventHeader_details time .cEvent_date {
+		display: inline;
+		font-size: {fontsize="medium"};
+	}
+
+	#elEventHeader_details time .cEvent_day {
+		display: block;
+	}
+
+	#elEventHeader_details time p {
+		display: block;
+		float: none;
+	}
+
+	#elEventHeader_details time p .fa-arrow-circle-right:before{
+		content:"\f0ab";
+	}
+
+	.cCalendarBlock .cCalendarBlock_map {
+		display: block;
+		float: none;
+	}
+}

@@ -1,0 +1,28 @@
+/* TABLETS */
+@media screen and (max-width: 979px) {
+	.ipsType_sectionTitle {
+		display: block;
+	}	
+}
+
+/* PHONES */
+@media screen and (max-width: 767px) {
+
+	.ipsType_pageTitle {
+		font-size: 20px;
+	}
+
+	.ipsType_normal {
+		font-size: 13px;
+	}
+
+	.ipsType_pageTitle.ipsType_largeTitle {
+		font-size: 28px;
+		letter-spacing: 0;
+	}
+
+	.ipsType_veryLarge {
+		font-size: 34px;
+		line-height: 42px;
+	}
+}

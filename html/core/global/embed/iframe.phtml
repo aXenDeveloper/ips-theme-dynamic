@@ -1,0 +1,4 @@
+<ips:template parameters="$url, $width=NULL, $height=NULL, $embedId=NULL" />
+<div class='ipsEmbeddedOther' contenteditable="false">
+	<iframe src="{$url|raw}" data-controller="core.front.core.autosizeiframe" {{if $embedId}}data-embedId='{$embedId}'{{endif}} allowfullscreen=''></iframe>
+</div>

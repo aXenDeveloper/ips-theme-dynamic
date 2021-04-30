@@ -1,0 +1,28 @@
+<ips:template parameters="$table, $headers, $rows" />
+{{if \count( $rows )}} 
+	{{foreach $rows as $notification}}
+		{{if isset( $notification['data']['title'] )}}
+			<li class='ipsDataItem {{if $notification['data']['unread']}}ipsDataItem_unread{{endif}} ipsClearfix'>
+				<div class='ipsDataItem_icon'>
+					{{if isset( $notification['data']['author'] )}}
+						{template="userPhoto" app="core" group="global" params="$notification['data']['author'], 'tiny'"}
+					{{endif}}
+				</div>
+				<div class='ipsDataItem_main'>
+					{{if !$notification['data']['unread']}}
+						<span class="ipsItemStatus ipsItemStatus_small ipsItemStatus_read">
+							<i class="fa fa-circle"></i>
+						</span>
+						<strong>
+					{{endif}}
+							<a href="{$notification['data']['url']}" class='ipsDataItem_title'>{$notification['data']['title']}</a>
+					{{if !$notification['data']['unread']}}
+						</strong>
+					{{endif}}
+					<br>
+					<span class="ipsType_light">{datetime="$notification['notification']->updated_time"}</span>
+				</div>
+			</li>
+			{{endif}}
+	{{endforeach}}
+{{endif}}

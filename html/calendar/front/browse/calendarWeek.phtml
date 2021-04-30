@@ -1,0 +1,95 @@
+<ips:template parameters="$calendars, $date, $featured, $birthdays, $events, $nextWeek, $lastWeek, $days, $today, $thisCalendar, $jump, $startDates=array()" />
+
+<div class='ipsBox ipsResponsive_pull'>
+	<div class='ipsPager cCalendarNav ipsPadding ipsAreaBackground_light ipsBorder_bottom lg:ipsPos_sticky'>
+		<div class='ipsPager_prev'>
+			<a href="{{if $thisCalendar}}{url="app=calendar&module=calendar&controller=view&view=week&id={$thisCalendar->_id}&w={$lastWeek->year}-{$lastWeek->mon}-{$lastWeek->mday}" seoTemplate="calendar_calweek" seoTitle="$thisCalendar->title_seo"}{{else}}{url="app=calendar&module=calendar&controller=view&view=week&w={$lastWeek->year}-{$lastWeek->mon}-{$lastWeek->mday}" seoTemplate="calendar_week"}{{endif}}" title='{lang="cal_week_title" sprintf="$lastWeek->firstDayOfWeek('monthNameShort'), $lastWeek->firstDayOfWeek('mday'), $lastWeek->firstDayOfWeek('year'), $lastWeek->lastDayOfWeek('monthNameShort'), $lastWeek->lastDayOfWeek('mday'), $lastWeek->lastDayOfWeek('year')"}' rel='prev nofollow' data-action='changeView'>
+				<span class='ipsPager_type ipsType_normal'>{lang="previous_week"}</span>
+				<span class='ipsPager_title ipsType_light'>
+					<span class='ipsResponsive_inline ipsResponsive_hidePhone'>
+						{lang="cal_week_title" sprintf="$lastWeek->firstDayOfWeek('monthNameShort'), $lastWeek->firstDayOfWeek('mday'), $lastWeek->firstDayOfWeek('year'), $lastWeek->lastDayOfWeek('monthNameShort'), $lastWeek->lastDayOfWeek('mday'), $lastWeek->lastDayOfWeek('year')"}
+					</span>
+					<span class='ipsResponsive_inline ipsResponsive_showPhone'>
+						{lang="cal_week_title_wb" sprintf="$lastWeek->firstDayOfWeek('monthNameShort'), $lastWeek->firstDayOfWeek('mday'), $lastWeek->firstDayOfWeek('year')"}
+					</span>
+				</span>
+			</a>
+		</div>
+		<div class='ipsPager_center cCalendarNav' data-role='calendarNav'>
+			<h1 class='ipsType_pageTitle ipsType_center'>{lang="cal_week_title" sprintf="$date->firstDayOfWeek('monthNameShort'), $date->firstDayOfWeek('mday'), $date->firstDayOfWeek('year'), $date->lastDayOfWeek('monthNameShort'), $date->lastDayOfWeek('mday'), $date->lastDayOfWeek('year')"}</h1>
+			<ul class='ipsButton_split ipsType_noBreak'>
+				<li><a href='{{if $thisCalendar}}{url="app=calendar&module=calendar&controller=view&view=month&id={$thisCalendar->_id}&y={$date->year}&m={$date->mon}" seoTemplate="calendar_calmonth" seoTitle="$thisCalendar->title_seo"}{{else}}{url="app=calendar&module=calendar&controller=view&view=month&y={$date->year}&m={$date->mon}" seoTemplate="calendar_month"}{{endif}}' title='{lang="cal_month_title" sprintf="$date->monthName, $date->year"}' class='ipsButton ipsButton_veryLight ipsButton_verySmall' data-action='changeView'>{lang="month"}</a></li>
+				<li><a href='#' class='ipsButton ipsButton_primary ipsButton_verySmall' title='{lang="cal_week_title" sprintf="$date->firstDayOfWeek('monthNameShort'), $date->firstDayOfWeek('mday'), $date->firstDayOfWeek('year'), $date->lastDayOfWeek('monthNameShort'), $date->lastDayOfWeek('mday'), $date->lastDayOfWeek('year')"}' data-action='changeView'>{lang="week"}</a></li>
+				{{if \in_array( $today, $days )}}
+					<li><a href='{{if $thisCalendar}}{url="app=calendar&module=calendar&controller=view&view=day&id={$thisCalendar->_id}&y={$date->year}&m={$date->mon}&d={$today->mday}&view=day" seoTemplate="calendar_calday" seoTitle="$thisCalendar->title_seo"}{{else}}{url="app=calendar&module=calendar&controller=view&view=day&y={$date->year}&m={$date->mon}&d={$today->mday}&view=day" seoTemplate="calendar_day"}{{endif}}' title='{lang="cal_month_day" sprintf="$date->monthName, $today->mday, $date->year"}' class='ipsButton ipsButton_veryLight ipsButton_verySmall' data-action='changeView'>{lang="day"}</a></li>
+				{{else}}
+					<li><a href='{{if $thisCalendar}}{url="app=calendar&module=calendar&controller=view&view=day&id={$thisCalendar->_id}&y={$date->year}&m={$date->mon}&d=1&view=day" seoTemplate="calendar_calday" seoTitle="$thisCalendar->title_seo"}{{else}}{url="app=calendar&module=calendar&controller=view&view=day&y={$date->year}&m={$date->mon}&d=1&view=day" seoTemplate="calendar_day"}{{endif}}' title='{lang="cal_month_day" sprintf="$date->monthName, $date->mday, $date->year"}' class='ipsButton ipsButton_veryLight ipsButton_verySmall' data-action='changeView'>{lang="day"}</a></li>
+				{{endif}}
+				<li><a href='{{if $thisCalendar}}{url="app=calendar&module=calendar&controller=view&view=stream&id={$thisCalendar->_id}&y={$date->year}&m={$date->mon}" seoTemplate="calendar_calstream" seoTitle="$thisCalendar->title_seo"}{{else}}{url="app=calendar&module=calendar&controller=view&view=stream&y={$date->year}&m={$date->mon}" seoTemplate="calendar_stream"}{{endif}}' title='{lang="cal_month_stream_title" sprintf="$date->monthName, $date->year"}' class='ipsButton ipsButton_veryLight ipsButton_verySmall' data-action='changeView'><span class='ipsResponsive_hidePhone ipsResponsive_inline'>{lang="event_stream"}</span><span class='ipsResponsive_showPhone ipsResponsive_inline'>{lang="event_stream_short"}</span></a></li>
+			</ul>
+		</div>
+		<div class='ipsPager_next'>
+			<a href="{{if $thisCalendar}}{url="app=calendar&module=calendar&controller=view&view=week&id={$thisCalendar->_id}&w={$nextWeek->year}-{$nextWeek->mon}-{$nextWeek->mday}" seoTemplate="calendar_calweek" seoTitle="$thisCalendar->title_seo"}{{else}}{url="app=calendar&module=calendar&controller=view&view=week&w={$nextWeek->year}-{$nextWeek->mon}-{$nextWeek->mday}" seoTemplate="calendar_week"}{{endif}}" title='{lang="cal_week_title" sprintf="$nextWeek->firstDayOfWeek('monthNameShort'), $nextWeek->firstDayOfWeek('mday'), $nextWeek->firstDayOfWeek('year'), $nextWeek->lastDayOfWeek('monthNameShort'), $nextWeek->lastDayOfWeek('mday'), $nextWeek->lastDayOfWeek('year')"}' rel='next nofollow' data-action='changeView'>
+				<span class='ipsPager_type ipsType_normal'>{lang="next_week"}</span>
+				<span class='ipsPager_title ipsType_light'>
+					<span class='ipsResponsive_inline ipsResponsive_hidePhone'>
+						{lang="cal_week_title" sprintf="$nextWeek->firstDayOfWeek('monthNameShort'), $nextWeek->firstDayOfWeek('mday'), $nextWeek->firstDayOfWeek('year'), $nextWeek->lastDayOfWeek('monthNameShort'), $nextWeek->lastDayOfWeek('mday'), $nextWeek->lastDayOfWeek('year')"}
+					</span>
+					<span class='ipsResponsive_inline ipsResponsive_showPhone'>
+						{lang="cal_week_title_wb" sprintf="$nextWeek->firstDayOfWeek('monthNameShort'), $nextWeek->firstDayOfWeek('mday'), $nextWeek->firstDayOfWeek('year')"}
+					</span>
+				</span>
+			</a>
+		</div>
+	</div>
+
+	<div class='ipsPadding'>
+		<ul class='ipsList_reset cCalendarWeek'>
+			{{foreach $days as $day}}
+			<li class='ipsColumns ipsColumns_collapsePhone ipsBox ipsBox--child'>
+				<div class='ipsAreaBackground_light ipsColumn ipsColumn_wide cCalendarWeek_day {{if $today->year == $day->year AND $today->mon == $day->mon AND $today->mday == $day->mday}} cCalendar_today{{endif}}'>
+					<div class='ipsPad'>
+						<h2 class='ipsType_sectionHead'><strong><a class='ipsType_blendLinks' href='{{if $thisCalendar}}{url="app=calendar&module=calendar&controller=view&id={$thisCalendar->_id}&y={$day->year}&m={$day->mon}&d={$day->mday}&view=day" seoTemplate="calendar_calday" seoTitle="$thisCalendar->title_seo"}{{else}}{url="app=calendar&module=calendar&controller=view&y={$day->year}&m={$day->mon}&d={$day->mday}&view=day" seoTemplate="calendar_day"}{{endif}}'>{$day->dayName}</a></strong></h2>
+						<p class='ipsType_reset ipsType_light ipsType_uppercase'>{lang="cal_month_day" sprintf="$day->monthName, $day->mday, $day->year"}</p>
+					</div>
+				</div>
+				<div class='ipsColumn ipsColumn_fluid ipsAreaBackground_reset'>
+					<div class='ipsPad'>
+						{{if isset( $events[ $day->year . '-' . $day->mon . '-' . $day->mday ] )}}
+							<ul class='cEvents_wrapper'>
+								{{if isset( $events[ $day->year . '-' . $day->mon . '-' . $day->mday ]['ranged'] )}}
+									<li class='cEvents_ranged'>
+										<ul class='cEvents'>
+											{{foreach $events[ $day->year . '-' . $day->mon . '-' . $day->mday ]['ranged'] as $event }}
+												<li class='cEvents_event cEvents_style{$event->calendar_id}{{if $event->nextOccurrence( $day, 'startDate' ) AND $event->nextOccurrence( $day, 'startDate' )->mysqlDatetime( FALSE ) == $day->mysqlDatetime( FALSE ) }}{{$startDates[ $event->id ] = $day->mysqlDatetime( FALSE );}} cEvents_first{{endif}}{{if $event->nextOccurrence( $day ?: $event->nextOccurrence( $day, 'startDate' ), 'endDate' ) AND $event->nextOccurrence( $day ?: $event->nextOccurrence( $day, 'startDate' ), 'endDate' )->mysqlDatetime( FALSE ) == $day->mysqlDatetime( FALSE ) }} cEvents_last{{endif}}'>
+													<a href='{$event->url()}' data-ipsHover data-ipsHover-target='{$event->url('hovercard')->setQuerystring( 'sd', isset( $startDates[ $event->id ] ) ? $startDates[ $event->id ] : $day->mysqlDatetime( FALSE ) )}'>{$event->title}{{if $event->hidden() === 1}} <i class='fa fa-warning'></i>{{endif}}</a>
+												</li>
+											{{endforeach}}
+										</ul>
+									</li>
+								{{endif}}
+								{{if isset( $events[ $day->year . '-' . $day->mon . '-' . $day->mday ]['single'] )}}
+									<li class='cEvents_single'>
+										<ul class='cEvents'>
+											{{foreach $events[ $day->year . '-' . $day->mon . '-' . $day->mday ]['single'] as $event }}
+												<li class='cEvents_event cEvents_style{$event->calendar_id}'>
+													<a href='{$event->url()}' data-ipsHover data-ipsHover-target='{$event->url('hovercard')->setQuerystring( 'sd', $day->year . '-' . $day->mon . '-' . $day->mday )}'>{$event->title}{{if $event->hidden() === 1}} <i class='fa fa-warning'></i>{{endif}}</a>
+												</li>
+											{{endforeach}}
+										</ul>
+									</li>
+								{{endif}}
+							</ul>
+						{{else}}
+							<span class='ipsType_light ipsType_medium'>{lang="no_events_today"}</span>
+						{{endif}}
+						{{if isset( $birthdays[ $day->mon . $day->mday ] ) AND $birthdays[ $day->mon . $day->mday ] }}
+							<p class='cCalendar_birthdays ipsType_light'><a class='ipsType_blendLinks' href='{{if $thisCalendar}}{url="app=calendar&module=calendar&controller=view&id={$thisCalendar->_id}&y={$day->year}&m={$day->mon}&d={$day->mday}&view=day" seoTemplate="calendar_calday" seoTitle="$thisCalendar->title_seo"}{{else}}{url="app=calendar&module=calendar&controller=view&y={$day->year}&m={$day->mon}&d={$day->mday}&view=day" seoTemplate="calendar_day"}{{endif}}'>{lang="birthdays_today" pluralize="$birthdays[ $day->mon . $day->mday ]"}</a></p>
+						{{endif}}
+					</div>
+				</div>
+			</li>
+			{{endforeach}}
+		</ul>
+	</div>
+</div>

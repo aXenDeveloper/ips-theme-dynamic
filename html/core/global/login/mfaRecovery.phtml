@@ -1,0 +1,27 @@
+<ips:template parameters="$handlers, $url, $knownDevicesAvailable=FALSE" />
+<div id='elTwoFactorAuthentication' class='ipsModal' data-controller='core.global.core.2fa'>
+	<div>
+		<h1 class='ipsType_center ipsType_pageTitle ipsSpacer_top'>{lang="mfa_popup_recover_title"}</h1>
+		<p class='ipsType_medium ipsType_richText ipsType_center c2FA_info'>
+			{lang="mfa_popup_recover_info"}
+		</p>
+		<div class="ipsPad">
+			<ul class="ipsList_reset">
+				{{foreach $handlers as $key => $handler}}
+					<li class="ipsSpacer_bottom ipsSpacer_half">
+						<a href="{$url->setQueryString( array( '_mfa' => 'alt', '_mfaMethod' => $key ) )}" class="ipsButton ipsButton_primary ipsButton_fullWidth ipsButton_medium">{lang="$handler->recoveryButton()"}</a>
+					</li>
+				{{endforeach}}
+				{{if $knownDevicesAvailable}}
+					<li class="ipsSpacer_bottom ipsSpacer_half"><a href="{$url->setQueryString( array( '_mfa' => 'knownDevice' ) )}" class="ipsButton ipsButton_light ipsButton_fullWidth ipsButton_medium">{lang="mfa_recovery_known_device"}</a></li>
+				{{endif}}
+				{{if \in_array( 'email', explode( ',', \IPS\Settings::i()->mfa_forgot_behaviour ) )}}
+					<li class="ipsSpacer_bottom ipsSpacer_half"><a href="{url="app=core&module=system&controller=settings&do=mfarecovery" base="front" seoTemplate="mfarecovery"}" class="ipsButton ipsButton_link ipsButton_fullWidth ipsButton_medium">{lang="mfa_recovery_email"}</a></li>
+				{{endif}}
+				{{if \in_array( 'contact', explode( ',', \IPS\Settings::i()->mfa_forgot_behaviour ) ) and \IPS\Member::loggedIn()->canUseContactUs()}}
+					<li class="ipsSpacer_bottom ipsSpacer_half"><a href="{url="app=core&module=contact&controller=contact" base="front" seoTemplate="contact"}" class="ipsButton ipsButton_link ipsButton_fullWidth ipsButton_medium">{lang="mfa_recovery_contact"}</a></li>
+				{{endif}}
+			</ul>
+		</div>
+	</div>
+</div>

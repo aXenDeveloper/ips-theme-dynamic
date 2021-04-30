@@ -1,0 +1,509 @@
+/* Data lists: our bread and butter. Shows lists of items with associated information */
+/* ======================================================== */
+/* COLORS */
+.ipsApp .ipsDataItem_new, .ipsApp .ipsDataItem_success {
+	background-color: var(--positive-light);
+}
+
+.ipsApp .ipsDataItem_warning {
+	background-color: var(--intermediate-light);
+}
+
+.ipsApp .ipsDataItem_error {
+	background-color: var(--negative-light);
+}
+
+.ipsApp .ipsDataItem_info {
+	background-color: var(--informational-light);
+}
+
+.ipsApp .ipsDataItem_selected {
+	background-color: rgb( var(--theme-selected) );
+}
+
+.ipsApp .ipsDataItem_status {
+	background-color: rgb( var(--theme-area_background_light) );
+}
+
+/* Unread status */
+.ipsDataList_readStatus .ipsDataItem:not( .ipsDataItem_unread ):not( .ipsDataItem_selected ):not( .ipsModerated ) {
+	background: rgb( var(--theme-area_background_light) );
+}
+
+/* Zebra striping */
+/* .ipsDataList_zebra > :nth-child(2n){
+	background: rgb( var(--theme-area_background_light) );
+} */
+
+/* Make the whole row clickable */
+.ipsDataList.ipsDataList_clickableRows .ipsDataItem > a {
+	display: block;
+}
+.ipsDataList.ipsDataList_clickableRows .ipsDataItem > a:hover {
+	background-color: rgb( var(--theme-area_background_light) ) !important;
+}
+
+/* ======================================================== */
+/* LISTS & ITEMS */
+.ipsDataList {
+	position: relative;
+	list-style: none;
+	padding: 0;
+	margin: 0;
+}
+
+	.ipsBox > form{
+		border-radius: inherit;
+	}
+	.ipsDataList,
+	.ipsDataList > *:last-child{
+		border-bottom-left-radius: inherit;
+		border-bottom-right-radius: inherit;
+	}
+
+.ipsDataItem_fullWidth {
+	width: 100%;
+}
+
+.ipsDataItem_title {
+	font-size: {fontsize="base"};
+	margin: 0 0 var(--sp-1) 0;
+	font-weight: 400;
+	display: inline;
+	line-height: 20px;
+}
+
+	.ipsDataItem_title .ipsBadge.ipsBadge_small {
+		position: relative;
+		top: -2px;
+	}
+
+	.ipsDataItem_unread .ipsDataItem_title {
+		font-weight: bold;
+	}
+
+	.ipsMenu .ipsDataItem_title {
+		font-size: {fontsize="medium"};
+	}
+
+/* Basic cell styles */
+.ipsDataItem_main, .ipsDataItem_stats, .ipsDataItem_lastPoster, .ipsDataItem_generic,
+.ipsDataItem_modCheck, .ipsDataItem_icon {
+	display: table-cell;
+	padding: 18px var(--sp-3); /* Leaving this at 18px right now - not on the scale, but 20px is just a bit too spaced out here */
+	vertical-align: middle;
+}
+
+.ipsDataItem_modCheck {
+	/* Required to make custom checkboxes work in chrome */
+	position: relative;
+}
+
+/* Reduced spacing cells */
+.ipsDataList.ipsDataList_reducedSpacing .ipsDataItem_icon,
+.ipsDataList.ipsDataList_reducedSpacing .ipsDataItem_main, 
+.ipsDataList.ipsDataList_reducedSpacing .ipsDataItem_stats,
+.ipsDataList.ipsDataList_reducedSpacing .ipsDataItem_lastPoster,
+.ipsDataList.ipsDataList_reducedSpacing .ipsDataItem_generic {
+	display: table-cell;
+	padding: var(--sp-3) 0;
+	vertical-align: top;
+}
+	
+	html[dir="ltr"] .ipsDataList.ipsDataList_reducedSpacing .ipsDataItem_icon + .ipsDataItem_main {
+		padding-left: var(--sp-2);
+	}
+	html[dir="rtl"] .ipsDataList.ipsDataList_reducedSpacing .ipsDataItem_icon + .ipsDataItem_main {
+		padding-right: var(--sp-2);
+	}
+	
+	html[dir="ltr"] .ipsDataList.ipsDataList_reducedSpacing .ipsDataItem_icon {
+		padding-left: var(--sp-1);
+	}
+	html[dir="rtl"] .ipsDataList.ipsDataList_reducedSpacing .ipsDataItem_icon {
+		padding-right: var(--sp-1);
+	}
+
+.ipsDataList.ipsDataList_reducedSpacing .ipsDataItem_title {
+	margin: 0;
+	display: inline;
+}
+
+/* Large lists */
+.ipsDataList_large .ipsDataItem_main, 
+.ipsDataList_large .ipsDataItem_stats,
+.ipsDataList_large .ipsDataItem_lastPoster,
+.ipsDataList_large .ipsDataItem_generic {
+	padding: var(--sp-6) var(--sp-3);
+}
+
+	.ipsDataList_large .ipsDataItem_icon {
+		padding: var(--sp-4) var(--sp-2) var(--sp-4) var(--sp-4);
+		min-width: 55px;
+		vertical-align: middle;
+	}
+	html[dir="rtl"] .ipsDataList_large .ipsDataItem_icon {
+		padding: var(--sp-6) var(--sp-4) var(--sp-4) var(--sp-8);
+	}
+
+/* Reassert some positioning styles */
+.ipsDataItem > .ipsPos_middle {
+	vertical-align: middle !important;
+}
+
+.ipsDataItem > .ipsPos_top {
+	vertical-align: top !important;
+}
+
+/* ======================================================== */
+/* LOADING STYLE */
+/* ======================================================== */
+.ipsDataItem_loading > div {
+	min-height: 65px;
+	width: 100%;
+	position: relative;
+}
+
+	.ipsDataItem_loading > div > span,
+	.ipsDataItem_loading > div > span:before,
+	.ipsDataItem_loading > div > span:after {
+		display: block;
+		position: absolute;
+		animation: dummy_anim 1s infinite;
+	}
+
+	.ipsDataItem_loading > div > span:before,
+	.ipsDataItem_loading > div > span:after {
+		content: '';
+	}
+
+	/* Topic info dummy */
+	.ipsDataItem_loading > div > span:last-child {
+		height: 18px;
+		top: 15px;
+	}
+	html[dir="ltr"] .ipsDataItem_loading > div > span:last-child {
+		left: 36px;
+		right: 610px;
+	}
+	html[dir="rtl"] .ipsDataItem_loading > div > span:last-child {
+		right: 36px;
+		left: 610px;
+	}
+	.ipsDataItem_loading > div > span:last-child:before {
+		width: 270px;
+		top: 25px;
+		height: 12px;
+		opacity: 0.7;
+	}
+	html[dir="ltr"] .ipsDataItem_loading > div > span:last-child:before {
+		left: 0;
+	}
+	html[dir="rtl"] .ipsDataItem_loading > div > span:last-child:before {
+		right: 0;
+	}
+	
+	.ipsDataItem_loading > div > span:last-child:after {
+		width: 16px;
+		height: 16px;
+		border-radius: 16px;
+		top: 0;
+	}
+	html[dir="ltr"] .ipsDataItem_loading > div > span:last-child:after {
+		left: -26px;
+	}
+	html[dir="rtl"] .ipsDataItem_loading > div > span:last-child:after {
+		right: -26px;
+	}
+
+	/* Last poster dummy */
+	.ipsDataItem_loading > div > span:first-child {
+		width: 38px;
+		height: 38px;
+		top: 12px;
+		border-radius: 38px;
+	}
+	html[dir="ltr"] .ipsDataItem_loading > div > span:first-child {
+		right: 300px;
+	}
+	html[dir="rtl"] .ipsDataItem_loading > div > span:first-child {
+		left: 300px;
+	}
+
+	.ipsDataItem_loading > div > span:first-child:after {
+		width: 200px;
+		top: 3px;
+		height: 15px;
+	}
+	html[dir="ltr"] .ipsDataItem_loading > div > span:first-child:after {
+		left: 50px;
+	}
+	html[dir="rtl"] .ipsDataItem_loading > div > span:first-child:after {
+		right: 50px;
+	}
+
+	.ipsDataItem_loading > div > span:first-child:before {
+		width: 150px;
+		top: 22px;
+		height: 12px;
+		opacity: 0.7;
+	}
+	html[dir="ltr"] .ipsDataItem_loading > div > span:first-child:before {
+		left: 50px;
+	}
+	html[dir="rtl"] .ipsDataItem_loading > div > span:first-child:before {
+		right: 50px;
+	}
+
+/* ======================================================== */
+/* ITEMS */
+.ipsDataItem { 
+	width: 100%;
+	position: relative;
+	border: 1px solid rgba( var(--theme-text_light), 0.1 );
+	border-width: 0 0 1px 0;
+}
+
+	/* .ipsDataList.ipsDataList_zebra > .ipsDataItem, */
+	.ipsDataList:not( .ipsGrid ) .ipsDataItem:last-child{
+		border-bottom-width: 0;
+	}
+
+/* ======================================================== */
+/* MAIN COLUMN - fluid */
+.ipsDataItem_main {
+	width: 100%;
+	margin: 0;
+	vertical-align: top;
+}
+	
+	.ipsDataItem .ipsDataItem_main:only-child {
+		display: block !important;
+	}
+
+	.ipsDataItem .ipsDataItem_main .ipsTags {
+		position: relative;
+		top: -2px;
+	}
+
+		@media screen and (max-width: 767px) {
+			.ipsDataItem .ipsDataItem_main .ipsTags {
+				top: 0;
+				margin: 4px 0;
+			}
+		}
+
+	.ipsDataItem .ipsDataItem_main .ipsContained > span:not(.ipsBadge) {
+		padding-right: 3px;
+	}
+
+/* ======================================================== */
+/* STATS COLUMN */
+.ipsDataItem_stats {
+	width: 15%;
+	min-width: 150px;
+	text-align: right;
+	list-style: none;
+}
+html[dir="rtl"] .ipsDataItem_stats {
+	text-align: left;
+}
+
+	.ipsDataItem_stats dl {
+		margin: 0 0 5px 0;
+	}
+	
+	.ipsDataItem_statsLarge {
+		text-align: right;
+	}
+	
+		.ipsDataItem_statsLarge .ipsDataItem_stats_number {
+			font-size: {fontsize="large"};
+			line-height: 1.3;
+		}
+
+	.ipsDataItem_stats_hot {
+		background: #da621a;
+		color: #fff;
+		font-size: {fontsize="x_small"};
+		font-weight: bold;
+		display: inline-block;
+		padding: 0 5px 0 5px;
+		position: relative;
+		vertical-align: middle;
+		border-radius: 2px;
+		white-space: nowrap;
+	}
+
+		.ipsDataItem_stats_hot:before {
+			content: attr(data-text);
+			text-transform: uppercase;
+			font-size: {fontsize="9"};
+			opacity: 0.6;
+		}
+		html[dir="ltr"] .ipsDataItem_stats_hot:before {
+			margin-right: 5px;
+		}
+		html[dir="rtl"] .ipsDataItem_stats_hot:before {
+			margin-left: 5px;
+		}
+
+	html[dir="ltr"] .ipsDataItem_stats dt, html[dir="ltr"] .ipsDataItem_stats dd {
+		margin-left: 0;
+	}
+	html[dir="rtl"] .ipsDataItem_stats dt, html[dir="rtl"] .ipsDataItem_stats dd {
+		margin-right: 0;
+	}
+
+/* ======================================================== */
+/* OTHER */
+.ipsDataItem_icon {
+	width: 25px;
+	min-width: 25px;
+	padding-top: 18px;
+}
+html[dir="ltr"] .ipsDataItem_icon {
+	padding-right: 0;
+}
+	html[dir="ltr"] .ipsDataList_large .ipsDataItem_icon {
+		padding-right: 10px;
+	}
+
+html[dir="rtl"] .ipsDataItem_icon {
+	padding-left: 0;
+}
+	html[dir="rtl"] .ipsDataList_large .ipsDataItem_icon {
+		padding-left: 10px;
+	}
+
+.ipsDataItem_icon_noPad {
+	padding: 0;
+}
+
+.ipsDataItem_category {
+	font-size: {fontsize="x_large"};
+}
+
+.ipsDataItem_meta {
+	margin: 0;
+	color: rgb( var(--theme-text_light) );
+}
+
+/* ======================================================== */
+/* LAST POSTER */
+.ipsDataItem_lastPoster {
+	width: 24%;
+	max-width: 24%;
+	min-width: 270px;
+	list-style: none;
+	margin: 0;
+	line-height: 1.4;
+}
+
+	.ipsDataItem_lastPoster.ipsDataItem_noPhoto {
+		width: 20%;
+		min-width:200px
+	}
+	
+	html[dir="ltr"] .ipsDataItem_lastPoster.ipsDataItem_withPhoto li {
+		margin-left: 50px;
+	}
+	html[dir="rtl"] .ipsDataItem_lastPoster.ipsDataItem_withPhoto li {
+		margin-right: 50px;
+	}
+
+	.ipsDataItem_lastPoster .ipsUserPhoto {
+		display: block;
+		float: left;
+		margin: 0 10px 0 -50px;
+		width: 40px;
+		height: 40px;
+	}
+	html[dir="rtl"] .ipsDataItem_lastPoster .ipsUserPhoto {
+		float: right;
+		margin: 0 -50px 0 10px;
+	}
+
+	.ipsDataItem_lastPoster .ipsTruncate_line,
+	.ipsDataItem_lastPoster__title{
+		font-size: {fontsize="medium"};
+		overflow: hidden;
+		text-overflow: ellipsis;
+		max-width: 196px;
+		white-space: nowrap;
+	}
+
+		@media (max-width: 1200px){
+			.ipsDataItem_lastPoster .ipsTruncate_line,
+			.ipsDataItem_lastPoster__title{
+				max-width: 136px;
+			}
+		}
+
+	.cForumGrid .ipsDataItem_lastPoster__title{
+		max-width: none;
+		white-space: normal;
+	}
+
+/* ======================================================== */
+/* GENERIC SIZING */
+.ipsDataItem_size1 { width: 50px; min-width: 50px; }
+.ipsDataItem_size2 { width: 75px; min-width: 75px; }
+.ipsDataItem_size3 { width: 100px; min-width: 100px; }
+.ipsDataItem_size4 { width: 125px; min-width: 125px; }
+.ipsDataItem_size5 { width: 150px; min-width: 150px; }
+.ipsDataItem_size6 { width: 175px; min-width: 175px; }
+.ipsDataItem_size7 { width: 200px; min-width: 200px; }
+.ipsDataItem_size8 { width: 225px; min-width: 225px; }
+.ipsDataItem_size9 { width: 250px; min-width: 250px; }
+.ipsDataItem_size10 { width: 300px; min-width: 300px; }
+
+/* ======================================================== */
+/* SUB LISTS */
+.ipsDataItem_subList {
+	margin: 5px 0 0;
+	background-repeat: no-repeat;
+	background-size: 13px 8px;
+	list-style: none;
+}
+html[dir="ltr"] .ipsDataItem_subList {
+	padding-left: 20px !important;
+	background-image: url( "{resource="subitem_stem.png" app="core" location="front"}" );
+	background-position: 3px 5px;
+}
+html[dir="rtl"] .ipsDataItem_subList {
+	padding-right: 20px !important;
+	background-image: url( "{resource="subitem_stem_rtl.png" app="core" location="front"}" );
+	background-position: right 3px top 5px;
+}
+	
+	.ipsDataItem_subList li {
+		margin-right: 5px !important;
+	}
+
+		.ipsDataItem_subList li.ipsDataItem_unread {
+			font-weight: bold;
+		}
+
+		.ipsDataItem_subList li a:after {
+			content: ',';
+		}
+
+		.ipsDataItem_subList li:last-child a:after {
+			content: '';
+		}
+
+	/* Sub results */
+	.ipsDataItem_subItem {
+		padding-bottom: 10px;
+	}
+	html[dir="ltr"] .ipsDataItem_subItem {
+		padding-left: 5%;
+	}
+	html[dir="rtl"] .ipsDataItem_subItem {
+		padding-right: 5%;
+	}
+
+		.ipsDataItem_subItem .ipsDataItem_icon {
+			font-size: {fontsize="x_large"};
+		}

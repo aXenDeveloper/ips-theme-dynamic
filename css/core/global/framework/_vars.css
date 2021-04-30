@@ -1,0 +1,75 @@
+:root {
+	/* Master scales & styles */
+	--sp-1: 4px;
+	--sp-2: 8px;
+	--sp-3: 12px;
+	--sp-4: 16px;
+	--sp-5: 20px;
+	--sp-6: 24px;
+	--sp-7: 32px;
+	--sp-8: 40px;
+	--sp-9: 48px;
+	--sp-10: 64px;
+
+	/* Border vars */
+	--radius-1: 4px;
+	--radius-2: 8px;
+	--border-1px: 1px solid rgba( var(--theme-text_light), 0.15 );
+
+	/* Status colors */
+	--positive-dark: #2C8C69;
+	--positive-light: #f0faf6;
+	--negative-dark: #C53030;
+	--negative-light: #FFF5F5;
+	--intermediate-dark: #DD6B20;
+	--intermediate-light: #FFFAF0;
+	--informational-dark: #2981bf;
+	--informational-light: #e9f0f5;
+	--general-dark: #7f858d;
+	--general-light: #f0f4f8;
+	
+	/* Variables used for specific contexts */
+	--box--boxShadow: 0px 2px 4px -1px rgba( var(--theme-area_background_dark), 0.1 );
+	--box--backgroundColor: rgb( var(--theme-area_background_reset) );
+	--box--radius: var(--radius-1);
+	--solved--borderColor: 44, 140, 105;
+	
+	/* Popup/dialog colors */
+	--popup--radius: var(--radius-1);
+	--popup--border: 1px solid rgba( var(--theme-area_background_dark), 0.1 );
+	--popup--boxShadow: 0 8px 50px rgba(0,0,0,0.1), 0px 4px 15px rgba(0,0,0,0.05);
+	--dialog--boxShadow: 0px 5px 55px rgba( var(--theme-area_background_dark), 0.4 ), 0px 7px 24px -12px rgba( var(--theme-area_background_dark), 0.7 );
+
+	/* Nav sizes */
+	--header--height: 80px;
+	--responsive-header--height: 55px;
+	--logo--height: {theme="logo_height"}%;
+	--responsive-logo--height: var(--logo--height);
+	--primary-navigation--height: 52px;
+	--secondary-navigation--height: 50px;
+
+	/* Form styles */
+	--form-field--radius: var(--radius-1);
+	--form-field--borderColor: rgba( var(--theme-text_light), 0.4 );
+	--form-field--borderHoverColor: rgba( var(--theme-text_light), 0.8 );
+	--form-field--focusShadow: rgba( var(--theme-active_input_border), 0.3 ) 0px 0px 0px 4px;
+
+	/* Button styles */
+	--button--radius: var(--radius-1);
+
+	/* Trophy colors */
+	--trophy-first--background: #fac746;
+	--trophy-first--color: #704926;
+	--trophy-second--background: #c0c0c0;
+	--trophy-third--background: #cd7f32;
+
+
+	/* Page widths */
+	--container--width: 1340px;
+	--minimal_container--width: 1000px;
+	
+	/* Theme settings */
+	/* Format is --theme-[setting-key] */
+{expression="\IPS\Theme::i()->css_vars"}
+
+}

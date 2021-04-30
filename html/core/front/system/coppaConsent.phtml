@@ -1,0 +1,67 @@
+<ips:template parameters="" />
+<div class="ipsPrint">
+	<h1>{setting="board_name"}</h1>
+	<h2>{lang="coppa_form"}</h2>
+
+	{lang="coppa_form_intro" sprintf="\IPS\Settings::i()->board_name"}
+	
+	<table>
+		<tr>
+			<th>{lang="coppa_form_child_name"} </th>
+			<th>{lang="coppa_form_child_email"} </th>
+		</tr>
+		<tr>
+			<td class="ipsPrint_doubleHeight">&nbsp;</td>
+			<td class="ipsPrint_doubleHeight">&nbsp;</td>
+		</tr>
+	</table>
+	
+	{lang="coppa_form_disclaimer"}
+	
+	<div></div>
+	<div></div>
+
+	<table>
+		<tr>
+			<th>{lang="coppa_form_name"} </th>
+			<th>{lang="coppa_form_relation"} </th>
+		</tr>
+		<tr>
+			<td class="ipsPrint_doubleHeight">&nbsp;</td>
+			<td class="ipsPrint_doubleHeight">&nbsp;</td>
+		</tr>
+		<tr>
+			<th>{lang="coppa_form_email"} </th>
+			<th>{lang="coppa_form_phone"} </th>
+		</tr>
+		<tr>
+			<td class="ipsPrint_doubleHeight">&nbsp;</td>
+			<td class="ipsPrint_doubleHeight">&nbsp;</td>
+		</tr>
+		<tr>
+			<th colspan="2">{lang="coppa_form_sig"} </th>
+		</tr>
+		<tr>
+			<td colspan="2" class="ipsPrint_tripleHeight">&nbsp;</td>
+		</tr>
+		<tr>
+			<th colspan="2">{lang="coppa_form_date"} </th>
+		</tr>
+		<tr>
+			<td colspan="2" class="ipsPrint_doubleHeight">&nbsp;</td>
+		</tr>
+	</table>
+
+	<div></div>
+
+	{{if \IPS\Settings::i()->privacy_type != "none"}}
+		<p>{lang="coppa_form_privacy"} {{if \IPS\Settings::i()->privacy_type == "internal"}}{url="app=core&module=system&controller=privacy" seoTemplate="privacy"}{{else}}{setting="privacy_link"}{{endif}}</p>
+		<div></div>
+	{{endif}}
+	{{if \IPS\Settings::i()->coppa_address}}
+		<p>{lang="coppa_form_mail"} {address="\IPS\Settings::i()->coppa_address"}</p>
+	{{endif}}
+	{{if \IPS\Settings::i()->coppa_fax}}
+		<p>{{if \IPS\Settings::i()->coppa_address and \IPS\Settings::i()->coppa_fax}}{lang="or"} {{endif}}{lang="coppa_form_fax"} {setting="coppa_fax"}</p>
+	{{endif}}
+</div>

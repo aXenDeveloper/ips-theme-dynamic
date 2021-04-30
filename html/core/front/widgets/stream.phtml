@@ -1,0 +1,9 @@
+<ips:template parameters="$stream, $results, $title, $orientation='vertical'" />
+<h3 class='ipsWidget_title'>{$title}</h3>
+<div class='{{if $orientation == "vertical"}}ipsPadding_horizontal:half ipsPadding_bottom:half {{else}} ipsPadding_horizontal ipsPadding_bottom {{endif}} ipsWidget_inner'>
+<ol class="cWidgetStreamList ipsList_reset">
+{{foreach $results AS $result}}
+	{$result->html($orientation, $stream->include_comments ? 'last_comment' : 'date', TRUE, $result->asArray()['indexData']['index_class']::searchResultBlock() )|raw}
+{{endforeach}}
+</ol>
+</div>

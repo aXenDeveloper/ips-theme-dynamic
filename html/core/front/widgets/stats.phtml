@@ -1,0 +1,65 @@
+<ips:template parameters="$stats, $orientation='vertical'" />
+<h3 class='ipsType_reset ipsWidget_title'>{lang="block_stats"}</h3>
+<div class='ipsWidget_inner'>
+	{{if $orientation == 'vertical'}}
+		<div class='ipsPad_half'>
+			<ul class="ipsDataList">
+				<li class="ipsDataItem">
+					<div class="ipsDataItem_main ipsPos_middle">
+						<strong>{lang="stats_total_members"}</strong>
+					</div>
+					<div class="ipsDataItem_stats ipsDataItem_statsLarge">
+						<span class="ipsDataItem_stats_number">{number="$stats['member_count']"}</span>
+					</div>
+				</li>
+				<li class="ipsDataItem">
+					<div class="ipsDataItem_main ipsPos_middle">
+						<strong>{lang="stats_most_online"}</strong>
+					</div>
+					<div class="ipsDataItem_stats ipsDataItem_statsLarge">
+						<span class="ipsDataItem_stats_number">{number="$stats['most_online']['count']"}</span><br>
+						<span class="ipsType_light ipsType_small"><time>{$stats['most_online']['time']}</time></span>
+					</div>
+				</li>
+			</ul>
+			<hr class='ipsHr'>
+			{{if $stats['last_registered']}}
+				<div class='ipsClearfix ipsPadding_bottom'>
+					<div class='ipsPos_left ipsType_center cNewestMember'>
+						{template="userPhoto" app="core" group="global" params="$stats['last_registered'], 'small'"}
+					</div>
+					<div class='ipsWidget_latestItem'>
+						<strong class='ipsType_minorHeading'>{lang="stats_newest_member"}</strong><br>
+						<span class='ipsType_normal'>{$stats['last_registered']->link()|raw}</span><br>
+						<span class='ipsType_medium ipsType_light'>{lang="members_joined"} <time>{$stats['last_registered']->joined->getTimestamp()}</time></span>
+					</div>
+				</div>
+			{{endif}}
+		</div>
+	{{else}}
+		<div class='ipsFlex ipsFlex-ai:center ipsFlex-jc:between sm:ipsFlex-fd:column sm:ipsFlex-ai:stretch ipsPadding ipsWidget_stats'>
+			<div class='ipsFlex-flex:11 ipsFlex ipsFlex-ai:center ipsFlex-jc:around'>
+				<div class='ipsType_center'>
+					<span class='ipsType_large ipsWidget_statsCount'>{number="$stats['member_count']"}</span><br>
+					<span class='ipsType_light ipsType_medium'>{lang="stats_total_members"}</span>
+				</div>
+				<div class='ipsType_center'>
+					<span class='ipsType_large ipsWidget_statsCount' data-ipsTooltip title='<time data-norelative="true">{$stats['most_online']['time']}</time>'>{number="$stats['most_online']['count']"}</span><br>
+					<span class='ipsType_light ipsType_medium'>{lang="stats_most_online"}</span>
+				</div>
+			</div>
+			{{if $stats['last_registered'] instanceof \IPS\Member}}
+			<div class='ipsFlex-flex:01 ipsBorder_left ipsPadding_left ipsMargin_right:double sm:ipsMargin_right:none sm:ipsMargin_top sm:ipsBorder:none sm:ipsBorder_top sm:ipsPadding_top sm:ipsPadding_left:none sm:ipsFlex sm:ipsFlex-jc:center'>
+				<div class='ipsPhotoPanel ipsPhotoPanel_mini cNewestMember'>
+					{template="userPhoto" app="core" group="global" params="$stats['last_registered'], 'mini'"}
+					<div>
+						<span class='ipsType_minorHeading'>{lang="stats_newest_member"}</span><br>
+						<span class='ipsType_normal'>{$stats['last_registered']->link()|raw}</span><br>
+						<span class='ipsType_small ipsType_light'>{lang="members_joined"} <time>{$stats['last_registered']->joined->getTimestamp()}</time></span>
+					</div>
+				</div>
+			</div>
+			{{endif}}
+		</div>
+	{{endif}}
+</div>

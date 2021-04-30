@@ -1,0 +1,42 @@
+<ips:template parameters="$files, $used" />
+<div class="ipsPageHeader ipsClearfix">
+	<h1 class="ipsType_pageTitle">{lang="my_attachments"}</h1>
+</div>
+{{if member.group['g_attach_max'] > 0}}
+	<div class='ipsAreaBackground_light ipsPad'>
+		<p>{lang="my_attachments_blurb" sprintf="\IPS\Output\Plugin\Filesize::humanReadableFilesize( $used ), \IPS\Output\Plugin\Filesize::humanReadableFilesize( \IPS\Member::loggedIn()->group['g_attach_max'] * 1024 )"}</p>
+	</div>
+{{endif}}
+{{if empty($files)}}
+	<div class='ipsPad ipsAreaBackground_light'>
+		{lang="my_attachments_empty"}
+	</div>
+{{else}}
+	<div class="ipsGrid ipsAttachment_fileList">
+		{{foreach $files as $url => $file}}
+			{{$id = mb_substr( $url, mb_strrpos( $url, '=' ) + 1 );}}
+			<div class='ipsDataItem ipsAttach ipsAttach_done'>
+				<div class='ipsDataItem_generic ipsDataItem_size1 ipsResponsive_hidePhone ipsResponsive_block ipsType_center'>
+					{{if \in_array( mb_strtolower( mb_substr( $file->filename, mb_strrpos( $file->filename, '.' ) + 1 ) ), \IPS\Image::$imageExtensions )}}
+						<a href="{$file}"><img src="{$file}" alt='' class='ipsImage' data-ipsLightbox data-ipsLightbox-group="myAttachments"></a>
+					{{else}}
+						<i class='fa fa-file ipsType_large'></i>
+					{{endif}}
+				</div>
+				<div class='ipsDataItem_main' data-action='selectFile'>
+					<h2 class='ipsDataItem_title ipsType_reset ipsType_medium ipsAttach_title ipsTruncate ipsTruncate_line'>{$file->originalFilename}</h2>
+					<p class='ipsDataItem_meta ipsType_light'>
+						{filesize="$file->filesize()"}
+					</p>
+				</div>
+				<div class='ipsDataItem_generic ipsDataItem_size6 ipsType_right'>
+					<ul class='ipsButton_split'>
+						<li>
+							<a href='{url="app=core&module=system&controller=attachments&do=view&id={$id}" seoTemplate="attachments"}' class='ipsButton ipsButton_verySmall ipsButton_light' data-ipsTooltip title='{lang="my_attachments_view"}'><i class='fa fa-search'></i></a>
+						</li>
+					</ul>
+				</div>		
+			</div>
+		{{endforeach}}
+	</div>
+{{endif}}

@@ -1,0 +1,537 @@
+<ips:template parameters="$topic, $comments, $question=NULL, $votes=array(), $nextUnread=NULL, $pagination, $topicVotes=array()" />
+
+{{if $club = $topic->container()->club()}}
+	{{if settings.clubs and settings.clubs_header == 'full'}}
+		{template="header" app="core" group="clubs" params="$club, $topic->container()"}
+	{{endif}}
+	<div id='elClubContainer'>
+{{endif}}
+
+<div class='ipsPageHeader ipsResponsive_pull ipsBox ipsPadding sm:ipsPadding:half ipsMargin_bottom'>
+	{{if $topic->isQuestion()}}
+		<div class='ipsFlex ipsFlex-ai:stretch ipsFlex-jc:center'>
+			<ul class='ipsList_reset cRatingColumn cRatingColumn_question ipsType_center ipsMargin_right ipsFlex-flex:00 ipsBorder_right'>
+				{{if $topic->canVote()}}
+					<li>
+						<a href='{$topic->url()->setQueryString( array( 'do' => 'rateQuestion', 'rating' => 1 ) )->csrf()}' class='cAnswerRate cAnswerRate_up {{if isset( $topicVotes[ \IPS\Member::loggedIn()->member_id ] ) && $topicVotes[ \IPS\Member::loggedIn()->member_id ] === 1}}ipsType_positive{{endif}}' title='{{if isset( $topicVotes[ \IPS\Member::loggedIn()->member_id ] ) && $topicVotes[ \IPS\Member::loggedIn()->member_id ] === 1}}{lang="remove_your_vote"}{{else}}{lang="vote_question_up"}{{endif}}' data-ipsTooltip><i class='fa fa-angle-up'></i></a>
+					</li>
+				{{else}}
+					<li>
+						<span class='cAnswerRate cAnswerRate_up cAnswerRate_noPermission' {{if !\IPS\Member::loggedIn()->member_id}}data-ipsTooltip title='{lang="sign_in_rate_question"}'{{endif}}><i class='fa fa-angle-up'></i></span>
+					</li>
+				{{endif}}
+
+					<li><span data-role="voteCount" data-voteCount="{expression="\intval( $topic->question_rating )"}" class='cAnswerRating {{if isset( $topicVotes[ \IPS\Member::loggedIn()->member_id ] ) && $topicVotes[ \IPS\Member::loggedIn()->member_id ] === 1}}ipsType_positive{{elseif isset( $topicVotes[ \IPS\Member::loggedIn()->member_id ] ) && $topicVotes[ \IPS\Member::loggedIn()->member_id ] === -1}}ipsType_negative{{endif}}'>{expression="\intval( $topic->question_rating )"}</span></li>
+
+				{{if $topic->canVote() && \IPS\Settings::i()->forums_questions_downvote}}
+					<li>
+						<a href='{$topic->url()->setQueryString( array( 'do' => 'rateQuestion', 'rating' => -1 ) )->csrf()}' class='cAnswerRate cAnswerRate_down {{if isset( $topicVotes[ \IPS\Member::loggedIn()->member_id ] ) && $topicVotes[ \IPS\Member::loggedIn()->member_id ] === -1}}ipsType_negative{{endif}}' title='{{if isset( $topicVotes[ \IPS\Member::loggedIn()->member_id ] ) && $topicVotes[ \IPS\Member::loggedIn()->member_id ] === -1}}{lang="remove_your_vote"}{{else}}{lang="vote_question_down"}{{endif}}' data-ipsTooltip><i class='fa fa-angle-down'></i></a>
+					</li>
+				{{elseif \IPS\Settings::i()->forums_questions_downvote}}
+					<li>
+						<span class='cAnswerRate cAnswerRate_down cAnswerRate_noPermission' {{if !\IPS\Member::loggedIn()->member_id}}data-ipsTooltip title='{lang="sign_in_rate_question"}'{{endif}}><i class='fa fa-angle-down'></i></span>
+					</li>
+				{{endif}}
+			</ul>
+			<div class='ipsFlex-flex:11'>
+	{{endif}}
+	<div class='ipsFlex ipsFlex-ai:center ipsFlex-fw:wrap ipsGap:4'>
+		<div class='ipsFlex-flex:11'>
+			<h1 class='ipsType_pageTitle ipsContained_container'>
+				{{if $topic->mapped('pinned') || $topic->mapped('featured') || $topic->hidden() === -1 || $topic->hidden() === 1 || $topic->hidden() === -2 || $topic->isSolved() || ( $topic->canToggleItemModeration() and $topic->itemModerationEnabled() )}}
+					{{if $topic->hidden() === -1}}
+						<span><span class="ipsBadge ipsBadge_icon ipsBadge_warning" data-ipsTooltip title='{$topic->hiddenBlurb()}'><i class='fa fa-eye-slash'></i></span></span>
+					{{elseif $topic->hidden() === -2}}
+						<span><span class="ipsBadge ipsBadge_icon ipsBadge_warning" data-ipsTooltip title='{$topic->deletedBlurb()}'><i class='fa fa-trash'></i></span></span>
+					{{elseif $topic->hidden() === 1}}
+						<span><span class="ipsBadge ipsBadge_icon ipsBadge_warning" data-ipsTooltip title='{lang="pending_approval"}'><i class='fa fa-warning'></i></span></span>
+					{{elseif $topic->canToggleItemModeration() and $topic->itemModerationEnabled()}}
+						<span><span class="ipsBadge ipsBadge_icon ipsBadge_warning" data-ipsTooltip title='{lang="topic_moderation_enabled"}'><i class='fa fa-user-times'></i></span></span>
+					{{endif}}
+					{{if $topic->mapped('pinned')}}
+						<span><span class="ipsBadge ipsBadge_icon ipsBadge_positive" data-ipsTooltip title='{lang="pinned"}'><i class='fa fa-thumb-tack'></i></span></span>
+					{{endif}}
+					{{if $topic->mapped('featured')}}
+						<span><span class="ipsBadge ipsBadge_icon ipsBadge_positive" data-ipsTooltip title='{lang="featured"}'><i class='fa fa-star'></i></span></span>
+					{{endif}}
+				{{endif}}
+
+				{{if $topic->prefix() OR ( $topic->canEdit() AND $topic::canTag( NULL, $topic->container() ) AND $topic::canPrefix( NULL, $topic->container() ) )}}
+					<span {{if !$topic->prefix()}}class='ipsHide'{{endif}} {{if ( $topic->canEdit() AND $topic::canTag( NULL, $topic->container() ) AND $topic::canPrefix( NULL, $topic->container() ) )}}data-editablePrefix{{endif}}>
+						{template="prefix" group="global" app="core" params="$topic->prefix( TRUE ), $topic->prefix()"}
+					</span>
+				{{endif}}
+				{{if $topic->canEdit()}}
+					<span class='ipsType_break ipsContained' data-controller="core.front.core.moderation">
+						<span data-role="editableTitle" title='{lang="click_hold_edit"}'>{$topic->title}</span>
+					</span>
+				{{else}}
+					<span class='ipsType_break ipsContained'>
+						<span>{$topic->title}</span>
+					</span>
+				{{endif}}
+			</h1>
+			{{if $topic->locked() && $topic->topic_open_time && $topic->topic_open_time > time()}}
+				<p class='ipsType_reset ipsType_medium'><strong><i class='fa fa-clock-o'></i> {lang="topic_unlocks_at" htmlsprintf="\IPS\DateTime::ts( $topic->topic_open_time )->html(), \IPS\DateTime::ts( $topic->topic_open_time )->localeTime( FALSE )"}</strong></p>
+			{{elseif !$topic->locked() && $topic->topic_close_time && $topic->topic_close_time > time()}}
+				<p class='ipsType_reset ipsType_medium'><strong><i class='fa fa-clock-o'></i> {lang="topic_locks_at" htmlsprintf="\IPS\DateTime::ts( $topic->topic_close_time )->html(), \IPS\DateTime::ts( $topic->topic_close_time )->localeTime( FALSE )"}</strong></p>
+			{{endif}}
+			{{if \count( $topic->tags() ) OR ( $topic->canEdit() AND $topic::canTag( NULL, $topic->container() ) )}}
+				{template="tags" group="global" app="core" params="$topic->tags(), FALSE, FALSE, ( $topic->canEdit() AND $topic::canTag( NULL, $topic->container() ) ) ? $topic->url() : NULL"}
+			{{endif}}
+		</div>
+		{{if $topic->container()->forum_allow_rating}}
+			<div class='ipsFlex-flex:00 ipsType_light'>
+				{{if $topic->canRate()}}
+					<p class='ipsType_reset ipsType_small'>
+						{{if $topic->isQuestion()}}{lang="rate_this_question"}{{else}}{lang="rate_this_topic"}{{endif}}
+					</p>
+				{{endif}}
+				{$topic->rating()|raw}
+			</div>
+		{{endif}}
+	</div>
+	<hr class='ipsHr'>
+	<div class='ipsPageHeader__meta ipsFlex ipsFlex-jc:between ipsFlex-ai:center ipsFlex-fw:wrap ipsGap:3'>
+		<div class='ipsFlex-flex:11'>
+			<div class='ipsPhotoPanel ipsPhotoPanel_mini ipsPhotoPanel_notPhone ipsClearfix'>
+				{template="userPhoto" group="global" app="core" params="$topic->author(), 'mini', $topic->warningRef()"}
+				<div>
+					<p class='ipsType_reset ipsType_blendLinks'>
+						<span class='ipsType_normal'>
+						{{if $topic->isQuestion()}}
+							<strong>{lang="ask_byline_no_date" htmlsprintf="$topic->author()->link( $topic->warningRef() )"},</strong><br />
+							<span class='ipsType_light'>{datetime="$topic->start_date"}</span>
+						{{else}}
+							<strong>{lang="byline_itemprop" htmlsprintf="$topic->author()->link()"}</strong><br />
+							<span class='ipsType_light'>{datetime="$topic->start_date"} {lang="in"} <a href="{$topic->container()->url()}">{$topic->container()->_formattedTitle|raw}</a></span>
+						{{endif}}
+						</span>
+					</p>
+				</div>
+			</div>
+		</div>
+		{{if !$topic->isArchived() and !$topic->container()->password}}
+			<div class='ipsFlex-flex:01 ipsResponsive_hidePhone'>
+				<div class='ipsFlex ipsFlex-ai:center ipsFlex-jc:center ipsGap:3 ipsGap_row:0'>
+					{{if !$topic->container()->disable_sharelinks}}
+						{template="shareButton" app="core" group="sharelinks" params="$topic"}
+					{{endif}}
+					{template="promote" app="core" group="global" params="$topic"}
+					{template="follow" app="core" group="global" params="'forums', 'topic', $topic->tid, $topic->followersCount()"}
+				</div>
+			</div>
+		{{endif}}			
+	</div>
+	{{if $topic->isSolved()}}
+		{{if $solvedComment = $topic->getSolution() AND ( $solvedComment->hidden() == 0 OR ( \in_array( $solvedComment->hidden(), array( 1, -1 ) ) AND $solvedComment->canUnhide() ) )}}
+			<div class='ipsBox ipsBox--child ipsComment ipsComment_solved ipsMargin:none ipsMargin_top ipsPadding:half'>
+				<div class='ipsFlex ipsFlex-ai:center sm:ipsFlex-fd:column ipsGap:3'>
+					<a href="{$topic->url()->setQueryString( array( 'do' => 'findComment', 'comment' => $topic->topic_answered_pid ))}" class='ipsButton ipsButton_verySmall ipsButton_positive sm:ipsFlex-as:stretch'>{lang="solved_and_go"}</a>
+					<span class='ipsFlex-flex:10 ipsType_positive ipsType_normal'>
+						{lang="solved_byline" htmlsprintf="$solvedComment->author()->name"}, {datetime="$solvedComment->mapped('date')"}
+					</span>
+				</div>
+			</div>
+		{{endif}}
+	{{endif}}
+	{{if $topic->isQuestion()}}
+			</div>
+		</div>
+	{{endif}}
+</div>
+
+{template="contentItemMessages" group="global" app="core" params="$topic->getMessages(), $topic"}
+
+{{if $topic->hidden() === 1 and $topic->canUnhide()}}
+	<div class="ipsMessage ipsMessage_warning ipsSpacer_top">
+		<p class="ipsType_reset">{lang="topic_pending_approval"}</p>
+		<ul class='ipsList_inline ipsSpacer_top'>
+			<li><a href="{$topic->url()->csrf()->setQueryString( array( 'do' => 'moderate', 'action' => 'unhide' ) )}" class="ipsButton ipsButton_positive ipsButton_verySmall" title='{lang="approve_title_topic"}'><i class="fa fa-check"></i> {lang="approve"}</a></li>
+			{{if $topic->canDelete()}}
+				<li><a href='{$topic->url()->csrf()->setQueryString( array( 'do' => 'moderate', 'action' => 'delete' ) )}' data-confirm  title='{lang="topic_delete_title"}' class='ipsButton ipsButton_negative ipsButton_verySmall'><i class='fa fa-times'></i> {lang="delete"}</a></li>
+			{{endif}}
+		</ul>
+	</div>
+{{endif}}
+
+<div class='ipsClearfix'>
+	<ul class="ipsToolList ipsToolList_horizontal ipsClearfix ipsSpacer_both {{if !$topic->canComment() and !( $topic->canPin() or $topic->canUnpin() or $topic->canFeature() or $topic->canUnfeature() or $topic->canHide() or $topic->canUnhide() or $topic->canMove() or $topic->canLock() or $topic->canUnlock() or $topic->canDelete() or $topic->availableSavedActions() )}}ipsResponsive_hidePhone{{endif}}">
+		{{if $topic->canComment()}}
+			<li class='ipsToolList_primaryAction'>
+				<span data-controller='forums.front.topic.reply'>
+					{{if $topic->container()->forums_bitoptions['bw_enable_answers']}}
+						<a href='#replyForm' class='ipsButton {{if $topic->locked()}}ipsButton_link ipsButton_link--negative{{else}}ipsButton_important{{endif}} ipsButton_medium ipsButton_fullWidth' data-action='replyToTopic'>{lang="answer_this_question"}{{if $topic->locked()}} ({lang="locked"}){{endif}}</a>
+					{{else}}
+						<a href='#replyForm' class='ipsButton {{if $topic->locked()}}ipsButton_link ipsButton_link--negative{{else}}ipsButton_important{{endif}} ipsButton_medium ipsButton_fullWidth' data-action='replyToTopic'>{lang="reply_to_this_topic"}{{if $topic->locked()}} ({lang="locked"}){{endif}}</a>
+					{{endif}}
+				</span>
+			</li>
+		{{endif}}
+		{{if $topic->container()->can('add')}}
+			<li class='ipsResponsive_hidePhone'>
+				{{if $topic->container()->forums_bitoptions['bw_enable_answers']}}
+					<a href="{$topic->container()->url()->setQueryString( 'do', 'add' )}" class='ipsButton ipsButton_link ipsButton_medium ipsButton_fullWidth' title='{lang="ask_a_question_desc"}'>{lang="ask_a_question"}</a>
+				{{else}}
+					<a href="{$topic->container()->url()->setQueryString( 'do', 'add' )}" class='ipsButton ipsButton_link ipsButton_medium ipsButton_fullWidth' title='{lang="start_new_topic_desc"}'>{lang="start_new_topic"}</a>
+				{{endif}}
+			</li>
+		{{endif}}
+		{{if ( $topic->canPin() or $topic->canUnpin() or $topic->canFeature() or $topic->canUnfeature() or $topic->canHide() or $topic->canUnhide() or $topic->canMove() or $topic->canLock() or $topic->canUnlock() or $topic->canDelete() or $topic->availableSavedActions() or $topic->canMerge() or $topic->canUnarchive() or $topic->canRemoveArchiveExcludeFlag() or \IPS\Member::loggedIn()->modPermission('can_view_moderation_log') or $topic->canToggleItemModeration() ) or ( $topic->hidden() == -2 AND \IPS\Member::loggedIn()->modPermission('can_manage_deleted_content') )}}
+			<li>
+				<a href='#elTopicActions_menu' id='elTopicActions' class='ipsButton ipsButton_link ipsButton_medium ipsButton_fullWidth' data-ipsMenu>{lang="moderator_actions"} <i class='fa fa-caret-down'></i></a>
+				<ul id='elTopicActions_menu' class='ipsMenu ipsMenu_auto ipsHide'>
+					{{if \IPS\Member::loggedIn()->modPermission('can_manage_deleted_content') AND $topic->hidden() == -2}}
+						<li class='ipsMenu_item'><a href='{$topic->url()->csrf()->setQueryString( array( 'do' => 'moderate', 'action' => 'restore' ) )}' data-confirm data-confirmSubMessage='{lang="restore_as_visible_desc"}'>{lang="restore_as_visible"}</a></li>
+						<li class='ipsMenu_item'><a href='{$topic->url()->csrf()->setQueryString( array( 'do' => 'moderate', 'action' => 'restoreAsHidden' ) )}' data-confirm data-confirmSubMessage='{lang="restore_as_hidden_desc"}'>{lang="restore_as_hidden"}</a></li>
+						<li class='ipsMenu_item'><a href='{$topic->url()->csrf()->setQueryString( array( 'do' => 'moderate', 'action' => 'delete', 'immediate' => 1 ) )}' data-confirm data-confirmSubMessage='{lang="delete_immediately_desc"}'>{lang="delete_immediately"}</a></li>
+					{{else}}
+						{{if $topic->canFeature()}}				
+							<li class='ipsMenu_item'><a href='{$topic->url()->csrf()->setQueryString( array( 'do' => 'moderate', 'action' => 'feature' ) )}'>{lang="feature"}</a></li>
+						{{endif}}
+						{{if $topic->canUnfeature()}}				
+							<li class='ipsMenu_item'><a href='{$topic->url()->csrf()->setQueryString( array( 'do' => 'moderate', 'action' => 'unfeature' ) )}' >{lang="unfeature"}</a></li>
+						{{endif}}
+						{{if $topic->canPin()}}				
+							<li class='ipsMenu_item'><a href='{$topic->url()->csrf()->setQueryString( array( 'do' => 'moderate', 'action' => 'pin' ) )}' >{lang="pin"}</a></li>
+						{{endif}}
+						{{if $topic->canUnpin()}}				
+							<li class='ipsMenu_item'><a href='{$topic->url()->csrf()->setQueryString( array( 'do' => 'moderate', 'action' => 'unpin' ) )}' >{lang="unpin"}</a></li>
+						{{endif}}
+						{{if $topic->canHide()}}				
+							<li class='ipsMenu_item'><a href='{$topic->url()->csrf()->setQueryString( array( 'do' => 'moderate', 'action' => 'hide' ) )}' data-ipsDialog data-ipsDialog-title="{lang="hide"}">{lang="hide"}</a></li>
+						{{endif}}
+						{{if $topic->canUnhide()}}				
+							<li class='ipsMenu_item'><a href='{$topic->url()->csrf()->setQueryString( array( 'do' => 'moderate', 'action' => 'unhide' ) )}' >{{if $topic->hidden() === 1}}{lang="approve"}{{else}}{lang="unhide"}{{endif}}</a></li>
+						{{endif}}
+						{{if $topic->canLock()}}				
+							<li class='ipsMenu_item'><a href='{$topic->url()->csrf()->setQueryString( array( 'do' => 'moderate', 'action' => 'lock' ) )}' >{lang="lock"}</a></li>
+						{{endif}}
+						{{if $topic->canUnlock()}}				
+							<li class='ipsMenu_item'><a href='{$topic->url()->csrf()->setQueryString( array( 'do' => 'moderate', 'action' => 'unlock' ) )}' >{lang="unlock"}</a></li>
+						{{endif}}
+						{{if $topic->canMove()}}				
+							<li class='ipsMenu_item'><a href='{$topic->url()->csrf()->setQueryString( array( 'do' => 'move' ) )}' data-ipsDialog data-ipsDialog-size='narrow' data-ipsDialog-title="{lang="move"}"  >{lang="move"}</a></li>
+						{{endif}}
+						{{if $topic->canMerge()}}				
+							<li class='ipsMenu_item'><a href='{$topic->url()->csrf()->setQueryString( array( 'do' => 'merge' ) )}' data-ipsDialog data-ipsDialog-size='narrow' data-ipsDialog-title="{lang="merge"}" >{lang="merge"}</a></li>
+						{{endif}}
+						{{if $topic->canUnarchive()}}
+							<li class='ipsMenu_item'><a href='{$topic->url()->csrf()->setQueryString( array( 'do' => 'unarchive' ) )}' data-confirm data-confirmSubMessage="{$topic->unarchiveBlurb()}" >{lang="unarchive"}</a></li>
+						{{endif}}
+                        {{if $topic->canRemoveArchiveExcludeFlag()}}
+							<li class='ipsMenu_item'><a href='{$topic->url()->csrf()->setQueryString( array( 'do' => 'removeArchiveExclude' ) )}' >{lang="remove_archive_exlude"}</a></li>
+						{{endif}}
+						{{if $topic->canDelete()}}				
+							<li class='ipsMenu_item'><a href='{$topic->url()->csrf()->setQueryString( array( 'do' => 'moderate', 'action' => 'delete' ) )}' data-confirm  >{lang="delete"}</a></li>
+						{{endif}}
+						{{if $topic->canOnMessage( 'add' )}}
+							<li class='ipsMenu_item'><a href='{$topic->url()->csrf()->setQueryString( array( 'do' => 'messageForm' ) )}' data-ipsDialog data-ipsDialog-title='{lang="add_message"}'>{lang="add_message"}</a></li>
+						{{endif}}
+						{{if $topic->canToggleItemModeration()}}
+							<li class='ipsMenu_item'><a href='{$topic->url()->csrf()->setQueryString( array( 'do' => 'toggleItemModeration' ) )}' data-confirm data-confirmMessage='{{if $topic->itemModerationEnabled()}}{lang="disable_topic_moderation_confirm"}{{else}}{lang="enable_topic_moderation_confirm"}{{endif}}'>{{if $topic->itemModerationEnabled()}}{lang="disable_topic_moderation"}{{else}}{lang="enable_topic_moderation"}{{endif}}</a></li>
+						{{endif}}
+						{{if !$topic->isArchived() and $topic->availableSavedActions()}}
+							<li class='ipsMenu_sep'><hr></li>
+							{{foreach $topic->availableSavedActions() as $action}}
+								<li class="ipsMenu_item"><a href='{$topic->url()->csrf()->setQueryString( array( 'do' => 'savedAction', 'action' => $action->_id ) )}' data-confirm>{$action->_title}</a></li>
+							{{endforeach}}
+						{{endif}}
+					{{endif}}
+					{{if \IPS\Member::loggedIn()->modPermission('can_view_moderation_log')}}
+						<li class='ipsMenu_sep'><hr></li>
+						<li class="ipsMenu_item"><a href='{$topic->url()->csrf()->setQueryString( array( 'do' => 'modLog' ) )}' data-ipsDialog data-ipsDialog-title='{lang="moderation_history"}'>{lang="moderation_history"}</a></li>
+					{{endif}}
+				</ul>
+			</li>
+		{{endif}}
+	</ul>
+</div>
+{{if $poll = $topic->getPoll()}}
+<div class='ipsBox ipsResponsive_pull'>
+{$poll|raw}
+</div>
+<br>
+{{endif}}
+<div id='comments' data-controller='core.front.core.commentFeed,forums.front.topic.view, core.front.core.ignoredComments' {{if settings.auto_polling_enabled}}data-autoPoll{{endif}} data-baseURL='{$topic->url()}' {{if $topic->isLastPage()}}data-lastPage{{endif}} data-feedID='topic-{$topic->tid}' class='cTopic ipsClear ipsSpacer_top'>
+	{{if $topic->isQuestion() && $question}}
+		<div class='ipsBox ipsResponsive_pull'>
+			<h2 class='ipsType_sectionTitle ipsType_reset'>{lang="question_title"}</h2>
+			{template="postContainer" group="topics" app="forums" params="$topic, $question, $votes, 'cPostQuestion ipsBox--child sm:ipsPadding_horizontal:half'"}
+		</div>
+		
+		{{if ( $topic->showSummaryOnDesktop() === 'post' OR $topic->showSummaryOnMobile() )}}
+			<div class="ipsSpacer_top">{template="activity" group="topics" app="forums" params="$topic, 'post'"}</div>
+		{{endif}}
+					
+		<div class='ipsSpacer_both'>
+			<div class="ipsBox ipsResponsive_pull ipsMargin_bottom">
+				<h2 class='ipsType_sectionTitle ipsType_reset ipsHide'>{lang="answer_count" pluralize="( $topic->posts ) ? $topic->posts - 1 : 0"}</h2>
+				<div class="ipsPadding:half ipsClearfix">
+					<ul class="ipsPos_right ipsButtonRow ipsClearfix sm:ipsMargin_bottom:half">
+						{{if ( \count( $topic->commentMultimodActions() ) && ( $topic->posts > 1 OR $topic->mapped('unapproved_comments') > 0 OR $topic->mapped('hidden_comments') > 0 ) ) || $pagination}}
+						<li>
+							<a class="ipsJS_show" href="#elCheck_menu" id="elCheck" title='{lang="select_rows_tooltip"}' data-ipsTooltip data-ipsAutoCheck data-ipsAutoCheck-context="#elPostFeed" data-ipsMenu data-ipsMenu-activeClass="ipsButtonRow_active">
+								<span class="cAutoCheckIcon ipsType_medium"><i class="fa fa-square-o"></i></span> <i class="fa fa-caret-down"></i>
+								<span class='ipsNotificationCount' data-role='autoCheckCount'>0</span>
+							</a>
+							<ul class="ipsMenu ipsMenu_auto ipsMenu_withStem ipsHide" id="elCheck_menu">
+								<li class="ipsMenu_title">{lang="select_rows"}</li>
+								<li class="ipsMenu_item" data-ipsMenuValue="all"><a href="#">{lang="all"}</a></li>
+								<li class="ipsMenu_item" data-ipsMenuValue="none"><a href="#">{lang="none"}</a></li>
+								<li class="ipsMenu_sep"><hr></li>
+								<li class="ipsMenu_item" data-ipsMenuValue="hidden"><a href="#">{lang="hidden"}</a></li>
+								<li class="ipsMenu_item" data-ipsMenuValue="unhidden"><a href="#">{lang="unhidden"}</a></li>
+								<li class="ipsMenu_item" data-ipsMenuValue="unapproved"><a href="#">{lang="unapproved"}</a></li>
+							</ul>
+						</li>
+						{{endif}}
+						<li>
+							<a href='{$topic->url()}' id="elSortBy_answers" {{if !isset( request.sortby )}}class='ipsButtonRow_active{{endif}}'>{lang="sort_by_answers"}</a>
+						</li>
+						<li>
+							<a href='{$topic->url()->setQueryString( 'sortby', 'date' )}' id="elSortBy_date" {{if isset( request.sortby ) and request.sortby == 'date'}}class='ipsButtonRow_active'{{endif}}>{lang="sort_by_date"}</a>
+						</li>
+					</ul>
+					{{if $pagination}}
+						{$pagination|raw}
+					{{endif}}
+				</div>
+			</div>
+		</div>
+	{{else}}
+			{{if ( \count( $topic->commentMultimodActions() ) && ( $topic->posts > 1 OR $topic->mapped('unapproved_comments') > 0 OR $topic->mapped('hidden_comments') > 0 ) ) || $pagination}}
+
+				<div class="ipsBox ipsResponsive_pull ipsPadding:half ipsClearfix ipsClear ipsMargin_bottom">
+					{{if \count( $topic->commentMultimodActions() )}}
+						<ul class="ipsButtonRow ipsPos_right ipsClearfix sm:ipsMargin_bottom:half">
+							<li>
+								<a class="ipsJS_show" href="#elCheck_menu" id="elCheck" title='{lang="select_rows_tooltip"}' data-ipsTooltip data-ipsAutoCheck data-ipsAutoCheck-context="#elPostFeed" data-ipsMenu data-ipsMenu-activeClass="ipsButtonRow_active">
+									<span class="cAutoCheckIcon ipsType_medium"><i class="fa fa-square-o"></i></span> <i class="fa fa-caret-down"></i>
+									<span class='ipsNotificationCount' data-role='autoCheckCount'>0</span>
+								</a>
+								<ul class="ipsMenu ipsMenu_auto ipsMenu_withStem ipsHide" id="elCheck_menu">
+									<li class="ipsMenu_title">{lang="select_rows"}</li>
+									<li class="ipsMenu_item" data-ipsMenuValue="all"><a href="#">{lang="all"}</a></li>
+									<li class="ipsMenu_item" data-ipsMenuValue="none"><a href="#">{lang="none"}</a></li>
+									<li class="ipsMenu_sep"><hr></li>
+									<li class="ipsMenu_item" data-ipsMenuValue="hidden"><a href="#">{lang="hidden"}</a></li>
+									<li class="ipsMenu_item" data-ipsMenuValue="unhidden"><a href="#">{lang="unhidden"}</a></li>
+									<li class="ipsMenu_item" data-ipsMenuValue="unapproved"><a href="#">{lang="unapproved"}</a></li>
+								</ul>
+							</li>
+						</ul>
+					{{endif}}
+					{{if $pagination}}
+						{$pagination|raw}
+					{{endif}}
+				</div>
+			{{endif}}
+	{{endif}}
+
+	{template="featuredComments" group="global" app="core" params="$topic->featuredComments(), $topic->url()->setQueryString( 'recommended', 'comments' ), 'recommended_posts', 'post_lc'"}
+	
+	<div id="elPostFeed" data-role='commentFeed' data-controller='core.front.core.moderation' {{if $topic->isQuestion() AND $topic->topic_answered_pid}} data-topicAnswerID="{$topic->topic_answered_pid}"{{endif}}>
+		<form action="{$topic->url()->csrf()->setQueryString( 'do', 'multimodComment' )->setPage('page', \IPS\Request::i()->page )}" method="post" data-ipsPageAction data-role='moderationTools'>
+			{{$postCount=0; $timeLastRead = $topic->timeLastRead(); $lined = FALSE;}}
+			{{if \count( $comments )}}
+				{{foreach $topic->generateCommentMetaData( $comments ) as $comment}}
+
+					{{if (!$topic->isQuestion() and !$lined and $timeLastRead and $timeLastRead->getTimestamp() < $comment->mapped('date'))}}
+						{{if $lined = TRUE and $postCount}}
+							<div class='ipsUnreadBar'>
+								<span>{lang="topic_meta_unread"}</span>
+							</div>
+						{{endif}}
+					{{endif}}
+
+					{{$postCount++;}}
+					{template="postContainer" group="topics" app="forums" params="$topic, $comment, $votes, ( $topic->isQuestion() ) ? 'cPostQuestion' : ''"}
+					{{if !$topic->isQuestion() and ( isset( $comment->metaData['comment']['moderation'] ) OR isset( $comment->metaData['comment']['timeGap'] ) )}}
+						<ul class='ipsTopicMeta'>
+							{{if isset( $comment->metaData['comment']['moderation'] )}}
+								{{foreach $comment->metaData['comment']['moderation'] as $modAction}}
+									<li class="ipsTopicMeta__item ipsTopicMeta__item--moderation">
+										<span class='ipsTopicMeta__time ipsType_light'>{datetime="$modAction['row']['ctime']" short="true"}</span>
+										<span class='ipsTopicMeta__action'>{$modAction['blurb']}</span>
+									</li>
+								{{endforeach}}
+							{{endif}}
+							{{if isset( $comment->metaData['comment']['timeGap'] )}}
+								<li class="ipsTopicMeta__item ipsTopicMeta__item--time">
+									{$comment->metaData['comment']['timeGap']['blurb']}...
+								</li>
+							{{endif}}
+						</ul>
+					{{endif}}
+					{{if $postCount == 1 AND $advertisement = \IPS\core\Advertisement::loadByLocation( 'ad_topic_view' )}}
+						{$advertisement|raw}
+					{{endif}}
+					{{if ( ( ! $topic->isQuestion() and $postCount == 1 ) and ( $topic->showSummaryOnDesktop() === 'post' OR $topic->showSummaryOnMobile() ) )}}
+						{template="activity" group="topics" app="forums" params="$topic, 'post'"}
+					{{endif}}
+				{{endforeach}}
+			{{else}}
+				{{if $topic->isQuestion()}}
+					<p class='ipsType_center ipsType_light ipsType_large ipsPad' data-role="noComments">
+						{lang="no_answers"}
+					</p>
+				{{endif}}
+			{{endif}}
+			{template="commentMultimod" app="core" group="global" params="$topic"}
+		</form>
+	</div>
+
+	{{if $pagination}}
+		<div class='ipsBox ipsPadding:half ipsMargin_top ipsClearfix ipsClear'>
+			{$pagination|raw}
+		</div>
+	{{endif}}
+	
+	{{if $topic->isArchived()}}
+		<div class='ipsMessage ipsMessage_general ipsSpacer_top'>
+			<h4 class='ipsMessage_title'>{lang="topic_is_archived"}</h4>
+			<p class='ipsType_reset'>
+				{lang="topic_archived_desc"}
+			</p>
+		</div>
+	{{endif}}
+	
+	{{if $topic->commentForm() || $topic->locked() || \IPS\Member::loggedIn()->restrict_post || \IPS\Member::loggedIn()->members_bitoptions['unacknowledged_warnings'] || !\IPS\Member::loggedIn()->checkPostsPerDay()}}
+		<a id='replyForm'></a>
+		<div data-role='replyArea' class='cTopicPostArea ipsBox ipsResponsive_pull ipsPadding {{if !$topic->canComment()}}cTopicPostArea_noSize{{endif}} ipsSpacer_top'>
+			{{if $topic->commentForm()}}
+				{{if $topic->locked()}}
+					<p class='ipsType_reset ipsType_warning ipsComposeArea_warning ipsSpacer_bottom ipsSpacer_half'><i class='fa fa-info-circle'></i> {lang="topic_locked_can_comment"}</p>
+				{{elseif ( $topic->getPoll() and $topic->getPoll()->poll_only )}}
+					<p class='ipsType_reset ipsType_warning ipsComposeArea_warning ipsSpacer_bottom ipsSpacer_half'><i class='fa fa-info-circle'></i> {lang="topic_poll_can_comment"}</p>
+				{{endif}}
+				{$topic->commentForm()|raw}
+			{{else}}
+				{{if $topic->locked()}}
+					{template="commentUnavailable" group="forms" location="front" app="core" params="'topic_locked_cannot_comment'"}
+				{{elseif \IPS\Member::loggedIn()->restrict_post}}
+					{template="commentUnavailable" group="forms" location="front" app="core" params="'restricted_cannot_comment', \IPS\Member::loggedIn()->warnings(5,NULL,'rpa'), \IPS\Member::loggedIn()->restrict_post"}
+				{{elseif \IPS\Member::loggedIn()->members_bitoptions['unacknowledged_warnings']}}
+					{template="commentUnavailable" group="forms" location="front" app="core" params="'unacknowledged_warning_cannot_post', \IPS\Member::loggedIn()->warnings( 1, FALSE )"}
+				{{elseif !\IPS\Member::loggedIn()->checkPostsPerDay()}}
+					{template="commentUnavailable" group="forms" location="front" app="core" params="'member_exceeded_posts_per_day'"}
+				{{endif}}
+			{{endif}}
+		</div>
+	{{endif}}
+
+	{{if !$topic->isArchived() and !$topic->container()->password}}
+		<div class='ipsBox ipsPadding ipsResponsive_pull ipsResponsive_showPhone ipsMargin_top'>
+			{{if !$topic->container()->disable_sharelinks}}
+				<div class='ipsResponsive_noFloat ipsResponsive_block ipsMargin_bottom:half'>
+					{template="shareButton" app="core" group="sharelinks" params="$topic, 'verySmall', 'light'"}
+				</div>
+			{{endif}}
+			<div class='ipsResponsive_noFloat ipsResponsive_block'>
+				{template="follow" app="core" group="global" params="'forums', 'topic', $topic->tid, $topic->followersCount()"}
+			</div>
+			{{if $topic->canPromoteToSocialMedia() and ( $topic instanceof \IPS\Content or $topic instanceof \IPS\Node\Model )}}
+				<div class='ipsResponsive_noFloat ipsResponsive_block ipsMargin_top:half'>
+					{template="promote" app="core" group="global" params="$topic"}
+				</div>
+			{{endif}}
+		</div>
+	{{endif}}
+</div>
+
+{{if ( $topic->canPin() or $topic->canUnpin() or $topic->canFeature() or $topic->canUnfeature() or $topic->canHide() or $topic->canUnhide() or $topic->canMove() or $topic->canLock() or $topic->canUnlock() or $topic->canDelete() or $topic->availableSavedActions() or $topic->canMerge() or $topic->canUnarchive() or $topic->canRemoveArchiveExcludeFlag() or \IPS\Member::loggedIn()->modPermission('can_view_moderation_log') or $topic->canToggleItemModeration() ) or ( $topic->hidden() == -2 AND \IPS\Member::loggedIn()->modPermission('can_manage_deleted_content') )}}
+	<ul class="ipsToolList ipsToolList_horizontal ipsClearfix ipsSpacer_top ipsResponsive_hidePhone">
+		<li>
+			<a href='#elTopicActionsBottom_menu' id='elTopicActionsBottom' class='ipsButton ipsButton_link ipsButton_link--light ipsButton_medium ipsButton_fullWidth' data-ipsMenu>{lang="moderator_actions"} <i class='fa fa-caret-down'></i></a>
+			<ul id='elTopicActionsBottom_menu' class='ipsMenu ipsMenu_auto ipsHide'>
+				{{if \IPS\Member::loggedIn()->modPermission('can_manage_deleted_content') AND $topic->hidden() == -2}}
+					<li class='ipsMenu_item'><a href='{$topic->url()->csrf()->setQueryString( array( 'do' => 'moderate', 'action' => 'restore' ) )}' data-confirm data-confirmSubMessage='{lang="restore_as_visible_desc"}'>{lang="restore_as_visible"}</a></li>
+					<li class='ipsMenu_item'><a href='{$topic->url()->csrf()->setQueryString( array( 'do' => 'moderate', 'action' => 'restoreAsHidden' ) )}' data-confirm data-confirmSubMessage='{lang="restore_as_hidden_desc"}'>{lang="restore_as_hidden"}</a></li>
+					<li class='ipsMenu_item'><a href='{$topic->url()->csrf()->setQueryString( array( 'do' => 'moderate', 'action' => 'delete', 'immediate' => 1 ) )}' data-confirm data-confirmSubMessage='{lang="delete_immediately_desc"}'>{lang="delete_immediately"}</a></li>
+				{{else}}
+					{{if $topic->canFeature()}}
+						<li class='ipsMenu_item'><a href='{$topic->url()->csrf()->setQueryString( array( 'do' => 'moderate', 'action' => 'feature' ) )}'>{lang="feature"}</a></li>
+					{{endif}}
+					{{if $topic->canUnfeature()}}
+						<li class='ipsMenu_item'><a href='{$topic->url()->csrf()->setQueryString( array( 'do' => 'moderate', 'action' => 'unfeature' ) )}' >{lang="unfeature"}</a></li>
+					{{endif}}
+					{{if $topic->canPin()}}
+						<li class='ipsMenu_item'><a href='{$topic->url()->csrf()->setQueryString( array( 'do' => 'moderate', 'action' => 'pin' ) )}' >{lang="pin"}</a></li>
+					{{endif}}
+					{{if $topic->canUnpin()}}
+						<li class='ipsMenu_item'><a href='{$topic->url()->csrf()->setQueryString( array( 'do' => 'moderate', 'action' => 'unpin' ) )}' >{lang="unpin"}</a></li>
+					{{endif}}
+					{{if $topic->canHide()}}
+						<li class='ipsMenu_item'><a href='{$topic->url()->csrf()->setQueryString( array( 'do' => 'moderate', 'action' => 'hide' ) )}' data-ipsDialog data-ipsDialog-title="{lang="hide"}">{lang="hide"}</a></li>
+					{{endif}}
+					{{if $topic->canUnhide()}}
+						<li class='ipsMenu_item'><a href='{$topic->url()->csrf()->setQueryString( array( 'do' => 'moderate', 'action' => 'unhide' ) )}' >{{if $topic->hidden() === 1}}{lang="approve"}{{else}}{lang="unhide"}{{endif}}</a></li>
+					{{endif}}
+					{{if $topic->canLock()}}
+						<li class='ipsMenu_item'><a href='{$topic->url()->csrf()->setQueryString( array( 'do' => 'moderate', 'action' => 'lock' ) )}' >{lang="lock"}</a></li>
+					{{endif}}
+					{{if $topic->canUnlock()}}
+						<li class='ipsMenu_item'><a href='{$topic->url()->csrf()->setQueryString( array( 'do' => 'moderate', 'action' => 'unlock' ) )}' >{lang="unlock"}</a></li>
+					{{endif}}
+					{{if $topic->canMove()}}
+						<li class='ipsMenu_item'><a href='{$topic->url()->csrf()->setQueryString( array( 'do' => 'move' ) )}' data-ipsDialog data-ipsDialog-size='narrow' data-ipsDialog-title="{lang="move"}"  >{lang="move"}</a></li>
+					{{endif}}
+					{{if $topic->canMerge()}}
+						<li class='ipsMenu_item'><a href='{$topic->url()->csrf()->setQueryString( array( 'do' => 'merge' ) )}' data-ipsDialog data-ipsDialog-size='narrow' data-ipsDialog-title="{lang="merge"}" >{lang="merge"}</a></li>
+					{{endif}}
+					{{if $topic->canUnarchive()}}
+						<li class='ipsMenu_item'><a href='{$topic->url()->csrf()->setQueryString( array( 'do' => 'unarchive' ) )}' data-confirm data-confirmSubMessage="{$topic->unarchiveBlurb()}" >{lang="unarchive"}</a></li>
+					{{endif}}
+					{{if $topic->canRemoveArchiveExcludeFlag()}}
+						<li class='ipsMenu_item'><a href='{$topic->url()->csrf()->setQueryString( array( 'do' => 'removeArchiveExclude' ) )}' >{lang="remove_archive_exlude"}</a></li>
+					{{endif}}
+					{{if $topic->canDelete()}}
+						<li class='ipsMenu_item'><a href='{$topic->url()->csrf()->setQueryString( array( 'do' => 'moderate', 'action' => 'delete' ) )}' data-confirm  >{lang="delete"}</a></li>
+					{{endif}}
+					{{if $topic->canOnMessage( 'add' )}}
+						<li class='ipsMenu_item'><a href='{$topic->url()->csrf()->setQueryString( array( 'do' => 'messageForm' ) )}' data-ipsDialog data-ipsDialog-title='{lang="add_message"}'>{lang="add_message"}</a></li>
+					{{endif}}
+					{{if $topic->canToggleItemModeration()}}
+							<li class='ipsMenu_item'><a href='{$topic->url()->csrf()->setQueryString( array( 'do' => 'toggleItemModeration' ) )}' data-confirm data-confirmMessage='{{if $topic->itemModerationEnabled()}}{lang="disable_topic_moderation_confirm"}{{else}}{lang="enable_topic_moderation_confirm"}{{endif}}'>{{if $topic->itemModerationEnabled()}}{lang="disable_topic_moderation"}{{else}}{lang="enable_topic_moderation"}{{endif}}</a></li>
+						{{endif}}
+					{{if !$topic->isArchived() and $topic->availableSavedActions()}}
+						<li class='ipsMenu_sep'><hr></li>
+						{{foreach $topic->availableSavedActions() as $action}}
+							<li class="ipsMenu_item"><a href='{$topic->url()->csrf()->setQueryString( array( 'do' => 'savedAction', 'action' => $action->_id ) )}' data-confirm>{$action->_title}</a></li>
+						{{endforeach}}
+					{{endif}}
+					{{if \IPS\Member::loggedIn()->modPermission('can_view_moderation_log')}}
+						<li class='ipsMenu_sep'><hr></li>
+						<li class="ipsMenu_item"><a href='{$topic->url()->csrf()->setQueryString( array( 'do' => 'modLog' ) )}' data-ipsDialog data-ipsDialog-title='{lang="moderation_history"}'>{lang="moderation_history"}</a></li>
+					{{endif}}
+				{{endif}}
+			</ul>
+		</li>
+	</ul>
+{{endif}}
+
+<div class='ipsPager ipsSpacer_top'>
+	<div class="ipsPager_prev">
+		{{if \IPS\forums\Forum::isSimpleView( $topic->container() )}}
+			<a href="{url="app=forums&module=forums&controller=index" seoTemplate="forums"}" title="{{if $topic->isQuestion() }}{lang="go_back_to_qa_forum"}{{else}}{lang="go_back_to_forum"}{{endif}}" rel="parent">
+				<span class="ipsPager_type">{{if $topic->isQuestion() }}{lang="go_back_to_qa_forum"}{{else}}{lang="go_back_to_forum"}{{endif}}</span>
+			</a>
+		{{else}}
+			<a href="{$topic->container()->url()}" title="{lang="go_to_forum" sprintf="$topic->container()->metaTitle()"}" rel="parent">
+				<span class="ipsPager_type">{{if $topic->isQuestion() }}{lang="go_back_to_qa_forum"}{{else}}{lang="go_back_to_forum"}{{endif}}</span>
+			</a>
+		{{endif}}
+	</div>
+	{{if $nextUnread !== NULL}}
+		<div class='ipsPager_next'>
+			<a href="{$topic->url()->setQueryString( array( 'do' => 'nextUnread' ) )}" title='{{if $topic->isQuestion()}}{lang="view_next_unread_question_title"}{{else}}{lang="view_next_unread_title"}{{endif}}'>
+				<span class="ipsPager_type">{{if $topic->isQuestion()}}{lang="view_next_unread_question"}{{else}}{lang="view_next_unread"}{{endif}}</span>
+			</a>
+		</div>
+	{{endif}}
+</div>
+
+{{if $topic->container()->club()}}
+	</div>
+{{endif}}

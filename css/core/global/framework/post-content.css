@@ -1,0 +1,735 @@
+/* Post content styles: quotes, spoilers, other formatting */
+/* We recommend you don't change these too much; users expect certain styles to look a certain way */
+
+/* ======================================================== */
+/* Fix some CKEditor styles									*/
+/* ======================================================== */
+.cke_source {
+	/* IE collapses the source textarea; if we force a minimum here, it will be able to calculate the correct size */
+	min-height: 300px !important;
+	min-width: 300px !important;
+}
+
+.ipsApp .cke_inner{
+	background-color: rgb( var(--theme-area_background_reset) );
+}
+
+.ipsApp .cke_wysiwyg_frame,
+.ipsApp .cke_wysiwyg_div{
+	background-color: rgb( var(--theme-area_background_reset) );
+	color: rgb( var(--theme-text_color) );
+}
+
+.cke_wysiwyg_div {
+	padding: 15px !important;
+	min-height: 200px;
+}
+
+	.cke_wysiwyg_div > p:first-child {
+		margin-top: 0 !important;
+	}
+
+.ipsApp .cke_widget_wrapper:hover > .cke_widget_element,
+.ipsApp .cke_widget_wrapper:hover .cke_widget_editable {
+	outline-width: 1px;
+	outline-style: solid;
+	outline-color: #8ec2ed;
+}
+	
+	.ipsApp .cke_widget_wrapper:hover .cke_widget_editable.cke_widget_editable_focused {
+		box-shadow: 0 1px 1px rgba(0,0,0,0.075), 0px 1px 9px rgba(82,168,236,0.7);
+	}
+
+.ipsMenu_item[data-mentionid] > a {
+	padding: 3px 15px;
+}
+
+.cke_wysiwyg_div ul {
+	list-style-type: disc;
+}
+
+	.cke_wysiwyg_div ul ul,
+	.cke_wysiwyg_div ol ul {
+		list-style-type: circle;
+	}
+
+		.cke_wysiwyg_div ul ul ul,
+		.cke_wysiwyg_div ol ol ul,
+		.cke_wysiwyg_div ol ul ul,
+		.cke_wysiwyg_div ul ol ul {
+			list-style-type: square;
+		}
+
+/* ======================================================== */
+/* QUOTES AND SPOILERS										*/
+/* ======================================================== */
+
+pre {
+	overflow: auto;
+}
+
+/* Basic box style */
+.ipsQuote,
+.ipsSpoiler, .ipsStyle_spoiler {
+	margin: 0;
+	padding: var(--sp-4);
+	position: relative;
+	background: rgb( var(--theme-area_background_light) );
+	border-radius: var(--radius-1);
+	clear: both;
+	border: 4px solid rgba( var(--theme-area_background_dark),.15);
+}
+
+	[dir='ltr'] .ipsQuote,
+	[dir='ltr'] .ipsSpoiler,
+	[dir='ltr'] .ipsStyle_spoiler{
+		border-width: 0 0 0 4px;
+	}
+	[dir='rtl'] .ipsQuote,
+	[dir='rtl'] .ipsSpoiler,
+	[dir='rtl'] .ipsStyle_spoiler{
+		border-width: 0 4px 0 0;
+	}
+
+	.ipsQuote + .ipsQuote,
+	.ipsSpoiler + .ipsSpoiler {
+		margin-top: var(--sp-4);
+	}
+	
+	/* Box header */
+	.ipsQuote_citation,
+	.ipsSpoiler_header {
+		background: rgb( var(--theme-area_background) );
+		margin: calc(var(--sp-4) * -1);
+		margin-bottom: var(--sp-3);
+		padding: var(--sp-3) var(--sp-4);
+		border-top-right-radius: inherit;
+		color: rgb( var(--theme-text_color) );
+		font-weight: bold;
+		font-size: {fontsize="small"};
+		display: block;
+		cursor: pointer;
+	}
+		[dir='rtl'] .ipsQuote_citation,
+		[dir='rtl'] .ipsSpoiler_header{
+			border-top-right-radius: 0;
+			border-top-left-radius: inherit;
+		}
+
+	.ipsQuote .ipsQuote_citation a,
+	.ipsSpoiler .ipsSpoiler_header a, .ipsStyle_spoiler .ipsSpoiler_header a {
+		color: inherit;
+		text-decoration: none;
+	}
+
+		.ipsQuote_citation.ipsQuote_closed,
+		.ipsSpoiler_header.ipsSpoiler_closed{
+			margin-bottom: calc(var(--sp-4) * -1);
+		}
+			[dir='ltr'] .ipsQuote_citation.ipsQuote_closed,
+			[dir='ltr'] .ipsSpoiler_header.ipsSpoiler_closed{
+				border-bottom-right-radius: inherit;
+			}
+			[dir='rtl'] .ipsQuote_citation.ipsQuote_closed,
+			[dir='rtl'] .ipsSpoiler_header.ipsSpoiler_closed{
+				border-bottom-left-radius: inherit;
+			}
+	
+	/* The open/close icon */
+	.ipsQuote_citation [data-action='toggleQuote'],
+	.ipsSpoiler_header [data-action='toggleSpoiler'] {
+		vertical-align: middle;
+		font-family: 'FontAwesome';
+		font-size: 16px;
+		margin-top: -3px;
+		transition: opacity 0.2s ease-in-out;
+		display: inline-block;
+		line-height: 1;
+	}
+		.ipsQuote_citation:not(:hover) [data-action='toggleQuote'],
+		.ipsSpoiler_header:not(:hover) [data-action='toggleSpoiler'] {
+			opacity: .3;
+		}
+	.ipsQuote_citation.ipsQuote_closed [data-action='toggleQuote']:before {
+		content: "\f138";
+	}
+	html[dir="rtl"] .ipsQuote_citation.ipsQuote_closed [data-action='toggleQuote']:before {
+		content: "\f137";
+	}
+	.ipsQuote_citation.ipsQuote_open [data-action='toggleQuote']:before {
+		content: "\f13a";
+	}
+	
+	/* The snapback icon */
+	.ipsQuote_citation .fa {
+		line-height: 23px;
+		opacity: 0.1;
+		transition: all 0.3s linear;
+	}
+		.ipsQuote_citation:hover .fa {
+			opacity: 1;
+		}
+
+	.ipsQuote p:first-child{
+		margin-top: 0;
+	}
+	.ipsQuote p:last-child,
+	.ipsSpoiler p:last-child{
+		margin-bottom: 0;
+	}
+
+	/* Tweak the truncate styling for quotes */
+	.ipsQuote_contents.ipsTruncate:after {
+		content: "";
+		bottom: 0;
+		position: absolute;
+		left: 0; right: 0;
+		height: 60px;
+		background: linear-gradient( rgba( var(--theme-area_background_light), 0.01 ), rgba( var(--theme-area_background_light), .99 ) );
+		visibility: visible;
+		pointer-events: none;
+	}
+
+	.ipsQuote .ipsTruncate_more {
+		color: rgb( var(--theme-text_color) );
+	}
+
+/* ======================================================== */
+/* SPOILERS													*/
+/* ======================================================== */
+.ipsSpoiler_header.ipsSpoiler_closed [data-action='toggleSpoiler']:before {
+	content: "\f06e";
+}
+.ipsSpoiler_header.ipsSpoiler_open [data-action='toggleSpoiler']:before {
+	content: "\f070";
+}
+
+/* ======================================================== */
+/* CODE														*/
+/* ======================================================== */
+.ipsCode {
+	background: rgb( var(--theme-area_background_light) );
+	padding: 15px !important;
+	clear: both;
+	direction: ltr;
+	word-wrap: normal;
+	border: 0px solid rgba( var(--theme-area_background_dark),.15) !important;
+	margin: 0;
+	border-radius: var(--radius-1);
+}
+
+	html[dir='ltr'] .ipsCode{
+		border-left-width: 4px !important;
+	}
+
+	html[dir='rtl'] .ipsCode{
+		border-right-width: 4px !important;
+	}
+
+	.ipsQuote .ipsCode{
+		background: rgba(var(--theme-area_background_dark), .03);
+	}
+
+/* ======================================================== */
+/* MENTIONS													*/
+/* ======================================================== */
+
+a[data-mentionid] {
+	display: inline-block;
+	border-radius: 20px;
+	padding: .1em .8em;
+	font-size: 90%;
+	background: rgb( var(--theme-area_background_reset) );
+	background-image: linear-gradient(to bottom, rgba( var(--theme-brand_primary), 0.15 ), rgba( var(--theme-brand_primary), 0.15 ));
+	color: rgb( var(--theme-brand_primary) );
+	text-decoration: none !important;
+}
+
+	a[data-mentionid]:hover{
+		background-image: linear-gradient(to bottom, rgba( var(--theme-brand_primary), 0.22 ), rgba( var(--theme-brand_primary), 0.22 ));
+	}
+
+/* ======================================================== */
+/* IMAGES */
+/* ======================================================== */
+.ipsAttachLink_image,
+.ipsAttachLink {
+	margin-bottom: 15px;
+}
+
+/* Lazy load fallback for non-JSers */
+body.ipsJS_none .ipsAttachLink_image:after {
+	content: "IMG: " attr(href);
+	background: rgb( var(--theme-area_background) );
+	border: 1px solid rgba( var(--theme-text_color), 0.1 );
+	padding: 5px;
+	font-size: 12px;
+	display: block;
+	word-wrap: break-word;
+}
+body.ipsJS_none .ipsAttachLink_image .ipsImage[data-src] {
+	display: none;
+}
+
+html[dir="ltr"] .ipsAttachLink_image.ipsAttachLink_right,
+html[dir="ltr"] .ipsAttachLink.ipsAttachLink_right,
+html[dir="rtl"] .ipsAttachLink_image.ipsAttachLink_left,
+html[dir="rtl"] .ipsAttachLink.ipsAttachLink_left {
+	margin-left: 30px;
+}
+html[dir="ltr"] .ipsAttachLink_image.ipsAttachLink_left,
+html[dir="ltr"] .ipsAttachLink.ipsAttachLink_left,
+html[dir="rtl"] .ipsAttachLink_image.ipsAttachLink_right,
+html[dir="rtl"] .ipsAttachLink.ipsAttachLink_right {
+	margin-right: 30px;
+}
+
+/* ======================================================== */
+/* REGULAR ATTACHMENTS */
+/* ======================================================== */
+.ipsAttachLink[data-fileid]:not( .ipsAttachLink_image ) {
+	background: rgb( var(--theme-area_background) );
+	border: 1px solid rgb( var(--theme-area_background) );
+	border-radius: var(--radius-1);
+	text-decoration: none;
+	color: rgb( var(--theme-text_light) );
+	line-height: 1.69;
+	padding: 0 7px;
+	display: inline-block;
+	max-width: 300px;
+	position: relative;
+	cursor: pointer;
+	transition: 0.1s all ease-in-out;
+	margin-bottom: 0;
+	font-size: {fontsize="small"};
+	vertical-align: middle;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	overflow: hidden;
+}
+
+	.ipsAttachLink[data-fileid]:not( .ipsAttachLink_image ):hover {
+		background: rgb( var(--theme-area_background_light) );
+	}
+
+		.ipsAttachLink[data-fileid]:not( .ipsAttachLink_image ) .ipsAttachLink_title {
+			color: rgb( var(--theme-text_dark) );
+		}
+
+	.ipsAttachLink[data-fileid]:not( .ipsAttachLink_image ):before {
+		font-family: 'FontAwesome';
+		content: '\f0c6';
+		color: rgb( var(--theme-text_light) );
+	}
+	html[dir="ltr"] .ipsAttachLink[data-fileid]:not( .ipsAttachLink_image ):before {
+		margin-right: 7px;
+	}
+	html[dir="rtl"] .ipsAttachLink[data-fileid]:not( .ipsAttachLink_image ):before {
+		margin-left: 7px;
+	}
+
+	/* Inside ckeditor, remove the max-width */
+	.cke .ipsAttachLink[data-fileid]:not( .ipsAttachLink_image ) {
+		max-width: none;
+	}
+
+html[dir] .ipsAttachLink.ipsAttachLink_block {
+	line-height: 1.3;
+	font-size: {fontsize="medium"};
+	margin-top: 15px;
+	min-height: 50px;
+	display: inline-block;
+	text-align: center;
+}
+html[dir="ltr"] .ipsAttachLink.ipsAttachLink_block {
+	padding: 10px 12px 10px 12px;
+	margin-right: 10px;
+}
+html[dir="rtl"] .ipsAttachLink.ipsAttachLink_block {
+	padding: 10px 12px 10px 12px;
+	margin-left: 10px;
+}
+
+.ipsAttachLink.ipsAttachLink_inline {}
+
+.ipsAttachLink.ipsAttachLink_block:before {
+	font-family: 'FontAwesome';
+	content: '\f016';
+	font-size: 28px;
+	color: rgb( var(--theme-text_dark) );
+}
+html[dir="ltr"] .ipsAttachLink.ipsAttachLink_block:before {
+	left: 12px;
+}
+html[dir="rtl"] .ipsAttachLink.ipsAttachLink_block:before {
+	right: 12px;
+}
+
+	.ipsAttachLink.ipsAttachLink_block[data-fileExt="zip"]:before,
+	.ipsAttachLink.ipsAttachLink_block[data-fileExt="rar"]:before,
+	.ipsAttachLink.ipsAttachLink_block[data-fileExt="7z"]:before,
+	.ipsAttachLink.ipsAttachLink_block[data-fileExt="gz"]:before,
+	.ipsAttachLink.ipsAttachLink_block[data-fileExt="tar"]:before {
+		content: '\f1c6';
+	}
+	.ipsAttachLink.ipsAttachLink_block[data-fileExt="pdf"]:before {
+		content: '\f1c1';
+	}
+	.ipsAttachLink.ipsAttachLink_block[data-fileExt="doc"]:before,
+	.ipsAttachLink.ipsAttachLink_block[data-fileExt="docx"]:before {
+		content: '\f1c2';
+	}
+	.ipsAttachLink.ipsAttachLink_block[data-fileExt="txt"]:before,
+	.ipsAttachLink.ipsAttachLink_block[data-fileExt="rtf"]:before {
+		content: '\f0f6';
+	}
+	.ipsAttachLink.ipsAttachLink_block[data-fileExt="xls"]:before,
+	.ipsAttachLink.ipsAttachLink_block[data-fileExt="xlsx"]:before {
+		content: '\f1c3';
+	}
+	.ipsAttachLink.ipsAttachLink_block[data-fileExt="ppt"]:before,
+	.ipsAttachLink.ipsAttachLink_block[data-fileExt="pptx"]:before,
+	.ipsAttachLink.ipsAttachLink_block[data-fileExt="pps"]:before {
+		content: '\f1c4';
+	}
+	.ipsAttachLink.ipsAttachLink_block[data-fileExt="html"]:before,
+	.ipsAttachLink.ipsAttachLink_block[data-fileExt="php"]:before,
+	.ipsAttachLink.ipsAttachLink_block[data-fileExt="js"]:before,
+	.ipsAttachLink.ipsAttachLink_block[data-fileExt="css"]:before,
+	.ipsAttachLink.ipsAttachLink_block[data-fileExt="xml"]:before,
+	.ipsAttachLink.ipsAttachLink_block[data-fileExt="csv"]:before,
+	.ipsAttachLink.ipsAttachLink_block[data-fileExt="sql"]:before,
+	.ipsAttachLink.ipsAttachLink_block[data-fileExt="py"]:before {
+		content: '\f1c9';
+	}
+
+.ipsAttachLink_title {
+	font-weight: 500;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	display: block;
+	overflow: hidden;
+	transition: 0.1s all ease-in-out;
+}
+
+.ipsAttachLink_metaInfo {
+	margin-top: 5px;
+	font-size: {fontsize="x_small"};
+	color: rgb( var(--theme-text_light) );
+}
+
+
+/* ======================================================== */
+/* EMBEDDABLES - Internal Embeds							*/
+/* These styles are used for the iframes when a user posts  */
+/* a link to another piece of content on the suite (for		*/
+/* example, a topic)										*/
+/* ======================================================== */
+
+iframe[data-embedContent] {
+	width: 100%;
+	min-height: 165px;
+	{{if settings.max_internalembed_width}}
+		max-width: {setting="max_internalembed_width"}px;
+	{{else}}
+		max-width: 100%;
+	{{endif}}
+	min-width: 250px;
+	margin: 10px 0;
+	border: 1px solid transparent;
+	position: relative;
+	background-size: 40px 40px;
+	border-radius: var(--radius-1);
+	display: block;
+}
+	
+	iframe[data-embedContent].ipsEmbed_finishedLoading {
+		background-color: rgb( var(--theme-page_background) );
+		background-image: none;
+		border: 1px solid rgba( var(--theme-text_dark), 0.1 );
+	}
+
+.ipsRichEmbed .ipsRichEmbed_masthead {
+	background: rgb( var(--theme-area_background_dark) );
+}
+
+.ipsRichEmbed .ipsRichEmbed_mastheadBg > a,
+.ipsRichEmbed .ipsRichEmbed_mastheadBg > span {
+	background-position: center;
+	background-repeat: no-repeat;
+	background-size: cover;
+	height: 180px;
+	display: block;
+}
+
+	.ipsRichEmbed .ipsRichEmbed_mastheadBg.ipsRichEmbed_mastheadBg_small > a,
+	.ipsRichEmbed .ipsRichEmbed_mastheadBg.ipsRichEmbed_mastheadBg_small > span {
+		height: 80px;
+	}
+
+.ipsRichEmbed .ipsImage	{
+	max-height: 350px;
+}
+
+.ipsRichEmbed_header {
+	border-bottom: 1px solid rgba( var(--theme-text_dark), 0.05 );
+	padding: var(--sp-3) 45px var(--sp-3) var(--sp-4);
+}
+
+	.ipsRichEmbed_header .ipsPhotoPanel .ipsUserPhoto {
+		margin-top: 5px;
+	}
+	
+.ipsRichEmbed_openItem {
+	font-size: 26px;
+	position: absolute;
+	right: 15px;
+	top: 15px;
+	color: rgb( var(--theme-text_dark) );
+	opacity: 0.1;
+	transition: all 0.2s ease-in-out;
+}
+
+	.ipsRichEmbed_openItem:hover {
+		color: inherit;
+		opacity: 1;
+	}
+
+.ipsRichEmbed_title {
+	font-size: {fontsize="medium"};
+	font-weight: 600;
+	padding-top: 2px;
+}
+
+.ipsRichEmbed_moreInfo {
+	border-top: 1px solid rgba( var(--theme-text_dark), 0.05 );
+}
+
+.ipsRichEmbed_metaLine {
+	
+}
+
+.ipsApp .ipsRichEmbed_stats.ipsSpacer_top {
+	border-top: 1px solid rgba( var(--theme-text_dark), 0.1 );
+	padding-top: 10px;
+	margin-top: 10px;
+}
+
+.ipsRichEmbed_originalItem {
+	border: 1px solid rgba( var(--theme-text_dark), 0.1 );
+	box-shadow: 0px 0px 3px rgba(0,0,0,0.1);
+}
+
+	.ipsRichEmbed_originalItem.ipsPad,
+	.ipsRichEmbed_originalItem .ipsPad {
+		padding: 10px;
+	}
+
+.ipsRichEmbed_itemTitle {
+	margin: 0;
+	font-size: {fontsize="large"};
+	color: rgb( var(--theme-text_dark) );
+	font-weight: 400;
+	line-height: 1.3;
+}
+
+.ipsRichEmbed_phone .ipsPhotoPanel > .ipsUserPhoto {
+	display: none !important;
+}
+
+html[dir] .ipsRichEmbed_phone .ipsPhotoPanel > div {
+	margin-left: 0;
+	margin-right: 0;
+}
+
+html[dir="ltr"] .ipsList_inline .ipsRichEmbed_commentPhoto {
+	margin-right: 2px;
+}
+html[dir="rtl"] .ipsList_inline .ipsRichEmbed_commentPhoto {
+	margin-left: 2px;
+}
+
+.ipsRichEmbed hr.ipsHr {
+	margin-top: 10px;
+	margin-bottom: 10px;
+}
+
+	/* 	A nasty hack which forces iOS to honor max-widths on iframes. Without this, our iframe
+		pushes the page width out because of the white-space:nowrap; on the embeddable titles.
+		See: http://stackoverflow.com/a/23083463
+	*/
+	.ipsEmbedded {
+		width: 1px;
+        min-width: 100%;
+        *width: 100%;
+	}
+	
+	.ipsEmbedded_image {
+		background-color: rgb( var(--theme-area_background_dark) );
+		background-size: cover;
+		background-position: 50%;
+		background-repeat: no-repeat;
+		overflow: hidden;
+	}
+
+	.ipsEmbedded_image, .ipsEmbedded_image a  {
+		width: 110px;
+		height: 110px;
+	}
+
+	.ipsEmbedded_image a {
+		display: block;
+	}
+
+	.ipsEmbedded_image img {
+		display: none;
+	}
+
+		.ipsEmbedded_withImage .ipsEmbedded_image {
+			position: absolute;
+			top: 10px;
+			border: 3px solid #fff;
+		}
+		html[dir="ltr"] .ipsEmbedded_withImage .ipsEmbedded_image {
+			left: 10px;
+		}
+		html[dir="rtl"] .ipsEmbedded_withImage .ipsEmbedded_image {
+			right: 10px;
+		}
+
+	.ipsEmbedded_headerArea {
+		background: rgb( var(--theme-area_background) );
+		border-bottom: 1px solid rgba( var(--theme-text_dark), 0.05 );
+		padding: 10px;
+		line-height: 1;
+		font-size: {fontsize="base"};
+	}
+
+		.ipsEmbedded_headerArea .ipsEmbedded_type {
+			font-size: {fontsize="x_small"};
+		} 
+
+	.ipsEmbedded .ipsType_medium, .ipsEmbedded .ipsType_small {
+		line-height: 1.3;
+	}
+
+	.ipsEmbedded_content {
+		padding: 9px 7px 7px;
+		background-color: rgb( var(--theme-area_background_light) );
+		min-height: 75px;
+	}
+
+	.ipsEmbedded_stats {
+		margin-top: 9px;
+		padding: 7px 0;
+		border-top: 1px solid rgba( var(--theme-text_dark), 0.05 );
+	}
+
+	.ipsEmbedded .ipsUserPhoto_tiny {
+		width: 30px;
+		height: 30px;
+	}
+
+	html[dir="ltr"] .ipsEmbedded_withImage .ipsEmbedded_headerArea,
+	html[dir="ltr"] .ipsEmbedded_withImage .ipsEmbedded_content {
+		padding-left: 130px;
+	}
+	html[dir="rtl"] .ipsEmbedded_withImage .ipsEmbedded_headerArea,
+	html[dir="rtl"] .ipsEmbedded_withImage .ipsEmbedded_content {
+		padding-right: 130px;
+	}
+
+	.ipsEmbedded_error {
+		text-align: center;
+		padding-top: 50px;
+		font-size: {fontsize="x_small"};
+		color: rgba( var(--theme-text_dark), 0.35 );
+	}
+
+/* ======================================================== */
+/* EMBEDDABLES - oEmbed Videos								*/
+/* These styles are used for embedded links to oEmbed		*/
+/* services that identify themselves as videos (for example	*/
+/* YouTube, Vimeo and Hulu)									*/
+/* ======================================================== */
+video.ipsEmbeddedVideo {
+	/* This is to ensure videos have a visible size to allow intersectionobserver to work */
+	min-width: 1px;
+	min-height: 1px;
+}
+
+.ipsEmbeddedVideo iframe {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+}
+
+{{if settings.max_video_width}}
+	.ipsEmbeddedVideo {
+		width: 100%;
+		max-width: {setting="max_video_width"}px;
+	}
+
+	.ipsEmbeddedVideo > div {
+		float: none;
+		clear: both;
+		width: 100%;
+		overflow: auto;
+		position: relative;
+		/* This allows videos to resize responsively */
+	    padding-bottom: 56.25%;
+	    padding-top: 25px;
+	}
+
+	.ipsQuote .ipsEmbeddedVideo > div {
+		width: 98%;
+		margin-bottom: 15px;
+	}
+{{else}}	
+	.ipsEmbeddedVideo {
+		float: none;
+	    clear: both;
+		width: 100%;
+		overflow: auto;
+		position: relative;
+	}	
+
+		.ipsEmbeddedVideo:not( video ) {
+			/* This allows videos to resize responsively */
+		    padding-bottom: 56.25%;
+		    padding-top: 25px;
+		}
+
+	.ipsQuote .ipsEmbeddedVideo {
+		width: 98%;
+		margin-bottom: 15px;
+	}
+{{endif}}
+
+/* Add space between consecutive videos */
+.ipsEmbeddedVideo + .ipsEmbeddedVideo{
+	margin-top: var(--sp-4);
+}
+
+/* ======================================================== */
+/* EMBEDDABLES - oEmbed Misc								*/
+/* These styles are used for embedded links to oEmbed		*/
+/* services that are not videos or photos (for example		*/
+/* Twitter and Instagram)									*/
+/* ======================================================== */
+
+.ipsEmbeddedOther iframe {
+	float: none;
+	clear: both;
+	width: 100%;
+	position: relative;
+	border: none;
+}
+
+{{if settings.max_video_width}}
+	.ipsEmbeddedOther {
+		max-width: {setting="max_video_width"}px;
+	}
+{{endif}}

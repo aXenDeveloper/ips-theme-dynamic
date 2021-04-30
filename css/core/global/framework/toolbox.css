@@ -1,0 +1,51 @@
+/* Toolboxes are side panels, used for things like sidebar manager and easy mode themes */
+.ipsApp .ipsToolbox {
+	background: #212223;
+	color: #fff;
+
+	--form-field--borderColor: rgba(255,255,255,0.05);
+	--form-field--borderHoverColor: {hextorgb="#fff" opacity="0.3"};
+	--form-field--focusShadow: {hextorgb="#fff" opacity="0.25"} 0px 0px 0px 3px;
+	--form-field--focusBorder: {hextorgb="#fff" opacity="0.5"};
+}
+
+	.ipsToolbox .ipsType_light{
+		color: inherit;
+		opacity: .7;
+	}
+	
+	.ipsApp .ipsToolbox a:not( .ipsButton ) {
+		color: inherit;
+		text-decoration: underline;
+	}
+	.ipsApp .ipsToolbox .ipsToolbox_title {
+		margin-bottom: 15px;
+	}
+
+	.ipsApp .ipsToolbox .ipsToolbox_sectionTitle {
+		background: #000;
+		padding: 10px 15px;
+		font-weight: normal;
+		border-radius: 4px;
+	}
+
+	.ipsApp .ipsToolbox input, .ipsApp .ipsToolbox select,
+	.ipsApp .ipsToolbox textarea {
+		background-color: rgba(255,255,255,0.1);
+		color: inherit;
+	}
+
+	.ipsApp .ipsToolbox select {
+		background-image: url( "{resource="select_dropdown.png" app="core" location="global"}" );
+		width: 100%;
+		max-width: 350px;
+	}
+
+		.ipsApp .ipsToolbox option {
+			background-color: rgba(0,0,0,0.8);
+		}
+
+	.ipsApp .ipsToolbox input[type=number] {
+		width: 100%;
+		max-width: 350px;
+	}

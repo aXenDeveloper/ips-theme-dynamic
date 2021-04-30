@@ -1,0 +1,14 @@
+<ips:template parameters="$comment, $supportsReason=FALSE" />
+
+<span class='ipsType_reset ipsType_medium ipsType_light' data-excludequote>
+	<strong>{lang="date_edited" htmlsprintf="\IPS\DateTime::ts( $comment->mapped('edit_time') )->html(FALSE), ( $comment->mapped('edit_member_name') ) ? htmlspecialchars( $comment->mapped('edit_member_name'), ENT_QUOTES | ENT_DISALLOWED, 'UTF-8', FALSE ) : \IPS\Member::loggedIn()->language()->addToStack('guest')"}</strong>
+	{{if $supportsReason && $comment->mapped('edit_reason')}}
+		<br>{$comment->mapped('edit_reason')}
+	{{endif}}
+	{{if \IPS\Settings::i()->edit_log == 2 and ( \IPS\Settings::i()->edit_log_public or \IPS\Member::loggedIn()->modPermission('can_view_editlog') ) }}
+		<a href='{$comment->url('editlog')}' class='' data-ipsDialog data-ipsDialog-title='{lang="edit_history_title"}' title='{lang="edit_history"}'>({lang="edit_history"})</a>
+		{{if !$comment->mapped('edit_show') AND \IPS\Member::loggedIn()->modPermission('can_view_editlog')}}
+		<br>{lang="comment_edit_show_anyways"}
+		{{endif}}
+	{{endif}}
+</span>
