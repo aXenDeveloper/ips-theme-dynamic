@@ -1,6 +1,0 @@
-<ips:template parameters="$object" />
-{{if $object->canPromoteToSocialMedia() and ( $object instanceof \IPS\Content or $object instanceof \IPS\Node\Model )}}
-	{{$column = $object::$databaseColumnId;}}
-	{template="promoteLink" app="core" group="global" params="$object, \IPS\core\Promote::loadByClassAndId( \get_class( $object ), $object->$column, TRUE ), TRUE"}
-{{endif}}
-

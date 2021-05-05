@@ -1,6 +1,0 @@
-<ips:template parameters="$table, $headers, $rows" />
-{{if \count( $rows )}}
-	{{foreach $rows as $row}}
-		{template="row" group="global" app="forums" params="$table, $headers, $row"}
-	{{endforeach}}
-{{endif}}

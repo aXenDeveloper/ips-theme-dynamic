@@ -1,8 +1,0 @@
-<ips:template parameters="$author" />
-{{foreach $author->contentProfileFields() as $group => $fields}}
-	{{foreach $fields as $field => $value}}
-	<li data-role='custom-field' class='ipsResponsive_hidePhone ipsType_break'>
-		{$value|raw}
-	</li>
-	{{endforeach}}
-{{endforeach}}

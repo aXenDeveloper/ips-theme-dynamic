@@ -1,9 +1,0 @@
-<ips:template parameters="$tag, $tagEditUrl=NULL" />
-
-<li {{if $tagEditUrl}}class='ipsTags_deletable'{{endif}}>
-	{{$urlSafeTag = \IPS\Settings::i()->use_friendly_urls ? ( \IPS\Settings::i()->htaccess_mod_rewrite ? \IPS\Http\Url::internal( "app=core&module=search&controller=search&tags=" . rawurlencode( $tag ), "front", "tags" ) : \IPS\Http\Url::internal( "app=core&module=search&controller=search", "front", "search" )->setQueryString( 'tags', $tag ) ) : \IPS\Http\Url::internal( "app=core&module=search&controller=search", "front", "tags" )->setQueryString( 'tags', $tag );}}
-	<a href="{$urlSafeTag}" class='ipsTag' title="{lang="find_tagged_content" sprintf="$tag"}" rel="tag"><span>{$tag}</span></a>
-	{{if $tagEditUrl}}
-		<a href='{$tagEditUrl->setQueryString( 'do', 'editTags' )->setQueryString( 'removeTag', $tag )->csrf()}' class='ipsTag_remove' data-action='removeTag' data-ipsTooltip title='{lang="remove_tag"}'>&times;</a>
-	{{endif}}
-</li>

@@ -1,7 +1,0 @@
-<ips:template parameters=" " />
-{{if isset( \IPS\Theme::i()->logo['front']['url'] ) AND \IPS\Theme::i()->logo['front']['url'] !== null }}
-{{$logo = \IPS\File::get( 'core_Theme', \IPS\Theme::i()->logo['front']['url'] )->url;}}
-<a href='{setting="base_url"}' id='elLogo' accesskey='1'><img src="{$logo}" alt='{setting="board_name" escape="true"}'></a>
-{{else}}
-<a href='{setting="base_url"}' id='elSiteTitle' accesskey='1'>{setting="board_name"}</a>
-{{endif}}

@@ -1,5 +1,0 @@
-<ips:template parameters="$realUrl, $linkUrl, $title, $mimeType, $id" />
-<video controls class="ipsEmbeddedVideo" data-fileid="{$id}" {{if settings.lazy_load_enabled}}data-video-embed{{else}}data-controller="core.global.core.embeddedvideo"{{endif}}>
-	<source {{if settings.lazy_load_enabled}}data-video-{{endif}}src="<fileStore.core_Attachment>/{$realUrl}" type="{$mimeType}">
-	<a class="ipsAttachLink" href="{$linkUrl}">{$title}</a>
-</video>

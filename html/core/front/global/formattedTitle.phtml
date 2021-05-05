@@ -1,6 +1,0 @@
-<ips:template parameters="$item" />
-{{if \is_array($item)}}
-<span class="ipsBadge ipsBadge_pill" {template="formattedInlineStyle" params="$item" app="core" group="global" location="front"}>{$item['title']}</span>
-{{else}}
-<span class="ipsBadge ipsBadge_pill" {template="formattedInlineStyle" params="$item" app="core" group="global" location="front"}>{$item->_title}</span>
-{{endif}}

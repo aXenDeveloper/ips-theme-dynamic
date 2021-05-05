@@ -1,9 +1,0 @@
-<ips:template parameters="$type, $source" />
-<div class='ipsEmbeddedOther' contenteditable="false">
-	<iframe
-		src="https://player.twitch.tv/?{$type}={{if $type == 'video'}}v{{endif}}{$source}&autoplay=false&parent={expression="parse_url(\IPS\Settings::i()->base_url, \PHP_URL_HOST )"}"
-		height="450"
-		width="300"
-		allowfullscreen="">
-	</iframe>
-</div>

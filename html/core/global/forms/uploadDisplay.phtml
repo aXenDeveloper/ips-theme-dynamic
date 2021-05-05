@@ -1,6 +1,0 @@
-<ips:template parameters="$file, $downloadUrl" />
-{{if $file->isImage()}}
-	<img src="{$file->url}" class="ipsImage" data-ipsLightbox>
-{{else}}
-	<a href="{$downloadUrl}">{$file->originalFilename}</a>
-{{endif}}

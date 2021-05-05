@@ -1,2 +1,0 @@
-<ips:template parameters="$url, $params" />
-<iframe {{foreach $params as $k => $v }}{$k}="{$v}" {{endforeach}} {{if settings.lazy_load_enabled}}src="{expression="\IPS\Text\Parser::blankPage()"}" data-embed-{{endif}}src="https://w.soundcloud.com/player/?url={$url}&amp;color=ff5500"></iframe>

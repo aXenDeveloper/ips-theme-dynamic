@@ -1,6 +1,0 @@
-<ips:template parameters="$record" />
-{{foreach $record->topicFields() as $id => $field}}
-{$field|raw}
-{{endforeach}}
-<br>
-<p><a href="{$record->url()}">{lang="content_view_record" sprintf="$record::database()->recordWord( 1 )"}</a></p>

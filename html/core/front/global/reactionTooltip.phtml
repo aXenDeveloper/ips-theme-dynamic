@@ -1,8 +1,0 @@
-<ips:template parameters="$reaction, $names, $others" />
-<strong>{$reaction->_title}</strong>
-{{foreach $names as $name}}
-	<br>{$name}
-{{endforeach}}
-{{if $others}}
-	<br>{lang="react_blurb_others_secondary" pluralize="$others"}
-{{endif}}

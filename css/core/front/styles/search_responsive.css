@@ -1,9 +1,0 @@
-/* PHONES */
-@media screen and (max-width: 767px) {
-	html[dir="ltr"] #elMainSearchInput {
-		padding-right: 7px;
-	}
-	html[dir="rtl"] #elMainSearchInput {
-		padding-left: 7px;
-	}
-}

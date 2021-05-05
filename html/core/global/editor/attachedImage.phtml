@@ -1,2 +1,0 @@
-<ips:template parameters="$url, $thumbnail, $title, $id, $width, $ratio=1" />
-<p><a href="<fileStore.core_Attachment>/{$url}" class="ipsAttachLink ipsAttachLink_image"><img data-fileid="{$id}" {{if settings.lazy_load_enabled}}src="{expression="\IPS\Text\Parser::blankImage()"}" data-src="<fileStore.core_Attachment>/{$thumbnail}"{{else}}src="<fileStore.core_Attachment>/{$thumbnail}"{{endif}} data-ratio="{$ratio}" width="{$width}" class="ipsImage ipsImage_thumbnailed" alt="{$title}"></a></p>

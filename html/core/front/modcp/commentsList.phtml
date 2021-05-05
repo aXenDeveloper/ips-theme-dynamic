@@ -1,8 +1,0 @@
-<ips:template parameters="$comments, $url, $totalCount, $perPage" />
-{template="pagination" group="global" app="core" location="global" params="$url, $totalCount, isset( \IPS\Request::i()->page ) ? \intval( \IPS\Request::i()->page ) : 1, $perPage"}
-{{if \count( $comments ) }}
-	{{foreach $comments as $comment}}
-		{$comment->html()|raw}
-	{{endforeach}}
-{{endif}}
-{template="pagination" group="global" app="core" location="global" params="$url, $totalCount, isset( \IPS\Request::i()->page ) ? \intval( \IPS\Request::i()->page ) : 1, $perPage"}

@@ -1,2 +1,0 @@
-<ips:template parameters="$url, $newWindow=TRUE, $title=NULL, $wordbreak=TRUE, $nofollow=FALSE, $noreferrer=FALSE" />
-{{if $wordbreak}}<div class='ipsType_break ipsContained'>{{endif}}<a href='{$url}'{{if $newWindow === TRUE}} target='_blank' {{if $nofollow === FALSE}}rel="{{if $noreferrer}}noreferrer{{else}}noopener{{endif}}"{{endif}}{{endif}}{{if $nofollow === TRUE}} rel="nofollow{{if $newWindow === TRUE}} {{if $noreferrer}}noreferrer{{else}}noopener{{endif}}{{endif}}"{{endif}}>{{if $title}}{$title}{{else}}{$url}{{endif}}</a>{{if $wordbreak}}</div>{{endif}}

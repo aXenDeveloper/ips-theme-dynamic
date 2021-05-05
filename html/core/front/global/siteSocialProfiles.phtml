@@ -1,8 +1,0 @@
-<ips:template parameters=" " />
-{{if \IPS\Settings::i()->site_social_profiles AND $links = json_decode( \IPS\Settings::i()->site_social_profiles, TRUE ) AND \count( $links )}}
-	{{foreach $links as $profile}}
-		<li class='cUserNav_icon'>
-			<a href='{$profile['key']}' target='_blank' class='cShareLink cShareLink_{$profile['value']}' rel='noopener noreferrer'><i class='fa fa-{$profile['value']}'></i></a>
-		</li>
-	{{endforeach}}
-{{endif}}
