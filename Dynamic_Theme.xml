@@ -27,8 +27,8 @@
 						{{if !\in_array('ipsLayout_minimal', \IPS\Output::i()->bodyClasses )}}{template="userBar" app="core" group="global" params=""}{{endif}}
 						{template="mobileNavigationIcon" app="core" group="global" params=""}
 					</div>
+					{template="navBar" app="core" group="global" params=""}
 				</header>
-				{template="navBar" app="core" group="global" params=""}
 				{{if !\in_array('ipsLayout_minimal', \IPS\Output::i()->bodyClasses )}}{template="mobileNavBar" app="core" group="global" params=""}{{endif}}
 			</div>
 		{{endif}}
@@ -112,23 +112,22 @@
   --theme-dynamic-color-1: 107, 105, 206;
   --theme-dynamic-color-2: 139, 105, 194;
   --theme-dynamic-color-link: 92, 100, 197;
-  --gradient-primary: linear-gradient(90deg, rgb( var(--theme-dynamic-color-1) ), rgb( var(--theme-dynamic-color-2 )));
+  --theme-dynamic-gradient-primary: linear-gradient(90deg, rgb( var(--theme-dynamic-color-1) ), rgb( var(--theme-dynamic-color-2 )));
   --theme-dynamic-button--radius: var(--sp-6);
   --header--height: 115px;
   --primary-navigation--height: 80px;
 }
 
 #ipsLayout_header header {
-  background-color: rgba(20, 21, 25, 0.79);
+  background: linear-gradient(rgba(20, 21, 25, 0.79), rgba(20, 21, 25, 0.79)),
+  url('{resource="dynamic_theme/header.png" app="core" location="front"}') no-repeat;
 }
 
 #ipsLayout_header nav {
-  background: rgba(18, 19, 23, 0.8);
+  background: rgba(18, 19, 23, 0.18);
 }
 
 body {
-  background-image: url('{resource="dynamic_theme/header.png" app="core" location="front"}');
-  background-repeat: no-repeat;
   font-family: "Poppins", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"
 }
 
@@ -146,7 +145,7 @@ a {
 }
 
 .ipsApp .ipsButton_primary {
-  background: var(--gradient-primary);
+  background: var(--theme-dynamic-gradient-primary);
 }
 
 .ipsApp .ipsButton:not(.ipsButton_link_secondary):not(.ipsButton_narrow) {
@@ -154,7 +153,7 @@ a {
 }
 
 .ipsApp .ipsButton_primary:hover:not(:active) {
-  background: var(--gradient-primary);
+  background: var(--theme-dynamic-gradient-primary);
   box-shadow: 0 0 0 4px rgba(var(--theme-dynamic-color-1), 0.5);
 }
 
@@ -227,6 +226,36 @@ a {
   color: rgb( var(--theme-dynamic-color-link) );
 }
 
+.ipsNavBar_primary > ul > li > a::after {
+  content: '';
+  background-image: var(--theme-dynamic-gradient-primary);
+  width: 100%;
+  height: 2px;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  -webkit-transform: scaleX(0);
+  transform: scaleX(0);
+  transition: transform .3s;
+  border-radius: 2px;
+}
+
+.ipsNavBar_primary > ul > li.ipsNavBar_active > a::after {
+  transform: scaleX(1);
+}
+
+/* ===== Icons ===== */
+nav .ipsNavBar_primary ul[data-role="primaryNavBar"] li a:not(.ipsButton_primary)::before {
+  content: "\f0c9";
+  font-family: 'font awesome 5 free';
+  font-size: 14px;
+  font-weight: 700;
+  margin-right: 3px;
+}
+
+{theme="dynamic_icons_nav_css"}
+
 /* ===== Search ===== */
 #elSearch {
   background: #18191e;
@@ -257,6 +286,18 @@ a {
   <field sc_key="button_bar" sc_type="Color" sc_multiple="0" sc_content="[]" sc_default="#ffffff" sc_tab_key="buttoncolors" sc_show_in_vse="0" sc_title="themesetting_button_bar" sc_order="13" sc_condition="">#ffffff</field>
   <field sc_key="comment_count" sc_type="Color" sc_multiple="0" sc_content="[]" sc_default="#edf2f7" sc_tab_key="frontendcolors" sc_show_in_vse="0" sc_title="themesetting_comment_count" sc_order="38" sc_condition="">#edf2f7</field>
   <field sc_key="comment_count_font" sc_type="Color" sc_multiple="0" sc_content="[]" sc_default="#2d3748" sc_tab_key="frontendcolors" sc_show_in_vse="0" sc_title="themesetting_comment_count_font" sc_order="39" sc_condition="">#2d3748</field>
+  <field sc_key="dynamic_icons_nav" sc_type="other" sc_multiple="0" sc_content="return new \IPS\Helpers\Form\YesNo( &quot;core_theme_setting_title_{$row['sc_id']}&quot;, $value, FALSE, array(&#13;&#10;'togglesOn' =&gt; array(&#13;&#10;        'theme_setting_dynamic_icons_nav_css'&#13;&#10;    )&#13;&#10;), NULL, NULL, NULL, 'theme_setting_' . $row['sc_key'] );" sc_default="1" sc_tab_key="dynamic_icons" sc_show_in_vse="0" sc_title="dynamic_icons_nav" sc_order="1" sc_condition=""/>
+  <field sc_key="dynamic_icons_nav_css" sc_type="TextArea" sc_multiple="0" sc_content="[]" sc_default="" sc_tab_key="dynamic_icons" sc_show_in_vse="0" sc_title="dynamic_icons_nav_css" sc_order="2" sc_condition="">nav .ipsNavBar_primary li[data-navext=&quot;Forums&quot;] a::before {content: &quot;\f015&quot; !important;}&#13;
+nav .ipsNavBar_primary li[data-navext=&quot;Calendar&quot;] a::before {content: &quot;\f073&quot; !important; font-weight: 300;}&#13;
+nav .ipsNavBar_primary li[data-navext=&quot;Guidelines&quot;] a::before {content: &quot;\f071&quot; !important;}&#13;
+nav .ipsNavBar_primary li[data-navext=&quot;StaffDirectory&quot;] a::before {content: &quot;\f21b&quot; !important;}&#13;
+nav .ipsNavBar_primary li[data-navext=&quot;OnlineUsers&quot;] a::before {content: &quot;\f0c0&quot; !important;}&#13;
+nav .ipsNavBar_primary li[data-navext=&quot;Leaderboard&quot;] a::before {content: &quot;\f091&quot; !important;}&#13;
+nav .ipsNavBar_primary li[data-navext=&quot;Clubs&quot;] a::before {content: &quot;\f1b3&quot; !important;}&#13;
+nav .ipsNavBar_primary li[data-navext=&quot;Blogs&quot;] a::before {content: &quot;\f5da&quot; !important;}&#13;
+nav .ipsNavBar_primary li[data-navext=&quot;Downloads&quot;] a::before {content: &quot;\f019&quot; !important;}&#13;
+nav .ipsNavBar_primary li[data-navext=&quot;Gallery&quot;] a::before {content: &quot;\f030&quot; !important;}&#13;
+nav .ipsNavBar_primary li[data-navext=&quot;Store&quot;] a::before {content: &quot;\f07a&quot; !important;}</field>
   <field sc_key="enable_fluid_width" sc_type="YesNo" sc_multiple="0" sc_content="[{&quot;key&quot;:&quot;&quot;,&quot;value&quot;:&quot;&quot;},{&quot;key&quot;:&quot;&quot;,&quot;value&quot;:&quot;&quot;}]" sc_default="0" sc_tab_key="custom" sc_show_in_vse="1" sc_title="themesetting_enable_fluid_width" sc_order="7" sc_condition="">0</field>
   <field sc_key="featured" sc_type="Color" sc_multiple="0" sc_content="[]" sc_default="#2c8c69" sc_tab_key="frontendcolors" sc_show_in_vse="0" sc_title="themesetting_featured_color" sc_order="40" sc_condition="">#2c8c69</field>
   <field sc_key="fluid_width_size" sc_type="Number" sc_multiple="0" sc_content="[]" sc_default="95" sc_tab_key="custom" sc_show_in_vse="1" sc_title="themesetting_fluid_width_size" sc_order="8" sc_condition="">95</field>
@@ -333,5 +374,9 @@ a {
  <app key="forums" version="105130"/>
  <app key="calendar" version="105130"/>
  <app key="cms" version="105130"/>
- <language/>
+ <language>
+  <word key="theme_custom_tab_dynamic_icons"><![CDATA[<i class='fa fa-star'></i> Icons]]></word>
+  <word key="dynamic_icons_nav">Enable icons in navbar?</word>
+  <word key="dynamic_icons_nav_css">[CSS] Icons navBar</word>
+ </language>
 </theme>
