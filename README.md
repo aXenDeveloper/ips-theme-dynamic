@@ -2,6 +2,8 @@
 
 # Dynamic Theme
 
+(PSD) Graphic Theme - [Grzegorz](https://www.pecetowicz.pl/profile/32013-grzegorz/)
+
 ## 🏷️ Requirements
 
 - [IPS Community Suite: 4.5 version](https://invisioncommunity.com/)
