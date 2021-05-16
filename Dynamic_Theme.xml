@@ -591,6 +591,16 @@ html[dir="rtl"] .ipsDataItem_subList {
 /* ===== Highlighted ===== */
 .ipsBadge_highlightedGroup {
   --badge--color: #fff;
+}
+
+/* ===== Badge ===== */
+.ipsBadge_new, .ipsBadge_style1 {
+  --badge--color: #6b6b6b;
+}
+
+.ipsBadge_positive, .ipsBadge_style4 {
+  --badge--background: var(--positive-dark);
+  --badge--color: var(--positive-light);
 }]]></css>
   <css css_location="front" css_attributes="" css_path="custom" css_name="swiper.css"><![CDATA[{{if theme.dynamic_swiper_on}}
 /**
@@ -1517,9 +1527,19 @@ nav .ipsNavBar_primary li[data-navext=&quot;Store&quot;] a::before {content: &qu
  <app key="calendar" version="105130"/>
  <app key="cms" version="105130"/>
  <language>
+  <word key="dynamic_swiper_loop_desc">This option loops the slider if its slides have ended.</word>
+  <word key="dynamic_swiper_auto">Enable slide slide automatically?</word>
+  <word key="dynamic_swiper_auto_delay">Autoplay delay (ms)</word>
+  <word key="dynamic_swiper_auto_delay_desc">1000ms = 1s.</word>
+  <word key="dynamic_swiper_auto_interaction">Autoplay interaction</word>
+  <word key="dynamic_swiper_auto_interaction_desc">When the option is enabled, the slider will stop after the user's intervention and will turn on only when the user refreshes the page.</word>
+  <word key="dynamic_icons_widgets">Enable icons in widgets?</word>
+  <word key="dynamic_icons_widgets_css">[CSS] Icons widgets</word>
+  <word key="dynamic_icons_widgets_css_desc"><![CDATA[A guide on how to add icons can be found in <a href='https://github.com/aXenDeveloper/ips-theme-dynamic' target='blank' rel='noopener'>the documentation on github</a>.]]></word>
   <word key="theme_custom_tab_dynamic_icons"><![CDATA[<i class='fa fa-star'></i> Icons]]></word>
   <word key="dynamic_icons_nav">Enable icons in navbar?</word>
   <word key="dynamic_icons_nav_css">[CSS] Icons navBar</word>
+  <word key="dynamic_icons_nav_css_desc"><![CDATA[A guide on how to add icons can be found in <a href='https://github.com/aXenDeveloper/ips-theme-dynamic' target='blank' rel='noopener'>the documentation on github</a>.]]></word>
   <word key="theme_custom_tab_dynamic_swiper"><![CDATA[<i class='fa fa-window-maximize'></i> Slider]]></word>
   <word key="dynamic_swiper_on">Enable slider?</word>
   <word key="dynamic_swiper_1">Slider #1</word>
@@ -1541,11 +1561,5 @@ nav .ipsNavBar_primary li[data-navext=&quot;Store&quot;] a::before {content: &qu
   <word key="dynamic_swiper_pagination">Show pagination?</word>
   <word key="dynamic_swiper_effect">Slide Effect</word>
   <word key="dynamic_swiper_loop">Turn on the loop?</word>
-  <word key="dynamic_swiper_loop_desc">This option loops the slider if its slides have ended.</word>
-  <word key="dynamic_swiper_auto">Enable slide slide automatically?</word>
-  <word key="dynamic_swiper_auto_delay">Autoplay delay (ms)</word>
-  <word key="dynamic_swiper_auto_delay_desc">1000ms = 1s.</word>
-  <word key="dynamic_swiper_auto_interaction">Autoplay interaction</word>
-  <word key="dynamic_swiper_auto_interaction_desc">When the option is enabled, the slider will stop after the user's intervention and will turn on only when the user refreshes the page.</word>
  </language>
 </theme>
