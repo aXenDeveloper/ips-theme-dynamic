@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<theme name="Dynamic Theme" easy_mode="0" editor_skin="ips" author_name="aXenDev" author_url="https://axendev.net/" version="1.0.0" long_version="10000" update_check="">
+<theme name="Dynamic Theme" easy_mode="0" editor_skin="ips" author_name="aXenDev" author_url="https://axendev.net/" version="1.0.0" long_version="10000" update_check="https://files.axendev.net/myapps/theme/dynamic/check.php">
  <app key="core" version="105130">
   <template template_group="global" template_name="aXenScript" template_data="" template_location="front"><![CDATA[<script src="{resource="dynamic_theme/swiper-bundle.min.js" app="core" location="front"}"></script>
 <script type='text/javascript'>
@@ -1325,8 +1325,8 @@ nav .ipsNavBar_primary li[data-navext=&quot;Store&quot;] a::before {content: &qu
   <field sc_key="dynamic_swiper_5_text" sc_type="Editor" sc_multiple="0" sc_content="[]" sc_default="" sc_tab_key="dynamic_swiper" sc_show_in_vse="0" sc_title="dynamic_swiper_text" sc_order="53" sc_condition=""></field>
   <field sc_key="dynamic_swiper_5_title" sc_type="Text" sc_multiple="0" sc_content="[]" sc_default="" sc_tab_key="dynamic_swiper" sc_show_in_vse="0" sc_title="dynamic_swiper_title" sc_order="52" sc_condition=""></field>
   <field sc_key="dynamic_swiper_auto" sc_type="other" sc_multiple="0" sc_content="return new \IPS\Helpers\Form\YesNo( &quot;core_theme_setting_title_{$row['sc_id']}&quot;, $value, FALSE, array(&#13;&#10;'togglesOn' =&gt; array(&#13;&#10;        'theme_setting_dynamic_swiper_auto_delay',&#13;&#10;        'theme_setting_dynamic_swiper_auto_interaction'&#13;&#10;    )&#13;&#10;), NULL, NULL, NULL, 'theme_setting_' . $row['sc_key'] );" sc_default="1" sc_tab_key="dynamic_swiper" sc_show_in_vse="0" sc_title="dynamic_swiper_auto" sc_order="7" sc_condition=""/>
-  <field sc_key="dynamic_swiper_auto_delay" sc_type="Number" sc_multiple="0" sc_content="[]" sc_default="4000" sc_tab_key="dynamic_swiper" sc_show_in_vse="0" sc_title="dynamic_swiper_auto_delay" sc_order="8" sc_condition=""></field>
-  <field sc_key="dynamic_swiper_auto_interaction" sc_type="YesNo" sc_multiple="0" sc_content="[]" sc_default="1" sc_tab_key="dynamic_swiper" sc_show_in_vse="0" sc_title="dynamic_swiper_auto_interaction" sc_order="9" sc_condition=""></field>
+  <field sc_key="dynamic_swiper_auto_delay" sc_type="Number" sc_multiple="0" sc_content="[]" sc_default="4000" sc_tab_key="dynamic_swiper" sc_show_in_vse="0" sc_title="dynamic_swiper_auto_delay" sc_order="8" sc_condition="">4000</field>
+  <field sc_key="dynamic_swiper_auto_interaction" sc_type="YesNo" sc_multiple="0" sc_content="[]" sc_default="1" sc_tab_key="dynamic_swiper" sc_show_in_vse="0" sc_title="dynamic_swiper_auto_interaction" sc_order="9" sc_condition="">1</field>
   <field sc_key="dynamic_swiper_effect" sc_type="Select" sc_multiple="0" sc_content="[{&quot;key&quot;:&quot;slide&quot;,&quot;value&quot;:&quot;slide&quot;},{&quot;key&quot;:&quot;fade&quot;,&quot;value&quot;:&quot;fade&quot;},{&quot;key&quot;:&quot;cube&quot;,&quot;value&quot;:&quot;cube&quot;},{&quot;key&quot;:&quot;coverflow&quot;,&quot;value&quot;:&quot;coverflow&quot;},{&quot;key&quot;:&quot;flip&quot;,&quot;value&quot;:&quot;flip&quot;}]" sc_default="slide" sc_tab_key="dynamic_swiper" sc_show_in_vse="0" sc_title="dynamic_swiper_effect" sc_order="5" sc_condition="">coverflow</field>
   <field sc_key="dynamic_swiper_loop" sc_type="YesNo" sc_multiple="0" sc_content="[]" sc_default="1" sc_tab_key="dynamic_swiper" sc_show_in_vse="0" sc_title="dynamic_swiper_loop" sc_order="6" sc_condition="">1</field>
   <field sc_key="dynamic_swiper_on" sc_type="other" sc_multiple="0" sc_content="return new \IPS\Helpers\Form\YesNo( &quot;core_theme_setting_title_{$row['sc_id']}&quot;, $value, FALSE, array(&#13;&#10;'togglesOn' =&gt; array(&#13;&#10;        'theme_setting_dynamic_swiper_1',&#13;&#10;        'theme_setting_dynamic_swiper_2',&#13;&#10;        'theme_setting_dynamic_swiper_3',&#13;&#10;        'theme_setting_dynamic_swiper_4',&#13;&#10;        'theme_setting_dynamic_swiper_5',&#13;&#10;        'theme_setting_dynamic_swiper_show',&#13;&#10;        'theme_setting_dynamic_swiper_show_url',&#13;&#10;        'theme_setting_dynamic_swiper_8',&#13;&#10;        'theme_setting_dynamic_swiper_9',&#13;&#10;        'theme_setting_dynamic_swiper_10'&#13;&#10;    )&#13;&#10;), NULL, NULL, NULL, 'theme_setting_' . $row['sc_key'] );" sc_default="1" sc_tab_key="dynamic_swiper" sc_show_in_vse="0" sc_title="dynamic_swiper_on" sc_order="1" sc_condition=""/>
@@ -1365,8 +1365,8 @@ nav .ipsNavBar_primary li[data-navext=&quot;Store&quot;] a::before {content: &qu
   <field sc_key="main_nav_tab_font" sc_type="Color" sc_multiple="0" sc_content="[]" sc_default="#353c41" sc_tab_key="frontendcolors" sc_show_in_vse="0" sc_title="themesetting_main_nav_active_font" sc_order="8" sc_condition="">#ffffff</field>
   <field sc_key="mentions" sc_type="Color" sc_multiple="0" sc_content="[{&quot;key&quot;:&quot;&quot;,&quot;value&quot;:&quot;&quot;}]" sc_default="#3d6594" sc_tab_key="frontendcolors" sc_show_in_vse="0" sc_title="themesetting_mentions" sc_order="28" sc_condition="">#5c64c5</field>
   <field sc_key="moderated" sc_type="Color" sc_multiple="0" sc_content="[{&quot;key&quot;:&quot;&quot;,&quot;value&quot;:&quot;&quot;}]" sc_default="#f7edf1" sc_tab_key="frontendcolors" sc_show_in_vse="0" sc_title="themesetting_moderated" sc_order="20" sc_condition="">#f7edf1</field>
-  <field sc_key="moderated_light" sc_type="Color" sc_multiple="0" sc_content="[{&quot;key&quot;:&quot;&quot;,&quot;value&quot;:&quot;&quot;}]" sc_default="#fcf7f9" sc_tab_key="frontendcolors" sc_show_in_vse="0" sc_title="themesetting_moderated_light" sc_order="21" sc_condition="">#fcf7f9</field>
-  <field sc_key="moderated_text" sc_type="Color" sc_multiple="0" sc_content="[{&quot;key&quot;:&quot;&quot;,&quot;value&quot;:&quot;&quot;}]" sc_default="#880e4f" sc_tab_key="frontendcolors" sc_show_in_vse="0" sc_title="themesetting_moderated_text" sc_order="22" sc_condition="">#880e4f</field>
+  <field sc_key="moderated_light" sc_type="Color" sc_multiple="0" sc_content="[{&quot;key&quot;:&quot;&quot;,&quot;value&quot;:&quot;&quot;}]" sc_default="#fcf7f9" sc_tab_key="frontendcolors" sc_show_in_vse="0" sc_title="themesetting_moderated_light" sc_order="21" sc_condition="">#210000</field>
+  <field sc_key="moderated_text" sc_type="Color" sc_multiple="0" sc_content="[{&quot;key&quot;:&quot;&quot;,&quot;value&quot;:&quot;&quot;}]" sc_default="#880e4f" sc_tab_key="frontendcolors" sc_show_in_vse="0" sc_title="themesetting_moderated_text" sc_order="22" sc_condition="">#bb5454</field>
   <field sc_key="moderated_text_light" sc_type="Color" sc_multiple="0" sc_content="[{&quot;key&quot;:&quot;&quot;,&quot;value&quot;:&quot;&quot;}]" sc_default="#a4768f" sc_tab_key="frontendcolors" sc_show_in_vse="0" sc_title="themesetting_moderated_text_light" sc_order="23" sc_condition="">#a4768f</field>
   <field sc_key="normal_button" sc_type="Color" sc_multiple="0" sc_content="[]" sc_default="#177ec9" sc_tab_key="buttoncolors" sc_show_in_vse="0" sc_title="themesetting_normal_button" sc_order="5" sc_condition="">#5c64c5</field>
   <field sc_key="normal_button_font" sc_type="Color" sc_multiple="0" sc_content="[]" sc_default="#ffffff" sc_tab_key="buttoncolors" sc_show_in_vse="0" sc_title="themesetting_normal_button_font" sc_order="6" sc_condition="">#ffffff</field>
@@ -1389,8 +1389,8 @@ nav .ipsNavBar_primary li[data-navext=&quot;Store&quot;] a::before {content: &qu
   <field sc_key="secondary_title_font" sc_type="Color" sc_multiple="0" sc_content="[{&quot;key&quot;:&quot;&quot;,&quot;value&quot;:&quot;&quot;}]" sc_default="#828e99" sc_tab_key="textcolors" sc_show_in_vse="0" sc_title="themesetting_secondary_title_font" sc_order="12" sc_condition="">#828e99</field>
   <field sc_key="section_title" sc_type="Color" sc_multiple="0" sc_content="[]" sc_default="#ffffff" sc_tab_key="textcolors" sc_show_in_vse="0" sc_title="themesetting_section_title" sc_order="8" sc_condition="">#ffffff</field>
   <field sc_key="section_title_font" sc_type="Color" sc_multiple="0" sc_content="[]" sc_default="#1a202c" sc_tab_key="textcolors" sc_show_in_vse="0" sc_title="themesetting_section_title_font" sc_order="10" sc_condition="">#ffffff</field>
-  <field sc_key="selected" sc_type="Color" sc_multiple="0" sc_content="[]" sc_default="#ebf4f9" sc_tab_key="frontendcolors" sc_show_in_vse="0" sc_title="themesetting_selected" sc_order="13" sc_condition="">#5c64c5</field>
-  <field sc_key="selected_border" sc_type="Color" sc_multiple="0" sc_content="[]" sc_default="#177ec9" sc_tab_key="frontendcolors" sc_show_in_vse="0" sc_title="themesetting_selected_border" sc_order="14" sc_condition="">#5c64c5</field>
+  <field sc_key="selected" sc_type="Color" sc_multiple="0" sc_content="[]" sc_default="#ebf4f9" sc_tab_key="frontendcolors" sc_show_in_vse="0" sc_title="themesetting_selected" sc_order="13" sc_condition="">#1d1727</field>
+  <field sc_key="selected_border" sc_type="Color" sc_multiple="0" sc_content="[]" sc_default="#177ec9" sc_tab_key="frontendcolors" sc_show_in_vse="0" sc_title="themesetting_selected_border" sc_order="14" sc_condition="">#8b69c2</field>
   <field sc_key="sidebar_position" sc_type="Select" sc_multiple="0" sc_content="[{&quot;key&quot;:&quot;left&quot;,&quot;value&quot;:&quot;Left&quot;},{&quot;key&quot;:&quot;right&quot;,&quot;value&quot;:&quot;Right&quot;}]" sc_default="right" sc_tab_key="custom" sc_show_in_vse="0" sc_title="themesetting_sidebar_position" sc_order="4" sc_condition="">right</field>
   <field sc_key="sidebar_responsive" sc_type="YesNo" sc_multiple="0" sc_content="[{&quot;key&quot;:&quot;&quot;,&quot;value&quot;:&quot;&quot;}]" sc_default="1" sc_tab_key="custom" sc_show_in_vse="1" sc_title="themesetting_sidebar_responsive" sc_order="5" sc_condition="">1</field>
   <field sc_key="social_links" sc_type="Radio" sc_multiple="0" sc_content="[{&quot;key&quot;:&quot;header&quot;,&quot;value&quot;:&quot;themesetting_header&quot;},{&quot;key&quot;:&quot;footer&quot;,&quot;value&quot;:&quot;themesetting_footer&quot;}]" sc_default="footer" sc_tab_key="custom" sc_show_in_vse="1" sc_title="themesetting_social_links_pos" sc_order="3" sc_condition="">footer</field>
@@ -1527,15 +1527,6 @@ nav .ipsNavBar_primary li[data-navext=&quot;Store&quot;] a::before {content: &qu
  <app key="calendar" version="105130"/>
  <app key="cms" version="105130"/>
  <language>
-  <word key="dynamic_swiper_loop_desc">This option loops the slider if its slides have ended.</word>
-  <word key="dynamic_swiper_auto">Enable slide slide automatically?</word>
-  <word key="dynamic_swiper_auto_delay">Autoplay delay (ms)</word>
-  <word key="dynamic_swiper_auto_delay_desc">1000ms = 1s.</word>
-  <word key="dynamic_swiper_auto_interaction">Autoplay interaction</word>
-  <word key="dynamic_swiper_auto_interaction_desc">When the option is enabled, the slider will stop after the user's intervention and will turn on only when the user refreshes the page.</word>
-  <word key="dynamic_icons_widgets">Enable icons in widgets?</word>
-  <word key="dynamic_icons_widgets_css">[CSS] Icons widgets</word>
-  <word key="dynamic_icons_widgets_css_desc"><![CDATA[A guide on how to add icons can be found in <a href='https://github.com/aXenDeveloper/ips-theme-dynamic' target='blank' rel='noopener'>the documentation on github</a>.]]></word>
   <word key="theme_custom_tab_dynamic_icons"><![CDATA[<i class='fa fa-star'></i> Icons]]></word>
   <word key="dynamic_icons_nav">Enable icons in navbar?</word>
   <word key="dynamic_icons_nav_css">[CSS] Icons navBar</word>
@@ -1561,5 +1552,14 @@ nav .ipsNavBar_primary li[data-navext=&quot;Store&quot;] a::before {content: &qu
   <word key="dynamic_swiper_pagination">Show pagination?</word>
   <word key="dynamic_swiper_effect">Slide Effect</word>
   <word key="dynamic_swiper_loop">Turn on the loop?</word>
+  <word key="dynamic_swiper_loop_desc">This option loops the slider if its slides have ended.</word>
+  <word key="dynamic_swiper_auto">Enable slide slide automatically?</word>
+  <word key="dynamic_swiper_auto_delay">Autoplay delay (ms)</word>
+  <word key="dynamic_swiper_auto_delay_desc">1000ms = 1s.</word>
+  <word key="dynamic_swiper_auto_interaction">Autoplay interaction</word>
+  <word key="dynamic_swiper_auto_interaction_desc">When the option is enabled, the slider will stop after the user's intervention and will turn on only when the user refreshes the page.</word>
+  <word key="dynamic_icons_widgets">Enable icons in widgets?</word>
+  <word key="dynamic_icons_widgets_css">[CSS] Icons widgets</word>
+  <word key="dynamic_icons_widgets_css_desc"><![CDATA[A guide on how to add icons can be found in <a href='https://github.com/aXenDeveloper/ips-theme-dynamic' target='blank' rel='noopener'>the documentation on github</a>.]]></word>
  </language>
 </theme>
