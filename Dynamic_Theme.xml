@@ -1270,7 +1270,7 @@ nav .ipsNavBar_primary li[data-navext=&quot;Downloads&quot;] a::before {content:
 nav .ipsNavBar_primary li[data-navext=&quot;Gallery&quot;] a::before {content: &quot;\f030&quot; !important;}&#13;
 nav .ipsNavBar_primary li[data-navext=&quot;Store&quot;] a::before {content: &quot;\f07a&quot; !important;}</field>
   <field sc_key="dynamic_icons_widgets" sc_type="other" sc_multiple="0" sc_content="return new \IPS\Helpers\Form\YesNo( &quot;core_theme_setting_title_{$row['sc_id']}&quot;, $value, FALSE, array(&#13;&#10;'togglesOn' =&gt; array(&#13;&#10;        'theme_setting_dynamic_icons_widgets_css'&#13;&#10;    )&#13;&#10;), NULL, NULL, NULL, 'theme_setting_' . $row['sc_key'] );" sc_default="1" sc_tab_key="dynamic_icons" sc_show_in_vse="0" sc_title="dynamic_icons_widgets" sc_order="3" sc_condition=""/>
-  <field sc_key="dynamic_icons_widgets_css" sc_type="TextArea" sc_multiple="0" sc_content="[]" sc_default="" sc_tab_key="dynamic_icons" sc_show_in_vse="0" sc_title="dynamic_icons_widgets_css" sc_order="4" sc_condition=""></field>
+  <field sc_key="dynamic_icons_widgets_css" sc_type="TextArea" sc_multiple="0" sc_content="[]" sc_default="" sc_tab_key="dynamic_icons" sc_show_in_vse="0" sc_title="dynamic_icons_widgets_css" sc_order="4" sc_condition="">.cWidgetContainer .ipsWidget[data-blockid*=&quot;forumStatistics&quot;] .ipsWidget_title::before {content: &quot;\f015&quot;;}</field>
   <field sc_key="dynamic_swiper_1" sc_type="other" sc_multiple="0" sc_content="return new \IPS\Helpers\Form\YesNo( &quot;core_theme_setting_title_{$row['sc_id']}&quot;, $value, FALSE, array(&#13;&#10;'togglesOn' =&gt; array(&#13;&#10;        'theme_setting_dynamic_swiper_1_background_color',&#13;&#10;        'theme_setting_dynamic_swiper_1_image',&#13;&#10;        'theme_setting_dynamic_swiper_1_image_position',&#13;&#10;        'theme_setting_dynamic_swiper_1_image_size',&#13;&#10;        'theme_setting_dynamic_swiper_1_image_repeat',&#13;&#10;        'theme_setting_dynamic_swiper_1_title',&#13;&#10;        'theme_setting_dynamic_swiper_1_text',&#13;&#10;  &#9;&#9;'theme_setting_dynamic_swiper_1_buttons'&#13;&#10;    )&#13;&#10;), NULL, NULL, NULL, 'theme_setting_' . $row['sc_key'] );" sc_default="1" sc_tab_key="dynamic_swiper" sc_show_in_vse="0" sc_title="dynamic_swiper_1" sc_order="10" sc_condition=""/>
   <field sc_key="dynamic_swiper_1_background_color" sc_type="Color" sc_multiple="0" sc_content="[]" sc_default="#141519" sc_tab_key="dynamic_swiper" sc_show_in_vse="0" sc_title="dynamic_swiper_background_color" sc_order="11" sc_condition="">#141519</field>
   <field sc_key="dynamic_swiper_1_buttons" sc_type="TextArea" sc_multiple="0" sc_content="[]" sc_default="" sc_tab_key="dynamic_swiper" sc_show_in_vse="0" sc_title="dynamic_swiper_buttons" sc_order="18" sc_condition=""><![CDATA[<a class="ipsButton ipsButton_medium ipsButton_primary" href="#">Lorem Ipsum</a>]]></field>
@@ -1527,10 +1527,9 @@ nav .ipsNavBar_primary li[data-navext=&quot;Store&quot;] a::before {content: &qu
  <app key="calendar" version="105130"/>
  <app key="cms" version="105130"/>
  <language>
-  <word key="theme_custom_tab_dynamic_icons"><![CDATA[<i class='fa fa-star'></i> Icons]]></word>
   <word key="dynamic_icons_nav">Enable icons in navbar?</word>
   <word key="dynamic_icons_nav_css">[CSS] Icons navBar</word>
-  <word key="dynamic_icons_nav_css_desc"><![CDATA[A guide on how to add icons can be found in <a href='https://github.com/aXenDeveloper/ips-theme-dynamic' target='blank' rel='noopener'>the documentation on github</a>.]]></word>
+  <word key="dynamic_icons_nav_css_desc"><![CDATA[A guide on how to add icons can be found in <a href='https://github.com/aXenDeveloper/ips-theme-dynamic#-configuration' target='blank' rel='noopener'>the documentation on github</a>.]]></word>
   <word key="theme_custom_tab_dynamic_swiper"><![CDATA[<i class='fa fa-window-maximize'></i> Slider]]></word>
   <word key="dynamic_swiper_on">Enable slider?</word>
   <word key="dynamic_swiper_1">Slider #1</word>
@@ -1560,6 +1559,7 @@ nav .ipsNavBar_primary li[data-navext=&quot;Store&quot;] a::before {content: &qu
   <word key="dynamic_swiper_auto_interaction_desc">When the option is enabled, the slider will stop after the user's intervention and will turn on only when the user refreshes the page.</word>
   <word key="dynamic_icons_widgets">Enable icons in widgets?</word>
   <word key="dynamic_icons_widgets_css">[CSS] Icons widgets</word>
-  <word key="dynamic_icons_widgets_css_desc"><![CDATA[A guide on how to add icons can be found in <a href='https://github.com/aXenDeveloper/ips-theme-dynamic' target='blank' rel='noopener'>the documentation on github</a>.]]></word>
+  <word key="dynamic_icons_widgets_css_desc"><![CDATA[A guide on how to add icons can be found in <a href='https://github.com/aXenDeveloper/ips-theme-dynamic#-configuration' target='blank' rel='noopener'>the documentation on github</a>.]]></word>
+  <word key="theme_custom_tab_dynamic_icons"><![CDATA[<i class='fa fa-star'></i> Icons]]></word>
  </language>
 </theme>
