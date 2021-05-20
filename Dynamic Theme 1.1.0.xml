@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<theme name="Dynamic Theme" easy_mode="0" editor_skin="ips" author_name="aXenDev" author_url="https://axendev.net/" version="1.0.0" long_version="10000" update_check="https://files.axendev.net/myapps/theme/dynamic/check.php">
- <app key="core" version="105130">
+<theme name="Dynamic Theme" easy_mode="0" editor_skin="ips" author_name="aXenDev" author_url="https://axendev.net/" version="1.1.0" long_version="10001" update_check="https://files.axendev.net/myapps/theme/dynamic/check.php">
+ <app key="core" version="106101">
   <template template_group="global" template_name="aXenScript" template_data="" template_location="front"><![CDATA[<script src="{resource="dynamic_theme/swiper-bundle.min.js" app="core" location="front"}"></script>
 <script type='text/javascript'>
   const swiper = new Swiper(".aXenSwiper", {
@@ -103,7 +103,7 @@
 		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.3/css/all.css" />
 		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.3/css/v4-shims.css" />
 	</head>
-	<body class='ipsApp ipsApp_front {{if isset( \IPS\Request::i()->cookie['hasJS'] )}}ipsJS_has{{else}}ipsJS_none{{endif}} ipsClearfix{{foreach output.bodyClasses as $class}} {$class}{{endforeach}}' {{if output.globalControllers}}data-controller='{expression="implode( ',', output.globalControllers )"}'{{endif}} {{if isset( output.inlineMessage )}}data-message="{expression="output.inlineMessage"}"{{endif}} data-pageApp='{$location['app']}' data-pageLocation='front' data-pageModule='{$location['module']}' data-pageController='{$location['controller']}' {{if isset( \IPS\Request::i()->id )}}data-pageID='{expression="(int) \IPS\Request::i()->id"}'{{endif}} {{if isset( \IPS\Dispatcher::i()->dispatcherController ) AND !\IPS\Dispatcher::i()->dispatcherController->isContentPage }}data-nocontent{{endif}}>
+	<body class='ipsApp ipsApp_front {{if isset( \IPS\Request::i()->cookie['hasJS'] )}}ipsJS_has{{else}}ipsJS_none{{endif}} ipsClearfix{{foreach output.bodyClasses as $class}} {$class}{{endforeach}}' {{if output.globalControllers}}data-controller='{expression="implode( ',', output.globalControllers )"}'{{endif}} {{if isset( output.inlineMessage )}}data-message="{expression="output.inlineMessage"}"{{endif}} data-pageApp='{$location['app']}' data-pageLocation='front' data-pageModule='{$location['module']}' data-pageController='{$location['controller']}' {{if isset( \IPS\Request::i()->id )}}data-pageID='{expression="(int) \IPS\Request::i()->id"}'{{endif}} {{if isset( \IPS\Dispatcher::i()->dispatcherController ) AND !\IPS\Dispatcher::i()->dispatcherController->isContentPage }}data-nocontent{{endif}} {{if output.pageName}}data-pageName="{expression="output.pageName"}"{{endif}}>
 		<a href='#ipsLayout_mainArea' class='ipsHide' title='{lang="jump_to_content_desc"}' accesskey='m'>{lang="jump_to_content"}</a>
 		{{if !request.isApp()}}
 			<div id='ipsLayout_header' class='ipsClearfix'>
@@ -111,7 +111,9 @@
 				<header>
 					<div class='ipsLayout_container'>
 						{template="logo" app="core" group="global" params=""}
-						{{if !\in_array('ipsLayout_minimal', \IPS\Output::i()->bodyClasses )}}{template="userBar" app="core" group="global" params=""}{{endif}}
+						{{if !\in_array('ipsLayout_minimal', \IPS\Output::i()->bodyClasses )}}
+							{template="userBar" app="core" group="global" params=""}
+                      	{{endif}}
 						{template="mobileNavigationIcon" app="core" group="global" params=""}
 					</div>
 					{template="navBar" app="core" group="global" params=""}
@@ -212,26 +214,18 @@
 </h3>
 <div class='ipsWidget_inner ipsPadding'>
 	{{if $memberCount}}
-		<ul class='ipsList_inline ipsList_csv ipsList_noSpacing ipsType_normal'>
+		<ul class='ipsList_inline ipsList_csv ipsList_noSpacing ipsType_normal' data-controller='core.front.widgets.onlineUsers'>
 			{{if \IPS\Member::loggedIn()->canAccessModule( \IPS\Application\Module::get( 'core', 'members' ) ) }}
 				{{foreach $members as $row}}
 					<li>
-						<a href="{url="app=core&module=members&controller=profile&id={$row['member_id']}" seoTemplate="profile" seoTitle="$row['seo_name']"}" data-ipsHover data-ipsHover-target='{url="app=core&module=members&controller=profile&id={$row['member_id']}&do=hovercard" seoTemplate="profile" seoTitle="$row['seo_name']"}' {{if $row['in_editor']}}data-ipsTooltip data-ipsTooltip-label="{lang="block_user_in_editor"}"{{else}}title="{lang="view_user_profile" sprintf="$row['member_name']"}"{{endif}} {{if $row['in_editor']}}class='cActiveUserEditor'{{endif}}>{expression="\IPS\Member\Group::load( $row['member_group'] )->formatName( $row['member_name'] )" raw="true"}</a>{{if \IPS\Member::loggedIn()->member_id AND \IPS\Member::loggedIn()->member_id === $row['member_id'] AND \IPS\Member::loggedIn()->isOnlineAnonymously()}}
-							<span title='{lang="signed_in_anoymously"}' data-ipsTooltip>
-								<i class='fa fa-eye-slash'></i>
-							</span>{{endif}}</li>
+						<a href="{url="app=core&module=members&controller=profile&id={$row['member_id']}" seoTemplate="profile" seoTitle="$row['seo_name']"}" data-ipsHover data-ipsHover-target='{url="app=core&module=members&controller=profile&id={$row['member_id']}&do=hovercard" seoTemplate="profile" seoTitle="$row['seo_name']"}' {{if $row['in_editor']}}data-ipsTooltip data-ipsTooltip-label="{lang="block_user_in_editor"}"{{else}}title="{lang="view_user_profile" sprintf="$row['member_name']"}"{{endif}} {{if $row['in_editor']}}class='cActiveUserEditor'{{endif}}>{expression="\IPS\Member\Group::load( $row['member_group'] )->formatName( $row['member_name'] )" raw="true"}</a>
+					</li>
 				{{endforeach}}
 			{{else}}
 				{{foreach $members as $row}}
 					<li>
 						{{if $row['in_editor']}}<i class="fa fa-circle-o-notch fa-spin" data-ipsTooltip data-ipsTooltip-label="{lang="block_user_in_editor"}"></i>{{endif}}
 						{expression="\IPS\Member\Group::load( $row['member_group'] )->formatName( $row['member_name'] )" raw="true"}
-
-						{{if \IPS\Member::loggedIn()->member_id AND \IPS\Member::loggedIn()->member_id === $row['member_id'] AND \IPS\Member::loggedIn()->isOnlineAnonymously()}}
-							<span title='{lang="signed_in_anoymously"}' data-ipsTooltip>
-								<i class='fa fa-eye-slash'></i>
-							</span>
-						{{endif}}
 					</li>
 				{{endforeach}}
 			{{endif}}
@@ -245,6 +239,411 @@
 		<p class='ipsType_reset ipsType_medium ipsType_light'>{lang="active_users_empty"}</p>
 	{{endif}}
 </div>]]></template>
+  <template template_group="embed" template_name="twitch" template_data="$type, $source" template_location="global"><![CDATA[<div class='ipsEmbeddedOther' contenteditable="false">
+	<iframe
+		src="https://player.twitch.tv/?{$type}={{if $type == 'video'}}v{{endif}}{$source}&autoplay=false&parent={expression="parse_url(\IPS\Settings::i()->base_url, \PHP_URL_HOST )"}"
+		height="450"
+		width="300"
+		allowfullscreen="">
+	</iframe>
+</div>
+]]></template>
+  <template template_group="global" template_name="aXenSocialMedia" template_data="" template_location="global"><![CDATA[{{if theme.fluent_header_socialmedia}}
+	<div class='aXenSocialMedia ipsResponsive_showDesktop ipsFlex ipsFlex-jc:center ipsFlex-ai:center'>
+		{theme="fluent_header_socialmedia_code"}
+	</div>
+	{{if theme.fluent_header_socialmedia_position == 0}}
+		<li class="elUserNav_sep"></li>
+	{{endif}}
+{{endif}}]]></template>
+  <template template_group="global" template_name="aXenSwiper" template_data="" template_location="global"><![CDATA[{{foreach explode(',', theme.fluent_swiper_show) as $value}}
+	{{foreach explode(',', theme.fluent_swiper_show_url) as $valueURL}}
+
+
+{{if ($value == 'forums' and request.module == 'forums' or $value == 'blogs' and request.module == 'blogs' or $value == 'calendar' and request.module == 'calendar' or $value == 'downloads' and request.module == 'downloads' or $value == 'gallery' and request.module == 'gallery' or $value == 'pages' and request.module == 'pages' or $value == 'store' and request.module == 'store' and request.controller == 'store' or $value == 'activiy' and request.module == 'discover' and request.controller == 'streams' or $value == 'clubs' and request.module == 'clubs' and request.controller == 'directory' or $value == 'profile' and request.module == 'members' and request.controller == 'profile') or theme.fluent_swiper_show == '*'}}
+	{{if theme.fluent_swiper_show_url and \IPS\Request::i()->url() == $valueURL}}		
+		{template="aXenSwiper_block" app="core" group="global" location="global"}
+	{{elseif theme.fluent_swiper_show_url == ""}}
+		{template="aXenSwiper_block" app="core" group="global" location="global"}
+	{{endif}}
+{{endif}}
+
+{{endforeach}}
+{{endforeach}}]]></template>
+  <template template_group="global" template_name="aXenSwiper_block" template_data="" template_location="global"><![CDATA[{{if theme.fluent_swiper_1 == 1 and theme.fluent_swiper_1_visible == '*' OR member.loggedIn()->inGroup( explode(',', theme.fluent_swiper_1_visible) ) or theme.fluent_swiper_2 == 1 and theme.fluent_swiper_2_visible == '*' OR member.loggedIn()->inGroup( explode(',', theme.fluent_swiper_2_visible) ) or theme.fluent_swiper_3 == 1 and theme.fluent_swiper_3_visible == '*' OR member.loggedIn()->inGroup( explode(',', theme.fluent_swiper_3_visible) ) or theme.fluent_swiper_4 == 1 and theme.fluent_swiper_4_visible == '*' OR member.loggedIn()->inGroup( explode(',', theme.fluent_swiper_4_visible) ) or theme.fluent_swiper_5 == 1 and theme.fluent_swiper_5_visible == '*' OR member.loggedIn()->inGroup( explode(',', theme.fluent_swiper_5_visible) ) or theme.fluent_swiper_6 == 1 and theme.fluent_swiper_6_visible == '*' OR member.loggedIn()->inGroup( explode(',', theme.fluent_swiper_6_visible) ) or theme.fluent_swiper_7 == 1 and theme.fluent_swiper_7_visible == '*' OR member.loggedIn()->inGroup( explode(',', theme.fluent_swiper_7_visible) ) or theme.fluent_swiper_8 == 1 and theme.fluent_swiper_8_visible == '*' OR member.loggedIn()->inGroup( explode(',', theme.fluent_swiper_8_visible) ) or theme.fluent_swiper_9 == 1 and theme.fluent_swiper_9_visible == '*' OR member.loggedIn()->inGroup( explode(',', theme.fluent_swiper_9_visible) ) or theme.fluent_swiper_10 == 1 and theme.fluent_swiper_10_visible == '*' OR member.loggedIn()->inGroup( explode(',', theme.fluent_swiper_10_visible) )}}
+<div class="swiper-container ipsWidget ipsWidget_horizontal{{if theme.fluent_swiper_position != 0}} ipsBox{{endif}}" dir="{{if member.language()->isrtl}}rtl{{else}}ltr{{endif}}">
+	<div class="swiper-wrapper">
+      
+    	{{if theme.fluent_swiper_1 == 1 and theme.fluent_swiper_1_visible == '*' OR member.loggedIn()->inGroup( explode(',', theme.fluent_swiper_1_visible) )}}
+			<div class="swiper-slide" swiper-id='1'>
+              <div class='swiper-slide_content'>
+        		<h2>{lang='fluent_swiper_1_title'}</h2>
+        		<p>{lang='fluent_swiper_1_text'}</p>
+              	<p>{lang='fluent_swiper_1_button'}</p>
+              </div>
+      		</div>
+      	{{endif}}
+      
+    	{{if theme.fluent_swiper_2 == 1 and theme.fluent_swiper_2_visible == '*' OR member.loggedIn()->inGroup( explode(',', theme.fluent_swiper_2_visible) )}}
+			<div class="swiper-slide" swiper-id='2'>
+              <div class='swiper-slide_content'>
+        		<h2>{lang='fluent_swiper_2_title'}</h2>
+        		<p>{lang='fluent_swiper_2_text'}</p>
+              	<p>{lang='fluent_swiper_2_button'}</p>
+              </div>
+      		</div>
+      	{{endif}}
+      
+    	{{if theme.fluent_swiper_3 == 1 and theme.fluent_swiper_3_visible == '*' OR member.loggedIn()->inGroup( explode(',', theme.fluent_swiper_3_visible) )}}
+			<div class="swiper-slide" swiper-id='3'>
+              <div class='swiper-slide_content'>
+        		<h2>{lang='fluent_swiper_3_title'}</h2>
+        		<p>{lang='fluent_swiper_3_text'}</p>
+              	<p>{lang='fluent_swiper_3_button'}</p>
+              </div>
+      		</div>
+      	{{endif}}
+      
+    	{{if theme.fluent_swiper_4 == 1 and theme.fluent_swiper_4_visible == '*' OR member.loggedIn()->inGroup( explode(',', theme.fluent_swiper_4_visible) )}}
+			<div class="swiper-slide" swiper-id='4'>
+              <div class='swiper-slide_content'>
+        		<h2>{lang='fluent_swiper_4_title'}</h2>
+        		<p>{lang='fluent_swiper_4_text'}</p>
+              	<p>{lang='fluent_swiper_4_button'}</p>
+              </div>
+      		</div>
+      	{{endif}}
+      
+    	{{if theme.fluent_swiper_5 == 1 and theme.fluent_swiper_5_visible == '*' OR member.loggedIn()->inGroup( explode(',', theme.fluent_swiper_5_visible) )}}
+			<div class="swiper-slide" swiper-id='5'>
+              <div class='swiper-slide_content'>
+        		<h2>{lang='fluent_swiper_5_title'}</h2>
+        		<p>{lang='fluent_swiper_5_text'}</p>
+              	<p>{lang='fluent_swiper_5_button'}</p>
+              </div>
+      		</div>
+      	{{endif}}
+      
+    	{{if theme.fluent_swiper_6 == 1 and theme.fluent_swiper_6_visible == '*' OR member.loggedIn()->inGroup( explode(',', theme.fluent_swiper_6_visible) )}}
+			<div class="swiper-slide" swiper-id='6'>
+              <div class='swiper-slide_content'>
+        		<h2>{lang='fluent_swiper_6_title'}</h2>
+        		<p>{lang='fluent_swiper_6_text'}</p>
+              	<p>{lang='fluent_swiper_6_button'}</p>
+              </div>
+      		</div>
+      	{{endif}}
+      
+    	{{if theme.fluent_swiper_7 == 1 and theme.fluent_swiper_7_visible == '*' OR member.loggedIn()->inGroup( explode(',', theme.fluent_swiper_7_visible) )}}
+			<div class="swiper-slide" swiper-id='7'>
+              <div class='swiper-slide_content'>
+        		<h2>{lang='fluent_swiper_7_title'}</h2>
+        		<p>{lang='fluent_swiper_7_text'}</p>
+              	<p>{lang='fluent_swiper_7_button'}</p>
+              </div>
+      		</div>
+      	{{endif}}
+      
+    	{{if theme.fluent_swiper_8 == 1 and theme.fluent_swiper_8_visible == '*' OR member.loggedIn()->inGroup( explode(',', theme.fluent_swiper_8_visible) )}}
+			<div class="swiper-slide" swiper-id='8'>
+              <div class='swiper-slide_content'>
+        		<h2>{lang='fluent_swiper_8_title'}</h2>
+        		<p>{lang='fluent_swiper_8_text'}</p>
+              	<p>{lang='fluent_swiper_8_button'}</p>
+              </div>
+      		</div>
+      	{{endif}}
+      
+    	{{if theme.fluent_swiper_9 == 1 and theme.fluent_swiper_9_visible == '*' OR member.loggedIn()->inGroup( explode(',', theme.fluent_swiper_9_visible) )}}
+			<div class="swiper-slide" swiper-id='9'>
+              <div class='swiper-slide_content'>
+        		<h2>{lang='fluent_swiper_9_title'}</h2>
+        		<p>{lang='fluent_swiper_9_text'}</p>
+              	<p>{lang='fluent_swiper_9_button'}</p>
+              </div>
+      		</div>
+      	{{endif}}
+      
+    	{{if theme.fluent_swiper_10 == 1 and theme.fluent_swiper_10_visible == '*' OR member.loggedIn()->inGroup( explode(',', theme.fluent_swiper_10_visible) )}}
+			<div class="swiper-slide" swiper-id='10'>
+              <div class='swiper-slide_content'>
+        		<h2>{lang='fluent_swiper_10_title'}</h2>
+        		<p>{lang='fluent_swiper_10_text'}</p>
+              	<p>{lang='fluent_swiper_10_button'}</p>
+              </div>
+      		</div>
+      	{{endif}}
+
+    </div>
+    {{if theme.fluent_swiper_pagination != 0}}
+    	<div class="swiper-pagination"></div>
+    {{endif}}
+	{{if theme.fluent_swiper_nav}}
+      	<div class="swiper-next"></div>
+		<div class="swiper-prev"></div>
+      {{endif}}
+</div>
+{{endif}}]]></template>
+  <template template_group="global" template_name="js_script" template_data="" template_location="global"><![CDATA[<script src='{resource="FluentDesignTheme/swiper-bundle.min.js" app="core" location="front"}'></script>
+<script>
+window.onload = () => {
+	const scrollTopBottom = $("#aXenBackTopBottom");
+	$(window).scroll(() => {
+		let topPos = $(this).scrollTop();
+		if (topPos > 150) {
+			$(scrollTopBottom).css("opacity", "1");
+		} else $(scrollTopBottom).css("opacity", "0");
+	});
+	let scrollAnimation = () => {
+		$('html, body').animate({
+      	scrollTop: 0
+    	}, 800);
+	};
+	$(scrollTopBottom).click(scrollAnimation);
+}
+
+{{if theme.fluent_swiper_1 or theme.fluent_swiper_2 or theme.fluent_swiper_3 or theme.fluent_swiper_4 or theme.fluent_swiper_5 or theme.fluent_swiper_6 or theme.fluent_swiper_7 or theme.fluent_swiper_8 or theme.fluent_swiper_9 or theme.fluent_swiper_10}}
+	var swiper = new Swiper('.swiper-container', {
+    	{{if theme.fluent_swiper_pagination != 0}}
+			pagination: {
+				el: '.swiper-pagination',
+				{{if theme.fluent_swiper_pagination == 2}}
+    				dynamicBullets: true,
+      			{{elseif theme.fluent_swiper_pagination == 3}}
+      				type: 'progressbar',
+        		{{elseif theme.fluent_swiper_pagination == 4}}
+        			type: 'fraction',
+          		{{endif}}
+      		},
+      	{{endif}}
+      	direction: '{theme="fluent_swiper_direction"}',
+      	effect: '{theme="fluent_swiper_effect"}',
+      	{{if theme.fluent_swiper_nav}}
+      		navigation: {
+        		nextEl: '.swiper-next',
+        		prevEl: '.swiper-prev',
+      		},
+      	{{endif}}
+      	{{if theme.fluent_swiper_auto}}
+      		autoplay: {
+        		delay: {theme="fluent_swiper_auto_time"},
+      			{{if theme.fluent_swiper_auto_interaction}}disableOnInteraction: true,{{endif}}
+      		},
+      	{{endif}}
+      	{{if theme.fluent_swiper_loop}}
+  			loop: true,
+    	{{endif}}
+      	{{if theme.fluent_swiper_keyboard}}
+      		keyboard: {
+        		enabled: true,
+      		},
+      	{{endif}}
+      	{{if theme.fluent_swiper_cursor}}
+      		grabCursor: true,
+      	{{endif}}
+    	{{if theme.fluent_swiper_mouse}}
+   	 		mousewheel: true,
+    	{{endif}}
+	});
+{{endif}}
+</script>]]></template>
+  <template template_group="global" template_name="js_theme" template_data="" template_location="global"><![CDATA[<script src='{resource="FluentDesignTheme/jscolor.min.js" app="core" location="front"}'></script>
+<script>
+	const checkDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+  
+  	const selectElements = {
+      dark: document.querySelectorAll('.aXenTopBar_theme'),
+      shepe: document.querySelectorAll('.aXenTopBar_shape'),
+      color: document.querySelector('#colorTheme'),
+      colorLi: document.querySelectorAll('.aXenTopBar_color'),
+      colorResetPC: document.querySelector('#aXenTopBar_colorResetPC'),
+      colorResetMobile: document.querySelector('#aXenTopBar_colorResetMobile'),
+      picture: document.querySelectorAll('.aXenTopBar_picture')
+    }
+    
+    const cookieName = {
+      shape: '{theme="fluent_pers_shapes_cookie"}',
+      color: '{theme="fluent_pers_jscolor_cookies"}',
+      picture: '{theme="fluent_pers_picture_cookies"}'
+    }
+   
+	const colorBackground = '{{if theme.fluent_header_nav_background == 0}}.tee #ipsLayout_header nav,{{endif}} .tee .ipsType_sectionTitle, .tee .ipsItemStatus.ipsItemStatus_large, .tee #elWidgetControls, .tee .ipsApp .ipsButton_normal, .tee .ipsWidget.ipsWidget_primary, .tee .ipsComposeArea_editorPaste, .tee .ipsReact_unreact, .tee .ipsField_stackItem .ipsField_stackDelete, .tee .ipsAttachment_progress > span, .tee .ipsSelectTree_selected, .tee .ipsSideMenu_itemActive a, .tee a.ipsSideMenu_itemActive, .tee span.ipsSideMenu_itemActive, .tee .ipsSideMenu_withChecks .ipsSideMenu_item > input[type="checkbox"]:checked ~ a, .tee .ipsSideMenu_withChecks .ipsSideMenu_item > input[type="checkbox"]:checked ~ span, .tee .ipsSideMenu_withRadios .ipsSideMenu_item > input[type="radio"]:checked ~ a, .tee .ipsSideMenu_withRadios .ipsSideMenu_item > input[type="radio"]:checked ~ span, .tee .ipsAreaBackground_dark, .tee .ipsStepBar > .ipsStep.ipsStep_active::before, .tee .ipsStepBar > .ipsStep.ipsStep_active::after, .tee #ipsMultiQuoter, .tee .ipsPagination .ipsPagination_page.ipsPagination_active a, .tee .ui-datepicker-header, .tee .ipsRichEmbed .ipsRichEmbed_masthead, .tee .ipsEmbedded_image, .tee .ipsTable_sortable.ipsTable_sortableActive, .tee .ipsTable.ipsMatrix thead th, .tee .ipsApp .ipsButton_primary, .tee .ipsCustomInput input:active:not( :checked ):not( :disabled ) + span, .tee .ipsCustomInput input:active:checked:not( :disabled ) + span, .tee .ipsCustomInput input:checked + span, .tee .cContentItem_delete, .tee .ipsProgressBar.ipsProgressBar_animated .ipsProgressBar_progress, .tee .ipsProgressBar_progress, .tee .ipsTabs, .tee .ipsNavBar_secondary > li > a::after, .tee .ipsNavBar_primary ul[data-role="primaryNavBar"] > li > a::after, .tee .ipsStreamItem_time, .tee .ipsStreamItem_time, .tee .ipsStreamItem_terminator, .tee .ipsStream .ipsStreamItem_contentType, .tee .cWidgetStreamIcon, .tee .cAuthorPane_badge{{if theme.fluent_mobile_nav_backgorund == 0}}, .tee #elMobileNav{{endif}}, .tee #aXenelMobileBreadcrumbFull, .tee .swiper-pagination-bullet-active, .tee .ipsToggle.ipsToggle_on, .tee .ipsUnreadBar:before, .tee .ipsUnreadBar:after, .tee ::selection, .tee ::-webkit-scrollbar-thumb, .tee .ipsScrollbar::-webkit-scrollbar-thumb{{if theme.fluent_pers_jscolor_code_background}}, {theme="fluent_pers_jscolor_code_background"}{{endif}}, .tee .aXenTopics_cAuthorPane_icons li[data-role="posts"], .tee .ipsCommentCount';
+	const colorBackgroundImportant = '.tee .ipsStream_withTimeline .ipsStreamItem.ipsStreamItem_actionBlock:after';
+	const colorColor = '.tee .ipsItemStatus:not( .ipsItemStatus_large ), .tee a:hover, .tee .ipsApp .ipsButton_link, .tee .ipsApp .ipsButton_veryLight, .tee #elUserLink_menu a:hover:before, .tee #elCreateNew_menu a:hover:before, .tee ipsRating .ipsRating_mine .ipsRating_on .fa-star, .tee .ipsRating .ipsRating_hover .fa-star, .tee .cToken, .tee a[data-mentionid], .tee .ipsType_brandedLinks a, a.ipsType_brandedLink, .tee .aXenTopBar_color, .tee.aXenSquare .aXenTopBar_shape, .tee .ipsUnreadBar{{if theme.fluent_pers_jscolor_code_color}}, {theme="fluent_pers_jscolor_code_color"}{{endif}}, .tee .aXenFooter div > h2 > span, .tee #ipsLayout_footer a:hover';
+	const colorBorder = '.tee .bimChatbox.skin_white #convoContent .ipsAutocompleteMenu_item:hover, .tee .bimChatbox.skin_white .mentionMe, .tee .ipsApp .chat_row.ipsDataItem_new, .tee hr.ipsHr.ipsHr_thick, .tee .ui-datepicker-header, .tee .ipsCommentUnreadSeperator, .tee .ipsCustomInput input:checked + span, .tee .ipsCommentCount, .tee .ipsStreamItem_bar hr.ipsHr, .tee [data-ipseditor]:focus-within, .tee .ipsAttachment_dropZone.ipsDragging, .tee .ipsComposeArea_dropZone.ipsDragging, .tee .ipsSelectTree_active.ipsSelectTree_bottom, .tee .ipsSelectTree_active.ipsSelectTree_top, .tee .ipsSelectTree_nodes, .tee .ipsApp .ipsToggle:focus, .tee .ipsApp .ipsCustomInput input:focus + span, .tee .ipsApp select:not( [multiple] ):focus, .tee .ipsApp textarea:focus, .tee .ipsApp input[type="text"]:focus, .tee .ipsApp input[type="password"]:focus, .tee .ipsApp input[type="datetime"]:focus, .tee .ipsApp input[type="datetime-local"]:focus, .tee .ipsApp input[type="date"]:focus, .tee .ipsApp input[type="month"]:focus, .tee .ipsApp input[type="time"]:focus, .tee .ipsApp input[type="week"]:focus, .tee .ipsApp input[type="number"]:focus, .tee .ipsApp input[type="email"]:focus, .tee .ipsApp input[type="url"]:focus, .tee .ipsApp input[type="search"]:focus, .tee .ipsApp input[type="tel"]:focus, .tee .ipsApp input[type="color"]:focus{{if theme.fluent_pers_jscolor_code_border}}, {theme="fluent_pers_jscolor_code_border"}{{endif}}';
+  
+  
+	/* ===== Start functions ===== */
+	const enableDark = () => {
+  		document.querySelector('html').dataset.theme = 'dark';
+      	ips.utils.cookie.set( 'fluent_dark', 1, true );
+	};
+
+	const disableDark = () => {
+  		delete document.querySelector('html').dataset.theme;
+      	ips.utils.cookie.unset( 'fluent_dark' );
+	};
+  
+	const shepeSquare = () => {
+  		document.body.classList.remove('aXenRound');
+  		document.body.classList.add('aXenSquare');
+      	localStorage.setItem(cookieName.shape, 'square');
+	};
+  
+	const shepeRound = () => {
+  		document.body.classList.remove('aXenSquare');
+  		document.body.classList.add('aXenRound');
+      	localStorage.setItem(cookieName.shape, 'round');
+	};
+  
+	const enablePicture = () => {
+  		document.body.classList.add('aXenPicture');
+      	localStorage.setItem(cookieName.picture, 1);
+	};
+  
+	const disablePicture = () => {
+  		document.body.classList.remove('aXenPicture');
+      	localStorage.setItem(cookieName.picture, 0);
+	};
+  
+  	{{if theme.fluent_pers_jscolor and theme.fluent_pers_jscolor_changes}}
+		const setColorTheme = (teeColor) => {
+  			selectElements.color.innerHTML =
+    			colorBackground + '{ background-color: ' + teeColor + '; }' +
+    			colorBackgroundImportant + '{ background-color: ' + teeColor + ' !important; }' +
+    			'.ipsStream.ipsStream_withTimeline { border-color: ' + teeColor + '1a !important; }' +
+    			'.ipsComment .ipsComment_authorBadge { --badge--color: ' + teeColor + ' !important; }' +
+    			'a[data-mentionid], .cToken { background-image: linear-gradient(to bottom, ' + teeColor + '26, '+ teeColor + '26) !important;}' +
+    			'.ipsApp .ipsToggle:focus, .ipsApp .ipsCustomInput input:focus + span, .ipsApp select:not( [multiple] ):focus, [data-ipseditor]:focus-within, .ipsReact_reactCount > a:hover, .ipsApp input[type="color"]:focus, .ipsApp textarea:focus, .ipsApp input[type="text"]:focus, .ipsApp input[type="password"]:focus, .ipsApp input[type="datetime"]:focus, .ipsApp input[type="datetime-local"]:focus, .ipsApp input[type="date"]:focus, .ipsApp input[type="month"]:focus, .ipsApp input[type="time"]:focus, .ipsApp input[type="week"]:focus, .ipsApp input[type="number"]:focus, .ipsApp input[type="email"]:focus, .ipsApp input[type="url"]:focus, .ipsApp input[type="search"]:focus, .ipsApp input[type="tel"]:focus { box-shadow: ' + teeColor + '4d 0px 0px 0px 4px !important;}' +
+    			'.ipsComposeArea_withPhoto [data-ipseditor]:focus-within::before{filter:drop-shadow( ' + teeColor + '4d -4px 0px 0px) !important;}' +
+    			colorColor + '{ color: ' + teeColor + '; }' +
+    			colorBorder + '{ border-color: ' + teeColor + '; }';
+    		selectElements.colorResetPC.style.display = 'inline-block';
+  			{{if !\in_array('ipsLayout_minimal', \IPS\Output::i()->bodyClasses )}}
+    			selectElements.colorResetMobile.style.display = 'inline-block';
+  			{{endif}}
+		};
+
+		const setColorThemeCookie = (picker) => {
+          	localStorage.setItem(cookieName.color, picker);
+  			setColorTheme(picker);
+		};
+	{{endif}}
+  
+	/* ===== Controller ===== */
+	{{if theme.fluent_pers_theme == 'auto' and theme.fluent_pers_theme}}
+  		if(checkDark && !ips.utils.cookie.get( 'fluent_dark_manual' )) {
+  			enableDark();
+		} else if(!checkDark && !ips.utils.cookie.get( 'fluent_dark_manual' )) {
+  			disableDark();
+		};
+	{{elseif theme.fluent_pers_theme and theme.fluent_pers_theme_change}}
+  		if(ips.utils.cookie.get( 'fluent_dark_manual' ) == null) {{if theme.fluent_pers_theme == 'dark'}}enableDark(){{elseif theme.fluent_pers_theme == 'light'}}disableDark(){{endif}};
+	{{elseif theme.fluent_pers_theme == 'dark' and theme.fluent_pers_theme_change == 0}}
+  		enableDark();
+	{{elseif theme.fluent_pers_theme == 'light' and theme.fluent_pers_theme_change == 0}}
+  		disableDark();
+	{{endif}}
+ 
+  	{{if theme.fluent_pers_theme_change}}
+  		ips.utils.cookie.get( 'fluent_dark' ) == 1 ? enableDark() : disableDark();
+  	{{endif}}
+  
+	{{if theme.fluent_pers_jscolor and theme.fluent_pers_jscolor_changes}}
+		selectElements.colorResetPC.style.display = 'none';
+  
+  		{{if !\in_array('ipsLayout_minimal', \IPS\Output::i()->bodyClasses )}}
+    		selectElements.colorResetMobile.style.display = 'none';
+  		{{endif}}
+  
+  		if(localStorage.getItem(cookieName.color) != null) setColorTheme(localStorage.getItem(cookieName.color));
+	{{endif}}
+
+  	{{if theme.fluent_pers_shapes and theme.fluent_pers_shapes_change}}
+  		if(localStorage.getItem(cookieName.shape) == null) {{if theme.fluent_pers_shapes == 'round'}}shepeRound(){{elseif theme.fluent_pers_shapes == 'square'}}shepeSquare(){{endif}};
+  	{{elseif theme.fluent_pers_shapes == 'round' and theme.fluent_pers_shapes_change == 0}}
+  		shepeRound();
+  	{{elseif theme.fluent_pers_shapes == 'round' and theme.fluent_pers_shapes_change == 0}}
+  		shepeSquare();
+  	{{endif}}
+
+  	(localStorage.getItem(cookieName.shape) == 'square') ? shepeSquare() : shepeRound();
+  
+ 	{{if theme.fluent_pers_picture}}  
+  		localStorage.getItem(cookieName.picture) == 1 ? enablePicture() : disablePicture();
+  	{{endif}}
+
+  
+	/* ===== addEventListener ===== */
+	{{if theme.fluent_pers_theme_change}}
+		for(el of selectElements.dark) {
+  			el.addEventListener('click', () => {
+              ips.utils.cookie.set( 'fluent_dark_manual', 1, true );
+    			ips.utils.cookie.get( 'fluent_dark' ) != 1 ? enableDark() : disableDark();
+  			});
+		};
+  	{{endif}}
+  
+  	{{if theme.fluent_pers_shapes and theme.fluent_pers_shapes_change}}
+  		for(el of selectElements.shepe) el.addEventListener('click', () => (localStorage.getItem(cookieName.shape) != 'round') ? shepeRound() : shepeSquare());
+  	{{endif}}
+  
+   	{{if theme.fluent_pers_picture}}  
+  		for(el of selectElements.picture) el.addEventListener('click', () => (localStorage.getItem(cookieName.picture) != 1) ? enablePicture() : disablePicture());
+    {{endif}}
+  
+  	{{if theme.fluent_pers_jscolor and theme.fluent_pers_jscolor_changes}}
+  		selectElements.colorResetPC.addEventListener('click', () => {
+          	localStorage.removeItem(cookieName.color);
+    		selectElements.color.innerHTML = '';
+  			selectElements.colorResetPC.style.display = 'none';
+  		});
+  
+		{{if !\in_array('ipsLayout_minimal', \IPS\Output::i()->bodyClasses )}}
+  			selectElements.colorResetMobile.addEventListener('click', () => {
+              	localStorage.removeItem(cookieName.color);
+    			selectElements.color.innerHTML = '';
+  				selectElements.colorResetMobile.style.display = 'none';
+  			});
+		{{endif}}
+	{{endif}}
+  
+	/* ===== Go to top ===== */
+	{{if theme.fluent_mobile_hook and theme.fluent_mobile_positionHeader == 0 and !\in_array('ipsLayout_minimal', \IPS\Output::i()->bodyClasses)}}
+		window.onload = () => {
+			window.onscroll = () => {
+  				if (document.body.scrollTop > 0 || document.documentElement.scrollTop >= {theme='fluent_mobile_header_hight'}) {
+    				document.querySelector('.aXenelMobileDrawer').classList.remove('aXenelMobileDrawer_hide');
+    				document.querySelector('header').classList.add('header_fixed');
+    				document.querySelector('#elMobileNav').classList.add('elMobileNav_fixed');
+  				} else {
+    				document.querySelector('.aXenelMobileDrawer').classList.add('aXenelMobileDrawer_hide');
+    				document.querySelector('header').classList.remove('header_fixed');
+    				document.querySelector('#elMobileNav').classList.remove('elMobileNav_fixed');
+  				}
+			}
+		}
+	{{endif}}
+  
+  	/* ===== Snow ===== */
+{{if theme.fluent_special_snow}}
+	const snow = () => {
+  	const snowFlake = document.createElement('i');
+  		snowFlake.classList.add('far');
+  		snowFlake.classList.add('fa-snowflake');
+  		snowFlake.style.left = Math.random() * window.innerWidth + 'px';
+  		snowFlake.style.animationDuration = Math.random() * 3 + 6 + 's';
+  		snowFlake.style.opacity = Math.random();
+  		snowFlake.style.fontSize = Math.random() * 10 + 10 + 'px';
+  		document.querySelector('.aXenSnow').appendChild(snowFlake);
+  
+  		setTimeout(() => {
+    		snowFlake.remove();
+  		}, {theme="fluent_special_snow_remove"})
+	}
+	setInterval(snow, {theme="fluent_special_snow_generator"});
+{{endif}}
+</script>]]></template>
   <css css_location="front" css_attributes="" css_path="custom" css_name="aXenDynamic.css"><![CDATA[:root {
   --theme-dynamic-color-1: 107, 105, 206;
   --theme-dynamic-color-2: 139, 105, 194;
@@ -1348,6 +1747,8 @@ nav .ipsNavBar_primary li[data-navext=&quot;Store&quot;] a::before {content: &qu
   <field sc_key="font_x_small" sc_type="Number" sc_multiple="0" sc_content="[]" sc_default="12" sc_tab_key="typescale" sc_show_in_vse="0" sc_title="font_x_small" sc_order="1" sc_condition="">12</field>
   <field sc_key="footer_text" sc_type="Color" sc_multiple="0" sc_content="[]" sc_default="#353c41" sc_tab_key="textcolors" sc_show_in_vse="0" sc_title="themesetting_footer_text" sc_order="13" sc_condition="">#656872</field>
   <field sc_key="header" sc_type="Color" sc_multiple="0" sc_content="[]" sc_default="#ffffff" sc_tab_key="frontendcolors" sc_show_in_vse="0" sc_title="themesetting_header" sc_order="3" sc_condition="">#141519</field>
+  <field sc_key="header_height" sc_type="Number" sc_multiple="0" sc_content="[]" sc_default="80" sc_tab_key="custom" sc_show_in_vse="0" sc_title="header_height" sc_order="2" sc_condition="">80</field>
+  <field sc_key="header_height_mobile" sc_type="Number" sc_multiple="0" sc_content="[]" sc_default="55" sc_tab_key="custom" sc_show_in_vse="0" sc_title="header_height_mobile" sc_order="3" sc_condition="">55</field>
   <field sc_key="header_text" sc_type="Color" sc_multiple="0" sc_content="[]" sc_default="#2d3748" sc_tab_key="frontendcolors" sc_show_in_vse="0" sc_title="themesetting_header_text" sc_order="4" sc_condition="">#ffffff</field>
   <field sc_key="headline_font" sc_type="Select" sc_multiple="0" sc_content="[{&quot;key&quot;:&quot;default&quot;,&quot;value&quot;:&quot;Default&quot;},{&quot;key&quot;:&quot;Inter&quot;,&quot;value&quot;:&quot;Inter&quot;},{&quot;key&quot;:&quot;Lato&quot;,&quot;value&quot;:&quot;Lato&quot;},{&quot;key&quot;:&quot;Open Sans&quot;,&quot;value&quot;:&quot;Open Sans&quot;},{&quot;key&quot;:&quot;Roboto&quot;,&quot;value&quot;:&quot;Roboto&quot;},{&quot;key&quot;:&quot;Roboto Slab&quot;,&quot;value&quot;:&quot;Roboto Slab&quot;},{&quot;key&quot;:&quot;Montserrat&quot;,&quot;value&quot;:&quot;Montserrat&quot;},{&quot;key&quot;:&quot;Merriweather&quot;,&quot;value&quot;:&quot;Merriweather&quot;}]" sc_default="Inter" sc_tab_key="textcolors" sc_show_in_vse="1" sc_title="themesetting_headline_font" sc_order="2" sc_condition="">Inter</field>
   <field sc_key="important_button" sc_type="Color" sc_multiple="0" sc_content="[]" sc_default="#177ec9" sc_tab_key="buttoncolors" sc_show_in_vse="0" sc_title="themesetting_important_button" sc_order="7" sc_condition="">#177ec9</field>
@@ -1400,13 +1801,14 @@ nav .ipsNavBar_primary li[data-navext=&quot;Store&quot;] a::before {content: &qu
   <field sc_key="text_color" sc_type="Color" sc_multiple="0" sc_content="[]" sc_default="#353c41" sc_tab_key="textcolors" sc_show_in_vse="0" sc_title="themesetting_text_color" sc_order="3" sc_condition="">#888b98</field>
   <field sc_key="text_dark" sc_type="Color" sc_multiple="0" sc_content="[]" sc_default="#000000" sc_tab_key="textcolors" sc_show_in_vse="0" sc_title="themesetting_dark_text_color" sc_order="4" sc_condition="">#ffffff</field>
   <field sc_key="text_light" sc_type="Color" sc_multiple="0" sc_content="[]" sc_default="#718096" sc_tab_key="textcolors" sc_show_in_vse="0" sc_title="themesetting_text_light" sc_order="5" sc_condition="">#55606f</field>
+  <field sc_key="text_very_light" sc_type="Color" sc_multiple="0" sc_content="[]" sc_default="#ffffff" sc_tab_key="textcolors" sc_show_in_vse="1" sc_title="themesetting_text_very_light" sc_order="5" sc_condition="">#ffffff</field>
   <field sc_key="timeline_color" sc_type="Color" sc_multiple="0" sc_content="[{&quot;key&quot;:&quot;&quot;,&quot;value&quot;:&quot;&quot;}]" sc_default="#2d3748" sc_tab_key="frontendcolors" sc_show_in_vse="0" sc_title="activity_stream_timeline" sc_order="25" sc_condition="">#5c64c5</field>
   <field sc_key="very_light_button" sc_type="Color" sc_multiple="0" sc_content="[]" sc_default="#ffffff" sc_tab_key="buttoncolors" sc_show_in_vse="0" sc_title="themesetting_very_light_button" sc_order="11" sc_condition="">#0b0c10</field>
   <field sc_key="very_light_button_font" sc_type="Color" sc_multiple="0" sc_content="[]" sc_default="#0e4c79" sc_tab_key="buttoncolors" sc_show_in_vse="0" sc_title="themesetting_very_light_button_font" sc_order="12" sc_condition="">#5c64c5</field>
   <field sc_key="widget_title_bar" sc_type="Color" sc_multiple="0" sc_content="[]" sc_default="#ffffff" sc_tab_key="frontendcolors" sc_show_in_vse="0" sc_title="themesetting_widget_title_bar" sc_order="18" sc_condition="">#ffffff</field>
   <field sc_key="widget_title_font" sc_type="Color" sc_multiple="0" sc_content="[]" sc_default="#1a202c" sc_tab_key="frontendcolors" sc_show_in_vse="0" sc_title="themesetting_widget_font" sc_order="19" sc_condition="">#ffffff</field>
  </app>
- <app key="forums" version="105130">
+ <app key="forums" version="106101">
   <template template_group="index" template_name="forumRow" template_data="$forum, $isSubForum=FALSE, $table=NULL" template_location="front"><![CDATA[{{if $forum->can('view')}}
 {{$lastPost = $forum->lastPost();}}
 {{$club = $forum->club();}}
@@ -1483,13 +1885,13 @@ nav .ipsNavBar_primary li[data-navext=&quot;Store&quot;] a::before {content: &qu
 					<strong class='ipsType_warning ipsType_medium'>
 						<i class='fa fa-warning'></i>
 						{{if $unapprovedContent['topics']}}
-							<a href='{$forum->url()->setQueryString( array( 'advanced_search_submitted' => 1, 'topic_type' => 'queued_topics' ) )->csrf()}' data-ipsTooltip title='{lang="queued_topics_badge" pluralize="$unapprovedContent['topics']"}' class='ipsType_blendLinks'>{$unapprovedContent['topics']}</a>
+							<a href='{$forum->url()->setQueryString( array( 'filter' => 'queued_topics' ) )}' data-ipsTooltip title='{lang="queued_topics_badge" pluralize="$unapprovedContent['topics']"}' class='ipsType_blendLinks'>{$unapprovedContent['topics']}</a>
 						{{else}}
 							<span class='ipsType_light'>0</span>
 						{{endif}}
 						/
 						{{if $unapprovedContent['posts']}}
-							<a href='{$forum->url()->setQueryString( array( 'advanced_search_submitted' => 1, 'topic_type' => 'queued_posts' ) )->csrf()}' data-ipsTooltip title='{lang="queued_posts_badge" pluralize="$unapprovedContent['posts']"}' class='ipsType_blendLinks'>{$unapprovedContent['posts']}</a>
+							<a href='{$forum->url()->setQueryString( array( 'filter' => 'queued_posts' ) )}' data-ipsTooltip title='{lang="queued_posts_badge" pluralize="$unapprovedContent['posts']"}' class='ipsType_blendLinks'>{$unapprovedContent['posts']}</a>
 						{{else}}
 							<span class='ipsType_light'>0</span>
 						{{endif}}
@@ -1499,9 +1901,13 @@ nav .ipsNavBar_primary li[data-navext=&quot;Store&quot;] a::before {content: &qu
 			<ul class="ipsDataItem_lastPoster ipsDataItem_withPhoto">
 				{{if $lastPost}}
 					<li>{template="userPhoto" app="core" group="global" params="$lastPost['author'], 'tiny'"}</li>
-					{{if $lastPost['topic_title']}}<li class='ipsDataItem_lastPoster__title'><a href="{$lastPost['topic_url']->setQueryString( 'do', 'getNewComment' )}" title='{$lastPost['topic_title']}'>{$lastPost['topic_title']}</a></li>{{endif}}
+					{{if $lastPost['topic_title']}}<li class='ipsDataItem_lastPoster__title'><a href="{{if member.member_id}}{$lastPost['topic_url']->setQueryString( 'do', 'getNewComment' )}{{else}}{$lastPost['topic_url']}{{endif}}" title='{$lastPost['topic_title']}'>{$lastPost['topic_title']}</a></li>{{endif}}
 					<li class='ipsType_light ipsType_blendLinks'>
-						{lang="byline_nodate" htmlsprintf="$lastPost['author']->link()"}, 
+						{{if $forum->last_poster_anon}}
+							{lang="byline_nodate" htmlsprintf="$lastPost['author']->link( NULL, NULL, TRUE )"}, 
+						{{else}}
+							{lang="byline_nodate" htmlsprintf="$lastPost['author']->link()"}, 
+						{{endif}}
 						{{if $lastPost['topic_title']}}
 							<a href='{$lastPost['topic_url']->setQueryString( 'do', 'getLastComment' )}' title='{lang="get_last_post"}'>{datetime="$lastPost['date']"}</a>
 						{{else}}
@@ -1524,9 +1930,10 @@ nav .ipsNavBar_primary li[data-navext=&quot;Store&quot;] a::before {content: &qu
 	</li>
 {{endif}}]]></template>
  </app>
- <app key="calendar" version="105130"/>
- <app key="cms" version="105130"/>
+ <app key="calendar" version="106101"/>
+ <app key="cms" version="106101"/>
  <language>
+  <word key="theme_custom_tab_dynamic_icons"><![CDATA[<i class='fa fa-star'></i> Icons]]></word>
   <word key="dynamic_icons_nav">Enable icons in navbar?</word>
   <word key="dynamic_icons_nav_css">[CSS] Icons navBar</word>
   <word key="dynamic_icons_nav_css_desc"><![CDATA[A guide on how to add icons can be found in <a href='https://github.com/aXenDeveloper/ips-theme-dynamic#-configuration' target='blank' rel='noopener'>the documentation on github</a>.]]></word>
@@ -1560,6 +1967,5 @@ nav .ipsNavBar_primary li[data-navext=&quot;Store&quot;] a::before {content: &qu
   <word key="dynamic_icons_widgets">Enable icons in widgets?</word>
   <word key="dynamic_icons_widgets_css">[CSS] Icons widgets</word>
   <word key="dynamic_icons_widgets_css_desc"><![CDATA[A guide on how to add icons can be found in <a href='https://github.com/aXenDeveloper/ips-theme-dynamic#-configuration' target='blank' rel='noopener'>the documentation on github</a>.]]></word>
-  <word key="theme_custom_tab_dynamic_icons"><![CDATA[<i class='fa fa-star'></i> Icons]]></word>
  </language>
 </theme>

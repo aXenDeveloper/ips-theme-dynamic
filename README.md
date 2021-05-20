@@ -6,7 +6,7 @@
 
 ## 🏷️ Requirements
 
-- [IPS Community Suite: 4.5 version](https://invisioncommunity.com/)
+- [IPS Community Suite: 4.6 version](https://invisioncommunity.com/)
 
 ## 🧰 Install
 
@@ -37,7 +37,7 @@ nav .ipsNavBar_primary li[data-navext="Forums"] a::before {content: "\f015" !imp
 ```
 
 - **data-navext** - The name of the item menu. You can find it by clicking on F12 in the browser and selecting the item tab.!  
-  [data-navext](https://raw.githubusercontent.com/aXenDeveloper/ips-theme-dynamic/master/screenshots/navBar_icons.png)
+  ![data-navext](https://raw.githubusercontent.com/aXenDeveloper/ips-theme-dynamic/master/screenshots/navBar_icons.png)
 - **f015** - [Unicode Font Awesome 5](https://fontawesome.com/icons)
 
 ### Icons widgets
