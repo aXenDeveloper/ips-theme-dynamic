@@ -4,9 +4,11 @@
 
 (PSD) Graphic Theme - [Grzegorz](https://www.pecetowicz.pl/profile/32013-grzegorz/)
 
+Built-in Font Awesome 5 icons.
+
 ## 🏷️ Requirements
 
-- [IPS Community Suite: 4.6 version](https://invisioncommunity.com/)
+- [IPS Community Suite: 4.5, 4.6 version](https://invisioncommunity.com/)
 
 ## 🧰 Install
 
@@ -16,7 +18,10 @@
    ![Create new](https://files.axendev.net/github/theme/create_new.png)
 3. Click on the link **manual upload**,  
    ![Manual Upload](https://files.axendev.net/github/theme/manual_upload.png)
-4. Select file **.xml** from packet and click next button
+4. Select file **.xml** from packet and click next button,
+5. Go to theme settings,
+6. Go to **Global tab** and **select your IPS version**
+    ![Manual Upload](https://files.axendev.net/projects/ips/themes/dynamic/version.png)
 
 ## 🛠️ Update
 
@@ -24,7 +29,11 @@
    ![Select Plugin](https://files.axendev.net/github/theme/admincp_select.png)
 2. Search your theme and click **Upload a new version**,  
    ![Upload a new version](https://files.axendev.net/github/theme/new_version_upload.png)
-3. Select file **.xml** from packet and click upload button.
+3. Select file **.xml** from packet and click upload button,
+4. Go to theme settings,
+5. Go to **Global tab** and **select your IPS version**
+    ![Manual Upload](https://files.axendev.net/projects/ips/themes/dynamic/version.png)
+
 
 ## 🔨 Configuration
 

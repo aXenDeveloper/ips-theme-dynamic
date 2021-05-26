@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<theme name="Dynamic Theme" easy_mode="0" editor_skin="ips" author_name="aXenDev" author_url="https://axendev.net/" version="1.1.0" long_version="10001" update_check="https://files.axendev.net/myapps/theme/dynamic/check.php">
+<theme name="Dynamic Theme" easy_mode="0" editor_skin="ips" author_name="aXenDev" author_url="https://axendev.net/" version="1.1.1" long_version="10002" update_check="https://files.axendev.net/projects/ips/themes/dynamic/check.php">
  <app key="core" version="106101">
   <template template_group="global" template_name="aXenScript" template_data="" template_location="front"><![CDATA[<script src="{resource="dynamic_theme/swiper-bundle.min.js" app="core" location="front"}"></script>
 <script type='text/javascript'>
@@ -103,7 +103,7 @@
 		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.3/css/all.css" />
 		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.3/css/v4-shims.css" />
 	</head>
-	<body class='ipsApp ipsApp_front {{if isset( \IPS\Request::i()->cookie['hasJS'] )}}ipsJS_has{{else}}ipsJS_none{{endif}} ipsClearfix{{foreach output.bodyClasses as $class}} {$class}{{endforeach}}' {{if output.globalControllers}}data-controller='{expression="implode( ',', output.globalControllers )"}'{{endif}} {{if isset( output.inlineMessage )}}data-message="{expression="output.inlineMessage"}"{{endif}} data-pageApp='{$location['app']}' data-pageLocation='front' data-pageModule='{$location['module']}' data-pageController='{$location['controller']}' {{if isset( \IPS\Request::i()->id )}}data-pageID='{expression="(int) \IPS\Request::i()->id"}'{{endif}} {{if isset( \IPS\Dispatcher::i()->dispatcherController ) AND !\IPS\Dispatcher::i()->dispatcherController->isContentPage }}data-nocontent{{endif}} {{if output.pageName}}data-pageName="{expression="output.pageName"}"{{endif}}>
+	<body class='ipsApp ipsApp_front {{if isset( \IPS\Request::i()->cookie['hasJS'] )}}ipsJS_has{{else}}ipsJS_none{{endif}} ipsClearfix{{foreach output.bodyClasses as $class}} {$class}{{endforeach}}' {{if output.globalControllers}}data-controller='{expression="implode( ',', output.globalControllers )"}'{{endif}} {{if isset( output.inlineMessage )}}data-message="{expression="output.inlineMessage"}"{{endif}} data-pageApp='{$location['app']}' data-pageLocation='front' data-pageModule='{$location['module']}' data-pageController='{$location['controller']}' {{if isset( \IPS\Request::i()->id )}}data-pageID='{expression="(int) \IPS\Request::i()->id"}'{{endif}} {{if isset( \IPS\Dispatcher::i()->dispatcherController ) AND !\IPS\Dispatcher::i()->dispatcherController->isContentPage }}data-nocontent{{endif}} {{if theme.dynamic_global_version === 'ips46'}}{{if output.pageName}}data-pageName="{expression="output.pageName"}"{{endif}}{{endif}}>
 		<a href='#ipsLayout_mainArea' class='ipsHide' title='{lang="jump_to_content_desc"}' accesskey='m'>{lang="jump_to_content"}</a>
 		{{if !request.isApp()}}
 			<div id='ipsLayout_header' class='ipsClearfix'>
@@ -201,8 +201,7 @@
 	{{endif}}
 	{{$first = FALSE;}}
 {{endforeach}}]]></template>
-  <template template_group="widgets" template_name="activeUsers" template_data="$members, $memberCount, $orientation='vertical'" template_location="front"><![CDATA[
-<h3 class='ipsType_reset ipsWidget_title'>
+  <template template_group="widgets" template_name="activeUsers" template_data="$members, $memberCount, $orientation='vertical'" template_location="front"><![CDATA[<h3 class='ipsType_reset ipsWidget_title'>
 	{{if \IPS\Dispatcher::i()->application->directory !== 'core'}}
 		{lang="block_activeUsers"}
 	{{else}}
@@ -212,13 +211,20 @@
 		&nbsp;&nbsp;<span class='ipsType_light ipsType_unbold ipsType_medium'>{lang="block_user_online_info" pluralize="$memberCount"}</span>
 	{{endif}}
 </h3>
-<div class='ipsWidget_inner ipsPadding'>
+<div class='ipsWidget_inner ipsPafd'>
 	{{if $memberCount}}
-		<ul class='ipsList_inline ipsList_csv ipsList_noSpacing ipsType_normal' data-controller='core.front.widgets.onlineUsers'>
+		<ul class='ipsList_inline ipsList_csv ipsList_noSpacing ipsType_normal' {{if theme.dynamic_global_version === 'ips46'}}data-controller='core.front.widgets.onlineUsers'{{endif}}>
 			{{if \IPS\Member::loggedIn()->canAccessModule( \IPS\Application\Module::get( 'core', 'members' ) ) }}
 				{{foreach $members as $row}}
 					<li>
+{{if theme.dynamic_global_version === 'ips46'}}
 						<a href="{url="app=core&module=members&controller=profile&id={$row['member_id']}" seoTemplate="profile" seoTitle="$row['seo_name']"}" data-ipsHover data-ipsHover-target='{url="app=core&module=members&controller=profile&id={$row['member_id']}&do=hovercard" seoTemplate="profile" seoTitle="$row['seo_name']"}' {{if $row['in_editor']}}data-ipsTooltip data-ipsTooltip-label="{lang="block_user_in_editor"}"{{else}}title="{lang="view_user_profile" sprintf="$row['member_name']"}"{{endif}} {{if $row['in_editor']}}class='cActiveUserEditor'{{endif}}>{expression="\IPS\Member\Group::load( $row['member_group'] )->formatName( $row['member_name'] )" raw="true"}</a>
+{{else}}
+						<a href="{url="app=core&module=members&controller=profile&id={$row['member_id']}" seoTemplate="profile" seoTitle="$row['seo_name']"}" data-ipsHover data-ipsHover-target='{url="app=core&module=members&controller=profile&id={$row['member_id']}&do=hovercard" seoTemplate="profile" seoTitle="$row['seo_name']"}' {{if $row['in_editor']}}data-ipsTooltip data-ipsTooltip-label="{lang="block_user_in_editor"}"{{else}}title="{lang="view_user_profile" sprintf="$row['member_name']"}"{{endif}} {{if $row['in_editor']}}class='cActiveUserEditor'{{endif}}>{expression="\IPS\Member\Group::load( $row['member_group'] )->formatName( $row['member_name'] )" raw="true"}</a>{{if \IPS\Member::loggedIn()->member_id AND \IPS\Member::loggedIn()->member_id === $row['member_id'] AND \IPS\Member::loggedIn()->isOnlineAnonymously()}}
+							<span title='{lang="signed_in_anoymously"}' data-ipsTooltip>
+								<i class='fa fa-eye-slash'></i>
+							</span>{{endif}}
+{{endif}}
 					</li>
 				{{endforeach}}
 			{{else}}
@@ -226,6 +232,13 @@
 					<li>
 						{{if $row['in_editor']}}<i class="fa fa-circle-o-notch fa-spin" data-ipsTooltip data-ipsTooltip-label="{lang="block_user_in_editor"}"></i>{{endif}}
 						{expression="\IPS\Member\Group::load( $row['member_group'] )->formatName( $row['member_name'] )" raw="true"}
+{{if theme.dynamic_global_version === 'ips45'}}
+						{{if \IPS\Member::loggedIn()->member_id AND \IPS\Member::loggedIn()->member_id === $row['member_id'] AND \IPS\Member::loggedIn()->isOnlineAnonymously()}}
+							<span title='{lang="signed_in_anoymously"}' data-ipsTooltip>
+								<i class='fa fa-eye-slash'></i>
+							</span>
+						{{endif}}
+{{endif}}
 					</li>
 				{{endforeach}}
 			{{endif}}
@@ -644,6 +657,51 @@ window.onload = () => {
 	setInterval(snow, {theme="fluent_special_snow_generator"});
 {{endif}}
 </script>]]></template>
+  <template template_group="global" template_name="js_theme_initial" template_data="" template_location="global"><![CDATA[<script>
+if(localStorage.getItem('{theme="fluent_pers_theme_cookies"}') == 1) {
+	document.querySelector('html').dataset.theme = 'dark';
+}
+</script>]]></template>
+  <template template_group="plugins" template_name="whowasonline" template_data="$members, $memberCount, $hour, $stat, $orientation='vertical'" template_location="global"><![CDATA[<h3 class='ipsType_reset ipsWidget_title'>	
+	{lang="block_whowasonline"} 
+	{{if $orientation == 'horizontal'}}
+&nbsp;<span class='ipsType_light ipsType_unbold ipsType_medium'>{lang="who_was_online_last_x" sprintf="$hour" pluralize="$memberCount"}</span> 	
+	{{endif}}	
+</h3>
+<div class='ipsWidget_inner ipsPad'>
+	{{if $memberCount}}
+		<ul class='ipsList_inline ipsList_csv ipsList_noSpacing'>
+  		  {{if \IPS\Settings::i()->who_was_online_photo}}
+		  {{if \IPS\Settings::i()->who_was_online_photo_size == 0}}
+			{{foreach $members as $row}}
+				{template="userPhoto" app="core" params="\IPS\Member::load( $row['member_id'] ), 'tiny'" group="global"} 
+			{{endforeach}}
+		  {{endif}}
+		  {{if \IPS\Settings::i()->who_was_online_photo_size == 1}}
+			{{foreach $members as $row}}
+				{template="userPhoto" app="core" params="\IPS\Member::load( $row['member_id'] ), 'medium'" group="global"} 
+			{{endforeach}}
+		  {{endif}}
+
+		  {{else}}
+			{{foreach $members as $row}}
+				<li>{template="userLinkFromData" group="global" app="core" params="$row['member_id'], $row['name'], $row['members_seo_name'], $row['member_group_id']"}</li>
+			{{endforeach}}
+		  {{endif}}
+		</ul>
+		{{if $orientation == 'vertical' and $memberCount > 60}}
+			<p class='ipsType_medium ipsType_reset'>
+				<a href='{url="app=core&module=online&controller=online" seoTemplate="online"}'>{lang="and_x_others" pluralize="$memberCount - 60"}</a>
+			</p>
+		{{endif}}
+{{if $stat !== false && $orientation!='vertical'}}
+<hr>
+		&nbsp;&nbsp;<span class='ipsType_light ipsType_unbold ipsType_medium'>{$stat|raw}</span>
+{{endif}}
+	{{else}}
+		<p class='ipsType_reset ipsType_medium ipsType_light'>{lang="who_was_online_users_empty"}</p>
+	{{endif}}
+</div>]]></template>
   <css css_location="front" css_attributes="" css_path="custom" css_name="aXenDynamic.css"><![CDATA[:root {
   --theme-dynamic-color-1: 107, 105, 206;
   --theme-dynamic-color-2: 139, 105, 194;
@@ -1656,6 +1714,7 @@ button.swiper-pagination-bullet {
   <field sc_key="button_bar" sc_type="Color" sc_multiple="0" sc_content="[]" sc_default="#ffffff" sc_tab_key="buttoncolors" sc_show_in_vse="0" sc_title="themesetting_button_bar" sc_order="13" sc_condition="">#1e2029</field>
   <field sc_key="comment_count" sc_type="Color" sc_multiple="0" sc_content="[]" sc_default="#edf2f7" sc_tab_key="frontendcolors" sc_show_in_vse="0" sc_title="themesetting_comment_count" sc_order="38" sc_condition="">#22242d</field>
   <field sc_key="comment_count_font" sc_type="Color" sc_multiple="0" sc_content="[]" sc_default="#2d3748" sc_tab_key="frontendcolors" sc_show_in_vse="0" sc_title="themesetting_comment_count_font" sc_order="39" sc_condition="">#ffffff</field>
+  <field sc_key="dynamic_global_version" sc_type="Select" sc_multiple="0" sc_content="[{&quot;key&quot;:&quot;ips45&quot;,&quot;value&quot;:&quot;IPS 4.5&quot;},{&quot;key&quot;:&quot;ips46&quot;,&quot;value&quot;:&quot;IPS 4.6&quot;}]" sc_default="ips46" sc_tab_key="dynamic_global" sc_show_in_vse="0" sc_title="dynamic_global_version" sc_order="1" sc_condition="">ips46</field>
   <field sc_key="dynamic_icons_nav" sc_type="other" sc_multiple="0" sc_content="return new \IPS\Helpers\Form\YesNo( &quot;core_theme_setting_title_{$row['sc_id']}&quot;, $value, FALSE, array(&#13;&#10;'togglesOn' =&gt; array(&#13;&#10;        'theme_setting_dynamic_icons_nav_css'&#13;&#10;    )&#13;&#10;), NULL, NULL, NULL, 'theme_setting_' . $row['sc_key'] );" sc_default="1" sc_tab_key="dynamic_icons" sc_show_in_vse="0" sc_title="dynamic_icons_nav" sc_order="1" sc_condition=""/>
   <field sc_key="dynamic_icons_nav_css" sc_type="TextArea" sc_multiple="0" sc_content="[]" sc_default="" sc_tab_key="dynamic_icons" sc_show_in_vse="0" sc_title="dynamic_icons_nav_css" sc_order="2" sc_condition="">nav .ipsNavBar_primary li[data-navext=&quot;Forums&quot;] a::before {content: &quot;\f015&quot; !important;}&#13;
 nav .ipsNavBar_primary li[data-navext=&quot;Calendar&quot;] a::before {content: &quot;\f073&quot; !important; font-weight: 300;}&#13;
@@ -1866,7 +1925,11 @@ nav .ipsNavBar_primary li[data-navext=&quot;Store&quot;] a::before {content: &qu
 				<ul class="ipsDataItem_subList ipsList_inline">
 					{{foreach $forum->children() as $subforum}}
 						<li class="{{if \IPS\forums\Topic::containerUnread( $subforum )}}ipsDataItem_unread{{endif}}">
+{{if theme.dynamic_global_version === 'ips46'}}
 							<a href="{$subforum->url()}"><span class='ipsItemStatus ipsItemStatus_tiny {{if !\IPS\forums\Topic::containerUnread( $subforum ) && !$subforum->redirect_on}}ipsItemStatus_read{{endif}}'><i class="fa fa-circle"></i></span>{$subforum->_title}</a>
+{{else}}
+							<a href="{$subforum->url()}">{{if \IPS\forums\Topic::containerUnread( $subforum )}}<span class='ipsItemStatus ipsItemStatus_tiny {{if !\IPS\forums\Topic::containerUnread( $subforum ) && !$subforum->redirect_on}}ipsItemStatus_read{{endif}}'><i class="fa fa-circle"></i></span>&nbsp;{{endif}}{$subforum->_title}</a>
+{{endif}}
 						</li>
 					{{endforeach}}
 				</ul>
@@ -1885,13 +1948,21 @@ nav .ipsNavBar_primary li[data-navext=&quot;Store&quot;] a::before {content: &qu
 					<strong class='ipsType_warning ipsType_medium'>
 						<i class='fa fa-warning'></i>
 						{{if $unapprovedContent['topics']}}
+{{if theme.dynamic_global_version === 'ips46'}}
 							<a href='{$forum->url()->setQueryString( array( 'filter' => 'queued_topics' ) )}' data-ipsTooltip title='{lang="queued_topics_badge" pluralize="$unapprovedContent['topics']"}' class='ipsType_blendLinks'>{$unapprovedContent['topics']}</a>
+{{else}}
+							<a href='{$forum->url()->setQueryString( array( 'advanced_search_submitted' => 1, 'topic_type' => 'queued_topics' ) )->csrf()}' data-ipsTooltip title='{lang="queued_topics_badge" pluralize="$unapprovedContent['topics']"}' class='ipsType_blendLinks'>{$unapprovedContent['topics']}</a>
+{{endif}}
 						{{else}}
 							<span class='ipsType_light'>0</span>
 						{{endif}}
 						/
 						{{if $unapprovedContent['posts']}}
+{{if theme.dynamic_global_version === 'ips46'}}
 							<a href='{$forum->url()->setQueryString( array( 'filter' => 'queued_posts' ) )}' data-ipsTooltip title='{lang="queued_posts_badge" pluralize="$unapprovedContent['posts']"}' class='ipsType_blendLinks'>{$unapprovedContent['posts']}</a>
+{{else}}
+							<a href='{$forum->url()->setQueryString( array( 'advanced_search_submitted' => 1, 'topic_type' => 'queued_posts' ) )->csrf()}' data-ipsTooltip title='{lang="queued_posts_badge" pluralize="$unapprovedContent['posts']"}' class='ipsType_blendLinks'>{$unapprovedContent['posts']}</a>
+{{endif}}
 						{{else}}
 							<span class='ipsType_light'>0</span>
 						{{endif}}
@@ -1901,13 +1972,17 @@ nav .ipsNavBar_primary li[data-navext=&quot;Store&quot;] a::before {content: &qu
 			<ul class="ipsDataItem_lastPoster ipsDataItem_withPhoto">
 				{{if $lastPost}}
 					<li>{template="userPhoto" app="core" group="global" params="$lastPost['author'], 'tiny'"}</li>
-					{{if $lastPost['topic_title']}}<li class='ipsDataItem_lastPoster__title'><a href="{{if member.member_id}}{$lastPost['topic_url']->setQueryString( 'do', 'getNewComment' )}{{else}}{$lastPost['topic_url']}{{endif}}" title='{$lastPost['topic_title']}'>{$lastPost['topic_title']}</a></li>{{endif}}
+					{{if $lastPost['topic_title']}}<li class='ipsDataItem_lastPoster__title'><a href="{{if theme.dynamic_global_version === 'ips46'}}{{if member.member_id}}{$lastPost['topic_url']->setQueryString( 'do', 'getNewComment' )}{{else}}{$lastPost['topic_url']}{{endif}}{{else}}{$lastPost['topic_url']->setQueryString( 'do', 'getNewComment' )}{{endif}}" title='{$lastPost['topic_title']}'>{$lastPost['topic_title']}</a></li>{{endif}}
 					<li class='ipsType_light ipsType_blendLinks'>
+{{if theme.dynamic_global_version === 'ips46'}}
 						{{if $forum->last_poster_anon}}
 							{lang="byline_nodate" htmlsprintf="$lastPost['author']->link( NULL, NULL, TRUE )"}, 
 						{{else}}
 							{lang="byline_nodate" htmlsprintf="$lastPost['author']->link()"}, 
 						{{endif}}
+{{else}}
+						{lang="byline_nodate" htmlsprintf="$lastPost['author']->link()"}, 
+{{endif}}
 						{{if $lastPost['topic_title']}}
 							<a href='{$lastPost['topic_url']->setQueryString( 'do', 'getLastComment' )}' title='{lang="get_last_post"}'>{datetime="$lastPost['date']"}</a>
 						{{else}}
@@ -1933,24 +2008,6 @@ nav .ipsNavBar_primary li[data-navext=&quot;Store&quot;] a::before {content: &qu
  <app key="calendar" version="106101"/>
  <app key="cms" version="106101"/>
  <language>
-  <word key="theme_custom_tab_dynamic_icons"><![CDATA[<i class='fa fa-star'></i> Icons]]></word>
-  <word key="dynamic_icons_nav">Enable icons in navbar?</word>
-  <word key="dynamic_icons_nav_css">[CSS] Icons navBar</word>
-  <word key="dynamic_icons_nav_css_desc"><![CDATA[A guide on how to add icons can be found in <a href='https://github.com/aXenDeveloper/ips-theme-dynamic#-configuration' target='blank' rel='noopener'>the documentation on github</a>.]]></word>
-  <word key="theme_custom_tab_dynamic_swiper"><![CDATA[<i class='fa fa-window-maximize'></i> Slider]]></word>
-  <word key="dynamic_swiper_on">Enable slider?</word>
-  <word key="dynamic_swiper_1">Slider #1</word>
-  <word key="dynamic_swiper_2">Slider #2</word>
-  <word key="dynamic_swiper_3">Slider #3</word>
-  <word key="dynamic_swiper_4">Slider #4</word>
-  <word key="dynamic_swiper_5">Slider #5</word>
-  <word key="dynamic_swiper_background_color">Background Color</word>
-  <word key="dynamic_swiper_image">Background Image</word>
-  <word key="dynamic_swiper_image_position">Background Position</word>
-  <word key="dynamic_swiper_image_size">Background Size</word>
-  <word key="dynamic_swiper_image_repeat">Background Repeat</word>
-  <word key="dynamic_swiper_title">Title</word>
-  <word key="dynamic_swiper_text">Text</word>
   <word key="dynamic_swiper_buttons">Buttons</word>
   <word key="dynamic_swiper_show">Where to display the slider?</word>
   <word key="dynamic_swiper_show_url">Display slider by URL</word>
@@ -1967,5 +2024,25 @@ nav .ipsNavBar_primary li[data-navext=&quot;Store&quot;] a::before {content: &qu
   <word key="dynamic_icons_widgets">Enable icons in widgets?</word>
   <word key="dynamic_icons_widgets_css">[CSS] Icons widgets</word>
   <word key="dynamic_icons_widgets_css_desc"><![CDATA[A guide on how to add icons can be found in <a href='https://github.com/aXenDeveloper/ips-theme-dynamic#-configuration' target='blank' rel='noopener'>the documentation on github</a>.]]></word>
+  <word key="theme_custom_tab_dynamic_icons"><![CDATA[<i class="fa fa-star"></i> Icons]]></word>
+  <word key="theme_custom_tab_dynamic_global"><![CDATA[<i class="fa fa-home"></i> Global]]></word>
+  <word key="dynamic_global_version">Select your IPS version</word>
+  <word key="dynamic_icons_nav">Enable icons in navbar?</word>
+  <word key="dynamic_icons_nav_css">[CSS] Icons navBar</word>
+  <word key="dynamic_icons_nav_css_desc"><![CDATA[A guide on how to add icons can be found in <a href='https://github.com/aXenDeveloper/ips-theme-dynamic#-configuration' target='blank' rel='noopener'>the documentation on github</a>.]]></word>
+  <word key="theme_custom_tab_dynamic_swiper"><![CDATA[<i class="fa fa-window-maximize"></i> Slider]]></word>
+  <word key="dynamic_swiper_on">Enable slider?</word>
+  <word key="dynamic_swiper_1">Slider #1</word>
+  <word key="dynamic_swiper_2">Slider #2</word>
+  <word key="dynamic_swiper_3">Slider #3</word>
+  <word key="dynamic_swiper_4">Slider #4</word>
+  <word key="dynamic_swiper_5">Slider #5</word>
+  <word key="dynamic_swiper_background_color">Background Color</word>
+  <word key="dynamic_swiper_image">Background Image</word>
+  <word key="dynamic_swiper_image_position">Background Position</word>
+  <word key="dynamic_swiper_image_size">Background Size</word>
+  <word key="dynamic_swiper_image_repeat">Background Repeat</word>
+  <word key="dynamic_swiper_title">Title</word>
+  <word key="dynamic_swiper_text">Text</word>
  </language>
 </theme>
