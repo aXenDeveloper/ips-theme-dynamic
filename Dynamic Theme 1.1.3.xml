@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<theme name="Dynamic Theme" easy_mode="0" editor_skin="ips" author_name="aXenDev" author_url="https://axendev.net/" version="1.1.1" long_version="10002" update_check="https://files.axendev.net/projects/ips/themes/dynamic/check.php">
- <app key="core" version="106101">
+<theme name="Dynamic Theme" easy_mode="0" editor_skin="ips" author_name="aXenDev" author_url="https://axendev.net/" version="1.1.3" long_version="10004" update_check="https://files.axendev.net/projects/ips/themes/dynamic/check.php">
+ <app key="core" version="106111">
   <template template_group="global" template_name="aXenScript" template_data="" template_location="front"><![CDATA[<script src="{resource="dynamic_theme/swiper-bundle.min.js" app="core" location="front"}"></script>
 <script type='text/javascript'>
   const swiper = new Swiper(".aXenSwiper", {
@@ -211,21 +211,21 @@
 		&nbsp;&nbsp;<span class='ipsType_light ipsType_unbold ipsType_medium'>{lang="block_user_online_info" pluralize="$memberCount"}</span>
 	{{endif}}
 </h3>
-<div class='ipsWidget_inner ipsPafd'>
+<div class='ipsWidget_inner ipsPad'>
 	{{if $memberCount}}
 		<ul class='ipsList_inline ipsList_csv ipsList_noSpacing ipsType_normal' {{if theme.dynamic_global_version === 'ips46'}}data-controller='core.front.widgets.onlineUsers'{{endif}}>
 			{{if \IPS\Member::loggedIn()->canAccessModule( \IPS\Application\Module::get( 'core', 'members' ) ) }}
 				{{foreach $members as $row}}
-					<li>
 {{if theme.dynamic_global_version === 'ips46'}}
-						<a href="{url="app=core&module=members&controller=profile&id={$row['member_id']}" seoTemplate="profile" seoTitle="$row['seo_name']"}" data-ipsHover data-ipsHover-target='{url="app=core&module=members&controller=profile&id={$row['member_id']}&do=hovercard" seoTemplate="profile" seoTitle="$row['seo_name']"}' {{if $row['in_editor']}}data-ipsTooltip data-ipsTooltip-label="{lang="block_user_in_editor"}"{{else}}title="{lang="view_user_profile" sprintf="$row['member_name']"}"{{endif}} {{if $row['in_editor']}}class='cActiveUserEditor'{{endif}}>{expression="\IPS\Member\Group::load( $row['member_group'] )->formatName( $row['member_name'] )" raw="true"}</a>
+					<li><a href="{url="app=core&module=members&controller=profile&id={$row['member_id']}" seoTemplate="profile" seoTitle="$row['seo_name']"}" data-ipsHover data-ipsHover-target='{url="app=core&module=members&controller=profile&id={$row['member_id']}&do=hovercard" seoTemplate="profile" seoTitle="$row['seo_name']"}' {{if $row['in_editor']}}data-ipsTooltip data-ipsTooltip-label="{lang="block_user_in_editor"}"{{else}}title="{lang="view_user_profile" sprintf="$row['member_name']"}"{{endif}} {{if $row['in_editor']}}class='cActiveUserEditor'{{endif}}>{expression="\IPS\Member\Group::load( $row['member_group'] )->formatName( $row['member_name'] )" raw="true"}</a></li>
 {{else}}
+          <li>
 						<a href="{url="app=core&module=members&controller=profile&id={$row['member_id']}" seoTemplate="profile" seoTitle="$row['seo_name']"}" data-ipsHover data-ipsHover-target='{url="app=core&module=members&controller=profile&id={$row['member_id']}&do=hovercard" seoTemplate="profile" seoTitle="$row['seo_name']"}' {{if $row['in_editor']}}data-ipsTooltip data-ipsTooltip-label="{lang="block_user_in_editor"}"{{else}}title="{lang="view_user_profile" sprintf="$row['member_name']"}"{{endif}} {{if $row['in_editor']}}class='cActiveUserEditor'{{endif}}>{expression="\IPS\Member\Group::load( $row['member_group'] )->formatName( $row['member_name'] )" raw="true"}</a>{{if \IPS\Member::loggedIn()->member_id AND \IPS\Member::loggedIn()->member_id === $row['member_id'] AND \IPS\Member::loggedIn()->isOnlineAnonymously()}}
 							<span title='{lang="signed_in_anoymously"}' data-ipsTooltip>
 								<i class='fa fa-eye-slash'></i>
 							</span>{{endif}}
+          </li>
 {{endif}}
-					</li>
 				{{endforeach}}
 			{{else}}
 				{{foreach $members as $row}}
@@ -1751,7 +1751,7 @@ nav .ipsNavBar_primary li[data-navext=&quot;Store&quot;] a::before {content: &qu
   <field sc_key="dynamic_swiper_2_image_repeat" sc_type="Select" sc_multiple="0" sc_content="[{&quot;key&quot;:&quot;no-repeat&quot;,&quot;value&quot;:&quot;no-repeat&quot;},{&quot;key&quot;:&quot;repeat&quot;,&quot;value&quot;:&quot;repeat&quot;},{&quot;key&quot;:&quot;repeat-x&quot;,&quot;value&quot;:&quot;repeat-x&quot;},{&quot;key&quot;:&quot;repeat-y&quot;,&quot;value&quot;:&quot;repeat-y&quot;},{&quot;key&quot;:&quot;round&quot;,&quot;value&quot;:&quot;round&quot;},{&quot;key&quot;:&quot;space&quot;,&quot;value&quot;:&quot;space&quot;}]" sc_default="repeat" sc_tab_key="dynamic_swiper" sc_show_in_vse="0" sc_title="dynamic_swiper_image_repeat" sc_order="24" sc_condition="">repeat</field>
   <field sc_key="dynamic_swiper_2_image_size" sc_type="Select" sc_multiple="0" sc_content="[{&quot;key&quot;:&quot;auto&quot;,&quot;value&quot;:&quot;auto&quot;},{&quot;key&quot;:&quot;contain&quot;,&quot;value&quot;:&quot;contain&quot;},{&quot;key&quot;:&quot;cover&quot;,&quot;value&quot;:&quot;cover&quot;}]" sc_default="auto" sc_tab_key="dynamic_swiper" sc_show_in_vse="0" sc_title="dynamic_swiper_image_size" sc_order="23" sc_condition="">auto</field>
   <field sc_key="dynamic_swiper_2_text" sc_type="Editor" sc_multiple="0" sc_content="[]" sc_default="" sc_tab_key="dynamic_swiper" sc_show_in_vse="0" sc_title="dynamic_swiper_text" sc_order="26" sc_condition=""><![CDATA[<p>
-	<strong>Lorem Ipsum</strong> is simply dummy text of the printing and typesetting industry.
+	<strong>Lorem Ipsum</strong> is simply dummy text of the printing and typesetting industry123.
 </p>
 ]]></field>
   <field sc_key="dynamic_swiper_2_title" sc_type="Text" sc_multiple="0" sc_content="[]" sc_default="What is Lorem Ipsum?" sc_tab_key="dynamic_swiper" sc_show_in_vse="0" sc_title="dynamic_swiper_title" sc_order="25" sc_condition="">What is Lorem Ipsum?</field>
@@ -1785,7 +1785,7 @@ nav .ipsNavBar_primary li[data-navext=&quot;Store&quot;] a::before {content: &qu
   <field sc_key="dynamic_swiper_auto" sc_type="other" sc_multiple="0" sc_content="return new \IPS\Helpers\Form\YesNo( &quot;core_theme_setting_title_{$row['sc_id']}&quot;, $value, FALSE, array(&#13;&#10;'togglesOn' =&gt; array(&#13;&#10;        'theme_setting_dynamic_swiper_auto_delay',&#13;&#10;        'theme_setting_dynamic_swiper_auto_interaction'&#13;&#10;    )&#13;&#10;), NULL, NULL, NULL, 'theme_setting_' . $row['sc_key'] );" sc_default="1" sc_tab_key="dynamic_swiper" sc_show_in_vse="0" sc_title="dynamic_swiper_auto" sc_order="7" sc_condition=""/>
   <field sc_key="dynamic_swiper_auto_delay" sc_type="Number" sc_multiple="0" sc_content="[]" sc_default="4000" sc_tab_key="dynamic_swiper" sc_show_in_vse="0" sc_title="dynamic_swiper_auto_delay" sc_order="8" sc_condition="">4000</field>
   <field sc_key="dynamic_swiper_auto_interaction" sc_type="YesNo" sc_multiple="0" sc_content="[]" sc_default="1" sc_tab_key="dynamic_swiper" sc_show_in_vse="0" sc_title="dynamic_swiper_auto_interaction" sc_order="9" sc_condition="">1</field>
-  <field sc_key="dynamic_swiper_effect" sc_type="Select" sc_multiple="0" sc_content="[{&quot;key&quot;:&quot;slide&quot;,&quot;value&quot;:&quot;slide&quot;},{&quot;key&quot;:&quot;fade&quot;,&quot;value&quot;:&quot;fade&quot;},{&quot;key&quot;:&quot;cube&quot;,&quot;value&quot;:&quot;cube&quot;},{&quot;key&quot;:&quot;coverflow&quot;,&quot;value&quot;:&quot;coverflow&quot;},{&quot;key&quot;:&quot;flip&quot;,&quot;value&quot;:&quot;flip&quot;}]" sc_default="slide" sc_tab_key="dynamic_swiper" sc_show_in_vse="0" sc_title="dynamic_swiper_effect" sc_order="5" sc_condition="">coverflow</field>
+  <field sc_key="dynamic_swiper_effect" sc_type="Select" sc_multiple="0" sc_content="[{&quot;key&quot;:&quot;slide&quot;,&quot;value&quot;:&quot;slide&quot;},{&quot;key&quot;:&quot;fade&quot;,&quot;value&quot;:&quot;fade&quot;},{&quot;key&quot;:&quot;cube&quot;,&quot;value&quot;:&quot;cube&quot;},{&quot;key&quot;:&quot;coverflow&quot;,&quot;value&quot;:&quot;coverflow&quot;},{&quot;key&quot;:&quot;flip&quot;,&quot;value&quot;:&quot;flip&quot;}]" sc_default="slide" sc_tab_key="dynamic_swiper" sc_show_in_vse="0" sc_title="dynamic_swiper_effect" sc_order="5" sc_condition="">slide</field>
   <field sc_key="dynamic_swiper_loop" sc_type="YesNo" sc_multiple="0" sc_content="[]" sc_default="1" sc_tab_key="dynamic_swiper" sc_show_in_vse="0" sc_title="dynamic_swiper_loop" sc_order="6" sc_condition="">1</field>
   <field sc_key="dynamic_swiper_on" sc_type="other" sc_multiple="0" sc_content="return new \IPS\Helpers\Form\YesNo( &quot;core_theme_setting_title_{$row['sc_id']}&quot;, $value, FALSE, array(&#13;&#10;'togglesOn' =&gt; array(&#13;&#10;        'theme_setting_dynamic_swiper_1',&#13;&#10;        'theme_setting_dynamic_swiper_2',&#13;&#10;        'theme_setting_dynamic_swiper_3',&#13;&#10;        'theme_setting_dynamic_swiper_4',&#13;&#10;        'theme_setting_dynamic_swiper_5',&#13;&#10;        'theme_setting_dynamic_swiper_show',&#13;&#10;        'theme_setting_dynamic_swiper_show_url',&#13;&#10;        'theme_setting_dynamic_swiper_8',&#13;&#10;        'theme_setting_dynamic_swiper_9',&#13;&#10;        'theme_setting_dynamic_swiper_10'&#13;&#10;    )&#13;&#10;), NULL, NULL, NULL, 'theme_setting_' . $row['sc_key'] );" sc_default="1" sc_tab_key="dynamic_swiper" sc_show_in_vse="0" sc_title="dynamic_swiper_on" sc_order="1" sc_condition=""/>
   <field sc_key="dynamic_swiper_pagination" sc_type="YesNo" sc_multiple="0" sc_content="[]" sc_default="1" sc_tab_key="dynamic_swiper" sc_show_in_vse="0" sc_title="dynamic_swiper_pagination" sc_order="4" sc_condition="">1</field>
@@ -1867,7 +1867,7 @@ nav .ipsNavBar_primary li[data-navext=&quot;Store&quot;] a::before {content: &qu
   <field sc_key="widget_title_bar" sc_type="Color" sc_multiple="0" sc_content="[]" sc_default="#ffffff" sc_tab_key="frontendcolors" sc_show_in_vse="0" sc_title="themesetting_widget_title_bar" sc_order="18" sc_condition="">#ffffff</field>
   <field sc_key="widget_title_font" sc_type="Color" sc_multiple="0" sc_content="[]" sc_default="#1a202c" sc_tab_key="frontendcolors" sc_show_in_vse="0" sc_title="themesetting_widget_font" sc_order="19" sc_condition="">#ffffff</field>
  </app>
- <app key="forums" version="106101">
+ <app key="forums" version="106111">
   <template template_group="index" template_name="forumRow" template_data="$forum, $isSubForum=FALSE, $table=NULL" template_location="front"><![CDATA[{{if $forum->can('view')}}
 {{$lastPost = $forum->lastPost();}}
 {{$club = $forum->club();}}
@@ -1925,11 +1925,7 @@ nav .ipsNavBar_primary li[data-navext=&quot;Store&quot;] a::before {content: &qu
 				<ul class="ipsDataItem_subList ipsList_inline">
 					{{foreach $forum->children() as $subforum}}
 						<li class="{{if \IPS\forums\Topic::containerUnread( $subforum )}}ipsDataItem_unread{{endif}}">
-{{if theme.dynamic_global_version === 'ips46'}}
-							<a href="{$subforum->url()}"><span class='ipsItemStatus ipsItemStatus_tiny {{if !\IPS\forums\Topic::containerUnread( $subforum ) && !$subforum->redirect_on}}ipsItemStatus_read{{endif}}'><i class="fa fa-circle"></i></span>{$subforum->_title}</a>
-{{else}}
 							<a href="{$subforum->url()}">{{if \IPS\forums\Topic::containerUnread( $subforum )}}<span class='ipsItemStatus ipsItemStatus_tiny {{if !\IPS\forums\Topic::containerUnread( $subforum ) && !$subforum->redirect_on}}ipsItemStatus_read{{endif}}'><i class="fa fa-circle"></i></span>&nbsp;{{endif}}{$subforum->_title}</a>
-{{endif}}
 						</li>
 					{{endforeach}}
 				</ul>
@@ -2005,8 +2001,8 @@ nav .ipsNavBar_primary li[data-navext=&quot;Store&quot;] a::before {content: &qu
 	</li>
 {{endif}}]]></template>
  </app>
- <app key="calendar" version="106101"/>
- <app key="cms" version="106101"/>
+ <app key="calendar" version="106111"/>
+ <app key="cms" version="106111"/>
  <language>
   <word key="dynamic_swiper_buttons">Buttons</word>
   <word key="dynamic_swiper_show">Where to display the slider?</word>
