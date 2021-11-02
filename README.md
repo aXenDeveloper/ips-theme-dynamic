@@ -8,7 +8,7 @@ Built-in Font Awesome 5 icons.
 
 ## 🏷️ Requirements
 
-- [IPS Community Suite: 4.5, 4.6 version](https://invisioncommunity.com/)
+- [IPS Community Suite: 4.6 version](https://invisioncommunity.com/)
 
 ## 🧰 Install
 
@@ -21,7 +21,7 @@ Built-in Font Awesome 5 icons.
 4. Select file **.xml** from packet and click next button,
 5. Go to theme settings,
 6. Go to **Global tab** and **select your IPS version**
-    ![Manual Upload](https://files.axendev.net/projects/ips/themes/dynamic/version.png)
+   ![Manual Upload](https://files.axendev.net/projects/ips/themes/dynamic/version.png)
 
 ## 🛠️ Update
 
@@ -32,8 +32,7 @@ Built-in Font Awesome 5 icons.
 3. Select file **.xml** from packet and click upload button,
 4. Go to theme settings,
 5. Go to **Global tab** and **select your IPS version**
-    ![Manual Upload](https://files.axendev.net/projects/ips/themes/dynamic/version.png)
-
+   ![Manual Upload](https://files.axendev.net/projects/ips/themes/dynamic/version.png)
 
 ## 🔨 Configuration
 
