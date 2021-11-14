@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<theme name="Dynamic Theme" easy_mode="0" editor_skin="ips" author_name="aXenDev" author_url="https://axendev.net/" version="1.1.5" long_version="10006" update_check="https://files.axendev.net/projects/ips/themes/dynamic/check.php">
- <app key="core" version="106140">
+<theme name="Dynamic Theme" easy_mode="0" editor_skin="ips" author_name="aXenDev" author_url="https://axendev.net/" version="1.1.6" long_version="10007" update_check="https://files.axendev.net/projects/ips/themes/dynamic/check.php">
+ <app key="core" version="106142">
   <template template_group="global" template_name="aXenScript" template_data="" template_location="front"><![CDATA[<script src="{resource="dynamic_theme/swiper-bundle.min.js" app="core" location="front"}"></script>
 <script type='text/javascript'>
   const swiper = new Swiper(".aXenSwiper", {
@@ -867,6 +867,7 @@ a {
 }
 
 /* ===== Icons ===== */
+{{if theme.dynamic_icons_nav}}
 body:not(.ipsLayout_minimal) nav .ipsNavBar_primary ul[data-role="primaryNavBar"] li a:not(.ipsButton_primary)::before {
   content: "\f0c9";
   font-family: 'font awesome 5 free';
@@ -876,6 +877,7 @@ body:not(.ipsLayout_minimal) nav .ipsNavBar_primary ul[data-role="primaryNavBar"
 }
 
 {theme="dynamic_icons_nav_css"}
+{{endif}}
 
 /* ===== Search ===== */
 #elSearch {
@@ -2293,7 +2295,7 @@ nav .ipsNavBar_primary li[data-navext=&quot;Store&quot;] a::before {content: &qu
   <field sc_key="widget_title_bar" sc_type="Color" sc_multiple="0" sc_content="[]" sc_default="#ffffff" sc_tab_key="frontendcolors" sc_show_in_vse="0" sc_title="themesetting_widget_title_bar" sc_order="18" sc_condition="">#ffffff</field>
   <field sc_key="widget_title_font" sc_type="Color" sc_multiple="0" sc_content="[]" sc_default="#1a202c" sc_tab_key="frontendcolors" sc_show_in_vse="0" sc_title="themesetting_widget_font" sc_order="19" sc_condition="">#ffffff</field>
  </app>
- <app key="forums" version="106140">
+ <app key="forums" version="106142">
   <template template_group="index" template_name="forumRow" template_data="$forum, $isSubForum=FALSE, $table=NULL" template_location="front"><![CDATA[{{if $forum->can('view')}}
 {{$lastPost = $forum->lastPost();}}
 {{$club = $forum->club();}}
@@ -2415,8 +2417,8 @@ nav .ipsNavBar_primary li[data-navext=&quot;Store&quot;] a::before {content: &qu
 	</li>
 {{endif}}]]></template>
  </app>
- <app key="calendar" version="106140"/>
- <app key="cms" version="106140"/>
+ <app key="calendar" version="106142"/>
+ <app key="cms" version="106142"/>
  <language>
   <word key="theme_custom_tab_dynamic_icons"><![CDATA[<i class="fa fa-star"></i> Icons]]></word>
   <word key="dynamic_icons_nav">Enable icons in navbar?</word>
