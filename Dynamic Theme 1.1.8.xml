@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<theme name="Dynamic Theme" easy_mode="0" editor_skin="ips" author_name="aXenDev" author_url="https://axendev.net/" version="1.1.7" long_version="10008" update_check="https://files.axendev.net/projects/ips/themes/dynamic/check.php">
- <app key="core" version="106155">
+<theme name="Dynamic Theme" easy_mode="0" editor_skin="ips" author_name="aXenDev" author_url="https://axendev.net/" version="1.1.8" long_version="10009" update_check="https://files.axendev.net/projects/ips/themes/dynamic/check.php">
+ <app key="core" version="106159">
   <template template_group="global" template_name="aXenScript" template_data="" template_location="front"><![CDATA[<script src="{resource="dynamic_theme/swiper-bundle.min.js" app="core" location="front"}"></script>
 <script type='text/javascript'>
   const swiper = new Swiper(".aXenSwiper", {
@@ -111,23 +111,21 @@
 		{{if settings.googletag_enabled}}
 			{setting="googletag_noscript_code"}
 		{{endif}}
-		  <a href='#ipsLayout_mainArea' class='ipsHide' title='{lang="jump_to_content_desc"}' accesskey='m'>{lang="jump_to_content"}</a>
-		{{if !request.isApp()}}
-			<div id='ipsLayout_header' class='ipsClearfix'>
-				{template="updateWarning" app="core" group="global" params=""}
-				<header>
-					<div class='ipsLayout_container'>
-						{template="logo" app="core" group="global" params=""}
-						{{if !\in_array('ipsLayout_minimal', \IPS\Output::i()->bodyClasses )}}
-							{template="userBar" app="core" group="global" params=""}
-                      	{{endif}}
-						{template="mobileNavigationIcon" app="core" group="global" params=""}
-					</div>
-					{template="navBar" app="core" group="global" params=""}
-				</header>
-				{{if !\in_array('ipsLayout_minimal', \IPS\Output::i()->bodyClasses )}}{template="mobileNavBar" app="core" group="global" params=""}{{endif}}
-			</div>
-		{{endif}}
+		<a href='#ipsLayout_mainArea' class='ipsHide' title='{lang="jump_to_content_desc"}' accesskey='m'>{lang="jump_to_content"}</a>
+		<div id='ipsLayout_header' class='ipsClearfix'>
+			{template="updateWarning" app="core" group="global" params=""}
+			<header>
+				<div class='ipsLayout_container'>
+					{template="logo" app="core" group="global" params=""}
+					{{if !\in_array('ipsLayout_minimal', \IPS\Output::i()->bodyClasses )}}
+						{template="userBar" app="core" group="global" params=""}
+											{{endif}}
+					{template="mobileNavigationIcon" app="core" group="global" params=""}
+				</div>
+				{template="navBar" app="core" group="global" params=""}
+			</header>
+			{{if !\in_array('ipsLayout_minimal', \IPS\Output::i()->bodyClasses )}}{template="mobileNavBar" app="core" group="global" params=""}{{endif}}
+		</div>
 		{template="aXenSwiper" app="core" group="global" if="theme.dynamic_swiper_on && !\in_array('ipsLayout_minimal', \IPS\Output::i()->bodyClasses )"}
 		<main id='ipsLayout_body' class='ipsLayout_container'>
 			<div id='ipsLayout_contentArea'>
@@ -150,35 +148,32 @@
 			</div>
 			{template="inlineMessage" if="member.msg_show_notification and $message = \IPS\core\Messenger\Conversation::latestUnreadMessage()" app="core" group="global" params="$message"}
 		</main>
-		{{if !request.isApp()}}
-			<footer id='ipsLayout_footer' class='ipsClearfix'>
-				<div class='ipsLayout_container'>
-					{advertisement="ad_global_footer"}
-					{template="footer" app="core" group="global" params=""}
-				</div>
-			</footer>
-			{template="mobileNavigation" if="theme.responsive" app="core" group="global" params=""}
-			{template="guestTermsBar" if="!\IPS\Member::loggedIn()->member_id and \IPS\Settings::i()->guest_terms_bar" app="core" group="global" params="base64_encode( \IPS\Settings::i()->base_url )"}
-			{template="includeJS" if="theme.js_include == 'footer'" app="core" group="global" location="global" params=""}
-			{template="viglink" if="settings.viglink_enabled" app="core" group="global" params=""}
-			{template="metaTagEditor" if="isset( $_SESSION['live_meta_tags'] ) and $_SESSION['live_meta_tags'] and member.isAdmin()" app="core" group="global" params=""}
-			{template="aXenScript" app="core" group="global"}
-		{{endif}}
+		<footer id='ipsLayout_footer' class='ipsClearfix'>
+			<div class='ipsLayout_container'>
+				{advertisement="ad_global_footer"}
+				{template="footer" app="core" group="global" params=""}
+			</div>
+		</footer>
+		{template="mobileNavigation" if="theme.responsive" app="core" group="global" params=""}
+		{template="guestTermsBar" if="!\IPS\Member::loggedIn()->member_id and \IPS\Settings::i()->guest_terms_bar" app="core" group="global" params="base64_encode( \IPS\Settings::i()->base_url )"}
+		{template="includeJS" if="theme.js_include == 'footer'" app="core" group="global" location="global" params=""}
+		{template="viglink" if="settings.viglink_enabled" app="core" group="global" params=""}
+		{template="metaTagEditor" if="isset( $_SESSION['live_meta_tags'] ) and $_SESSION['live_meta_tags'] and member.isAdmin()" app="core" group="global" params=""}
+		{template="aXenScript" app="core" group="global"}
 		<!--ipsQueryLog-->
 		<!--ipsCachingLog-->
 		{expression="output.endBodyCode" raw="true"}
-		{{if !request.isApp()}}
-			{{if settings.fb_pixel_enabled and settings.fb_pixel_id and $noscript = \IPS\core\Facebook\Pixel::i()->noscript()}}
-				<noscript>
-				{$noscript|raw}
-				</noscript>
-			{{endif}}
+		{{if settings.fb_pixel_enabled and settings.fb_pixel_id and $noscript = \IPS\core\Facebook\Pixel::i()->noscript()}}
+			<noscript>
+			{$noscript|raw}
+			</noscript>
 		{{endif}}
 		{{if settings.custom_body_code}}
 			{setting="custom_body_code"}
 		{{endif}}
 	</body>
-</html>]]></template>
+</html>
+]]></template>
   <template template_group="global" template_name="navBarItems" template_data="$roots, $subBars=NULL, $parent=0, $preview=FALSE" template_location="front"><![CDATA[{{$first = TRUE;}}
 {{foreach $roots as $id => $item}}
 	{{if $preview or $item->canView()}}
@@ -2385,7 +2380,7 @@ nav .ipsNavBar_primary li[data-navext=&quot;Store&quot;] a::before {content: &qu
   <field sc_key="widget_title_bar" sc_type="Color" sc_multiple="0" sc_content="[]" sc_default="#ffffff" sc_tab_key="frontendcolors" sc_show_in_vse="0" sc_title="themesetting_widget_title_bar" sc_order="18" sc_condition="">#ffffff</field>
   <field sc_key="widget_title_font" sc_type="Color" sc_multiple="0" sc_content="[]" sc_default="#1a202c" sc_tab_key="frontendcolors" sc_show_in_vse="0" sc_title="themesetting_widget_font" sc_order="19" sc_condition="">#ffffff</field>
  </app>
- <app key="forums" version="106155">
+ <app key="forums" version="106159">
   <template template_group="index" template_name="forumRow" template_data="$forum, $isSubForum=FALSE, $table=NULL" template_location="front"><![CDATA[{{if $forum->can('view')}}
 {{$lastPost = $forum->lastPost();}}
 {{$club = $forum->club();}}
@@ -2507,10 +2502,11 @@ nav .ipsNavBar_primary li[data-navext=&quot;Store&quot;] a::before {content: &qu
 	</li>
 {{endif}}]]></template>
  </app>
- <app key="calendar" version="106155"/>
- <app key="cms" version="106155"/>
+ <app key="calendar" version="106159"/>
+ <app key="cms" version="106159"/>
  <app key="axenplayerpanel" version="10000"/>
- <app key="axencontentnotes" version="10000"/>
+ <app key="axencontentnotes" version="10003"/>
+ <app key="axenserverlist" version="10015"/>
  <app key="axenmembers" version="10006">
   <template template_group="widgets" template_name="aXenContact" template_data="$members" template_location="front"><![CDATA[<h3 class="ipsType_reset ipsWidget_title">{lang="block_aXenContact"}</h3>
 
@@ -2790,20 +2786,8 @@ nav .ipsNavBar_primary li[data-navext=&quot;Store&quot;] a::before {content: &qu
 {{endif}}
 ]]></template>
  </app>
- <app key="axenvacation" version="10006"/>
  <app key="axenfontawesome6" version="10002"/>
  <language>
-  <word key="theme_custom_tab_dynamic_icons"><![CDATA[<i class="fa fa-star"></i> Icons]]></word>
-  <word key="dynamic_icons_nav">Enable icons in navbar?</word>
-  <word key="dynamic_icons_nav_css">[CSS] Icons navBar</word>
-  <word key="dynamic_icons_nav_css_desc"><![CDATA[A guide on how to add icons can be found in <a href='https://github.com/aXenDeveloper/ips-theme-dynamic#-configuration' target='blank' rel='noopener'>the documentation on github</a>.]]></word>
-  <word key="theme_custom_tab_dynamic_swiper"><![CDATA[<i class="fa fa-window-maximize"></i> Slider]]></word>
-  <word key="dynamic_swiper_on">Enable slider?</word>
-  <word key="dynamic_swiper_1">Slider #1</word>
-  <word key="dynamic_swiper_2">Slider #2</word>
-  <word key="dynamic_swiper_3">Slider #3</word>
-  <word key="dynamic_swiper_4">Slider #4</word>
-  <word key="dynamic_swiper_5">Slider #5</word>
   <word key="dynamic_swiper_background_color">Background Color</word>
   <word key="dynamic_swiper_image">Background Image</word>
   <word key="dynamic_swiper_image_position">Background Position</word>
@@ -2831,5 +2815,16 @@ nav .ipsNavBar_primary li[data-navext=&quot;Store&quot;] a::before {content: &qu
   <word key="dynamic_removed">Removed settings (OFF)</word>
   <word key="dynamic_icons_awesome5">Enable Font Awesome 5 icons?</word>
   <word key="dynamic_icons_awesome5_desc"><![CDATA[Disable this option if you are using the <a href="https://invisioncommunity.com/files/file/10056-axen-font-awesome-6-in-ips/" target="_blank">(aXen) Font Awesome 6 in IPS</a> application.]]></word>
+  <word key="theme_custom_tab_dynamic_icons"><![CDATA[<i class="fa fa-star"></i> Icons]]></word>
+  <word key="dynamic_icons_nav">Enable icons in navbar?</word>
+  <word key="dynamic_icons_nav_css">[CSS] Icons navBar</word>
+  <word key="dynamic_icons_nav_css_desc"><![CDATA[A guide on how to add icons can be found in <a href='https://github.com/aXenDeveloper/ips-theme-dynamic#-configuration' target='blank' rel='noopener'>the documentation on github</a>.]]></word>
+  <word key="theme_custom_tab_dynamic_swiper"><![CDATA[<i class="fa fa-window-maximize"></i> Slider]]></word>
+  <word key="dynamic_swiper_on">Enable slider?</word>
+  <word key="dynamic_swiper_1">Slider #1</word>
+  <word key="dynamic_swiper_2">Slider #2</word>
+  <word key="dynamic_swiper_3">Slider #3</word>
+  <word key="dynamic_swiper_4">Slider #4</word>
+  <word key="dynamic_swiper_5">Slider #5</word>
  </language>
 </theme>
