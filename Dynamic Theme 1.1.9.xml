@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<theme name="Dynamic Theme" easy_mode="0" editor_skin="ips" author_name="aXenDev" author_url="https://axendev.net/" version="1.1.8" long_version="10009" update_check="https://files.axendev.net/projects/ips/themes/dynamic/check.php">
+<theme name="Dynamic Theme" easy_mode="0" editor_skin="ips" author_name="aXenDev" author_url="https://axendev.net/" version="1.1.9" long_version="10010" update_check="https://files.axendev.net/projects/ips/themes/dynamic/check.php">
  <app key="core" version="106159">
   <template template_group="global" template_name="aXenScript" template_data="" template_location="front"><![CDATA[<script src="{resource="dynamic_theme/swiper-bundle.min.js" app="core" location="front"}"></script>
 <script type='text/javascript'>
@@ -1112,6 +1112,13 @@ html[dir="rtl"] .ipsDataItem_subList {
 .ipsBadge_positive, .ipsBadge_style4 {
   --badge--background: var(--positive-dark);
   --badge--color: var(--positive-light);
+}
+
+/* ===== Commerce ===== */
+.ipsForm div[data-controller="nexus.global.gateways.stripe"] {
+	--theme-area_background_reset: 255, 255, 255;
+	--input-success__background-color: #162f00;
+  	--input-error__background-color: #ebf2e5;
 }]]></css>
   <css css_location="front" css_attributes="" css_path="custom" css_name="axenarticle.css"><![CDATA[.aXenArticle_img {
     height: 230px;
@@ -2786,7 +2793,7 @@ nav .ipsNavBar_primary li[data-navext=&quot;Store&quot;] a::before {content: &qu
 {{endif}}
 ]]></template>
  </app>
- <app key="axenfontawesome6" version="10002"/>
+ <app key="axenfontawesome6" version="10003"/>
  <language>
   <word key="dynamic_swiper_background_color">Background Color</word>
   <word key="dynamic_swiper_image">Background Image</word>
