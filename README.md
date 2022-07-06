@@ -8,7 +8,7 @@ Built-in Font Awesome 5 icons.
 
 ## 🏷️ Requirements
 
-- [IPS Community Suite: 4.6 version](https://invisioncommunity.com/)
+- [IPS Community Suite: 4.7 version](https://invisioncommunity.com/)
 
 ## 🧰 Install
 
