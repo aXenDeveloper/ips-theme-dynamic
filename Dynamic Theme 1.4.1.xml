@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<theme name="Dynamic Theme" easy_mode="0" editor_skin="ips" author_name="aXenDev" author_url="https://axendev.net/" version="1.4.0" long_version="10013" update_check="https://files.axendev.net/projects/ips/themes/dynamic/check.php">
+<theme name="Dynamic Theme" easy_mode="0" editor_skin="ips" author_name="aXenDev" author_url="https://axendev.net/" version="1.4.1" long_version="10014" update_check="https://files.axendev.net/projects/ips/themes/dynamic/check.php">
  <header><![CDATA[]]></header>
  <footer><![CDATA[]]></footer>
  <app key="core" version="107644">
@@ -1198,6 +1198,14 @@ html[dir="rtl"] .ipsDataItem_subList {
 
 .cNexusSupportMessage_m .cNexusSupportMessage_author, .cNexusSupportMessage_a .cNexusSupportMessage_author {
     background: rgb( var(--theme-area_background) );
+}
+
+/* ===== Drawer ===== */
+@media screen and (max-width: 979px) {
+  	.elMobileDrawer__rank {
+    	position: sticky;
+    	width: auto;
+	}
 }]]></css>
   <css css_location="front" css_attributes="" css_path="custom" css_name="axenarticle.css"><![CDATA[.aXenArticle_img {
     height: 230px;
